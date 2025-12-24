@@ -107,4 +107,8 @@ export const BLOCK_ICONS: Record<BlockType, string> = {
     documents: "📄",
     upsells: "🎁",
     embed: "🖼️",
+    trash: "🗑️",
+    parking: "🅿️",
+    breakfast: "🥐",
+    transport: "🚌",
 };

@@ -76,7 +76,7 @@ function WifiCard({ data, onClick, theme, className }: { data: any; onClick: () 
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             <div className="absolute top-0 right-0 p-4 md:p-6 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Wifi className="w-24 h-24" />
+                <Wifi className="w-16 h-16 md:w-24 md:h-24" />
             </div>
 
             <div className="flex items-start justify-between relative z-10">
@@ -85,9 +85,9 @@ function WifiCard({ data, onClick, theme, className }: { data: any; onClick: () 
                         <div className="p-2 rounded-xl bg-blue-100 text-blue-600">
                             <Wifi className="w-5 h-5" />
                         </div>
-                        <span className="font-bold text-sm opacity-60 uppercase tracking-wider">Wi-Fi</span>
+                        <span className="font-bold text-xs md:text-sm opacity-60 uppercase tracking-wider">Wi-Fi</span>
                     </div>
-                    <div className="text-2xl font-bold mb-1">{data.networkName || "Réseau"}</div>
+                    <div className="text-xl md:text-2xl font-bold mb-1">{data.networkName || "Réseau"}</div>
                     <div className="font-mono text-lg opacity-70 bg-black/5 inline-block px-2 py-1 rounded-lg">
                         {data.password || "••••••••"}
                     </div>
@@ -117,7 +117,7 @@ function AccessCard({ data, onClick, theme, className }: { data: any; onClick: (
             </div>
 
             <div>
-                <div className="font-bold text-lg leading-none mb-1">Codes</div>
+                <div className="font-bold text-base md:text-lg leading-none mb-1">Codes</div>
                 <div className="text-xs opacity-60">Accès sécurisé</div>
             </div>
         </motion.button>
@@ -136,9 +136,9 @@ function StandardCard({ icon: Icon, title, onClick, theme, className }: { icon: 
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center transition-colors"
                 style={{ backgroundColor: `${theme.primary}15`, color: theme.primary }}
             >
-                <Icon className="w-7 h-7" />
+                <Icon className="w-6 h-6 md:w-7 md:h-7" />
             </div>
-            <span className="font-bold text-sm leading-tight">{title}</span>
+            <span className="font-bold text-xs md:text-sm leading-tight">{title}</span>
         </motion.button>
     );
 }
@@ -166,7 +166,7 @@ function TimeCard({ type, data, onClick, theme, className }: { type: string; dat
             </div>
 
             <div>
-                <div className="text-3xl md:text-4xl font-black tracking-tighter mb-1 relative z-10">
+                <div className="text-2xl md:text-4xl font-black tracking-tighter mb-1 relative z-10">
                     {time}
                 </div>
                 <div className="text-sm font-bold opacity-60 uppercase tracking-wider">{label}</div>
@@ -204,7 +204,7 @@ function LocationCard({ data, onClick, theme, className }: { data: any; onClick:
             </div>
 
             <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 text-white">
-                <div className="text-base md:text-lg font-bold leading-tight mb-1 line-clamp-2">
+                <div className="text-sm md:text-lg font-bold leading-tight mb-1 line-clamp-2">
                     {data.address || "Localisation"}
                 </div>
                 <div className="text-[10px] md:text-xs font-medium opacity-80 uppercase tracking-wider flex items-center gap-1">
@@ -225,11 +225,11 @@ function ContactCard({ data, onClick, theme, className }: { data: any; onClick: 
             className={`rounded-[32px] p-5 flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 mb-3 shadow-lg flex items-center justify-center text-2xl font-bold text-white relative z-10">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 mb-3 shadow-lg flex items-center justify-center text-xl md:text-2xl font-bold text-white relative z-10">
                 {(data.name || "H").charAt(0)}
             </div>
 
-            <div className="font-bold text-lg leading-tight mb-0.5 relative z-10">
+            <div className="font-bold text-base md:text-lg leading-tight mb-0.5 relative z-10">
                 {data.name?.split(" ")[0] || "Hôte"}
             </div>
 
@@ -386,8 +386,8 @@ function ListCard({ title, icon: Icon, items, theme, className }: { title: strin
             </div>
 
             <div className="relative z-10">
-                <div className="font-bold text-lg mb-0.5">{title}</div>
-                <div className="font-medium text-sm line-clamp-1 opacity-70">
+                <div className="font-bold text-base md:text-lg mb-0.5">{title}</div>
+                <div className="font-medium text-xs md:text-sm line-clamp-1 opacity-70">
                     {firstText}
                 </div>
                 {count > 1 && (
@@ -426,8 +426,8 @@ function UpsellsCard({ data, onClick, theme, className }: { data: any; onClick: 
             </div>
 
             <div className="relative z-10">
-                <div className="font-bold text-lg mb-0.5">Extras</div>
-                <div className="font-medium text-sm opacity-70">
+                <div className="font-bold text-base md:text-lg mb-0.5">Extras</div>
+                <div className="font-medium text-xs md:text-sm opacity-70">
                     {firstFn?.title || "Services disponibles"}
                 </div>
             </div>
@@ -575,12 +575,12 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                     <div className={`bg-white/5 backdrop-blur-2xl border border-white/10 rounded-t-[32px] md:rounded-[40px] shadow-[0_-20px_60px_rgba(0,0,0,0.3)] min-h-[50vh] ${isDesktop ? 'p-4 md:p-10' : 'p-4'}`}>
                         {/* Responsive Grid: If forceMobile (isDesktop false), force grid-cols-2. Else use responsive classes. */}
                         {/* Responsive Grid: Multi-column on Desktop, Single column on Mobile (to fix layout issues) */}
-                        <div className={`grid gap-3 md:gap-6 ${isDesktop ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-1'}`}>
+                        <div className={`grid gap-3 md:gap-6 ${isDesktop ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-2'}`}>
 
                             {/* 1. WIFI (Tall on Desktop, Wide on Mobile) */}
                             {/* Mobile: col-span-2. Desktop: col-span-2 or col-span-1? Let's make it prominent col-span-2 */}
                             {wifiBlock && (
-                                <div className="col-span-1 md:col-span-2">
+                                <div className="col-span-2 md:col-span-2">
                                     <WifiCard
                                         data={wifiBlock.data}
                                         onClick={() => setSelectedBlockId(wifiBlock.id)}
@@ -591,7 +591,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
 
                             {/* 2. ACCESS CODES */}
                             {accessBlock && (
-                                <div className="col-span-1 md:col-span-1">
+                                <div className="col-span-2 md:col-span-1">
                                     <AccessCard
                                         data={accessBlock.data}
                                         onClick={() => setSelectedBlockId(accessBlock.id)}
@@ -614,9 +614,9 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 let aspectClass = "aspect-square"; // Default to square for standard tiles
 
                                 // Define sizes per block type
-                                if (["location", "marketing_hero"].includes(b.type)) {
+                                if (["location", "marketing_hero", "upsells"].includes(b.type)) {
                                     // Large Map or Hero
-                                    mobileClass = "col-span-1";
+                                    mobileClass = "col-span-2";
                                     desktopClass = "md:col-span-2 md:row-span-2";
                                     aspectClass = "aspect-square"; // Always square for map/hero
                                 } else if (["wifi", "checkin", "checkout", "upsells"].includes(b.type)) { // Added upsells to wide
