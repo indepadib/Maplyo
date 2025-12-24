@@ -1,4 +1,5 @@
-# EguideHQ (starter)
+# Maplyo
+The E-guide for every Airbnb
 
 ## Install
 ```bash
