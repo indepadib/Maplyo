@@ -143,7 +143,7 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr'
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="mx-auto max-w-md bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl p-3 flex items-center gap-3 shadow-2xl relative overflow-hidden group cursor-pointer hover:bg-white/20 transition-colors"
+            className="mx-auto max-w-md bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl p-3 flex items-center gap-3 shadow-2xl relative overflow-hidden group cursor-pointer hover:bg-white/20 transition-colors z-[100]"
         >
             <div className="p-2 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
                 <Icon className="w-5 h-5 text-white" />
@@ -253,7 +253,7 @@ function TimeCard({ type, data, onClick, theme, className, lang }: { type: strin
         <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={onClick}
-            className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            className={`rounded-[24px] md:rounded-[32px] p-4 md:p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             <div className="flex justify-between items-start w-full">
@@ -263,10 +263,10 @@ function TimeCard({ type, data, onClick, theme, className, lang }: { type: strin
             </div>
 
             <div>
-                <div className="text-3xl font-black tracking-tighter mb-1 relative z-10">
+                <div className="text-2xl md:text-3xl font-black tracking-tighter mb-1 relative z-10">
                     {time}
                 </div>
-                <div className="text-xs font-bold opacity-60 uppercase tracking-wider">{label}</div>
+                <div className="text-[10px] md:text-xs font-bold opacity-60 uppercase tracking-wider">{label}</div>
             </div>
         </motion.button>
     );
@@ -293,11 +293,11 @@ function LocationCard({ data, onClick, theme, className, lang }: { data: any; on
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-            <div className="absolute top-5 left-5 p-2.5 rounded-2xl bg-white text-rose-500 shadow-md">
+            <div className="absolute top-4 left-4 p-2 rounded-2xl bg-white text-rose-500 shadow-md z-10">
                 <MinimalIcons.location className="w-6 h-6" />
             </div>
 
-            <div className="absolute bottom-5 left-5 right-5 text-white">
+            <div className="absolute bottom-4 left-4 right-4 text-white z-10">
                 <div className="text-lg font-bold leading-tight mb-1 line-clamp-2">
                     {data.address ? data.address.split(',')[0] : t.location}
                 </div>
@@ -428,9 +428,9 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
     const locationBlock = guide.blocks.find(b => b.type === "location");
 
     // Extract city from location for Smart Recommendations
-    const city = locationBlock && (locationBlock.data as any).address
+    const city = (locationBlock && (locationBlock.data as any).address
         ? (locationBlock.data as any).address.split(',').slice(-1)[0].trim()
-        : "";
+        : "") || "Destination";
 
     // Intelligent Filter logic
     const gridBlocks = useMemo(() => {
@@ -526,7 +526,8 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
 
                             {/* TIP ALERT - Floating Notification Style */}
                             <AnimatePresence>
-                                {!searchQuery && showTip && city && (
+                                {/* Removed city check to fix visibility issue if city is undefined */}
+                                {!searchQuery && showTip && (
                                     <DailyRecommendation city={city} lang={lang} onClose={() => setShowTip(false)} />
                                 )}
                             </AnimatePresence>
