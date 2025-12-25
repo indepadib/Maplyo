@@ -9,12 +9,12 @@ import { guideThemes } from "@/types/themes";
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
-import { Wifi, Key, X, ExternalLink, Search, Globe, ChevronRight, CheckCircle2, MapPin } from "lucide-react";
+import { Wifi, Key, X, ExternalLink, Search, Globe, ChevronRight, CheckCircle2, MapPin, Sun, Moon, Coffee, Utensils, Music, Camera } from "lucide-react";
 
 // --- TRANSLATIONS ---
 const DICTIONARY = {
     fr: {
-        searchPlaceholder: "Rechercher...",
+        searchPlaceholder: "Rechercher une info, un code...",
         wifi: "Wi-Fi",
         access: "Codes d'accès",
         checkin: "Arrivée",
@@ -31,10 +31,11 @@ const DICTIONARY = {
         empty: "Aucun résultat trouvé",
         secureAccess: "Accès sécurisé",
         network: "Réseau",
-        password: "Mot de passe"
+        password: "Mot de passe",
+        tipOfTheDay: "Tip du jour"
     },
     en: {
-        searchPlaceholder: "Search...",
+        searchPlaceholder: "Search info, codes...",
         wifi: "Wi-Fi",
         access: "Access Codes",
         checkin: "Check-in",
@@ -51,8 +52,22 @@ const DICTIONARY = {
         empty: "No results found",
         secureAccess: "Secure Access",
         network: "Network",
-        password: "Password"
+        password: "Password",
+        tipOfTheDay: "Daily Tip"
     }
+};
+
+// --- SMART SEARCH KEYWORDS ---
+const SEARCH_KEYWORDS: Record<string, string[]> = {
+    places: ["restaurant", "manger", "eat", "food", "bar", "boire", "drink", "café", "coffee", "visiter", "visit", "musée", "museum", "culture"],
+    access_codes: ["code", "clé", "key", "digicode", "box", "entree", "entry", "porte", "gate", "télécommande", "remote"],
+    wifi: ["internet", "connection", "réseau", "network", "4g", "5g", "pass"],
+    checkin: ["park", "parking", "arriver", "arrive", "heure", "time"],
+    checkout: ["partir", "leave", "départ", "heure", "time"],
+    rules: ["règlement", "interdit", "fumer", "chiens", "animaux", "bruit", "fête", "party", "smoking", "pets", "noise"],
+    contact: ["téléphone", "phone", "email", "urgence", "emergency", "police", "pompier", "hospital", "docteur", "doctor"],
+    faq: ["question", "problème", "help", "aide", "comment"],
+    transport: ["bus", "train", "taxi", "uber", "métro", "gare", "station", "airport", "aéroport"]
 };
 
 // --- ANIMATED PRIMITIVES ---
@@ -62,7 +77,6 @@ function BottomSheet({ isOpen, onClose, children, title }: { isOpen: boolean; on
         <AnimatePresence>
             {isOpen && (
                 <>
-                    {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -71,7 +85,6 @@ function BottomSheet({ isOpen, onClose, children, title }: { isOpen: boolean; on
                         className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
                     />
 
-                    {/* Drawer */}
                     <motion.div
                         initial={{ y: "100%" }}
                         animate={{ y: 0 }}
@@ -85,12 +98,10 @@ function BottomSheet({ isOpen, onClose, children, title }: { isOpen: boolean; on
                             if (info.offset.y > 100) onClose();
                         }}
                     >
-                        {/* Drag Handle */}
                         <div className="w-full flex justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing">
                             <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
                         </div>
 
-                        {/* Header */}
                         <div className="px-6 pb-4 flex items-center justify-between border-b border-gray-100">
                             <h2 className="text-xl font-bold text-gray-900">{title}</h2>
                             <button onClick={onClose} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
@@ -98,7 +109,6 @@ function BottomSheet({ isOpen, onClose, children, title }: { isOpen: boolean; on
                             </button>
                         </div>
 
-                        {/* Content */}
                         <div className="flex-1 overflow-y-auto p-5 md:p-6 pb-10 md:pb-12">
                             {children}
                         </div>
@@ -106,6 +116,56 @@ function BottomSheet({ isOpen, onClose, children, title }: { isOpen: boolean; on
                 </>
             )}
         </AnimatePresence>
+    );
+}
+
+// --- DAILY RECOMMENDATION WIDGET ---
+
+function DailyRecommendation({ city, lang }: { city: string; lang: 'fr' | 'en' }) {
+    const day = new Date().getDay(); // 0 = Sunday, 1 = Monday...
+    const t = DICTIONARY[lang];
+
+    // Simple logic for variations based on day
+    // This creates the "Smart Recommendation" effect
+    const PLANS = [
+        { day: 0, icon: Coffee, title: lang === 'fr' ? "Dimanche Détente" : "Lazy Sunday", text: lang === 'fr' ? `Profitez d'un brunch calme à ${city || "ville"} avant de visiter les marchés locaux.` : `Enjoy a quiet brunch in ${city || "town"} before visiting the local markets.` },
+        { day: 1, icon: Sun, title: lang === 'fr' ? "Lundi Motivé" : "Monday Mood", text: lang === 'fr' ? `Commencez la semaine par explorer le centre historique de ${city}.` : `Start the week by exploring the historic center of ${city}.` },
+        { day: 2, icon: Camera, title: lang === 'fr' ? "Mardi Découverte" : "Discovery Tuesday", text: lang === 'fr' ? `Le moment idéal pour visiter les musées de ${city} sans la foule.` : `The perfect time to visit ${city}'s museums without the crowd.` },
+        { day: 3, icon: Utensils, title: lang === 'fr' ? "Mercredi Gourmand" : "Tasty Wednesday", text: lang === 'fr' ? `Envie de local ? Essayez le couscous ou les spécialités de ${city} ce midi !` : `Craving local? Try the couscous or ${city}'s specialties for lunch!` },
+        { day: 4, icon: MapPin, title: lang === 'fr' ? "Jeudi Aventure" : "Adventure Thursday", text: lang === 'fr' ? `Partez à la découverte des environs de ${city} cet après-midi.` : `Go explore the surroundings of ${city} this afternoon.` },
+        { day: 5, icon: Music, title: lang === 'fr' ? "Vendredi Festif" : "Festive Friday", text: lang === 'fr' ? `La vie nocturne de ${city} s'éveille. Demandez-nous les meilleures adresses !` : `${city}'s nightlife is waking up. Ask us for the best spots!` },
+        { day: 6, icon: Sun, title: lang === 'fr' ? "Samedi Sortie" : "Saturday Outing", text: lang === 'fr' ? `Journée idéale pour une grande balade ou une excursion depuis ${city}.` : `Ideal day for a long walk or an excursion from ${city}.` },
+    ];
+
+    const plan = PLANS[day];
+    const Icon = plan.icon;
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="col-span-2 relative overflow-hidden rounded-[32px] bg-gradient-to-br from-indigo-500 to-purple-600 p-6 text-white shadow-lg"
+        >
+            <div className="absolute top-0 right-0 p-6 opacity-20">
+                <Icon className="w-24 h-24 rotate-12" />
+            </div>
+
+            <div className="relative z-10 flex flex-col h-full justify-between">
+                <div className="flex items-center gap-2 mb-3">
+                    <div className="bg-white/20 backdrop-blur-md p-1.5 rounded-lg">
+                        <Icon className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-xs font-bold uppercase tracking-widest text-white/50">{t.tipOfTheDay}</span>
+                </div>
+
+                <div>
+                    <h3 className="text-2xl font-bold mb-2 leading-tight">{plan.title}</h3>
+                    <p className="text-white/90 text-sm md:text-base font-medium leading-relaxed max-w-[90%]">
+                        {plan.text}
+                    </p>
+                </div>
+            </div>
+        </motion.div>
     );
 }
 
@@ -117,28 +177,27 @@ function WifiCard({ data, onClick, theme, className, lang }: { data: any; onClic
         <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={onClick}
-            className={`relative overflow-hidden rounded-[24px] md:rounded-[32px] p-4 md:p-6 text-left shadow-sm group w-full h-full ${className || ''}`}
+            className={`relative overflow-hidden rounded-[24px] md:rounded-[32px] p-5 text-left shadow-sm group w-full h-full flex flex-col justify-between ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
-            <div className="absolute top-0 right-0 p-4 md:p-6 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Wifi className="w-16 h-16 md:w-24 md:h-24" />
+            <div className="absolute top-0 right-0 p-5 opacity-10 group-hover:opacity-20 transition-opacity">
+                <Wifi className="w-16 h-16 md:w-20 md:h-20" />
             </div>
 
-            <div className="flex items-start justify-between relative z-10">
-                <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <div className="p-2 rounded-xl bg-blue-100 text-blue-600">
-                            <Wifi className="w-5 h-5" />
-                        </div>
-                        <span className="font-bold text-xs md:text-sm opacity-60 uppercase tracking-wider">{t.wifi}</span>
-                    </div>
-                    <div className="text-xl md:text-2xl font-bold mb-1">{data.networkName || "Réseau"}</div>
-                    <div className="font-mono text-lg opacity-70 bg-black/5 inline-block px-2 py-1 rounded-lg">
-                        {data.password || "••••••••"}
-                    </div>
+            <div className="flex items-start justify-between relative z-10 w-full mb-4">
+                <div className="p-2.5 rounded-2xl bg-blue-500/10 text-blue-600">
+                    <Wifi className="w-6 h-6" />
                 </div>
-                <div className="bg-white p-2 rounded-xl shadow-sm hidden md:block">
-                    <QRCodeSVG value={`WIFI:S:${data.networkName};T:WPA;P:${data.password};;`} size={60} />
+                <div className="bg-white p-1.5 rounded-xl shadow-sm hidden md:block">
+                    <QRCodeSVG value={`WIFI:S:${data.networkName};T:WPA;P:${data.password};;`} size={40} />
+                </div>
+            </div>
+
+            <div className="relative z-10">
+                <div className="text-xs font-bold opacity-50 uppercase tracking-wider mb-1">{t.wifi}</div>
+                <div className="text-xl font-bold mb-2 truncate w-full">{data.networkName || "Réseau"}</div>
+                <div className="font-mono text-sm opacity-70 bg-black/5 inline-block px-3 py-1.5 rounded-lg truncate max-w-full">
+                    {data.password || "••••••••"}
                 </div>
             </div>
         </motion.button>
@@ -151,20 +210,20 @@ function AccessCard({ data, onClick, theme, className, lang }: { data: any; onCl
         <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={onClick}
-            className={`rounded-[24px] md:rounded-[32px] p-4 md:p-6 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             <div className="absolute -bottom-4 -right-4 opacity-5 group-hover:opacity-10 transition-opacity rotate-[-15deg]">
                 <Key className="w-32 h-32" />
             </div>
 
-            <div className="p-2.5 w-fit rounded-xl bg-amber-100 text-amber-700 mb-2">
+            <div className="p-2.5 w-fit rounded-2xl bg-amber-500/10 text-amber-600 mb-2">
                 <Key className="w-6 h-6" />
             </div>
 
             <div>
-                <div className="font-bold text-base md:text-lg leading-none mb-1">{t.access}</div>
-                <div className="text-xs opacity-60">{t.secureAccess}</div>
+                <div className="font-bold text-lg leading-none mb-1">{t.access}</div>
+                <div className="text-xs opacity-60 font-medium">{t.secureAccess}</div>
             </div>
         </motion.button>
     );
@@ -174,23 +233,21 @@ function StandardCard({ icon: Icon, title, onClick, theme, className }: { icon: 
     return (
         <motion.button
             whileTap={{ scale: 0.95 }}
-            whileHover={{ y: -5, boxShadow: "0 10px 30px -10px rgba(0,0,0,0.15)" }}
+            whileHover={{ y: -2 }}
             onClick={onClick}
-            className={`rounded-[24px] md:rounded-[32px] flex flex-col items-center justify-center p-3 md:p-4 gap-2 md:gap-3 text-center shadow-sm transition-all w-full h-full ${className || ''}`}
+            className={`rounded-[24px] md:rounded-[32px] flex flex-col items-center justify-center p-4 gap-3 text-center shadow-sm transition-all w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center transition-colors"
-                style={{ backgroundColor: `${theme.primary}15`, color: theme.primary }}
+                style={{ backgroundColor: `${theme.primary}10`, color: theme.primary }}
             >
-                <Icon className="w-6 h-6 md:w-7 md:h-7" />
+                <Icon className="w-7 h-7" />
             </div>
-            <span className="font-bold text-xs md:text-sm leading-tight">{title}</span>
+            <span className="font-bold text-sm leading-tight line-clamp-2 px-1">{title}</span>
         </motion.button>
     );
 }
 
-
-// --- TIME CARD (Check-in / Check-out) ---
 
 function TimeCard({ type, data, onClick, theme, className, lang }: { type: string; data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
     const t = DICTIONARY[lang];
@@ -203,29 +260,24 @@ function TimeCard({ type, data, onClick, theme, className, lang }: { type: strin
         <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={onClick}
-            className={`rounded-[24px] md:rounded-[32px] p-4 md:p-6 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             <div className="flex justify-between items-start w-full">
-                <div className="p-2 md:p-2.5 rounded-xl bg-gray-100 text-gray-600">
-                    <Icon className="w-5 h-5 md:w-6 md:h-6" />
+                <div className="p-2.5 rounded-2xl bg-gray-100 text-gray-600">
+                    <Icon className="w-5 h-5" />
                 </div>
             </div>
 
             <div>
-                <div className="text-2xl md:text-4xl font-black tracking-tighter mb-1 relative z-10">
+                <div className="text-3xl font-black tracking-tighter mb-1 relative z-10">
                     {time}
                 </div>
-                <div className="text-sm font-bold opacity-60 uppercase tracking-wider">{label}</div>
+                <div className="text-xs font-bold opacity-60 uppercase tracking-wider">{label}</div>
             </div>
-
-            {/* Decorative background circle */}
-            <div className="absolute -bottom-8 -right-8 w-24 h-24 rounded-full bg-current opacity-5 pointer-events-none" />
         </motion.button>
     );
 }
-
-// --- LOCATION CARD ---
 
 function LocationCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
     const t = DICTIONARY[lang];
@@ -236,28 +288,27 @@ function LocationCard({ data, onClick, theme, className, lang }: { data: any; on
             href={mapLink}
             target="_blank"
             rel="noopener noreferrer"
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.98 }}
             className={`block rounded-[24px] md:rounded-[32px] relative overflow-hidden shadow-sm group text-left w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             {/* Pseudo-Map Background */}
-            <div className="absolute inset-0 opacity-20 grayscale saturate-0 group-hover:scale-110 transition-transform duration-700 bg-cover bg-center"
+            <div className="absolute inset-0 opacity-40 hover:opacity-100 transition-opacity duration-500 bg-cover bg-center"
                 style={{
-                    backgroundImage: "url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')" // Placeholder, could use a real static map API
+                    backgroundImage: "url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')" // Placeholder
                 }}
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-
-            <div className="absolute top-4 left-4 md:top-6 md:left-6 p-2 md:p-2.5 rounded-xl bg-white text-rose-500 shadow-md">
-                <MinimalIcons.location className="w-5 h-5 md:w-6 md:h-6" />
+            <div className="absolute top-5 left-5 p-2.5 rounded-2xl bg-white text-rose-500 shadow-md">
+                <MinimalIcons.location className="w-6 h-6" />
             </div>
 
-            <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 text-white">
-                <div className="text-sm md:text-lg font-bold leading-tight mb-1 line-clamp-2">
-                    {data.address || t.location}
+            <div className="absolute bottom-5 left-5 right-5 text-white">
+                <div className="text-lg font-bold leading-tight mb-1 line-clamp-2">
+                    {data.address ? data.address.split(',')[0] : t.location}
                 </div>
-                <div className="text-[10px] md:text-xs font-medium opacity-80 uppercase tracking-wider flex items-center gap-1">
+                <div className="text-xs font-medium opacity-80 uppercase tracking-wider flex items-center gap-1">
                     {t.viewMap} <ExternalLink className="w-3 h-3" />
                 </div>
             </div>
@@ -265,201 +316,45 @@ function LocationCard({ data, onClick, theme, className, lang }: { data: any; on
     )
 }
 
-// --- CONTACT CARD ---
-
-function ContactCard({ data, onClick, theme, className }: { data: any; onClick: () => void; theme: any; className?: string }) {
-    return (
-        <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={onClick}
-            className={`rounded-[32px] p-5 flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
-            style={{ backgroundColor: theme.cardBg, color: theme.text }}
-        >
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 mb-3 shadow-lg flex items-center justify-center text-xl md:text-2xl font-bold text-white relative z-10">
-                {(data.name || "H").charAt(0)}
-            </div>
-
-            <div className="font-bold text-base md:text-lg leading-tight mb-0.5 relative z-10">
-                {data.name?.split(" ")[0] || "Hôte"}
-            </div>
-
-            <div className="flex gap-2 mt-3 relative z-10">
-                <div className="p-2 rounded-full bg-green-100 text-green-600"><MinimalIcons.contact className="w-4 h-4" /></div>
-            </div>
-
-            <div className="absolute inset-0 bg-current opacity-[0.03] group-hover:opacity-[0.06] transition-opacity" />
-        </motion.button>
-    )
-}
-
-// --- RULES (CHECKLIST) CARD ---
-
-function RulesCard({ data, onClick, theme, className }: { data: any; onClick: () => void; theme: any; className?: string }) {
-    const rules = Array.isArray(data.items) ? data.items : [];
-    const count = rules.length;
-    const firstRule = rules[0]?.text || rules[0] || "";
-
-    return (
-        <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={onClick}
-            className={`rounded-[24px] md:rounded-[32px] p-4 md:p-6 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
-            style={{ backgroundColor: theme.cardBg, color: theme.text }}
-        >
-            <div className="flex justify-between items-start w-full relative z-10">
-                <div className="p-2 md:p-2.5 rounded-xl bg-rose-100 text-rose-600">
-                    <MinimalIcons.rules className="w-5 h-5 md:w-6 md:h-6" />
-                </div>
-                <div className="font-bold text-[10px] md:text-xs opacity-60 uppercase tracking-wider bg-black/5 px-2 py-1 rounded-lg">
-                    {count}
-                </div>
-            </div>
-
-            <div className="relative z-10">
-                <div className="font-medium text-sm line-clamp-3 opacity-80 leading-relaxed">
-                    {firstRule ? `1. ${firstRule}` : "Consulter le règlement"}
-                </div>
-                {count > 1 && (
-                    <div className="text-xs font-bold opacity-50 mt-1 uppercase tracking-wider">
-                        + {count - 1} autre{count > 2 ? "s" : ""}
-                    </div>
-                )}
-            </div>
-            {/* Decorative */}
-            <div className="absolute -bottom-4 -right-4 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity rotate-12">
-                <MinimalIcons.rules className="w-32 h-32" />
-            </div>
-        </motion.button>
-    );
-}
-
-// --- AMENITIES CARD ---
-
-function AmenitiesCard({ data, onClick, theme, className }: { data: any; onClick: () => void; theme: any; className?: string }) {
-    const items = Array.isArray(data.items) ? data.items : [];
-    const count = items.length;
-    const firstItems = items.slice(0, 2).map((i: any) => i.text || i).join(", ");
-
-    return (
-        <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={onClick}
-            className={`rounded-[24px] md:rounded-[32px] p-4 md:p-6 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
-            style={{ backgroundColor: theme.cardBg, color: theme.text }}
-        >
-            <div className="flex justify-between items-start w-full relative z-10">
-                <div className="p-2 md:p-2.5 rounded-xl bg-blue-100 text-blue-600">
-                    <MinimalIcons.amenities className="w-5 h-5 md:w-6 md:h-6" />
-                </div>
-                <div className="font-bold text-[10px] md:text-xs opacity-60 uppercase tracking-wider bg-black/5 px-2 py-1 rounded-lg">
-                    {count}
-                </div>
-            </div>
-
-            <div className="relative z-10">
-                <div className="font-medium text-sm line-clamp-2 opacity-80 leading-relaxed">
-                    {firstItems ? `${firstItems}${count > 2 ? "..." : ""}` : "Voir les équipements"}
-                </div>
-                {count > 2 && (
-                    <div className="text-xs font-bold opacity-50 mt-1 uppercase tracking-wider">
-                        + {count - 2} autre{count > 3 ? "s" : ""}
-                    </div>
-                )}
-            </div>
-
-            {/* Decorative */}
-            <div className="absolute -bottom-4 -right-4 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity rotate-[-15deg]">
-                <MinimalIcons.amenities className="w-32 h-32" />
-            </div>
-        </motion.button>
-    );
-}
-
-// --- FAQ CARD ---
-
-function FaqCard({ data, onClick, theme, className }: { data: any; onClick: () => void; theme: any; className?: string }) {
-    const items = Array.isArray(data.items) ? data.items : [];
-    const count = items.length;
-    const firstQ = items[0]?.question || "";
-
-    return (
-        <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={onClick}
-            className={`rounded-[24px] md:rounded-[32px] p-4 md:p-6 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
-            style={{ backgroundColor: theme.cardBg, color: theme.text }}
-        >
-            <div className="flex justify-between items-start w-full relative z-10">
-                <div className="p-2 md:p-2.5 rounded-xl bg-purple-100 text-purple-600">
-                    <MinimalIcons.faq className="w-5 h-5 md:w-6 md:h-6" />
-                </div>
-                <div className="font-bold text-[10px] md:text-xs opacity-60 uppercase tracking-wider bg-black/5 px-2 py-1 rounded-lg">
-                    {count} {count > 1 ? "Q&R" : "Q"}
-                </div>
-            </div>
-
-            <div className="relative z-10">
-                <div className="font-medium text-sm line-clamp-3 opacity-80 leading-relaxed italic">
-                    {firstQ ? `Q: ${firstQ}` : "Foire aux questions"}
-                </div>
-
-            </div>
-
-            {/* Decorative */}
-            <div className="absolute -bottom-4 -right-4 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity rotate-12">
-                <MinimalIcons.faq className="w-32 h-32" />
-            </div>
-        </motion.button>
-    );
-}
-
-// --- PLACES / EVENTS CARD ---
-
 function ListCard({ title, icon: Icon, items, theme, className }: { title: string; icon: any; items: any[]; theme: any; className?: string }) {
     const count = items.length;
-    const firstItem = items[0];
-    const firstText = firstItem?.name || firstItem?.title || "Voir la liste";
 
     return (
         <motion.button
-            whileTap={{ scale: 0.95 }}
-            className={`rounded-[24px] md:rounded-[32px] p-4 md:p-6 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            whileTap={{ scale: 0.98 }}
+            className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             <div className="flex justify-between items-start w-full relative z-10">
-                <div className="p-2 md:p-2.5 rounded-xl bg-orange-100 text-orange-600">
-                    <Icon className="w-5 h-5 md:w-6 md:h-6" />
+                <div className="p-2.5 rounded-2xl bg-orange-500/10 text-orange-600">
+                    <Icon className="w-6 h-6" />
                 </div>
-                <div className="font-bold text-[10px] md:text-xs opacity-60 uppercase tracking-wider bg-black/5 px-2 py-1 rounded-lg">
+                <div className="font-bold text-[10px] opacity-60 uppercase tracking-wider bg-black/5 px-2 py-1 rounded-lg">
                     {count}
                 </div>
             </div>
 
-            <div className="relative z-10">
-                <div className="font-bold text-base md:text-lg mb-0.5">{title}</div>
-                <div className="font-medium text-xs md:text-sm line-clamp-1 opacity-70">
-                    {firstText}
+            <div className="relative z-10 mt-4">
+                <div className="font-bold text-lg mb-2">{title}</div>
+                <div className="space-y-1">
+                    {items.slice(0, 2).map((item, i) => (
+                        <div key={i} className="flex items-center gap-2 text-sm opacity-70">
+                            <span className="w-1 h-1 rounded-full bg-current" />
+                            <span className="truncate">{item.name || item.title || "Item"}</span>
+                        </div>
+                    ))}
                 </div>
-                {count > 1 && (
-                    <div className="text-xs font-bold opacity-50 mt-1 uppercase tracking-wider">
-                        + {count - 1} autre{count > 2 ? "s" : ""}
-                    </div>
-                )}
             </div>
         </motion.button>
     )
 }
 
 function UpsellsCard({ data, onClick, theme, className }: { data: any; onClick: () => void; theme: any; className?: string }) {
-    const items = data.items || [];
-    const count = items.length;
-    const firstFn = items[0];
-
     return (
         <motion.button
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.98 }}
             onClick={onClick}
-            className={`rounded-[24px] md:rounded-[32px] p-4 md:p-6 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity rotate-12">
@@ -467,19 +362,45 @@ function UpsellsCard({ data, onClick, theme, className }: { data: any; onClick: 
             </div>
 
             <div className="flex justify-between items-start w-full relative z-10">
-                <div className="p-2 md:p-2.5 rounded-xl bg-green-100 text-green-600">
-                    <MinimalIcons.upsells className="w-5 h-5 md:w-6 md:h-6" />
+                <div className="p-2.5 rounded-2xl bg-green-500/10 text-green-600">
+                    <MinimalIcons.upsells className="w-6 h-6" />
                 </div>
-                <div className="font-bold text-[10px] md:text-xs text-white bg-green-500 px-2 py-1 rounded-lg shadow-sm">
+                <div className="font-bold text-[10px] text-white bg-green-500 px-2 py-1 rounded-lg shadow-sm">
                     Shop
                 </div>
             </div>
 
             <div className="relative z-10">
-                <div className="font-bold text-base md:text-lg mb-0.5">Extras</div>
-                <div className="font-medium text-xs md:text-sm opacity-70">
-                    {firstFn?.title || "Services disponibles"}
+                <div className="font-bold text-lg mb-1">Extras</div>
+                <div className="font-medium text-sm opacity-70">
+                    Découvrez nos services exclusifs
                 </div>
+            </div>
+        </motion.button>
+    )
+}
+
+// --- SUB-CARDS (Rules, FAQ, Amenities, Contact) ---
+// Simplified square versions to match "Apple" grid
+function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, onClick, className }: any) {
+    return (
+        <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={onClick}
+            className={`rounded-[24px] md:rounded-[32px] p-4 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            style={{ backgroundColor: theme.cardBg, color: theme.text }}
+        >
+            <div className="flex justify-between items-start w-full relative z-10">
+                <div className={`p-2.5 rounded-2xl ${colorClass}`}>
+                    <Icon className="w-5 h-5" />
+                </div>
+            </div>
+
+            <div className="relative z-10 mt-2">
+                {count !== undefined && (
+                    <div className="text-[10px] font-bold opacity-50 uppercase tracking-wider mb-0.5">{count} items</div>
+                )}
+                <div className="font-bold text-base leading-tight">{title}</div>
             </div>
         </motion.button>
     )
@@ -497,10 +418,9 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
     const t = DICTIONARY[lang];
 
     const { scrollY } = useScroll();
-    // Parallax & Fade for Hero
     const heroY = useTransform(scrollY, [0, 500], [0, 200]);
     const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
-    const gridY = useTransform(scrollY, [0, 400], [0, -40]); // Subtle overlap effect
+    const gridY = useTransform(scrollY, [0, 400], [0, -40]);
 
     // Theme resolution
     // @ts-ignore
@@ -510,17 +430,34 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
     const heroBlock = guide.blocks.find(b => b.type === "hero");
     const wifiBlock = guide.blocks.find(b => b.type === "wifi");
     const accessBlock = guide.blocks.find(b => b.type === "access_codes");
+    const locationBlock = guide.blocks.find(b => b.type === "location");
 
-    // Filter logic
+    // Extract city from location for Smart Recommendations
+    const city = locationBlock && (locationBlock.data as any).address
+        ? (locationBlock.data as any).address.split(',').slice(-1)[0].trim()
+        : "";
+
+    // Intelligent Filter logic
     const gridBlocks = useMemo(() => {
         const all = guide.blocks.filter(b => !["hero", "wifi", "access_codes"].includes(b.type));
         if (!searchQuery) return all;
+
         const q = searchQuery.toLowerCase();
-        return all.filter(b =>
-            (b.title?.toLowerCase().includes(q)) ||
-            (blockRegistry[b.type]?.label.toLowerCase().includes(q)) ||
-            (JSON.stringify(b.data).toLowerCase().includes(q))
-        );
+
+        return all.filter(b => {
+            // 1. Direct Text Match
+            if (b.title?.toLowerCase().includes(q)) return true;
+            if (JSON.stringify(b.data).toLowerCase().includes(q)) return true;
+
+            // 2. Type Label Match
+            if (blockRegistry[b.type]?.label.toLowerCase().includes(q)) return true;
+
+            // 3. Smart Keyword Match
+            const keywords = SEARCH_KEYWORDS[b.type] || [];
+            if (keywords.some(k => k.includes(q))) return true;
+
+            return false;
+        });
     }, [guide.blocks, searchQuery]);
 
 
@@ -548,12 +485,10 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                 </div>
             )}
 
-            {/* Changed from max-w-md to responsive wide container */}
             <div className={`w-full relative z-10 ${isDesktop ? '' : 'max-w-md mx-auto'}`}>
 
-                {/* CINEMATIC HERO AREA */}
-                {/* Height increased: 60vh mobile, 85vh desktop */}
-                <div className={`relative overflow-hidden ${isDesktop ? 'md:-mb-12 h-[55vh] md:h-[85vh]' : 'h-[55vh]'}`}>
+                {/* CINEMATIC HERO */}
+                <div className={`relative overflow-hidden ${isDesktop ? 'md:-mb-12 h-[55vh] md:h-[85vh]' : 'h-[50vh]'}`}>
                     <motion.div
                         style={{ y: heroY, opacity: heroOpacity }}
                         className="absolute inset-0 w-full h-full"
@@ -570,24 +505,23 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                         ) : (
                             <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black" />
                         )}
-                        {/* Dramatic Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-                        {/* Top Bar (Search + Lang) */}
-                        <div className="absolute top-0 left-0 right-0 p-4 z-50 flex justify-between items-start">
-                            <div className="bg-black/20 backdrop-blur-md rounded-full p-1 flex items-center border border-white/10 w-full max-w-[200px]">
-                                <Search className="w-4 h-4 text-white/50 ml-3" />
+                        {/* Top Bar */}
+                        <div className="absolute top-0 left-0 right-0 p-4 z-50 flex justify-between items-start gap-4">
+                            <div className="bg-black/30 backdrop-blur-xl rounded-full p-1.5 flex items-center border border-white/20 w-full shadow-lg">
+                                <Search className="w-4 h-4 text-white/70 ml-3" />
                                 <input
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder={t.searchPlaceholder}
-                                    className="bg-transparent border-none outline-none text-white text-sm px-2 py-1.5 w-full placeholder:text-white/40"
+                                    className="bg-transparent border-none outline-none text-white text-sm px-2 py-1 w-full placeholder:text-white/50"
                                 />
                             </div>
 
                             <button
                                 onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
-                                className="bg-black/20 backdrop-blur-md rounded-full px-3 py-2 flex items-center gap-2 border border-white/10 text-white text-xs font-bold uppercase hover:bg-black/40 transition-colors"
+                                className="bg-black/30 backdrop-blur-xl rounded-full px-3 py-2.5 flex items-center gap-2 border border-white/20 text-white text-xs font-bold uppercase hover:bg-black/40 transition-colors shadow-lg"
                             >
                                 <Globe className="w-3.5 h-3.5" />
                                 {lang}
@@ -598,9 +532,9 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                             <motion.div
                                 initial={{ y: 30, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
-                                transition={{ duration: 0.8, ease: "easeOut" }}
+                                transition={{ duration: 0.8 }}
                             >
-                                <h1 className={`font-black mb-3 text-white tracking-tight leading-[1.1] drop-shadow-2xl ${isDesktop ? 'text-3xl md:text-8xl md:mb-4 md:leading-none' : 'text-3xl'}`}>
+                                <h1 className={`font-black mb-3 text-white tracking-tight leading-[1.1] drop-shadow-2xl ${isDesktop ? 'text-4xl md:text-8xl md:mb-4' : 'text-3xl'}`}>
                                     {(heroBlock?.data as any)?.title || guide.title}
                                 </h1>
                             </motion.div>
@@ -612,38 +546,12 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                     transition={{ delay: 0.2, duration: 0.8 }}
                                     className={`flex flex-col gap-4 items-center ${isDesktop ? 'md:flex-row md:items-start' : ''}`}
                                 >
-                                    <p className={`text-white/90 max-w-xl font-medium leading-relaxed drop-shadow-md ${isDesktop ? 'text-base md:text-2xl' : 'text-base'}`}>
+                                    <p className={`text-white/90 max-w-xl font-medium leading-relaxed drop-shadow-md text-base md:text-xl`}>
                                         {(heroBlock.data as any).subtitle}
                                     </p>
-
-                                    <div className={`flex gap-2 flex-wrap justify-center mt-2 ${isDesktop ? 'md:justify-start md:mt-0' : ''}`}>
-                                        {((heroBlock.data as any).badges || []).map((b: string, i: number) => (
-                                            <motion.span
-                                                key={b}
-                                                initial={{ scale: 0.8, opacity: 0 }}
-                                                animate={{ scale: 1, opacity: 1 }}
-                                                transition={{ delay: 0.4 + (i * 0.1) }}
-                                                className={`bg-white/10 backdrop-blur-md rounded-full font-bold border border-white/20 text-white shadow-lg ${isDesktop ? 'px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm' : 'px-3 py-1.5 text-xs'}`}
-                                            >
-                                                {b}
-                                            </motion.span>
-                                        ))}
-                                    </div>
                                 </motion.div>
                             )}
                         </div>
-
-                        {/* Scroll Indicator */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1, y: [0, 10, 0] }}
-                            transition={{ delay: 1, duration: 2, repeat: Infinity }}
-                            className={`absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 z-20 ${isDesktop ? 'md:hidden' : ''}`}
-                        >
-                            <div className="w-1 h-12 rounded-full border border-white/30 flex justify-center p-1">
-                                <div className="w-1 h-3 bg-white rounded-full animate-bounce" />
-                            </div>
-                        </motion.div>
                     </motion.div>
                 </div>
 
@@ -653,16 +561,23 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4, duration: 0.6 }}
                     style={{ y: gridY }}
-                    className={`relative max-w-7xl mx-auto ${isDesktop ? 'px-4 md:px-8' : 'px-4'}`}
+                    className={`relative max-w-7xl mx-auto ${isDesktop ? 'px-8 md:px-12' : 'px-4'}`}
                 >
-                    <div className={`bg-white/5 backdrop-blur-2xl border border-white/10 rounded-t-[32px] md:rounded-[40px] shadow-[0_-20px_60px_rgba(0,0,0,0.3)] min-h-[50vh] ${isDesktop ? 'p-4 md:p-10' : 'p-4'}`}>
-                        {/* Responsive Grid: If forceMobile (isDesktop false), force grid-cols-2. Else use responsive classes. */}
-                        {/* Responsive Grid: Multi-column on Desktop, Single column on Mobile */}
-                        <div className={`grid gap-3 md:gap-6 ${isDesktop ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-1'}`}>
+                    <div className={`bg-white/5 backdrop-blur-2xl border border-white/10 rounded-t-[32px] md:rounded-[48px] shadow-2xl min-h-[50vh] ${isDesktop ? 'p-10' : 'p-4'}`}>
 
-                            {/* 1. WIFI */}
+                        {/* GRID DEFINITION: Mobile = 2 Cols, Desktop = 4 Cols */}
+                        <div className={`grid gap-3 md:gap-5 ${isDesktop ? 'grid-cols-4' : 'grid-cols-2'}`}>
+
+                            {/* SMART TIP (Always Top on Mobile) */}
+                            {!searchQuery && (
+                                <div className="col-span-2 md:col-span-2">
+                                    <DailyRecommendation city={city} lang={lang} />
+                                </div>
+                            )}
+
+                            {/* 1. WIFI (Rectangle 2x1) */}
                             {wifiBlock && !searchQuery && (
-                                <div className="col-span-1 md:col-span-2">
+                                <div className="col-span-2 md:col-span-2 aspect-[2/1] md:aspect-auto md:h-64">
                                     <WifiCard
                                         data={wifiBlock.data}
                                         onClick={() => setSelectedBlockId(wifiBlock.id)}
@@ -672,9 +587,11 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 </div>
                             )}
 
-                            {/* 2. ACCESS CODES */}
+                            {/* 2. ACCESS CODES (Square or Rectangle depending on pref, user wanted 'found' easily, so let's make it Rectangle alongside Wifi if desktop, or Square on mobile?) 
+                               User said "code he can't find", so big is better. Let's make it Rectangle too.
+                            */}
                             {accessBlock && !searchQuery && (
-                                <div className="col-span-1 md:col-span-1">
+                                <div className="col-span-2 md:col-span-2 aspect-[2/1] md:aspect-auto md:h-64">
                                     <AccessCard
                                         data={accessBlock.data}
                                         onClick={() => setSelectedBlockId(accessBlock.id)}
@@ -689,25 +606,26 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 const def = blockRegistry[b.type];
                                 const Icon = MinimalIcons[b.type] || MinimalIcons.hero;
 
-                                // SIZING LOGIC
-                                // Mobile: Always col-span-1 (full width in grid-cols-1). Natural height.
-                                // Desktop: Standard grid behavior.
+                                // APPLE STYLE SIZING LOGIC
+                                // ------------------------
 
-                                let desktopClass = "md:col-span-1";
-                                let aspectClass = ""; // No forced aspect ratio by default on mobile
+                                // Default: Square (1x1)
+                                let colSpan = "col-span-1";
+                                let aspect = "aspect-square"; // Enforce Square
 
-                                // Define sizes per block type
-                                if (["location", "marketing_hero"].includes(b.type)) {
-                                    // Large Map or Hero
-                                    desktopClass = "md:col-span-2 md:row-span-2";
-                                    aspectClass = isDesktop ? "aspect-square" : "aspect-square"; // Keep square for maps even on mobile? Or auto? Let's keep square for map.
-                                } else if (["checkin", "checkout", "upsells"].includes(b.type)) {
-                                    // Wide cards on desktop
-                                    desktopClass = "md:col-span-2";
-                                    aspectClass = isDesktop ? "aspect-[2/1]" : ""; // Natural height on mobile
-                                } else {
-                                    // Standard cards
-                                    aspectClass = isDesktop ? "aspect-square" : ""; // Natural height on mobile
+                                // "Rich" Blocks: Rectangle (2x1)
+                                // Standard lists, Maps, Upsells, Check-in/out (maybe)
+                                const isRichBlock = ["location", "places", "events", "upsells", "marketing_hero", "documents"].includes(b.type);
+
+                                if (isRichBlock) {
+                                    colSpan = "col-span-2"; // Full width on mobile (2 cols), Half width on Desktop (2 of 4)
+                                    aspect = "aspect-[2/1]"; // Enforce Rect
+                                }
+
+                                // Special Case: Location on Desktop can be huge
+                                if (b.type === "location" && isDesktop) {
+                                    colSpan = "md:col-span-2 md:row-span-2";
+                                    aspect = "md:aspect-square";
                                 }
 
                                 const cardProps = {
@@ -717,152 +635,71 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                     lang: lang
                                 };
 
-                                const wrapperClass = `col-span-1 ${desktopClass} ${aspectClass} relative group`;
+                                // Wrapper Class with strict grid placement
+                                const wrapperClass = `${colSpan} ${aspect} relative group`;
 
-                                // Select Component
+
+                                // COMPONENT SELECTION
+
+                                if (isRichBlock) {
+                                    if (b.type === "location") return <div key={b.id} className={wrapperClass}><LocationCard {...cardProps} /></div>;
+                                    if (b.type === "upsells") return <div key={b.id} className={wrapperClass}><UpsellsCard {...cardProps} /></div>;
+                                    return <div key={b.id} className={wrapperClass}><ListCard title={b.title || def.label} icon={Icon} items={(b.data as any).items || []} theme={currentTheme} /></div>;
+                                }
+
                                 if (b.type === "checkin" || b.type === "checkout") {
-                                    return (
-                                        <div key={b.id} className={wrapperClass}>
-                                            <TimeCard type={b.type} {...cardProps} />
-                                        </div>
-                                    )
+                                    return <div key={b.id} className={wrapperClass}><TimeCard type={b.type} {...cardProps} /></div>;
                                 }
 
-                                if (b.type === "location") {
+                                // Mini Cards (Square)
+                                if (["contact", "rules", "amenities", "faq"].includes(b.type)) {
+                                    let colorClass = "bg-gray-100 text-gray-600";
+                                    let startTitle = b.title || def.label;
+                                    let count = undefined;
+
+                                    if (b.type === "contact") { colorClass = "bg-green-100 text-green-600"; }
+                                    if (b.type === "rules") { colorClass = "bg-rose-100 text-rose-600"; count = (b.data as any).items?.length; }
+                                    if (b.type === "amenities") { colorClass = "bg-blue-100 text-blue-600"; count = (b.data as any).items?.length; }
+                                    if (b.type === "faq") { colorClass = "bg-purple-100 text-purple-600"; count = (b.data as any).items?.length; }
+
                                     return (
                                         <div key={b.id} className={wrapperClass}>
-                                            <LocationCard {...cardProps} />
-                                        </div>
-                                    )
-                                }
-
-                                if (b.type === "parking") {
-                                    return (
-                                        <div key={b.id} className="col-span-1 md:col-span-1 relative group">
-                                            <StandardCard icon={Icon} title={b.title || def.label} {...cardProps} />
-                                        </div>
-                                    )
-                                }
-
-                                if (b.type === "contact") {
-                                    return (
-                                        <div key={b.id} className={wrapperClass}>
-                                            <ContactCard {...cardProps} />
-                                        </div>
-                                    )
-                                }
-
-                                if (b.type === "rules") {
-                                    return (
-                                        <div key={b.id} className={wrapperClass}>
-                                            <RulesCard {...cardProps} />
-                                        </div>
-                                    )
-                                }
-
-                                if (b.type === "amenities") {
-                                    return (
-                                        <div key={b.id} className={wrapperClass}>
-                                            <AmenitiesCard {...cardProps} />
-                                        </div>
-                                    )
-                                }
-
-                                if (b.type === "faq") {
-                                    return (
-                                        <div key={b.id} className={wrapperClass}>
-                                            <FaqCard {...cardProps} />
-                                        </div>
-                                    )
-                                }
-
-                                if (b.type === "places" || b.type === "events" || b.type === "documents") {
-                                    return (
-                                        <div key={b.id} className={wrapperClass}>
-                                            <ListCard
-                                                title={b.title || def.label}
+                                            <MiniInfoCard
                                                 icon={Icon}
-                                                items={(b.data as any).items || []}
+                                                title={startTitle}
+                                                count={count}
+                                                colorClass={colorClass}
                                                 theme={currentTheme}
+                                                onClick={() => setSelectedBlockId(b.id)}
                                             />
                                         </div>
                                     )
                                 }
 
-                                if (b.type === "upsells") {
-                                    return (
-                                        <div key={b.id} className={wrapperClass}>
-                                            <UpsellsCard {...cardProps} />
-                                        </div>
-                                    )
-                                }
-
-                                // Fallback to Standard
+                                // Fallback
                                 return (
-                                    <div key={b.id} className="col-span-1 md:col-span-1 relative group">
-                                        <StandardCard
-                                            icon={Icon}
-                                            title={b.title || def.label}
-                                            {...cardProps}
-                                        />
+                                    <div key={b.id} className={wrapperClass}>
+                                        <StandardCard icon={Icon} title={b.title || def.label} {...cardProps} />
                                     </div>
                                 );
                             })}
-
-                            {/* Empty State */}
-                            {gridBlocks.length === 0 && !wifiBlock && !accessBlock && (
-                                <div className="col-span-2 md:col-span-4 py-32 text-center text-white/60">
-                                    <div className="text-4xl mb-4 opacity-50">✨</div>
-                                    <p className="text-xl font-light">{t.empty}</p>
-                                </div>
-                            )}
                         </div>
 
-                        <div className="text-center mt-16 mb-8 flex items-center justify-center gap-2 opacity-50 hover:opacity-100 transition-opacity">
+                        {/* Empty State */}
+                        {gridBlocks.length === 0 && !wifiBlock && !accessBlock && (
+                            <div className="py-20 text-center text-white/50">
+                                <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                                <p className="text-lg font-medium">{t.empty}</p>
+                            </div>
+                        )}
+
+                        <div className="text-center mt-12 mb-4 flex items-center justify-center gap-2 opacity-50">
                             <span className="w-1 h-1 rounded-full bg-current"></span>
-                            <p className="text-xs font-bold uppercase tracking-[0.3em] text-white mix-blend-overlay">
-                                Maplyo
-                            </p>
+                            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white">Maplyo</p>
                             <span className="w-1 h-1 rounded-full bg-current"></span>
                         </div>
                     </div>
                 </motion.div>
-
-            </div>
-
-
-            {/* Quick Access FAB */}
-            <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3 pointer-events-none">
-                <div className="pointer-events-auto flex flex-col gap-3">
-                    {accessBlock && !searchQuery && (
-                        <motion.button
-                            initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={() => setSelectedBlockId(accessBlock.id)}
-                            className="w-14 h-14 rounded-full bg-white shadow-xl shadow-black/20 flex items-center justify-center text-gray-800 border border-gray-100 backdrop-blur-sm"
-                            style={{ color: currentTheme.primary }}
-                            title={t.access}
-                        >
-                            <MinimalIcons.access_codes className="w-6 h-6" />
-                        </motion.button>
-                    )}
-                    {wifiBlock && !searchQuery && (
-                        <motion.button
-                            initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={() => setSelectedBlockId(wifiBlock.id)}
-                            className="w-14 h-14 rounded-full bg-white shadow-xl shadow-black/20 flex items-center justify-center text-gray-800 border border-gray-100 backdrop-blur-sm"
-                            style={{ color: currentTheme.primary }}
-                            title={t.wifi}
-                        >
-                            <MinimalIcons.wifi className="w-6 h-6" />
-                        </motion.button>
-                    )}
-                </div>
             </div>
 
             {/* DRAWER FOR DETAILS */}
@@ -881,6 +718,6 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                 )}
             </BottomSheet>
 
-        </div >
+        </div>
     );
 }
