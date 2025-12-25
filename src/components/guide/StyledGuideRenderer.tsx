@@ -2,14 +2,58 @@
 
 import Image from "next/image";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { blockRegistry } from "@/components/blocks/registry";
 import type { Guide, BlockType } from "@/types/blocks";
 import { guideThemes } from "@/types/themes";
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
-import { Wifi, Key, X, ExternalLink } from "lucide-react";
+import { Wifi, Key, X, ExternalLink, Search, Globe, ChevronRight, CheckCircle2, MapPin } from "lucide-react";
+
+// --- TRANSLATIONS ---
+const DICTIONARY = {
+    fr: {
+        searchPlaceholder: "Rechercher...",
+        wifi: "Wi-Fi",
+        access: "Codes d'accès",
+        checkin: "Arrivée",
+        checkout: "Départ",
+        location: "Localisation",
+        rules: "Règles",
+        contact: "Contact",
+        amenities: "Équipements",
+        places: "Lieux",
+        events: "Événements",
+        documents: "Documents",
+        upsells: "Extras",
+        viewMap: "Voir la carte",
+        empty: "Aucun résultat trouvé",
+        secureAccess: "Accès sécurisé",
+        network: "Réseau",
+        password: "Mot de passe"
+    },
+    en: {
+        searchPlaceholder: "Search...",
+        wifi: "Wi-Fi",
+        access: "Access Codes",
+        checkin: "Check-in",
+        checkout: "Check-out",
+        location: "Location",
+        rules: "Rules",
+        contact: "Contact",
+        amenities: "Amenities",
+        places: "Places",
+        events: "Events",
+        documents: "Documents",
+        upsells: "Extras",
+        viewMap: "View Map",
+        empty: "No results found",
+        secureAccess: "Secure Access",
+        network: "Network",
+        password: "Password"
+    }
+};
 
 // --- ANIMATED PRIMITIVES ---
 
@@ -67,7 +111,8 @@ function BottomSheet({ isOpen, onClose, children, title }: { isOpen: boolean; on
 
 // --- SPECIALIZED CARDS ---
 
-function WifiCard({ data, onClick, theme, className }: { data: any; onClick: () => void; theme: any; className?: string }) {
+function WifiCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+    const t = DICTIONARY[lang];
     return (
         <motion.button
             whileTap={{ scale: 0.98 }}
@@ -85,7 +130,7 @@ function WifiCard({ data, onClick, theme, className }: { data: any; onClick: () 
                         <div className="p-2 rounded-xl bg-blue-100 text-blue-600">
                             <Wifi className="w-5 h-5" />
                         </div>
-                        <span className="font-bold text-xs md:text-sm opacity-60 uppercase tracking-wider">Wi-Fi</span>
+                        <span className="font-bold text-xs md:text-sm opacity-60 uppercase tracking-wider">{t.wifi}</span>
                     </div>
                     <div className="text-xl md:text-2xl font-bold mb-1">{data.networkName || "Réseau"}</div>
                     <div className="font-mono text-lg opacity-70 bg-black/5 inline-block px-2 py-1 rounded-lg">
@@ -100,7 +145,8 @@ function WifiCard({ data, onClick, theme, className }: { data: any; onClick: () 
     );
 }
 
-function AccessCard({ data, onClick, theme, className }: { data: any; onClick: () => void; theme: any; className?: string }) {
+function AccessCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+    const t = DICTIONARY[lang];
     return (
         <motion.button
             whileTap={{ scale: 0.98 }}
@@ -117,8 +163,8 @@ function AccessCard({ data, onClick, theme, className }: { data: any; onClick: (
             </div>
 
             <div>
-                <div className="font-bold text-base md:text-lg leading-none mb-1">Codes</div>
-                <div className="text-xs opacity-60">Accès sécurisé</div>
+                <div className="font-bold text-base md:text-lg leading-none mb-1">{t.access}</div>
+                <div className="text-xs opacity-60">{t.secureAccess}</div>
             </div>
         </motion.button>
     );
@@ -146,9 +192,10 @@ function StandardCard({ icon: Icon, title, onClick, theme, className }: { icon: 
 
 // --- TIME CARD (Check-in / Check-out) ---
 
-function TimeCard({ type, data, onClick, theme, className }: { type: string; data: any; onClick: () => void; theme: any; className?: string }) {
+function TimeCard({ type, data, onClick, theme, className, lang }: { type: string; data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+    const t = DICTIONARY[lang];
     const isCheckIn = type === "checkin";
-    const label = isCheckIn ? "Arrivée" : "Départ";
+    const label = isCheckIn ? t.checkin : t.checkout;
     const time = data.time || (isCheckIn ? "15:00" : "11:00");
     const Icon = MinimalIcons[type as BlockType] || MinimalIcons.hero;
 
@@ -180,20 +227,23 @@ function TimeCard({ type, data, onClick, theme, className }: { type: string; dat
 
 // --- LOCATION CARD ---
 
-function LocationCard({ data, onClick, theme, className }: { data: any; onClick: () => void; theme: any; className?: string }) {
+function LocationCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+    const t = DICTIONARY[lang];
+    const mapLink = data.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.address || "")}`;
+
     return (
-        <motion.button
+        <motion.a
+            href={mapLink}
+            target="_blank"
+            rel="noopener noreferrer"
             whileTap={{ scale: 0.95 }}
-            onClick={onClick}
-            className={`rounded-[24px] md:rounded-[32px] relative overflow-hidden shadow-sm group text-left w-full h-full ${className || ''}`}
+            className={`block rounded-[24px] md:rounded-[32px] relative overflow-hidden shadow-sm group text-left w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             {/* Pseudo-Map Background */}
-            <div className="absolute inset-0 opacity-20 grayscale saturate-0 group-hover:scale-110 transition-transform duration-700 bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=14&size=400x400&key=YOUR_API_KEY_HERE_PLACEHOLDER')]"
+            <div className="absolute inset-0 opacity-20 grayscale saturate-0 group-hover:scale-110 transition-transform duration-700 bg-cover bg-center"
                 style={{
-                    backgroundImage: "url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center"
+                    backgroundImage: "url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')" // Placeholder, could use a real static map API
                 }}
             />
 
@@ -205,13 +255,13 @@ function LocationCard({ data, onClick, theme, className }: { data: any; onClick:
 
             <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 text-white">
                 <div className="text-sm md:text-lg font-bold leading-tight mb-1 line-clamp-2">
-                    {data.address || "Localisation"}
+                    {data.address || t.location}
                 </div>
                 <div className="text-[10px] md:text-xs font-medium opacity-80 uppercase tracking-wider flex items-center gap-1">
-                    Voir la carte <ExternalLink className="w-3 h-3" />
+                    {t.viewMap} <ExternalLink className="w-3 h-3" />
                 </div>
             </div>
-        </motion.button>
+        </motion.a>
     )
 }
 
@@ -242,7 +292,7 @@ function ContactCard({ data, onClick, theme, className }: { data: any; onClick: 
     )
 }
 
-// --- RULES CARD ---
+// --- RULES (CHECKLIST) CARD ---
 
 function RulesCard({ data, onClick, theme, className }: { data: any; onClick: () => void; theme: any; className?: string }) {
     const rules = Array.isArray(data.items) ? data.items : [];
@@ -261,7 +311,7 @@ function RulesCard({ data, onClick, theme, className }: { data: any; onClick: ()
                     <MinimalIcons.rules className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
                 <div className="font-bold text-[10px] md:text-xs opacity-60 uppercase tracking-wider bg-black/5 px-2 py-1 rounded-lg">
-                    {count} {count > 1 ? "Règles" : "Règle"}
+                    {count}
                 </div>
             </div>
 
@@ -439,12 +489,14 @@ function UpsellsCard({ data, onClick, theme, className }: { data: any; onClick: 
 
 export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { guide: Guide; unlocked: boolean; forceMobile?: boolean }) {
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-    const containerRef = useRef(null);
-    const { scrollY } = useScroll();
+    const [searchQuery, setSearchQuery] = useState("");
+    const [lang, setLang] = useState<'fr' | 'en'>('fr');
 
     // Disable Desktop enhancements if forceMobile is on (for Builder Preview)
     const isDesktop = !forceMobile;
+    const t = DICTIONARY[lang];
 
+    const { scrollY } = useScroll();
     // Parallax & Fade for Hero
     const heroY = useTransform(scrollY, [0, 500], [0, 200]);
     const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
@@ -459,15 +511,25 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
     const wifiBlock = guide.blocks.find(b => b.type === "wifi");
     const accessBlock = guide.blocks.find(b => b.type === "access_codes");
 
-    // Filter out special blocks handled separately in the grid
-    const gridBlocks = guide.blocks.filter(b => !["hero", "wifi", "access_codes"].includes(b.type));
+    // Filter logic
+    const gridBlocks = useMemo(() => {
+        const all = guide.blocks.filter(b => !["hero", "wifi", "access_codes"].includes(b.type));
+        if (!searchQuery) return all;
+        const q = searchQuery.toLowerCase();
+        return all.filter(b =>
+            (b.title?.toLowerCase().includes(q)) ||
+            (blockRegistry[b.type]?.label.toLowerCase().includes(q)) ||
+            (JSON.stringify(b.data).toLowerCase().includes(q))
+        );
+    }, [guide.blocks, searchQuery]);
+
 
     const selectedBlock = guide.blocks.find(b => b.id === selectedBlockId);
     const SelectedDef = selectedBlock ? blockRegistry[selectedBlock.type] : null;
 
     return (
         <div
-            className="min-h-screen bg-gray-50 pb-20 selection:bg-blue-100 font-sans relative"
+            className="min-h-screen bg-gray-50 pb-20 selection:bg-rose-500/30 font-sans relative"
             style={{
                 backgroundColor: currentTheme.background
             }}
@@ -510,6 +572,27 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                         )}
                         {/* Dramatic Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+
+                        {/* Top Bar (Search + Lang) */}
+                        <div className="absolute top-0 left-0 right-0 p-4 z-50 flex justify-between items-start">
+                            <div className="bg-black/20 backdrop-blur-md rounded-full p-1 flex items-center border border-white/10 w-full max-w-[200px]">
+                                <Search className="w-4 h-4 text-white/50 ml-3" />
+                                <input
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder={t.searchPlaceholder}
+                                    className="bg-transparent border-none outline-none text-white text-sm px-2 py-1.5 w-full placeholder:text-white/40"
+                                />
+                            </div>
+
+                            <button
+                                onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
+                                className="bg-black/20 backdrop-blur-md rounded-full px-3 py-2 flex items-center gap-2 border border-white/10 text-white text-xs font-bold uppercase hover:bg-black/40 transition-colors"
+                            >
+                                <Globe className="w-3.5 h-3.5" />
+                                {lang}
+                            </button>
+                        </div>
 
                         <div className={`absolute left-0 right-0 px-6 max-w-7xl mx-auto z-20 ${isDesktop ? 'bottom-16 md:bottom-24 md:px-12 text-center md:text-left' : 'bottom-16 text-center'}`}>
                             <motion.div
@@ -578,23 +661,25 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                         <div className={`grid gap-3 md:gap-6 ${isDesktop ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-1'}`}>
 
                             {/* 1. WIFI */}
-                            {wifiBlock && (
+                            {wifiBlock && !searchQuery && (
                                 <div className="col-span-1 md:col-span-2">
                                     <WifiCard
                                         data={wifiBlock.data}
                                         onClick={() => setSelectedBlockId(wifiBlock.id)}
                                         theme={currentTheme}
+                                        lang={lang}
                                     />
                                 </div>
                             )}
 
                             {/* 2. ACCESS CODES */}
-                            {accessBlock && (
+                            {accessBlock && !searchQuery && (
                                 <div className="col-span-1 md:col-span-1">
                                     <AccessCard
                                         data={accessBlock.data}
                                         onClick={() => setSelectedBlockId(accessBlock.id)}
                                         theme={currentTheme}
+                                        lang={lang}
                                     />
                                 </div>
                             )}
@@ -628,7 +713,8 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 const cardProps = {
                                     data: b.data,
                                     onClick: () => setSelectedBlockId(b.id),
-                                    theme: currentTheme
+                                    theme: currentTheme,
+                                    lang: lang
                                 };
 
                                 const wrapperClass = `col-span-1 ${desktopClass} ${aspectClass} relative group`;
@@ -727,7 +813,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                             {gridBlocks.length === 0 && !wifiBlock && !accessBlock && (
                                 <div className="col-span-2 md:col-span-4 py-32 text-center text-white/60">
                                     <div className="text-4xl mb-4 opacity-50">✨</div>
-                                    <p className="text-xl font-light">Le guide est en cours de création</p>
+                                    <p className="text-xl font-light">{t.empty}</p>
                                 </div>
                             )}
                         </div>
@@ -748,7 +834,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
             {/* Quick Access FAB */}
             <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3 pointer-events-none">
                 <div className="pointer-events-auto flex flex-col gap-3">
-                    {accessBlock && (
+                    {accessBlock && !searchQuery && (
                         <motion.button
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
@@ -757,12 +843,12 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                             onClick={() => setSelectedBlockId(accessBlock.id)}
                             className="w-14 h-14 rounded-full bg-white shadow-xl shadow-black/20 flex items-center justify-center text-gray-800 border border-gray-100 backdrop-blur-sm"
                             style={{ color: currentTheme.primary }}
-                            title="Codes d'accès"
+                            title={t.access}
                         >
                             <MinimalIcons.access_codes className="w-6 h-6" />
                         </motion.button>
                     )}
-                    {wifiBlock && (
+                    {wifiBlock && !searchQuery && (
                         <motion.button
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
@@ -771,7 +857,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                             onClick={() => setSelectedBlockId(wifiBlock.id)}
                             className="w-14 h-14 rounded-full bg-white shadow-xl shadow-black/20 flex items-center justify-center text-gray-800 border border-gray-100 backdrop-blur-sm"
                             style={{ color: currentTheme.primary }}
-                            title="Wi-Fi"
+                            title={t.wifi}
                         >
                             <MinimalIcons.wifi className="w-6 h-6" />
                         </motion.button>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Edit2, Trash2, ExternalLink, Moon, Sun, LayoutGrid, List } from "lucide-react";
+import { Plus, Edit2, Trash2, ExternalLink, Moon, Sun, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { guideThemes } from "@/types/themes";
 import { Modal } from "@/components/ui/Modal";
@@ -29,7 +29,6 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     // AI State
     const [isAiModalOpen, setIsAiModalOpen] = useState(false);
-    const [aiStep, setAiStep] = useState(1);
     const [aiPrompt, setAiPrompt] = useState<{
         city: string;
         type: "airbnb" | "hotel" | "guest_house";
@@ -66,7 +65,6 @@ export default function DashboardPage() {
 
             if (res.status === 403 && data.isLimitReached) {
                 alert("Limite atteinte ! Passez à la version Pro pour créer plus de guides.");
-                // Ideally, we could open a Pro upgrade modal here
                 return;
             }
 
@@ -194,68 +192,73 @@ export default function DashboardPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50/50 text-gray-900 font-sans selection:bg-blue-100">
+        <div className="min-h-screen bg-slate-950 font-sans selection:bg-rose-500/30 text-zinc-100">
             {/* Ambient Background Gradient */}
-            <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50/50 via-white to-white pointer-events-none -z-10" />
+            <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-rose-900/10 rounded-full blur-[120px] mix-blend-screen" />
+                <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-900/10 rounded-full blur-[100px] mix-blend-screen" />
+                <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.02]" />
+            </div>
 
             {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100 transition-all">
-                <div className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between py-4">
-                    <div className="flex items-center gap-3 group cursor-pointer">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300">
-                            M
+            <header className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
+                <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+                    <Link href="/dashboard" className="flex items-center gap-3 group">
+                        <div className="w-10 h-10 bg-gradient-to-br from-rose-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-rose-500/20 group-hover:scale-105 transition-transform duration-300">
+                            <MapIcon className="w-5 h-5" />
                         </div>
-                        <h1 className="font-bold text-xl tracking-tight text-gray-900">Maplyo</h1>
-                    </div>
+                        <h1 className="font-bold text-xl tracking-tight text-white">Maplyo</h1>
+                    </Link>
+
                     <div className="flex items-center gap-4">
-                        <div className="hidden md:flex items-center gap-2 bg-gray-100/50 p-1 rounded-xl">
+                        <div className="hidden md:flex items-center gap-2 bg-white/5 p-1 rounded-xl border border-white/5">
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value as any)}
-                                className="bg-transparent border-none text-sm font-medium px-3 py-1.5 cursor-pointer outline-none focus:ring-0 text-gray-600"
+                                className="bg-transparent border-none text-sm font-medium px-3 py-1.5 cursor-pointer outline-none focus:ring-0 text-zinc-400 hover:text-white"
                             >
                                 <option value="recent">Récents</option>
                                 <option value="name">Nom</option>
                             </select>
                         </div>
-                        <div className="h-6 w-px bg-gray-200 hidden md:block" />
+                        <div className="h-6 w-px bg-white/10 hidden md:block" />
                         <button
                             onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
-                            className="p-2.5 text-gray-500 hover:bg-gray-100 rounded-xl transition-all hover:text-gray-900"
+                            className="p-2.5 text-zinc-400 hover:bg-white/5 rounded-xl transition-all hover:text-white"
                         >
                             {viewMode === "grid" ? <List size={20} /> : <LayoutGrid size={20} />}
                         </button>
                         <button
                             onClick={signOut}
-                            className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-white shadow-sm flex items-center justify-center font-bold text-gray-600 text-sm hover:ring-2 hover:ring-offset-2 hover:ring-gray-300 transition-all"
+                            className="w-10 h-10 rounded-full bg-gradient-to-br from-zinc-800 to-zinc-700 border border-white/10 shadow-sm flex items-center justify-center font-bold text-zinc-400 text-sm hover:ring-2 hover:ring-offset-2 hover:ring-rose-500/50 transition-all hover:text-white"
                             title="Se déconnecter"
                         >
-                            {user?.email?.[0].toUpperCase() || "JD"}
+                            <LogOut className="w-4 h-4 ml-0.5" />
                         </button>
                     </div>
                 </div>
             </header>
 
             <main className="max-w-7xl mx-auto px-6 pt-32 pb-20">
-                <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                     <div>
-                        <h2 className="text-4xl font-bold mb-2 tracking-tight text-gray-900">Mes Guides</h2>
-                        <p className="text-gray-500 text-lg">Gérez vos guides de bienvenue numériques.</p>
+                        <h2 className="text-4xl font-bold mb-2 tracking-tight text-white">Mes Guides</h2>
+                        <p className="text-zinc-500 text-lg">Gérez vos expériences voyageurs.</p>
                     </div>
                     <div className="flex gap-4">
                         <button
                             onClick={() => setIsAiModalOpen(true)}
-                            className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3.5 rounded-2xl font-bold hover:shadow-lg hover:shadow-purple-500/30 transition-all active:scale-95 group"
+                            className="flex items-center gap-2 bg-gradient-to-r from-rose-600 to-purple-600 text-white px-6 py-3.5 rounded-2xl font-bold hover:shadow-lg hover:shadow-rose-600/30 transition-all active:scale-95 group border border-white/10"
                         >
-                            <span className="text-xl">✨</span>
-                            <span className="hidden sm:inline">Magic Create</span>
+                            <Sparkles className="w-5 h-5 group-hover:animate-pulse" />
+                            <span className="hidden sm:inline">Magic Create (AI)</span>
                         </button>
                         <button
                             onClick={() => {
                                 setNewGuideTitle("");
                                 setIsCreateModalOpen(true);
                             }}
-                            className="flex items-center gap-2 bg-gray-900 text-white px-6 py-3.5 rounded-2xl font-bold hover:bg-black transition-all shadow-xl shadow-gray-900/20 active:scale-95 group"
+                            className="flex items-center gap-2 bg-white text-slate-950 px-6 py-3.5 rounded-2xl font-bold hover:bg-zinc-200 transition-all shadow-xl shadow-white/5 active:scale-95 group"
                         >
                             <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
                             <span className="hidden sm:inline">Nouveau Guide</span>
@@ -264,23 +267,23 @@ export default function DashboardPage() {
                 </div>
 
                 <AnimatePresence>
-                    {guides.length === 0 ? (
+                    {guides.length === 0 && !loading ? (
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-center py-32 bg-white rounded-[2.5rem] border border-dashed border-gray-200 shadow-sm"
+                            className="text-center py-32 bg-white/[0.02] rounded-[2.5rem] border border-dashed border-white/10 shadow-sm"
                         >
-                            <div className="w-20 h-20 bg-blue-50 text-blue-500 rounded-3xl flex items-center justify-center mx-auto mb-6 text-4xl shadow-inner">
-                                📖
+                            <div className="w-20 h-20 bg-white/5 text-rose-400 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner border border-white/5">
+                                <Sparkles className="w-10 h-10" />
                             </div>
-                            <h3 className="text-2xl font-bold mb-3 text-gray-900">Aucun guide pour le moment</h3>
-                            <p className="text-gray-500 mb-8 max-w-md mx-auto text-lg leading-relaxed">
+                            <h3 className="text-2xl font-bold mb-3 text-white">Aucun guide pour le moment</h3>
+                            <p className="text-zinc-500 mb-8 max-w-md mx-auto text-lg leading-relaxed">
                                 Créez votre premier guide pour offrir une expérience exceptionnelle à vos voyageurs.
                             </p>
                             <div className="flex justify-center gap-4">
                                 <button
                                     onClick={() => setIsAiModalOpen(true)}
-                                    className="bg-purple-100 text-purple-700 px-8 py-4 rounded-2xl font-bold hover:bg-purple-200 transition-all"
+                                    className="bg-rose-500/10 text-rose-400 border border-rose-500/20 px-8 py-4 rounded-2xl font-bold hover:bg-rose-500/20 transition-all"
                                 >
                                     ✨ Essayer l'IA
                                 </button>
@@ -289,7 +292,7 @@ export default function DashboardPage() {
                                         setNewGuideTitle("");
                                         setIsCreateModalOpen(true);
                                     }}
-                                    className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/30 hover:shadow-blue-600/40"
+                                    className="bg-white text-slate-900 px-8 py-4 rounded-2xl font-bold hover:bg-zinc-200 transition-all shadow-lg"
                                 >
                                     Créer manuellement
                                 </button>
@@ -305,25 +308,25 @@ export default function DashboardPage() {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: idx * 0.05 }}
-                                        className="group bg-white rounded-[2rem] border border-gray-100 overflow-hidden hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.1)] transition-all duration-500 hover:-translate-y-1 flex flex-col"
+                                        className="group bg-slate-900/50 backdrop-blur-sm rounded-[2rem] border border-white/5 overflow-hidden hover:border-rose-500/30 transition-all duration-500 hover:-translate-y-1 flex flex-col shadow-2xl shadow-black/20"
                                     >
                                         {/* Preview Banner */}
-                                        <div className="h-48 bg-gray-100 relative overflow-hidden">
+                                        <div className="h-48 bg-slate-800 relative overflow-hidden">
                                             <div
                                                 className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-110"
                                                 style={{ backgroundColor: theme.primary, backgroundImage: theme.bgType === 'image' ? `url(${theme.bgImage})` : undefined }}
                                             />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent opacity-90" />
 
                                             <div className="absolute top-4 right-4 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
-                                                <Link href={`/g/${guide.slug}`} target="_blank" className="p-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl text-white hover:bg-white hover:text-gray-900 transition-colors shadow-lg" title="Voir le guide public">
+                                                <Link href={`/g/${guide.slug}`} target="_blank" className="p-3 bg-black/40 backdrop-blur-md border border-white/20 rounded-xl text-white hover:bg-white hover:text-black transition-colors shadow-lg" title="Voir le guide public">
                                                     <ExternalLink size={18} />
                                                 </Link>
                                             </div>
 
                                             <div className="absolute bottom-4 left-5 right-5">
                                                 <div className="flex items-center gap-2 mb-2">
-                                                    <span className="text-[10px] font-bold px-2 py-1 rounded-lg bg-white/20 backdrop-blur-md border border-white/20 text-white uppercase tracking-wider">
+                                                    <span className="text-[10px] font-bold px-2 py-1 rounded-lg bg-white/10 backdrop-blur-md border border-white/10 text-zinc-300 uppercase tracking-wider">
                                                         {guide.blockCount} blocs
                                                     </span>
                                                 </div>
@@ -337,27 +340,27 @@ export default function DashboardPage() {
                                             <div className="flex-1 mb-6">
                                                 <div className="flex items-center justify-between mb-2">
                                                     <div className="flex items-center gap-2">
-                                                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                                                        <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">En ligne</span>
+                                                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse box-shadow-green shadow-[0_0_10px_rgba(34,197,94,0.5)]"></span>
+                                                        <span className="text-xs font-medium text-zinc-500 uppercase tracking-wide">En ligne</span>
                                                     </div>
-                                                    <p className="text-xs font-medium text-gray-400">
-                                                        Mis à jour {new Date(guide.updatedAt).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long' })}
+                                                    <p className="text-xs font-medium text-zinc-600">
+                                                        {new Date(guide.updatedAt).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long' })}
                                                     </p>
                                                 </div>
-                                                <div className="flex items-center gap-2 text-sm text-gray-500 font-mono bg-gray-50 p-2 rounded-lg border border-gray-100">
-                                                    <span className="text-gray-400">maplyo.com/g/</span>
-                                                    <span className="text-gray-900 select-all">{guide.slug}</span>
+                                                <div className="flex items-center gap-2 text-sm text-zinc-500 font-mono bg-white/[0.02] p-2 rounded-lg border border-white/5">
+                                                    <span className="text-zinc-600 select-none">maplyo.com/g/</span>
+                                                    <span className="text-rose-400 select-all">{guide.slug}</span>
                                                 </div>
                                             </div>
 
                                             <div className="flex gap-3 pt-2">
-                                                <Link href={`/app/guides/${guide.id}/builder`} className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gray-900 text-white font-bold hover:bg-black transition-colors shadow-lg shadow-gray-900/10">
+                                                <Link href={`/app/guides/${guide.id}/builder`} className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-white text-slate-950 font-bold hover:bg-zinc-200 transition-colors shadow-lg">
                                                     <Edit2 size={18} />
                                                     Éditer
                                                 </Link>
                                                 <button
                                                     onClick={() => deleteGuide(guide.id)}
-                                                    className="p-3.5 rounded-xl border border-gray-200 text-gray-400 hover:border-red-200 hover:bg-red-50 hover:text-red-600 transition-colors"
+                                                    className="p-3.5 rounded-xl border border-white/10 text-zinc-500 hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-400 transition-colors"
                                                     title="Supprimer"
                                                 >
                                                     <Trash2 size={20} />
@@ -383,7 +386,7 @@ export default function DashboardPage() {
                     <div className="space-y-6">
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">Ville ou Lieu</label>
+                                <label className="block text-sm font-bold text-zinc-700 mb-2">Ville ou Lieu</label>
                                 <input
                                     className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-purple-500 outline-none transition-all"
                                     placeholder="Ex: Marrakech, Quartier Guéliz"
@@ -394,7 +397,7 @@ export default function DashboardPage() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-2">Type</label>
+                                    <label className="block text-sm font-bold text-zinc-700 mb-2">Type</label>
                                     <select
                                         className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 outline-none"
                                         value={aiPrompt.type}
@@ -406,7 +409,7 @@ export default function DashboardPage() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-2">Voyageurs</label>
+                                    <label className="block text-sm font-bold text-zinc-700 mb-2">Voyageurs</label>
                                     <select
                                         className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 outline-none"
                                         value={aiPrompt.targetAudience}
@@ -417,70 +420,6 @@ export default function DashboardPage() {
                                         <option value="remote_workers">Télétravailleurs</option>
                                         <option value="groups">Groupes</option>
                                     </select>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">Langue</label>
-                                <div className="flex gap-4">
-                                    <label className={`flex-1 p-3 rounded-xl border-2 cursor-pointer transition-all ${aiPrompt.language === 'fr' ? 'border-purple-500 bg-purple-50 text-purple-700' : 'border-gray-100'}`}>
-                                        <input type="radio" className="hidden" name="lang" checked={aiPrompt.language === 'fr'} onChange={() => setAiPrompt({ ...aiPrompt, language: 'fr' })} />
-                                        <span className="font-bold block text-center">Français 🇫🇷</span>
-                                    </label>
-                                    <label className={`flex-1 p-3 rounded-xl border-2 cursor-pointer transition-all ${aiPrompt.language === 'en' ? 'border-purple-500 bg-purple-50 text-purple-700' : 'border-gray-100'}`}>
-                                        <input type="radio" className="hidden" name="lang" checked={aiPrompt.language === 'en'} onChange={() => setAiPrompt({ ...aiPrompt, language: 'en' })} />
-                                        <span className="font-bold block text-center">English 🇬🇧</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">Ambiance (Mood)</label>
-                                <div className="grid grid-cols-2 gap-3">
-                                    {[
-                                        { id: 'relax', label: 'Détente 🌿' },
-                                        { id: 'adventure', label: 'Aventure 🎒' },
-                                        { id: 'romantic', label: 'Romantique ❤️' },
-                                        { id: 'business', label: 'Travail 💼' }
-                                    ].map((m) => (
-                                        <label key={m.id} className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${aiPrompt.mood === m.id ? 'border-purple-500 bg-purple-50 text-purple-700' : 'border-gray-100 hover:bg-gray-50'}`}>
-                                            <input
-                                                type="radio"
-                                                className="hidden"
-                                                name="mood"
-                                                checked={aiPrompt.mood === m.id}
-                                                onChange={() => setAiPrompt({ ...aiPrompt, mood: m.id as any })}
-                                            />
-                                            <span className="font-bold block text-center text-sm">{m.label}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">Équipements Clés</label>
-                                <div className="flex flex-wrap gap-2">
-                                    {["Wi-Fi", "Piscine", "Parking", "Climatisation", "Cuisine", "TV", "Lave-linge"].map((item) => (
-                                        <button
-                                            key={item}
-                                            onClick={() => {
-                                                const current = aiPrompt.amenities || [];
-                                                const exists = current.includes(item);
-                                                setAiPrompt({
-                                                    ...aiPrompt,
-                                                    amenities: exists
-                                                        ? current.filter((i: string) => i !== item)
-                                                        : [...current, item]
-                                                });
-                                            }}
-                                            className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-all ${(aiPrompt.amenities || []).includes(item)
-                                                ? "bg-purple-100 border-purple-200 text-purple-700"
-                                                : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
-                                                }`}
-                                        >
-                                            {item}
-                                        </button>
-                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -516,7 +455,7 @@ export default function DashboardPage() {
             >
                 <form onSubmit={handleCreateGuide} className="space-y-6">
                     <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2">
+                        <label className="block text-sm font-bold text-zinc-700 mb-2">
                             Nom du guide
                         </label>
                         <input
@@ -528,19 +467,6 @@ export default function DashboardPage() {
                             autoFocus
                             required
                         />
-                        <p className="text-sm text-gray-500 mt-3 ml-1">
-                            Choisissez un nom accueillant pour vos voyageurs.
-                        </p>
-                    </div>
-
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-2xl flex gap-4 text-blue-900 text-sm border border-blue-100">
-                        <span className="text-2xl pt-1">💡</span>
-                        <div className="space-y-1">
-                            <p className="font-bold">Conseil de pro</p>
-                            <p className="opacity-90 leading-relaxed">
-                                Une fois créé, vous pourrez choisir un thème inspirant (comme "Marrakech" ou "Chefchaouen") et personnaliser chaque détail.
-                            </p>
-                        </div>
                     </div>
 
                     <div className="flex justify-end gap-3 pt-6 border-t border-gray-100">
