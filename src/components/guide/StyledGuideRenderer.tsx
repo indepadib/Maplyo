@@ -119,22 +119,20 @@ function BottomSheet({ isOpen, onClose, children, title }: { isOpen: boolean; on
     );
 }
 
-// --- DAILY RECOMMENDATION WIDGET ---
+// --- DAILY RECOMMENDATION WIDGET (NOTIFICATION STYLE) ---
 
-function DailyRecommendation({ city, lang }: { city: string; lang: 'fr' | 'en' }) {
-    const day = new Date().getDay(); // 0 = Sunday, 1 = Monday...
+function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr' | 'en'; onClose: () => void }) {
+    const day = new Date().getDay();
     const t = DICTIONARY[lang];
 
-    // Simple logic for variations based on day
-    // This creates the "Smart Recommendation" effect
     const PLANS = [
-        { day: 0, icon: Coffee, title: lang === 'fr' ? "Dimanche Détente" : "Lazy Sunday", text: lang === 'fr' ? `Profitez d'un brunch calme à ${city || "ville"} avant de visiter les marchés locaux.` : `Enjoy a quiet brunch in ${city || "town"} before visiting the local markets.` },
-        { day: 1, icon: Sun, title: lang === 'fr' ? "Lundi Motivé" : "Monday Mood", text: lang === 'fr' ? `Commencez la semaine par explorer le centre historique de ${city}.` : `Start the week by exploring the historic center of ${city}.` },
-        { day: 2, icon: Camera, title: lang === 'fr' ? "Mardi Découverte" : "Discovery Tuesday", text: lang === 'fr' ? `Le moment idéal pour visiter les musées de ${city} sans la foule.` : `The perfect time to visit ${city}'s museums without the crowd.` },
-        { day: 3, icon: Utensils, title: lang === 'fr' ? "Mercredi Gourmand" : "Tasty Wednesday", text: lang === 'fr' ? `Envie de local ? Essayez le couscous ou les spécialités de ${city} ce midi !` : `Craving local? Try the couscous or ${city}'s specialties for lunch!` },
-        { day: 4, icon: MapPin, title: lang === 'fr' ? "Jeudi Aventure" : "Adventure Thursday", text: lang === 'fr' ? `Partez à la découverte des environs de ${city} cet après-midi.` : `Go explore the surroundings of ${city} this afternoon.` },
-        { day: 5, icon: Music, title: lang === 'fr' ? "Vendredi Festif" : "Festive Friday", text: lang === 'fr' ? `La vie nocturne de ${city} s'éveille. Demandez-nous les meilleures adresses !` : `${city}'s nightlife is waking up. Ask us for the best spots!` },
-        { day: 6, icon: Sun, title: lang === 'fr' ? "Samedi Sortie" : "Saturday Outing", text: lang === 'fr' ? `Journée idéale pour une grande balade ou une excursion depuis ${city}.` : `Ideal day for a long walk or an excursion from ${city}.` },
+        { day: 0, icon: Coffee, title: lang === 'fr' ? "Dimanche Détente" : "Lazy Sunday", text: lang === 'fr' ? `Un brunch à ${city || "ville"} ?` : `Brunch in ${city || "town"}?` },
+        { day: 1, icon: Sun, title: lang === 'fr' ? "Lundi Motivé" : "Monday Mood", text: lang === 'fr' ? `Explorez le centre de ${city}.` : `Explore ${city}'s center.` },
+        { day: 2, icon: Camera, title: lang === 'fr' ? "Mardi Découverte" : "Discovery Tuesday", text: lang === 'fr' ? `Visitez les musées de ${city}.` : `Visit ${city}'s museums.` },
+        { day: 3, icon: Utensils, title: lang === 'fr' ? "Mercredi Gourmand" : "Tasty Wednesday", text: lang === 'fr' ? `Goutez aux spécialités de ${city} !` : `Taste ${city}'s specialties!` },
+        { day: 4, icon: MapPin, title: lang === 'fr' ? "Jeudi Aventure" : "Adventure Thursday", text: lang === 'fr' ? `Partez en excursion.` : `Go on an excursion.` },
+        { day: 5, icon: Music, title: lang === 'fr' ? "Vendredi Festif" : "Festive Friday", text: lang === 'fr' ? `La vie nocturne de ${city} !` : `${city}'s nightlife!` },
+        { day: 6, icon: Sun, title: lang === 'fr' ? "Samedi Sortie" : "Saturday Outing", text: lang === 'fr' ? `Baladez-vous à ${city}.` : `Walk around ${city}.` },
     ];
 
     const plan = PLANS[day];
@@ -142,29 +140,24 @@ function DailyRecommendation({ city, lang }: { city: string; lang: 'fr' | 'en' }
 
     return (
         <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="col-span-2 relative overflow-hidden rounded-[32px] bg-gradient-to-br from-indigo-500 to-purple-600 p-6 text-white shadow-lg"
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="mx-auto max-w-md bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl p-3 flex items-center gap-3 shadow-2xl relative overflow-hidden group cursor-pointer hover:bg-white/20 transition-colors"
         >
-            <div className="absolute top-0 right-0 p-6 opacity-20">
-                <Icon className="w-24 h-24 rotate-12" />
+            <div className="p-2 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
+                <Icon className="w-5 h-5 text-white" />
             </div>
-
-            <div className="relative z-10 flex flex-col h-full justify-between">
-                <div className="flex items-center gap-2 mb-3">
-                    <div className="bg-white/20 backdrop-blur-md p-1.5 rounded-lg">
-                        <Icon className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-white/50">{t.tipOfTheDay}</span>
+            <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">{t.tipOfTheDay}</span>
+                    <span className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
                 </div>
-
-                <div>
-                    <h3 className="text-2xl font-bold mb-2 leading-tight">{plan.title}</h3>
-                    <p className="text-white/90 text-sm md:text-base font-medium leading-relaxed max-w-[90%]">
-                        {plan.text}
-                    </p>
-                </div>
+                <div className="font-bold text-sm truncate">{plan.title} : <span className="font-normal opacity-90">{plan.text}</span></div>
             </div>
+            <button onClick={(e) => { e.stopPropagation(); onClose(); }} className="p-1 hover:bg-white/20 rounded-full transition-colors">
+                <X className="w-4 h-4 opacity-70" />
+            </button>
         </motion.div>
     );
 }
@@ -235,13 +228,13 @@ function StandardCard({ icon: Icon, title, onClick, theme, className }: { icon: 
             whileTap={{ scale: 0.95 }}
             whileHover={{ y: -2 }}
             onClick={onClick}
-            className={`rounded-[24px] md:rounded-[32px] flex flex-col items-center justify-center p-4 gap-3 text-center shadow-sm transition-all w-full h-full ${className || ''}`}
+            className={`rounded-[24px] md:rounded-[28px] flex flex-col items-center justify-center p-4 gap-3 text-center shadow-sm transition-all w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center transition-colors"
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center transition-colors"
                 style={{ backgroundColor: `${theme.primary}10`, color: theme.primary }}
             >
-                <Icon className="w-7 h-7" />
+                <Icon className="w-6 h-6" />
             </div>
             <span className="font-bold text-sm leading-tight line-clamp-2 px-1">{title}</span>
         </motion.button>
@@ -387,7 +380,7 @@ function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, o
         <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={onClick}
-            className={`rounded-[24px] md:rounded-[32px] p-4 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            className={`rounded-[24px] md:rounded-[28px] p-4 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             <div className="flex justify-between items-start w-full relative z-10">
@@ -412,6 +405,8 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [lang, setLang] = useState<'fr' | 'en'>('fr');
+    // Notification state
+    const [showTip, setShowTip] = useState(true);
 
     // Disable Desktop enhancements if forceMobile is on (for Builder Preview)
     const isDesktop = !forceMobile;
@@ -507,25 +502,34 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-                        {/* Top Bar */}
-                        <div className="absolute top-0 left-0 right-0 p-4 z-50 flex justify-between items-start gap-4">
-                            <div className="bg-black/30 backdrop-blur-xl rounded-full p-1.5 flex items-center border border-white/20 w-full shadow-lg">
-                                <Search className="w-4 h-4 text-white/70 ml-3" />
-                                <input
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder={t.searchPlaceholder}
-                                    className="bg-transparent border-none outline-none text-white text-sm px-2 py-1 w-full placeholder:text-white/50"
-                                />
+                        {/* Top Bar with Search & Lang */}
+                        <div className="absolute top-0 left-0 right-0 p-4 z-50 flex flex-col gap-4">
+                            <div className="flex justify-between items-start gap-4">
+                                <div className="bg-black/30 backdrop-blur-xl rounded-full p-1.5 flex items-center border border-white/20 w-full shadow-lg">
+                                    <Search className="w-4 h-4 text-white/70 ml-3" />
+                                    <input
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        placeholder={t.searchPlaceholder}
+                                        className="bg-transparent border-none outline-none text-white text-sm px-2 py-1 w-full placeholder:text-white/50"
+                                    />
+                                </div>
+
+                                <button
+                                    onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
+                                    className="bg-black/30 backdrop-blur-xl rounded-full px-3 py-2.5 flex items-center gap-2 border border-white/20 text-white text-xs font-bold uppercase hover:bg-black/40 transition-colors shadow-lg"
+                                >
+                                    <Globe className="w-3.5 h-3.5" />
+                                    {lang}
+                                </button>
                             </div>
 
-                            <button
-                                onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
-                                className="bg-black/30 backdrop-blur-xl rounded-full px-3 py-2.5 flex items-center gap-2 border border-white/20 text-white text-xs font-bold uppercase hover:bg-black/40 transition-colors shadow-lg"
-                            >
-                                <Globe className="w-3.5 h-3.5" />
-                                {lang}
-                            </button>
+                            {/* TIP ALERT - Floating Notification Style */}
+                            <AnimatePresence>
+                                {!searchQuery && showTip && city && (
+                                    <DailyRecommendation city={city} lang={lang} onClose={() => setShowTip(false)} />
+                                )}
+                            </AnimatePresence>
                         </div>
 
                         <div className={`absolute left-0 right-0 px-6 max-w-7xl mx-auto z-20 ${isDesktop ? 'bottom-16 md:bottom-24 md:px-12 text-center md:text-left' : 'bottom-16 text-center'}`}>
@@ -561,23 +565,20 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4, duration: 0.6 }}
                     style={{ y: gridY }}
-                    className={`relative max-w-7xl mx-auto ${isDesktop ? 'px-8 md:px-12' : 'px-4'}`}
+                    className={`relative max-w-5xl mx-auto ${isDesktop ? 'px-8 md:px-12' : 'px-4'}`}
                 >
                     <div className={`bg-white/5 backdrop-blur-2xl border border-white/10 rounded-t-[32px] md:rounded-[48px] shadow-2xl min-h-[50vh] ${isDesktop ? 'p-10' : 'p-4'}`}>
 
-                        {/* GRID DEFINITION: Mobile = 2 Cols, Desktop = 4 Cols */}
-                        <div className={`grid gap-3 md:gap-5 ${isDesktop ? 'grid-cols-4' : 'grid-cols-2'}`}>
-
-                            {/* SMART TIP (Always Top on Mobile) */}
-                            {!searchQuery && (
-                                <div className="col-span-2 md:col-span-2">
-                                    <DailyRecommendation city={city} lang={lang} />
-                                </div>
-                            )}
+                        {/* 
+                            GRID REFINEMENT: 
+                            Mobile: 2 Cols
+                            Desktop: 4 Cols but contained in max-w-5xl (Compact)
+                        */}
+                        <div className={`grid gap-3 md:gap-4 ${isDesktop ? 'grid-cols-4' : 'grid-cols-2'}`}>
 
                             {/* 1. WIFI (Rectangle 2x1) */}
                             {wifiBlock && !searchQuery && (
-                                <div className="col-span-2 md:col-span-2 aspect-[2/1] md:aspect-auto md:h-64">
+                                <div className="col-span-2 md:col-span-2 aspect-[2/1] md:aspect-auto md:h-52">
                                     <WifiCard
                                         data={wifiBlock.data}
                                         onClick={() => setSelectedBlockId(wifiBlock.id)}
@@ -587,11 +588,9 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 </div>
                             )}
 
-                            {/* 2. ACCESS CODES (Square or Rectangle depending on pref, user wanted 'found' easily, so let's make it Rectangle alongside Wifi if desktop, or Square on mobile?) 
-                               User said "code he can't find", so big is better. Let's make it Rectangle too.
-                            */}
+                            {/* 2. ACCESS CODES */}
                             {accessBlock && !searchQuery && (
-                                <div className="col-span-2 md:col-span-2 aspect-[2/1] md:aspect-auto md:h-64">
+                                <div className="col-span-2 md:col-span-2 aspect-[2/1] md:aspect-auto md:h-52">
                                     <AccessCard
                                         data={accessBlock.data}
                                         onClick={() => setSelectedBlockId(accessBlock.id)}
@@ -614,7 +613,6 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 let aspect = "aspect-square"; // Enforce Square
 
                                 // "Rich" Blocks: Rectangle (2x1)
-                                // Standard lists, Maps, Upsells, Check-in/out (maybe)
                                 const isRichBlock = ["location", "places", "events", "upsells", "marketing_hero", "documents"].includes(b.type);
 
                                 if (isRichBlock) {
@@ -635,7 +633,6 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                     lang: lang
                                 };
 
-                                // Wrapper Class with strict grid placement
                                 const wrapperClass = `${colSpan} ${aspect} relative group`;
 
 
