@@ -574,13 +574,12 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                 >
                     <div className={`bg-white/5 backdrop-blur-2xl border border-white/10 rounded-t-[32px] md:rounded-[40px] shadow-[0_-20px_60px_rgba(0,0,0,0.3)] min-h-[50vh] ${isDesktop ? 'p-4 md:p-10' : 'p-4'}`}>
                         {/* Responsive Grid: If forceMobile (isDesktop false), force grid-cols-2. Else use responsive classes. */}
-                        {/* Responsive Grid: Multi-column on Desktop, Single column on Mobile (to fix layout issues) */}
-                        <div className={`grid gap-3 md:gap-6 ${isDesktop ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-2'}`}>
+                        {/* Responsive Grid: Multi-column on Desktop, Single column on Mobile */}
+                        <div className={`grid gap-3 md:gap-6 ${isDesktop ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-1'}`}>
 
-                            {/* 1. WIFI (Tall on Desktop, Wide on Mobile) */}
-                            {/* Mobile: col-span-2. Desktop: col-span-2 or col-span-1? Let's make it prominent col-span-2 */}
+                            {/* 1. WIFI */}
                             {wifiBlock && (
-                                <div className="col-span-2 md:col-span-2">
+                                <div className="col-span-1 md:col-span-2">
                                     <WifiCard
                                         data={wifiBlock.data}
                                         onClick={() => setSelectedBlockId(wifiBlock.id)}
@@ -591,7 +590,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
 
                             {/* 2. ACCESS CODES */}
                             {accessBlock && (
-                                <div className="col-span-2 md:col-span-1">
+                                <div className="col-span-1 md:col-span-1">
                                     <AccessCard
                                         data={accessBlock.data}
                                         onClick={() => setSelectedBlockId(accessBlock.id)}
@@ -600,35 +599,30 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 </div>
                             )}
 
-                            {/* 3. DYNAMIC SPECIALIZED CARDS with BENTO 2.0 LAYOUT */}
+                            {/* 3. DYNAMIC BLOCKS */}
                             {gridBlocks.map((b, i) => {
                                 const def = blockRegistry[b.type];
                                 const Icon = MinimalIcons[b.type] || MinimalIcons.hero;
 
-                                // BENTO GRID SIZING LOGIC
-                                // Mobile: defaults to col-span-1 (square). Some can be col-span-2 (wide).
-                                // Desktop: defaults to col-span-1. Some can be col-span-2 (wide) or col-span-2 row-span-2 (large).
+                                // SIZING LOGIC
+                                // Mobile: Always col-span-1 (full width in grid-cols-1). Natural height.
+                                // Desktop: Standard grid behavior.
 
-                                let mobileClass = "col-span-1";
                                 let desktopClass = "md:col-span-1";
-                                let aspectClass = "aspect-square"; // Default to square for standard tiles
+                                let aspectClass = ""; // No forced aspect ratio by default on mobile
 
                                 // Define sizes per block type
-                                if (["location", "marketing_hero", "upsells"].includes(b.type)) {
+                                if (["location", "marketing_hero"].includes(b.type)) {
                                     // Large Map or Hero
-                                    mobileClass = "col-span-2";
                                     desktopClass = "md:col-span-2 md:row-span-2";
-                                    aspectClass = "aspect-square"; // Always square for map/hero
-                                } else if (["wifi", "checkin", "checkout", "upsells"].includes(b.type)) { // Added upsells to wide
-                                    // Wide cards
-                                    mobileClass = "col-span-1";
+                                    aspectClass = isDesktop ? "aspect-square" : "aspect-square"; // Keep square for maps even on mobile? Or auto? Let's keep square for map.
+                                } else if (["checkin", "checkout", "upsells"].includes(b.type)) {
+                                    // Wide cards on desktop
                                     desktopClass = "md:col-span-2";
-                                    aspectClass = "aspect-[2/1]"; // Wide rectangular
-                                } else if (["places", "events", "documents", "faq", "rules", "files"].includes(b.type)) {
-                                    // List/Text heavy cards - Auto height or standard?
-                                    // If we use aspect-square, they might overflow if too much text.
-                                    // Let's use aspect-[4/3] for mobile lists to give space.
-                                    aspectClass = isDesktop ? "aspect-square" : "aspect-[3/2]";
+                                    aspectClass = isDesktop ? "aspect-[2/1]" : ""; // Natural height on mobile
+                                } else {
+                                    // Standard cards
+                                    aspectClass = isDesktop ? "aspect-square" : ""; // Natural height on mobile
                                 }
 
                                 const cardProps = {
@@ -637,7 +631,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                     theme: currentTheme
                                 };
 
-                                const wrapperClass = `${mobileClass} ${desktopClass} ${aspectClass} relative group`;
+                                const wrapperClass = `col-span-1 ${desktopClass} ${aspectClass} relative group`;
 
                                 // Select Component
                                 if (b.type === "checkin" || b.type === "checkout") {
