@@ -1,6 +1,6 @@
 import { Guide, BlockType } from "@/types/blocks";
 import { guideThemes } from "@/types/themes";
-import { openai, cleanAIJSON } from "./openai";
+import { createOpenAIClient, cleanAIJSON } from "./openai";
 
 export interface GuidePrompt {
     city: string;
@@ -17,7 +17,10 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     const { city, type, targetAudience, language, mood } = prompt;
 
     // Fallbck if no API key
-    if (!process.env.OPENAI_API_KEY) {
+    const openai = createOpenAIClient();
+
+    // Fallbck if no API key
+    if (!openai) {
         console.warn("Missing OPENAI_API_KEY, returning mock data.");
         return generateMockGuide(prompt);
     }
