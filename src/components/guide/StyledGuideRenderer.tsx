@@ -121,10 +121,38 @@ function BottomSheet({ isOpen, onClose, children, title }: { isOpen: boolean; on
 
 // --- DAILY RECOMMENDATION WIDGET (NOTIFICATION STYLE) ---
 
+// --- DAILY RECOMMENDATION WIDGET (NOTIFICATION STYLE) ---
+
 function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr' | 'en'; onClose: () => void }) {
-    const day = new Date().getDay();
+    const [tip, setTip] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    // Fetch AI Tip on Mount
+    useState(() => {
+        const fetchTip = async () => {
+            try {
+                const res = await fetch('/api/ai/tip', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ city, lang })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.title && data.text) setTip(data);
+                }
+            } catch (e) {
+                console.error(e);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchTip();
+    });
+
     const t = DICTIONARY[lang];
 
+    // FALLBACK PLANS (If AI fails or loading)
+    const day = new Date().getDay();
     const PLANS = [
         { day: 0, icon: Coffee, title: lang === 'fr' ? "Dimanche Détente" : "Lazy Sunday", text: lang === 'fr' ? `Un brunch à ${city || "ville"} ?` : `Brunch in ${city || "town"}?` },
         { day: 1, icon: Sun, title: lang === 'fr' ? "Lundi Motivé" : "Monday Mood", text: lang === 'fr' ? `Explorez le centre de ${city}.` : `Explore ${city}'s center.` },
@@ -135,8 +163,20 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr'
         { day: 6, icon: Sun, title: lang === 'fr' ? "Samedi Sortie" : "Saturday Outing", text: lang === 'fr' ? `Baladez-vous à ${city}.` : `Walk around ${city}.` },
     ];
 
-    const plan = PLANS[day];
-    const Icon = plan.icon;
+    const fallback = PLANS[day];
+
+    // Resolve Icon
+    let Icon = fallback.icon;
+    if (tip && tip.icon) {
+        if (tip.icon === "Coffee") Icon = Coffee;
+        else if (tip.icon === "Sun") Icon = Sun;
+        else if (tip.icon === "Umbrella") Icon = Sun; // map to sun/cloud
+        else if (tip.icon === "Camera") Icon = Camera;
+        else if (tip.icon === "MapPin") Icon = MapPin;
+    }
+
+    const title = tip ? tip.title : fallback.title;
+    const text = tip ? tip.text : fallback.text;
 
     return (
         <motion.div
@@ -145,15 +185,16 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr'
             exit={{ opacity: 0, y: -20 }}
             className="mx-auto max-w-md bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl p-3 flex items-center gap-3 shadow-2xl relative overflow-hidden group cursor-pointer hover:bg-white/20 transition-colors z-[100]"
         >
-            <div className="p-2 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
-                <Icon className="w-5 h-5 text-white" />
+            <div className="p-2 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg relative">
+                <Icon className="w-5 h-5 text-white relative z-10" />
+                {loading && <div className="absolute inset-0 bg-white/20 animate-pulse rounded-xl" />}
             </div>
             <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                     <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">{t.tipOfTheDay}</span>
                     <span className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
                 </div>
-                <div className="font-bold text-sm truncate">{plan.title} : <span className="font-normal opacity-90">{plan.text}</span></div>
+                <div className="font-bold text-sm truncate">{title} : <span className="font-normal opacity-90">{text}</span></div>
             </div>
             <button onClick={(e) => { e.stopPropagation(); onClose(); }} className="p-1 hover:bg-white/20 rounded-full transition-colors">
                 <X className="w-4 h-4 opacity-70" />
@@ -483,7 +524,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
             <div className={`w-full relative z-10 ${isDesktop ? '' : 'max-w-md mx-auto'}`}>
 
                 {/* CINEMATIC HERO */}
-                <div className={`relative overflow-hidden ${isDesktop ? 'md:-mb-12 h-[55vh] md:h-[85vh]' : 'h-[50vh]'}`}>
+                <div className={`relative overflow-hidden h-[50vh] ${isDesktop ? 'md:h-[85vh] md:-mb-12' : ''}`}>
                     <motion.div
                         style={{ y: heroY, opacity: heroOpacity }}
                         className="absolute inset-0 w-full h-full"
@@ -539,7 +580,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ duration: 0.8 }}
                             >
-                                <h1 className={`font-black mb-3 text-white tracking-tight leading-[1.1] drop-shadow-2xl ${isDesktop ? 'text-4xl md:text-8xl md:mb-4' : 'text-3xl'}`}>
+                                <h1 className={`font-black mb-3 text-white tracking-tight leading-[1.1] drop-shadow-2xl text-3xl ${isDesktop ? 'md:text-8xl md:mb-4' : ''}`}>
                                     {(heroBlock?.data as any)?.title || guide.title}
                                 </h1>
                             </motion.div>
@@ -566,16 +607,16 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4, duration: 0.6 }}
                     style={{ y: gridY }}
-                    className={`relative max-w-5xl mx-auto ${isDesktop ? 'px-8 md:px-12' : 'px-4'}`}
+                    className={`relative max-w-5xl mx-auto px-4 ${isDesktop ? 'md:px-12' : ''}`}
                 >
-                    <div className={`bg-white/5 backdrop-blur-2xl border border-white/10 rounded-t-[32px] md:rounded-[48px] shadow-2xl min-h-[50vh] ${isDesktop ? 'p-10' : 'p-4'}`}>
+                    <div className={`bg-white/5 backdrop-blur-2xl border border-white/10 rounded-t-[32px] md:rounded-[48px] shadow-2xl min-h-[50vh] p-4 ${isDesktop ? 'md:p-10' : ''}`}>
 
                         {/* 
                             GRID REFINEMENT: 
                             Mobile: 2 Cols
                             Desktop: 4 Cols but contained in max-w-5xl (Compact)
                         */}
-                        <div className={`grid gap-3 md:gap-4 ${isDesktop ? 'grid-cols-4' : 'grid-cols-2'}`}>
+                        <div className={`grid gap-3 md:gap-4 grid-cols-2 ${isDesktop ? 'md:grid-cols-4' : ''}`}>
 
                             {/* 1. WIFI (Rectangle 2x1) */}
                             {wifiBlock && !searchQuery && (
@@ -624,7 +665,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 // Special Case: Location on Desktop can be huge
                                 if (b.type === "location" && isDesktop) {
                                     colSpan = "md:col-span-2 md:row-span-2";
-                                    aspect = "md:aspect-square";
+                                    aspect = "aspect-[2/1] md:aspect-square";
                                 }
 
                                 const cardProps = {

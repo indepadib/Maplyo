@@ -6,6 +6,13 @@ export const metadata: Metadata = {
   description: "Créez des guides numériques pour vos voyageurs, beaux, rapides, et faciles à maintenir.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false, // App-like feel
+};
+
 
 import { AuthProvider } from "@/components/auth/AuthProvider";
 

@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { Loader2, Sparkles } from "lucide-react";
 
 // Helper components from SpecializedEditors
 // Duplicating small helpers here to avoid circular deps or complex exports, keeping it self-contained for now.
@@ -27,6 +29,49 @@ function TextAreaField({ label, value, onChange, placeholder }: any) {
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
             />
+        </div>
+    );
+}
+
+// --- AI BUTTON HELPERS ---
+function AIGenerateButton({ onGenerate, label = "Auto-Fill" }: { onGenerate: (city: string) => void; label?: string }) {
+    const [loading, setLoading] = useState(false);
+    const [city, setCity] = useState("");
+    const [showInput, setShowInput] = useState(false);
+
+    const handleClick = async () => {
+        if (!showInput) {
+            setShowInput(true);
+            return;
+        }
+        if (!city) return;
+
+        setLoading(true);
+        await onGenerate(city);
+        setLoading(false);
+        setShowInput(false);
+    };
+
+    return (
+        <div className="mb-6 flex gap-2 items-center">
+            {showInput && (
+                <input
+                    autoFocus
+                    className="h-9 rounded-lg border border-purple-200 px-3 text-sm outline-none w-32 focus:ring-2 focus:ring-purple-200"
+                    placeholder="City..."
+                    value={city}
+                    onChange={e => setCity(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleClick()}
+                />
+            )}
+            <button
+                onClick={handleClick}
+                disabled={loading}
+                className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg text-xs font-bold uppercase tracking-wider hover:shadow-lg transition-all disabled:opacity-50"
+            >
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                {loading ? "Generating..." : label}
+            </button>
         </div>
     );
 }
@@ -61,6 +106,22 @@ export function WelcomeEditor({ data, onChange }: { data: any; onChange: (d: any
 export function PlacesEditor({ data, onChange }: { data: any; onChange: (d: any) => void }) {
     const items = Array.isArray(data.items) ? data.items : [];
 
+    const handleAI = async (city: string) => {
+        try {
+            const res = await fetch('/api/ai/block-content', {
+                method: 'POST',
+                body: JSON.stringify({ city, blockType: 'places' })
+            });
+            const json = await res.json();
+            if (json.items) {
+                onChange({ ...data, items: [...items, ...json.items] });
+            }
+        } catch (e) {
+            console.error(e);
+            alert("AI Generation failed");
+        }
+    };
+
     const updateItem = (index: number, key: string, val: string) => {
         const newItems = [...items];
         newItems[index] = { ...newItems[index], [key]: val };
@@ -78,6 +139,8 @@ export function PlacesEditor({ data, onChange }: { data: any; onChange: (d: any)
 
     return (
         <div>
+            <AIGenerateButton onGenerate={handleAI} label="AI Recommendation" />
+
             <div className="space-y-6 mb-6">
                 {items.map((item: any, i: number) => (
                     <div key={i} className="p-4 bg-gray-50 rounded-xl border border-gray-200 relative group">
@@ -110,6 +173,22 @@ export function PlacesEditor({ data, onChange }: { data: any; onChange: (d: any)
 export function EventsEditor({ data, onChange }: { data: any; onChange: (d: any) => void }) {
     const items = Array.isArray(data.items) ? data.items : [];
 
+    const handleAI = async (city: string) => {
+        try {
+            const res = await fetch('/api/ai/block-content', {
+                method: 'POST',
+                body: JSON.stringify({ city, blockType: 'events' })
+            });
+            const json = await res.json();
+            if (json.items) {
+                onChange({ ...data, items: [...items, ...json.items] });
+            }
+        } catch (e) {
+            console.error(e);
+            alert("AI Generation failed");
+        }
+    };
+
     const updateItem = (index: number, key: string, val: string) => {
         const newItems = [...items];
         newItems[index] = { ...newItems[index], [key]: val };
@@ -130,6 +209,8 @@ export function EventsEditor({ data, onChange }: { data: any; onChange: (d: any)
 
     return (
         <div>
+            <AIGenerateButton onGenerate={handleAI} label="Find Events" />
+
             <div className="space-y-6 mb-6">
                 {items.map((item: any, i: number) => (
                     <div key={i} className="p-4 bg-gray-50 rounded-xl border border-gray-200 relative group">

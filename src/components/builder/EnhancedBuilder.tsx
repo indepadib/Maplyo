@@ -144,7 +144,7 @@ export function EnhancedBuilder({ initialGuide }: { initialGuide: Guide }) {
 
             <div className="flex-1 flex overflow-hidden">
                 {/* 1. LEFT COLUMN: LIBRARY */}
-                <aside className="w-80 bg-white border-r border-gray-200 flex flex-col z-10 overflow-y-auto">
+                <aside className="w-80 bg-white border-r border-gray-200 flex-col z-10 overflow-y-auto hidden lg:flex">
                     <div className="p-6">
                         <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-6">Bibliothèque</h2>
                         <div className="space-y-8">
@@ -177,6 +177,14 @@ export function EnhancedBuilder({ initialGuide }: { initialGuide: Guide }) {
                 {/* 2. CENTER COLUMN: CANVAS */}
                 <main className="flex-1 bg-gray-100/50 overflow-y-auto p-8 flex justify-center">
                     <div className="w-full max-w-xl pb-20">
+                        <div className="lg:hidden p-4 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-xl mb-6 text-sm flex items-start gap-3">
+                            <span className="text-xl">💻</span>
+                            <div>
+                                <p className="font-bold">Mode Consultation</p>
+                                <p className="opacity-90 mt-1">L'éditeur complet est optimisé pour ordinateur.</p>
+                            </div>
+                        </div>
+
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-2xl font-bold text-gray-900">Structure du guide</h2>
                             <span className="text-sm text-gray-500">{guide.blocks.length} blocs</span>
@@ -243,7 +251,7 @@ export function EnhancedBuilder({ initialGuide }: { initialGuide: Guide }) {
                 </main>
 
                 {/* 3. RIGHT COLUMN: PREVIEW & EDITOR */}
-                <aside className="w-[420px] bg-white border-l border-gray-200 flex flex-col z-10 shadow-xl">
+                <aside className="w-[420px] bg-white border-l border-gray-200 flex-col z-10 shadow-xl hidden lg:flex">
                     {/* TOGGLE TABS (Optional future feature, for now split view) */}
 
                     {/* TOP: PREVIEW */}

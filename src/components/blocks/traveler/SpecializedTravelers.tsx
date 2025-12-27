@@ -24,17 +24,31 @@ export function CheckinTraveler({ data, title }: { data: any; title?: string }) 
 export function LocationTraveler({ data }: { data: any }) {
     const address = data.address || "Adresse non renseignée";
     const mapUrl = data.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+    const embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
     return (
         <div className="space-y-6">
             <div className="aspect-video w-full rounded-[32px] overflow-hidden bg-gray-100 relative shadow-sm border border-gray-100 group">
-                {/* Fake Map Background */}
-                <div className="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')] bg-cover bg-center opacity-30 grayscale" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="bg-white p-3 rounded-full shadow-xl text-rose-500 animate-bounce">
-                        <MinimalIcons.location className="w-8 h-8" />
-                    </div>
-                </div>
+                {data.address ? (
+                    <iframe
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        loading="lazy"
+                        allowFullScreen
+                        src={embedUrl}
+                        className="grayscale hover:grayscale-0 transition-all duration-700"
+                    />
+                ) : (
+                    <>
+                        <div className="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')] bg-cover bg-center opacity-30 grayscale" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="bg-white p-3 rounded-full shadow-xl text-rose-500 animate-bounce">
+                                <MinimalIcons.location className="w-8 h-8" />
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
 
             <div className="bg-gray-50 p-6 rounded-[24px] border border-gray-100">
