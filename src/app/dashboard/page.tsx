@@ -9,6 +9,7 @@ import { Modal } from "@/components/ui/Modal";
 import type { Guide, BlockType } from "@/types/blocks";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 
 type GuideSummary = {
     id: string;
@@ -205,7 +206,7 @@ export default function DashboardPage() {
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                     <Link href="/dashboard" className="flex items-center gap-3 group">
                         <div className="w-10 h-10 bg-gradient-to-br from-rose-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-rose-500/20 group-hover:scale-105 transition-transform duration-300">
-                            <MapIcon className="w-5 h-5" />
+                            <MaplyoLogo className="w-6 h-6" classNamePath="fill-white" />
                         </div>
                         <h1 className="font-bold text-xl tracking-tight text-white">Maplyo</h1>
                     </Link>

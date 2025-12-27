@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { PhoneMockup3D } from "@/components/landing/PhoneMockup3D";
+import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 
 // --- Components ---
 
@@ -45,7 +46,7 @@ const Nav = () => {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 via-purple-600 to-rose-600 flex items-center justify-center shadow-lg shadow-rose-500/20 group-hover:shadow-rose-500/40 transition-shadow">
-            <MapIcon className="text-white w-5 h-5" />
+            <MaplyoLogo className="w-6 h-6" classNamePath="fill-white" />
           </div>
           <span className="text-2xl font-bold bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
             Maplyo
@@ -153,8 +154,8 @@ const PricingCard = ({
     viewport={{ once: true }}
     transition={{ delay, duration: 0.6 }}
     className={`relative p-8 rounded-[2rem] border transition-transform duration-300 hover:-translate-y-2 ${popular
-        ? "bg-gradient-to-b from-rose-950/40 to-slate-950/80 border-rose-500/30 shadow-2xl shadow-rose-900/10"
-        : "bg-slate-900/30 border-white/5 hover:border-white/10"
+      ? "bg-gradient-to-b from-rose-950/40 to-slate-950/80 border-rose-500/30 shadow-2xl shadow-rose-900/10"
+      : "bg-slate-900/30 border-white/5 hover:border-white/10"
       } flex flex-col h-full`}
   >
     {popular && (
@@ -193,8 +194,8 @@ const PricingCard = ({
 
     <Button
       className={`w-full h-12 text-sm font-semibold rounded-xl transition-all duration-300 ${popular
-          ? "bg-white text-slate-900 hover:bg-zinc-200 hover:scale-[1.02] shadow-xl"
-          : "bg-white/5 hover:bg-white/10 text-white hover:scale-[1.02]"
+        ? "bg-white text-slate-900 hover:bg-zinc-200 hover:scale-[1.02] shadow-xl"
+        : "bg-white/5 hover:bg-white/10 text-white hover:scale-[1.02]"
         } border-0`}
     >
       Choisir {tier}
@@ -521,7 +522,7 @@ export default function LandingPage() {
             <div className="col-span-2 md:col-span-1">
               <Link href="/" className="flex items-center gap-2 mb-6">
                 <div className="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center">
-                  <MapIcon className="text-white w-4 h-4" />
+                  <MaplyoLogo className="w-5 h-5" classNamePath="fill-white" />
                 </div>
                 <span className="text-xl font-bold text-white">Maplyo</span>
               </Link>
