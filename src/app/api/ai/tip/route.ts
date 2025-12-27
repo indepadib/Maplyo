@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { openai, cleanAIJSON } from "@/lib/ai/openai";
+import { createOpenAIClient, cleanAIJSON } from "@/lib/ai/openai";
 
 export async function POST(request: NextRequest) {
     try {
         const { city, lang, weather } = await request.json();
 
-        if (!process.env.OPENAI_API_KEY) {
+        const openai = createOpenAIClient();
+        if (!openai) {
             return NextResponse.json({ error: "No API Key" }, { status: 500 });
         }
 

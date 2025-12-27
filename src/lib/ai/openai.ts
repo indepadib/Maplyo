@@ -1,12 +1,15 @@
 import OpenAI from 'openai';
 
-// Initialize OpenAI Client
-// Requires OPENAI_API_KEY in .env.local
-export const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-    dangerouslyAllowBrowser: true // Only strictly if needed on client, but better keep it server side. 
-    // We will use this primarily in server actions/api routes.
-});
+// Helper to create client only when needed (runtime)
+// preventing build-time errors if env var is missing
+export const createOpenAIClient = () => {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) return null; // Handle gracefully in caller
+
+    return new OpenAI({
+        apiKey: apiKey,
+    });
+};
 
 // Helper to clean JSON output from AI (sometimes they add markdown blocks)
 export function cleanAIJSON(text: string) {
