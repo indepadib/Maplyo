@@ -18,13 +18,13 @@ export default function Icon() {
             <div
                 style={{
                     fontSize: 24,
-                    background: '#1e293b', // Navy background for the app icon
+                    background: '#000000', // Black background for sleek look
                     width: '100%',
                     height: '100%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderRadius: 36, // Rounded corners for Apple style
+                    borderRadius: 36,
                 }}
             >
                 <svg
@@ -34,35 +34,31 @@ export default function Icon() {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                 >
-                    {/* Navy Pillars (White/Lighter on dark bg) */}
+                    {/* Left Wing */}
                     <path
-                        d="M15 10 H35 V60 L25 70 L15 60 V10Z"
-                        fill="#ffffff"
+                        d="M20 20 L40 20 L40 80 L20 60 Z"
+                        fill="#e11d48"
                     />
+                    {/* Right Wing */}
                     <path
-                        d="M65 10 H85 V60 L75 70 L65 60 V10Z"
-                        fill="#ffffff"
+                        d="M80 20 L60 20 L60 80 L80 60 Z"
+                        fill="#9333ea"
                     />
-
-                    {/* Gold Feet */}
+                    {/* Central Fold */}
                     <path
-                        d="M15 75 L25 85 L35 75 L35 85 L25 95 L15 85 Z"
-                        fill="#d4af37"
+                        d="M40 20 L60 20 L60 55 L50 65 L40 55 Z"
+                        fill="#be185d"
                     />
+                    {/* Bottom Smile */}
                     <path
-                        d="M65 75 L75 85 L85 75 L85 85 L75 95 L65 85 Z"
-                        fill="#d4af37"
-                    />
-
-                    {/* Central Gold V */}
-                    <path
-                        d="M35 10 L50 25 L65 10 L65 35 L50 80 L35 35 Z"
-                        fill="#d4af37"
+                        d="M25 85 L50 95 L75 85"
+                        stroke="#be185d"
+                        strokeWidth="6"
+                        strokeLinecap="round"
                     />
                 </svg>
             </div>
         ),
-        // ImageResponse options
         {
             ...size,
         }

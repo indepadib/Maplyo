@@ -33,38 +33,32 @@ export default function Icon() {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                 >
-                    {/* Navy Pillars */}
+                    {/* Left Wing (Rose) */}
                     <path
-                        d="M15 10 H35 V60 L25 70 L15 60 V10Z"
-                        fill="#1e293b"
+                        d="M20 20 L40 20 L40 80 L20 60 Z"
+                        fill="#e11d48"
                     />
+                    {/* Right Wing (Purple) */}
                     <path
-                        d="M65 10 H85 V60 L75 70 L65 60 V10Z"
-                        fill="#1e293b"
+                        d="M80 20 L60 20 L60 80 L80 60 Z"
+                        fill="#9333ea"
                     />
-
-                    {/* Gold Feet */}
+                    {/* Central Fold */}
                     <path
-                        d="M15 75 L25 85 L35 75 L35 85 L25 95 L15 85 Z"
-                        fill="#d4af37"
+                        d="M40 20 L60 20 L60 55 L50 65 L40 55 Z"
+                        fill="#be185d"
                     />
+                    {/* Bottom Smile */}
                     <path
-                        d="M65 75 L75 85 L85 75 L85 85 L75 95 L65 85 Z"
-                        fill="#d4af37"
-                    />
-
-                    {/* Central Gold V */}
-                    <path
-                        d="M35 10 L50 25 L65 10 L65 35 L50 80 L35 35 Z"
-                        fill="#d4af37"
+                        d="M25 85 L50 95 L75 85"
+                        stroke="#be185d"
+                        strokeWidth="6"
+                        strokeLinecap="round"
                     />
                 </svg>
             </div>
         ),
-        // ImageResponse options
         {
-            // For convenience, we can re-use the exported icons size metadata
-            // config to also set the ImageResponse's width and height.
             ...size,
         }
     );
