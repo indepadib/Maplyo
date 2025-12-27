@@ -194,7 +194,7 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr'
                     <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">{t.tipOfTheDay}</span>
                     <span className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
                 </div>
-                <div className="font-bold text-sm truncate">{title} : <span className="font-normal opacity-90">{text}</span></div>
+                <div className="font-bold text-sm line-clamp-2 leading-tight">{title} : <span className="font-normal opacity-90">{text}</span></div>
             </div>
             <button onClick={(e) => { e.stopPropagation(); onClose(); }} className="p-1 hover:bg-white/20 rounded-full transition-colors">
                 <X className="w-4 h-4 opacity-70" />
@@ -665,7 +665,10 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 // Special Case: Location on Desktop can be huge
                                 if (b.type === "location" && isDesktop) {
                                     colSpan = "md:col-span-2 md:row-span-2";
-                                    aspect = "aspect-[2/1] md:aspect-square";
+                                    aspect = "aspect-square md:aspect-square"; // Square on mobile too for visibility
+                                } else if (isRichBlock) {
+                                    colSpan = "col-span-2";
+                                    aspect = "aspect-[2/1]";
                                 }
 
                                 const cardProps = {

@@ -42,29 +42,7 @@ export function GuideClient({ guide: initialGuide }: { guide: Guide }) {
         .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
       `}</style>
 
-      {/* Menu discret en bas pour navigation (style app mobile) - Masqué sur desktop */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 pb-safe pt-2 px-6 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-        <div className="max-w-md mx-auto flex items-center justify-between h-14">
-          <Link href="/" className="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-900 transition-colors">
-            <span className="text-xl">🏠</span>
-            <span className="text-[10px] font-medium uppercase">Accueil</span>
-          </Link>
 
-          {/* Un dummy "Menu" central pour le style */}
-          <div className="relative -top-6">
-            <Link href="/app/guides/demo/builder">
-              <div className="w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
-                ✏️
-              </div>
-            </Link>
-          </div>
-
-          <div className="flex flex-col items-center gap-1 text-gray-400">
-            <span className="text-xl">👤</span>
-            <span className="text-[10px] font-medium uppercase">Profil</span>
-          </div>
-        </div>
-      </div>
 
       {/* Le Guide Rendu */}
       <StyledGuideRenderer guide={guide} unlocked={unlocked} />

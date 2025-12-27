@@ -11,20 +11,22 @@ export async function POST(request: NextRequest) {
         }
 
         const prompt = `
-        Generate a "Tip of the Day" for a visitor in ${city || "this city"}.
+        You are a local expert for ${city || "this city"}.
+        Generate a "Tip of the Day" for a visitor.
         Context:
         - Date: ${new Date().toLocaleDateString()}
         - Weather: ${weather || "Normal"}
-        - Language: ${lang || "en"}
+        - Language: ${lang || "en"} (Output strictly in this language)
 
-        Output strictly 2 short sentences:
-        1. A specific activity suggestion based on weather/season.
-        2. A "Pro Tip" for locals (e.g. transport, food, mannerism).
-        
-        Format as JSON:
+        Requirements:
+        1. BE SPECIFIC: Name a real restaurant, museum, park, or event. Do NOT say "visit a local museum", say "Visit the Louvre".
+        2. BE TIMELY: If it's raining, suggest an indoor activity. If it's generic, you fail.
+        3. BE BRIEF: 2 sentences max.
+
+        Output JSON:
         {
-            "title": "Topic (e.g. Rainy Day Art, Sunny Park)",
-            "text": "The 2 sentences...",
+            "title": "Specific Topic (e.g. Visit [Place Name])",
+            "text": "Specific advice clearly naming the place/activity.",
             "icon": "Sun|Umbrella|Coffee|Camera|MapPin"
         }
         `;
@@ -32,8 +34,8 @@ export async function POST(request: NextRequest) {
         const response = await openai.chat.completions.create({
             model: "gpt-4o",
             messages: [{ role: "system", content: prompt }],
-            temperature: 0.8,
-            max_tokens: 150
+            temperature: 0.7,
+            max_tokens: 200
         });
 
         const content = response.choices[0]?.message?.content || "{}";
