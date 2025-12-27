@@ -10,6 +10,8 @@ import type { Guide, BlockType } from "@/types/blocks";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
+import { getUserSubscription, checkLimit } from "@/lib/subscription";
+import { UserSubscription } from "@/types/subscription";
 
 type GuideSummary = {
     id: string;
@@ -99,15 +101,16 @@ export default function DashboardPage() {
         setIsGenerating(false);
     };
 
-
     useEffect(() => {
-        const loadGuides = async () => {
-            if (!user) return;
-            setLoading(true);
+        if (!user) return;
+
+        const load = async () => {
+            // 1. Load Guides
             const { data, error } = await supabase
-                .from("guides")
-                .select("id, title, slug, theme_id, updated_at, content")
-                .eq("user_id", user.id); // Filter by user
+                .from('guides')
+                .select('id, title, slug, theme_id, updated_at, content')
+                .eq('user_id', user.id)
+                .order('updated_at', { ascending: false });
 
             if (error) {
                 console.error("Error loading guides:", error);
@@ -120,12 +123,16 @@ export default function DashboardPage() {
                     updatedAt: new Date(g.updated_at).getTime(),
                     blockCount: g.content?.blocks?.length || 0
                 }));
-                items.sort((a, b) => b.updatedAt - a.updatedAt);
                 setGuides(items);
             }
+
+            // 2. Load Subscription
+            const sub = await getUserSubscription(user.id);
+            setSubscription(sub);
+
             setLoading(false);
         };
-        loadGuides();
+        load();
     }, [user]);
 
     const filteredGuides = [...guides].sort((a, b) => {
@@ -146,7 +153,16 @@ export default function DashboardPage() {
 
     const handleCreateGuide = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!user) return;
+        if (!user || !subscription) return;
+
+        // CHECK LIMITS
+        const canCreate = checkLimit(subscription.planId, 'guides', guides.length);
+        if (!canCreate) {
+            // Redirect to Pricing
+            setIsCreateModalOpen(false); // Close modal
+            window.location.href = '/pricing';
+            return;
+        }
 
         const newGuideData = {
             title: newGuideTitle || "Mon Nouveau Guide",
