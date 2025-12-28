@@ -41,6 +41,8 @@ export type AccessCodesBlockData = z.infer<typeof AccessCodesBlockDataSchema>;
 export const CheckinBlockDataSchema = z.object({
   time: z.string().default("15:00"),
   instruction: z.string().optional(),
+  videoUrl: z.string().optional(),
+  images: z.array(z.string()).default([]),
 });
 export type CheckinBlockData = z.infer<typeof CheckinBlockDataSchema>;
 
@@ -87,6 +89,10 @@ export const PlacesBlockDataSchema = z.object({
     address: z.string().optional(),
     url: z.string().optional(),
     imageUrl: z.string().optional(),
+    photos: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    priceLevel: z.enum(['cheap', 'moderate', 'expensive']).optional(),
+    rating: z.number().min(0).max(5).optional(),
   })).default([]),
 });
 export type PlacesBlockData = z.infer<typeof PlacesBlockDataSchema>;
@@ -134,6 +140,7 @@ export const TrashBlockDataSchema = z.object({
   trashDay: z.string().optional(),
   recyclingDay: z.string().optional(),
   location: z.string().optional(),
+  imageUrl: z.string().optional(),
 });
 export type TrashBlockData = z.infer<typeof TrashBlockDataSchema>;
 
@@ -142,6 +149,7 @@ export const ParkingBlockDataSchema = z.object({
   location: z.string().optional(),
   cost: z.string().optional(),
   mapUrl: z.string().optional(),
+  imageUrl: z.string().optional(),
 });
 export type ParkingBlockData = z.infer<typeof ParkingBlockDataSchema>;
 

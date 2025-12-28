@@ -1,5 +1,7 @@
 
 // --- SHARED UI HELPERS ---
+import { FileUploader } from "@/components/ui/FileUploader";
+
 function InputField({ label, value, onChange, placeholder, type = "text" }: any) {
     return (
         <div className="mb-4">
@@ -44,6 +46,17 @@ export function CheckinEditor({ data, onChange }: { data: any; onChange: (d: any
                 value={data.instruction}
                 onChange={(v: string) => onChange({ ...data, instruction: v })}
                 placeholder="Instructions d'accès..."
+            />
+            <FileUploader
+                label="Vidéo (MP4) ou URL YouTube"
+                value={data.videoUrl}
+                onUpload={(url) => onChange({ ...data, videoUrl: url })}
+                accept="video/*"
+            />
+            <FileUploader
+                label="Plan d'accès / Photo"
+                value={data.images?.[0]}
+                onUpload={(url) => onChange({ ...data, images: url ? [url] : [] })}
             />
         </div>
     );
@@ -298,6 +311,11 @@ export function TrashEditor({ data, onChange }: { data: any; onChange: (d: any) 
                 onChange={(v: string) => onChange({ ...data, location: v })}
                 placeholder="ex: Dans le garage, au fond à droite"
             />
+            <FileUploader
+                label="Photo du local"
+                value={data.imageUrl}
+                onUpload={(url) => onChange({ ...data, imageUrl: url })}
+            />
         </div>
     );
 }
@@ -332,6 +350,11 @@ export function ParkingEditor({ data, onChange }: { data: any; onChange: (d: any
                     placeholder="https://maps.google.com/..."
                 />
             </div>
+            <FileUploader
+                label="Photo du parking"
+                value={data.imageUrl}
+                onUpload={(url) => onChange({ ...data, imageUrl: url })}
+            />
         </div>
     );
 }

@@ -16,6 +16,27 @@ export function CheckinTraveler({ data, title }: { data: any; title?: string }) 
                     <p>{data.instruction}</p>
                 </div>
             )}
+
+            {data.videoUrl && (
+                <div className="rounded-[24px] overflow-hidden bg-black aspect-video shadow-md">
+                    <iframe
+                        src={data.videoUrl.replace("watch?v=", "embed/")}
+                        className="w-full h-full"
+                        allowFullScreen
+                        title="Video"
+                    />
+                </div>
+            )}
+
+            {data.images && data.images.length > 0 && (
+                <div className="grid grid-cols-2 gap-2">
+                    {data.images.map((img: string, i: number) => (
+                        <div key={i} className="aspect-square rounded-2xl overflow-hidden bg-gray-100">
+                            <img src={img} alt="Detail" className="w-full h-full object-cover" />
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
@@ -219,38 +240,42 @@ export function TrashTraveler({ data }: { data: any }) {
     return (
         <div className="space-y-6">
             <div className="bg-gray-50 p-6 rounded-[24px] border border-gray-100 flex flex-col gap-4">
-                <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                        <MinimalIcons.trash className="w-6 h-6" />
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-gray-900 text-lg">Gestion des Déchets</h3>
-                        {data.location && <p className="text-gray-500 text-sm">{data.location}</p>}
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 mt-2">
-                    {data.trashDay && (
-                        <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm text-center">
-                            <div className="text-[10px] font-bold uppercase text-gray-400 mb-1">Ordures</div>
-                            <div className="font-bold text-gray-900">{data.trashDay}</div>
-                        </div>
-                    )}
-                    {data.recyclingDay && (
-                        <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm text-center">
-                            <div className="text-[10px] font-bold uppercase text-yellow-500 mb-1">Recyclage</div>
-                            <div className="font-bold text-gray-900">{data.recyclingDay}</div>
-                        </div>
-                    )}
+                <div>
+                    <h3 className="font-bold text-gray-900 text-lg">Gestion des Déchets</h3>
+                    {data.location && <p className="text-gray-500 text-sm">{data.location}</p>}
                 </div>
             </div>
 
-            {data.instructions && (
-                <div className="prose prose-sm max-w-none text-gray-600 bg-white p-4 rounded-2xl border border-gray-100">
-                    <p>{data.instructions}</p>
+            {data.imageUrl && (
+                <div className="rounded-xl overflow-hidden aspect-video relative">
+                    <img src={data.imageUrl} alt="Trash Location" className="w-full h-full object-cover" />
                 </div>
             )}
+
+            <div className="grid grid-cols-2 gap-3 mt-2">
+                {data.trashDay && (
+                    <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm text-center">
+                        <div className="text-[10px] font-bold uppercase text-gray-400 mb-1">Ordures</div>
+                        <div className="font-bold text-gray-900">{data.trashDay}</div>
+                    </div>
+                )}
+                {data.recyclingDay && (
+                    <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm text-center">
+                        <div className="text-[10px] font-bold uppercase text-yellow-500 mb-1">Recyclage</div>
+                        <div className="font-bold text-gray-900">{data.recyclingDay}</div>
+                    </div>
+                )}
+            </div>
         </div>
+
+            {
+        data.instructions && (
+            <div className="prose prose-sm max-w-none text-gray-600 bg-white p-4 rounded-2xl border border-gray-100">
+                <p>{data.instructions}</p>
+            </div>
+        )
+    }
+        </div >
     );
 }
 
@@ -261,7 +286,10 @@ export function ParkingTraveler({ data }: { data: any }) {
     return (
         <div className="space-y-6">
             <div className="aspect-video w-full rounded-[32px] overflow-hidden bg-gray-100 relative shadow-sm border border-gray-100 group">
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&q=80')] bg-cover bg-center" />
+                <div
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                    style={{ backgroundImage: `url('${data.imageUrl || 'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&q=80'}')` }}
+                />
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6 text-center">
                     <MinimalIcons.parking className="w-10 h-10 mb-2 opacity-90" />

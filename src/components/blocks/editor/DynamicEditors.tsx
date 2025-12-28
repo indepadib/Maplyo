@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Loader2, Sparkles } from "lucide-react";
+import { FileUploader } from "@/components/ui/FileUploader";
 
 // Helper components from SpecializedEditors
 // Duplicating small helpers here to avoid circular deps or complex exports, keeping it self-contained for now.
@@ -92,11 +93,10 @@ export function WelcomeEditor({ data, onChange }: { data: any; onChange: (d: any
                 onChange={(v: string) => onChange({ ...data, content: v })}
                 placeholder="Nous sommes ravis de vous accueillir..."
             />
-            <InputField
-                label="Image URL"
+            <FileUploader
+                label="Image de couverture"
                 value={data.imageUrl}
-                onChange={(v: string) => onChange({ ...data, imageUrl: v })}
-                placeholder="https://..."
+                onUpload={(url) => onChange({ ...data, imageUrl: url })}
             />
         </div>
     );
@@ -154,9 +154,35 @@ export function PlacesEditor({ data, onChange }: { data: any; onChange: (d: any)
                                 <TextAreaField label="Description" value={item.description} onChange={(v: string) => updateItem(i, "description", v)} />
                             </div>
                             <InputField label="Adresse" value={item.address} onChange={(v: string) => updateItem(i, "address", v)} />
-                            <InputField label="Lien URL" value={item.url} onChange={(v: string) => updateItem(i, "url", v)} />
+                            <div className="col-span-1">
+                                <InputField label="Lien URL" value={item.url} onChange={(v: string) => updateItem(i, "url", v)} />
+                            </div>
+                            <div className="col-span-1">
+                                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Prix</label>
+                                <select
+                                    className="w-full h-10 rounded-lg border border-gray-300 bg-white px-3 text-sm outline-none"
+                                    value={item.priceLevel || "moderate"}
+                                    onChange={(e) => updateItem(i, "priceLevel", e.target.value)}
+                                >
+                                    <option value="cheap">€ (Abordable)</option>
+                                    <option value="moderate">€€ (Moyen)</option>
+                                    <option value="expensive">€€€ (Luxe)</option>
+                                </select>
+                            </div>
                             <div className="col-span-2">
-                                <InputField label="Image URL" value={item.imageUrl} onChange={(v: string) => updateItem(i, "imageUrl", v)} />
+                                <InputField
+                                    label="Tags (séparés par virgule)"
+                                    value={item.tags?.join(', ')}
+                                    onChange={(v: string) => updateItem(i, "tags", v.split(',').map((s: string) => s.trim()))}
+                                    placeholder="Romantique, Vue mer, Italien..."
+                                />
+                            </div>
+                            <div className="col-span-2">
+                                <FileUploader
+                                    label="Image Principale"
+                                    value={item.imageUrl}
+                                    onUpload={(url) => updateItem(i, "imageUrl", url)}
+                                />
                             </div>
                         </div>
                     </div>
@@ -310,7 +336,11 @@ export function UpsellsEditor({ data, onChange }: { data: any; onChange: (d: any
                         <TextAreaField label="Description" value={item.description} onChange={(v: string) => updateItem(i, "description", v)} />
                         <InputField label="Texte bouton" value={item.cta} onChange={(v: string) => updateItem(i, "cta", v)} placeholder="Réserver" />
                         <InputField label="Lien bouton" value={item.url} onChange={(v: string) => updateItem(i, "url", v)} />
-                        <InputField label="Image URL" value={item.imageUrl} onChange={(v: string) => updateItem(i, "imageUrl", v)} />
+                        <FileUploader
+                            label="Image de l'offre"
+                            value={item.imageUrl}
+                            onUpload={(url) => updateItem(i, "imageUrl", url)}
+                        />
                     </div>
                 ))}
             </div>

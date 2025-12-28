@@ -236,12 +236,12 @@ export default function LandingPage() {
       {/* --- Dynamic Background --- */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <motion.div
-          style={{ y: yBackground, opacity: 0.6 }}
-          className="absolute top-[-20%] left-[-10%] w-[80vw] h-[80vw] bg-rose-600/10 rounded-full blur-[150px] mix-blend-screen"
+          style={{ y: yBackground, opacity: 0.5 }}
+          className="absolute top-[-20%] left-[-10%] w-[80vw] h-[80vw] bg-rose-600/10 rounded-full blur-3xl mix-blend-screen"
         />
         <motion.div
-          style={{ y: useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]), opacity: 0.4 }}
-          className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-purple-600/10 rounded-full blur-[150px] mix-blend-screen"
+          style={{ y: useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]), opacity: 0.3 }}
+          className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-purple-600/10 rounded-full blur-3xl mix-blend-screen"
         />
         <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03]" />
       </div>
@@ -354,7 +354,7 @@ export default function LandingPage() {
               >
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 text-xs font-bold">Map</div>
-                  <span className="text-white text-sm font-bold">GPS Intégré</span>
+                  <span className="text-white text-sm font-bold">Google Maps Intégré</span>
                 </div>
                 <p className="text-xs text-zinc-400">Google Maps directement dans le guide.</p>
               </motion.div>
@@ -371,10 +371,19 @@ export default function LandingPage() {
           <div className="relative flex overflow-x-hidden group">
             <div className="animate-marquee whitespace-nowrap flex space-x-12 items-center">
               {/* Logos placeholders - duplicated for seamless loop */}
-              {[...Array(10)].map((_, i) => (
-                <div key={i} className="text-2xl font-bold text-white/20 flex items-center gap-2">
-                  <div className="w-8 h-8 bg-white/10 rounded-full" />
-                  <span>H O S T I F Y</span>
+              {[
+                "HOSTPILOT",
+                "CONCIERGERIE ZENATA",
+                "CONCIERGERIE CABO NEGRO",
+                "BNB MANAGER",
+                "KEY CONCIERGE",
+                "HOSTPILOT",
+                "CONCIERGERIE ZENATA",
+                "CONCIERGERIE CABO NEGRO"
+              ].map((name, i) => (
+                <div key={i} className="text-xl font-bold text-white/30 flex items-center gap-2">
+                  <div className="w-6 h-6 bg-white/10 rounded-full" />
+                  <span>{name}</span>
                 </div>
               ))}
             </div>

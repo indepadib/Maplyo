@@ -10,6 +10,7 @@ import { MinimalIcons } from "@/components/icons/MinimalIcons";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
 import { Wifi, Key, X, ExternalLink, Search, Globe, ChevronRight, CheckCircle2, MapPin, Sun, Moon, Coffee, Utensils, Music, Camera } from "lucide-react";
+import { GuideChatbot } from "./GuideChatbot";
 
 // --- TRANSLATIONS ---
 const DICTIONARY = {
@@ -53,7 +54,31 @@ const DICTIONARY = {
         secureAccess: "Secure Access",
         network: "Network",
         password: "Password",
-        tipOfTheDay: "Daily Tip"
+        tipOfTheDay: "Daily Tip",
+        // Days
+        sunday: "Sunday",
+        monday: "Monday",
+        tuesday: "Tuesday",
+        wednesday: "Wednesday",
+        thursday: "Thursday",
+        friday: "Friday",
+        saturday: "Saturday",
+        // Daily Tips Defaults
+        lazy: "Lazy",
+        mood: "Mood",
+        discovery: "Discovery",
+        tasty: "Tasty",
+        adventure: "Adventure",
+        festive: "Festive",
+        outing: "Outing",
+        brunch: "Brunch in",
+        explore: "Explore center of",
+        museums: "Visit museums in",
+        taste: "Taste specialties of",
+        excursion: "Go on an excursion",
+        nightlife: "Nightlife in",
+        walk: "Walk around",
+        items: "items"
     }
 };
 
@@ -154,13 +179,13 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr'
     // FALLBACK PLANS (If AI fails or loading)
     const day = new Date().getDay();
     const PLANS = [
-        { day: 0, icon: Coffee, title: lang === 'fr' ? "Dimanche Détente" : "Lazy Sunday", text: lang === 'fr' ? `Un brunch à ${city || "ville"} ?` : `Brunch in ${city || "town"}?` },
-        { day: 1, icon: Sun, title: lang === 'fr' ? "Lundi Motivé" : "Monday Mood", text: lang === 'fr' ? `Explorez le centre de ${city}.` : `Explore ${city}'s center.` },
-        { day: 2, icon: Camera, title: lang === 'fr' ? "Mardi Découverte" : "Discovery Tuesday", text: lang === 'fr' ? `Visitez les musées de ${city}.` : `Visit ${city}'s museums.` },
-        { day: 3, icon: Utensils, title: lang === 'fr' ? "Mercredi Gourmand" : "Tasty Wednesday", text: lang === 'fr' ? `Goutez aux spécialités de ${city} !` : `Taste ${city}'s specialties!` },
-        { day: 4, icon: MapPin, title: lang === 'fr' ? "Jeudi Aventure" : "Adventure Thursday", text: lang === 'fr' ? `Partez en excursion.` : `Go on an excursion.` },
-        { day: 5, icon: Music, title: lang === 'fr' ? "Vendredi Festif" : "Festive Friday", text: lang === 'fr' ? `La vie nocturne de ${city} !` : `${city}'s nightlife!` },
-        { day: 6, icon: Sun, title: lang === 'fr' ? "Samedi Sortie" : "Saturday Outing", text: lang === 'fr' ? `Baladez-vous à ${city}.` : `Walk around ${city}.` },
+        { day: 0, icon: Coffee, title: lang === 'fr' ? "Dimanche Détente" : `${t.sunday} ${t.lazy}`, text: lang === 'fr' ? `Un brunch à ${city || "ville"} ?` : `${t.brunch} ${city || "town"}?` },
+        { day: 1, icon: Sun, title: lang === 'fr' ? "Lundi Motivé" : `${t.monday} ${t.mood}`, text: lang === 'fr' ? `Explorez le centre de ${city}.` : `${t.explore} ${city}.` },
+        { day: 2, icon: Camera, title: lang === 'fr' ? "Mardi Découverte" : `${t.tuesday} ${t.discovery}`, text: lang === 'fr' ? `Visitez les musées de ${city}.` : `${t.museums} ${city}.` },
+        { day: 3, icon: Utensils, title: lang === 'fr' ? "Mercredi Gourmand" : `${t.wednesday} ${t.tasty}`, text: lang === 'fr' ? `Goutez aux spécialités de ${city} !` : `${t.taste} ${city}!` },
+        { day: 4, icon: MapPin, title: lang === 'fr' ? "Jeudi Aventure" : `${t.thursday} ${t.adventure}`, text: lang === 'fr' ? `Partez en excursion.` : `${t.excursion}.` },
+        { day: 5, icon: Music, title: lang === 'fr' ? "Vendredi Festif" : `${t.friday} ${t.festive}`, text: lang === 'fr' ? `La vie nocturne de ${city} !` : `${t.nightlife} ${city}!` },
+        { day: 6, icon: Sun, title: lang === 'fr' ? "Samedi Sortie" : `${t.saturday} ${t.outing}`, text: lang === 'fr' ? `Baladez-vous à ${city}.` : `${t.walk} ${city}.` },
     ];
 
     const fallback = PLANS[day];
@@ -686,7 +711,11 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 if (isRichBlock) {
                                     if (b.type === "location") return <div key={b.id} className={wrapperClass}><LocationCard {...cardProps} /></div>;
                                     if (b.type === "upsells") return <div key={b.id} className={wrapperClass}><UpsellsCard {...cardProps} /></div>;
-                                    return <div key={b.id} className={wrapperClass}><ListCard title={b.title || def.label} icon={Icon} items={(b.data as any).items || []} theme={currentTheme} /></div>;
+
+                                    // Translate default title if needed
+                                    const displayTitle = b.title || (t[b.type as keyof typeof t] || def.label);
+
+                                    return <div key={b.id} className={wrapperClass}><ListCard title={displayTitle} icon={Icon} items={(b.data as any).items || []} theme={currentTheme} /></div>;
                                 }
 
                                 if (b.type === "checkin" || b.type === "checkout") {
@@ -696,7 +725,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 // Mini Cards (Square)
                                 if (["contact", "rules", "amenities", "faq"].includes(b.type)) {
                                     let colorClass = "bg-gray-100 text-gray-600";
-                                    let startTitle = b.title || def.label;
+                                    let startTitle = b.title || (t[b.type as keyof typeof t] || def.label);
                                     let count = undefined;
 
                                     if (b.type === "contact") { colorClass = "bg-green-100 text-green-600"; }
@@ -760,6 +789,8 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                 )}
             </BottomSheet>
 
+            {/* AI CHATBOT INTEGRATION */}
+            <GuideChatbot guide={guide} primaryColor={currentTheme.primary} />
         </div>
     );
 }

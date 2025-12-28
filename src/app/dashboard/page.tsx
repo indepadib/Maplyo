@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Edit2, Trash2, ExternalLink, Moon, Sun, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles } from "lucide-react";
+import { Plus, Edit2, Trash2, ExternalLink, Moon, Sun, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { guideThemes } from "@/types/themes";
 import { Modal } from "@/components/ui/Modal";
@@ -30,6 +30,7 @@ export default function DashboardPage() {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [newGuideTitle, setNewGuideTitle] = useState("");
     const [loading, setLoading] = useState(true);
+    const [subscription, setSubscription] = useState<UserSubscription | null>(null);
     // AI State
     const [isAiModalOpen, setIsAiModalOpen] = useState(false);
     const [aiPrompt, setAiPrompt] = useState<{
@@ -252,6 +253,13 @@ export default function DashboardPage() {
                         >
                             <LogOut className="w-4 h-4 ml-0.5" />
                         </button>
+                        <Link
+                            href="/dashboard/settings"
+                            className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-white/10 hover:text-white transition-all hover:scale-105"
+                            title="Paramètres"
+                        >
+                            <Settings className="w-4 h-4" />
+                        </Link>
                     </div>
                 </div>
             </header>

@@ -299,4 +299,69 @@ export const guideThemes: GuideTheme[] = [
         bgType: "image",
         bgImage: "https://images.unsplash.com/photo-1580649721798-75ce479269d0?w=1920&q=80", // Agadir beach/palm
     },
+    {
+        id: "boho",
+        name: "Bohemian Chic",
+        description: "Naturel et artistique",
+        primary: "#b45309", // Amber 700
+        background: "#fff7ed",
+        cardBg: "rgba(255, 255, 255, 0.95)",
+        text: "#7c2d12",
+        textLight: "#9a3412",
+        border: "#fed7aa",
+        bgType: "image",
+        bgImage: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=1920&q=80", // Boho Interior
+    },
+    {
+        id: "scandi",
+        name: "Scandinave",
+        description: "Minimalisme nordique",
+        primary: "#475569",
+        background: "#f8fafc",
+        cardBg: "rgba(255, 255, 255, 0.98)",
+        text: "#334155",
+        textLight: "#64748b",
+        border: "#e2e8f0",
+        bgType: "image",
+        bgImage: "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?w=1920&q=80", // Scandi
+    },
+    {
+        id: "tropical",
+        name: "Tropiques",
+        description: "Jungle et vert",
+        primary: "#15803d",
+        background: "#f0fdf4",
+        cardBg: "rgba(255, 255, 255, 0.9)",
+        text: "#14532d",
+        textLight: "#166534",
+        border: "#bbf7d0",
+        bgType: "image",
+        bgImage: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1920&q=80", // Tropical Hotel
+    },
+    {
+        id: "dark-luxe",
+        name: "Noir & Or",
+        description: "Luxe nocturne",
+        primary: "#eab308", // Yellow 500
+        background: "#09090b", // Zinc 950
+        cardBg: "rgba(9, 9, 11, 0.95)",
+        text: "#fafafa",
+        textLight: "#a1a1aa",
+        border: "#27272a",
+        bgType: "image",
+        bgImage: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&q=80", // Dark Luxury Interior
+    },
+    {
+        id: "greek",
+        name: "Santorini",
+        description: "Bleu et Blanc",
+        primary: "#0284c7",
+        background: "#ffffff",
+        cardBg: "rgba(255, 255, 255, 0.95)",
+        text: "#0c4a6e",
+        textLight: "#0369a1",
+        border: "#e0f2fe",
+        bgType: "image",
+        bgImage: "https://images.unsplash.com/photo-1601581875309-fafbf2d3ed92?w=1920&q=80", // Greece
+    }
 ];

@@ -33,20 +33,50 @@ export function PlacesTraveler({ data }: { data: any }) {
                         </div>
                     )}
                     <div className="p-4">
-                        <div className="flex justify-between items-start">
-                            <h4 className="font-bold text-gray-900">{item.name || "Lieu"}</h4>
+                        <div className="flex justify-between items-start mb-1">
+                            <div>
+                                <h4 className="font-bold text-gray-900 text-lg">{item.name || "Lieu"}</h4>
+                                <div className="flex items-center gap-2 mt-1">
+                                    {item.priceLevel && (
+                                        <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                            {item.priceLevel === 'expensive' ? '€€€' : item.priceLevel === 'moderate' ? '€€' : '€'}
+                                        </span>
+                                    )}
+                                    {item.rating && (
+                                        <span className="text-xs font-bold text-amber-500 flex items-center gap-0.5">
+                                            ★ {item.rating}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
                             {item.url && (
-                                <a href={item.url} target="_blank" rel="noopener noreferrer" className="p-1.5 bg-gray-50 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 transition-colors">
+                                <a href={item.url} target="_blank" rel="noopener noreferrer" className="p-2 bg-gray-50 rounded-xl text-gray-400 hover:text-white hover:bg-blue-600 transition-all shadow-sm">
                                     <ExternalLink className="w-4 h-4" />
                                 </a>
                             )}
                         </div>
-                        {item.description && <p className="text-sm text-gray-600 mt-2 line-clamp-2">{item.description}</p>}
-                        {item.address && (
-                            <div className="flex items-center gap-1.5 mt-3 text-xs font-medium text-gray-500">
-                                <MapPin className="w-3.5 h-3.5" />
-                                {item.address}
+
+                        {item.tags && item.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mb-3">
+                                {item.tags.map((tag: string, idx: number) => (
+                                    <span key={idx} className="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-lg">
+                                        #{tag}
+                                    </span>
+                                ))}
                             </div>
+                        )}
+
+                        {item.description && <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 mb-3">{item.description}</p>}
+
+                        {item.address && (
+                            <a
+                                href={`https://maps.google.com/?q=${item.address}`}
+                                target="_blank"
+                                className="flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-blue-500 transition-colors p-2 rounded-lg hover:bg-blue-50 -ml-2 w-fit"
+                            >
+                                <MapPin className="w-3.5 h-3.5" />
+                                <span className="underline decoration-dotted">{item.address}</span>
+                            </a>
                         )}
                     </div>
                 </div>

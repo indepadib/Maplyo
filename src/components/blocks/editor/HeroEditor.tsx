@@ -1,6 +1,7 @@
 "use client";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
+import { FileUploader } from "@/components/ui/FileUploader";
 
 export function HeroEditor({ data, onChange }: { title?: string; data: any; onChange: (d: any) => void }) {
   const d = data ?? {};
@@ -15,8 +16,12 @@ export function HeroEditor({ data, onChange }: { title?: string; data: any; onCh
         <Textarea value={d.subtitle ?? ""} onChange={(e) => onChange({ ...d, subtitle: e.target.value })} />
       </div>
       <div>
-        <div className="mb-1 text-xs font-medium text-zinc-700">Image de couverture (URL)</div>
-        <Input value={d.coverImageUrl ?? ""} onChange={(e) => onChange({ ...d, coverImageUrl: e.target.value })} />
+        <FileUploader
+          label="Image de couverture"
+          value={d.coverImageUrl}
+          onUpload={(url) => onChange({ ...d, coverImageUrl: url })}
+          accept="image/*"
+        />
       </div>
       <div>
         <div className="mb-1 text-xs font-medium text-zinc-700">Badges (séparés par virgules)</div>
