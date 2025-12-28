@@ -379,17 +379,20 @@ export default function LandingPage() {
               {/* Logos placeholders - duplicated for seamless loop */}
               {[
                 "HOSTPILOT",
-                "CONCIERGERIE ZENATA",
-                "CONCIERGERIE CABO NEGRO",
+                "ZENATA",
+                "CABO NEGRO",
                 "BNB MANAGER",
                 "KEY CONCIERGE",
                 "HOSTPILOT",
-                "CONCIERGERIE ZENATA",
-                "CONCIERGERIE CABO NEGRO"
+                "ZENATA",
+                "CABO NEGRO"
               ].map((name, i) => (
-                <div key={i} className="text-xl font-bold text-white/30 flex items-center gap-2">
-                  <div className="w-6 h-6 bg-white/10 rounded-full" />
-                  <span>{name}</span>
+                <div key={i} className="flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity duration-300 px-6">
+                  {/* Abstract Geometric Logo for each */}
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center border border-white/10">
+                    <span className="text-xs font-black text-white">{name[0]}</span>
+                  </div>
+                  <span className="text-lg font-bold tracking-widest text-white/80">{name}</span>
                 </div>
               ))}
             </div>
@@ -588,9 +591,15 @@ export default function LandingPage() {
                 Paiement Sécurisé
               </span>
               {/* Payment Icons (Text for now to allow SVG icons later if needed) */}
-              <div className="flex gap-2">
-                <svg className="h-6 w-auto" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path className="fill-[#fff]" d="M13.623 0L9.049 23.594H3.012L7.586 0h6.037z" /><path className="fill-[#fff]" d="M37.98 0l-3.003 14.739c-.198.857-1.127 1.401-1.896 1.401h-4.664l2.87-16.14h6.693z" /><path className="fill-[#F79E1B]" d="M26.262 18.068C26.96 17.07 27.696 15.65 28.16 13.91l2.05-10.02a18.257 18.257 0 00-6.732-1.076c-3.13 0-5.32 1.636-5.32 3.996 0 2.228 2.016 3.447 3.535 4.192 1.57.771 2.096 1.258 2.096 1.944 0 1.054-1.267 1.536-2.44 1.536-1.63 0-3.32-.821-4.28-1.78l-2.618 3.326c1.64 1.492 4.675 2.14 6.84 2.14 3.73 0 6.07-1.868 6.07-4.57 0-1.874-1.04-3.21-3.664-4.498-1.46-.73-2.396-1.503-2.396-2.636 0-1.18 1.15-1.995 2.502-1.995 1.43 0 2.89.542 3.82 1.156L26.26 18.068z" /><path className="fill-[#fff]" d="M9.162 0L6.72 15.66s-.31.877-1.428 1.11C3.33 17.152.013 15.86.013 15.86L.002 16c1.86.417 5.068 2.126 6.574 2.126 3.02 0 4.65-1.528 4.88-3.053L14.735 0H9.162z" /></svg>
-                <div className="h-6 w-9 bg-white/10 rounded flex items-center justify-center text-[8px] font-bold text-zinc-500">MC</div>
+              <div className="flex gap-4">
+                {/* VISA */}
+                <svg className="h-8 w-auto opacity-70 hover:opacity-100 transition-opacity" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path className="fill-white" d="M13.623 0L9.049 23.594H3.012L7.586 0h6.037z" /><path className="fill-white" d="M37.98 0l-3.003 14.739c-.198.857-1.127 1.401-1.896 1.401h-4.664l2.87-16.14h6.693z" /><path className="fill-[#F79E1B]" d="M26.262 18.068C26.96 17.07 27.696 15.65 28.16 13.91l2.05-10.02a18.257 18.257 0 00-6.732-1.076c-3.13 0-5.32 1.636-5.32 3.996 0 2.228 2.016 3.447 3.535 4.192 1.57.771 2.096 1.258 2.096 1.944 0 1.054-1.267 1.536-2.44 1.536-1.63 0-3.32-.821-4.28-1.78l-2.618 3.326c1.64 1.492 4.675 2.14 6.84 2.14 3.73 0 6.07-1.868 6.07-4.57 0-1.874-1.04-3.21-3.664-4.498-1.46-.73-2.396-1.503-2.396-2.636 0-1.18 1.15-1.995 2.502-1.995 1.43 0 2.89.542 3.82 1.156L26.26 18.068z" /><path className="fill-white" d="M9.162 0L6.72 15.66s-.31.877-1.428 1.11C3.33 17.152.013 15.86.013 15.86L.002 16c1.86.417 5.068 2.126 6.574 2.126 3.02 0 4.65-1.528 4.88-3.053L14.735 0H9.162z" /></svg>
+                {/* MASTERCARD */}
+                <svg className="h-8 w-auto opacity-70 hover:opacity-100 transition-opacity" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#EB001B" d="M14.2 17.6c-1.6 1-3.6 1.6-5.6 1.6-2 0-3.9-.5-5.6-1.5-1.7-1-2.9-2.5-2.9-4.2 0-3.2 4.1-5.7 8.5-5.7 4.5 0 8.5 2.5 8.5 5.7 0 1.7-1.2 3.2-2.9 4.1z" />
+                  <path fill="#F79E1B" d="M9.8 17.6c1.6 1 3.6 1.6 5.6 1.6 2 0 3.9-.5 5.6-1.5 1.7-1 2.9-2.5 2.9-4.2 0-3.2-4.1-5.7-8.5-5.7-4.5 0-8.5 2.5-8.5 5.7 0 1.7 1.2 3.2 2.9 4.1z" />
+                  <path fill="#FF5F00" d="M14.2 13.5c0 3.2-2.5 5.7-5.7 5.7-3.2 0-5.7-2.5-5.7-5.7 0-3.2 2.5-5.7 5.7-5.7 3.2 0 5.7 2.5 5.7 5.7z" transform="matrix(0.7 0 0 1 4.3 0)" />
+                </svg>
               </div>
             </div>
           </div>
