@@ -22,19 +22,13 @@ export function MaplyoLogo({
                 xmlns="http://www.w3.org/2000/svg"
                 className={className}
             >
-                <defs>
-                    <linearGradient id="brandGradient" x1="4" y1="6" x2="20" y2="18" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%" stopColor="#f43f5e" />
-                        <stop offset="100%" stopColor="#9333ea" />
-                    </linearGradient>
-                </defs>
                 <path
                     d={path}
-                    stroke={monochrome ? "currentColor" : "url(#brandGradient)"}
+                    stroke="currentColor"
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={monochrome || classNamePath !== "text-current" ? classNamePath : ""}
+                    className={classNamePath}
                 />
             </svg>
             {showText && <span className={`font-bold tracking-tight ${classNameText}`}>Maplyo</span>}

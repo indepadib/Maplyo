@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, X, ShieldCheck, Lock, Sparkles, Zap } from "lucide-react";
+import { CheckCircle2, X, ShieldCheck, Lock, Sparkles, Zap, Home, Hand } from "lucide-react";
 import { PLANS } from "@/types/subscription";
 import { Button } from "@/components/ui/Button";
 import { useState } from "react";
@@ -55,7 +55,7 @@ export default function PricingPage() {
                 <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
                     <div className="flex items-center gap-3 cursor-pointer group" onClick={() => router.push('/')}>
                         <div className="relative w-10 h-10 flex items-center justify-center bg-gradient-to-br from-rose-100 to-purple-100 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                            <MaplyoLogo className="w-6 h-6 text-rose-600" />
+                            <MaplyoLogo className="w-6 h-6 text-rose-600" showText={false} />
                         </div>
                         <span className="font-extrabold text-xl tracking-tight text-gray-900">Maplyo</span>
                     </div>
@@ -96,7 +96,9 @@ export default function PricingPage() {
                     {/* DEMO PLAN */}
                     <div className="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-xl shadow-gray-200/50 flex flex-col hover:border-gray-300 transition-all duration-300 relative group">
                         <div className="mb-6">
-                            <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">👋</div>
+                            <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 text-gray-400 group-hover:scale-110 transition-transform">
+                                <Hand className="w-6 h-6" />
+                            </div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">{PLANS.demo.name}</h3>
                             <div className="flex items-baseline gap-1">
                                 <span className="text-4xl font-black text-gray-900">Gratuit</span>
@@ -122,7 +124,9 @@ export default function PricingPage() {
                             Le plus populaire
                         </div>
                         <div className="mb-6 mt-6">
-                            <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 text-2xl text-rose-500">🏠</div>
+                            <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 text-rose-500">
+                                <Home className="w-6 h-6" />
+                            </div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">{PLANS.basic.name}</h3>
                             <div className="flex items-baseline gap-1">
                                 <span className="text-5xl font-black text-gray-900">{PLANS.basic.price} DH</span>
@@ -152,7 +156,9 @@ export default function PricingPage() {
                         <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
 
                         <div className="mb-6 relative">
-                            <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-2xl text-purple-400">✨</div>
+                            <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-purple-400">
+                                <Sparkles className="w-6 h-6" />
+                            </div>
                             <h3 className="text-xl font-bold text-white mb-2">{PLANS.pro.name}</h3>
                             <div className="flex items-baseline gap-1">
                                 <span className="text-5xl font-black text-white">{PLANS.pro.price} DH</span>
