@@ -122,7 +122,7 @@ export function PlacesEditor({ data, onChange }: { data: any; onChange: (d: any)
         }
     };
 
-    const updateItem = (index: number, key: string, val: string) => {
+    const updateItem = (index: number, key: string, val: string | string[]) => {
         const newItems = [...items];
         newItems[index] = { ...newItems[index], [key]: val };
         onChange({ ...data, items: newItems });
