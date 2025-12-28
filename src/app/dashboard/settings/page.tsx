@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { User, CreditCard, Settings, ChevronLeft, Upload, Package, ShoppingBag } from "lucide-react";
+import { User, CreditCard, Settings, ChevronLeft, Upload, Package, ShoppingBag, Sparkles } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { supabase } from "@/lib/supabase";
 import { FileUploader } from "@/components/ui/FileUploader";
