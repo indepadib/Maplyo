@@ -23,7 +23,11 @@ import {
   Play
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { PhoneMockup3D } from "@/components/landing/PhoneMockup3D";
+import dynamic from 'next/dynamic';
+const PhoneMockup3D = dynamic(() => import("@/components/landing/PhoneMockup3D").then(mod => mod.PhoneMockup3D), {
+  ssr: false,
+  loading: () => <div className="w-[300px] h-[600px] bg-white/5 rounded-[3rem] animate-pulse mx-auto" />
+});
 import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 
 // --- Components ---
@@ -46,7 +50,7 @@ const Nav = () => {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 via-purple-600 to-rose-600 flex items-center justify-center shadow-lg shadow-rose-500/20 group-hover:shadow-rose-500/40 transition-shadow">
-            <MaplyoLogo className="w-6 h-6" classNamePath="fill-white" />
+            <MaplyoLogo className="w-6 h-6" classNamePath="fill-white" showText={false} />
           </div>
           <span className="text-2xl font-bold bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
             Maplyo
@@ -170,7 +174,7 @@ const PricingCard = ({
       </h3>
       <div className="flex items-baseline gap-1">
         <span className="text-5xl font-bold text-white tracking-tight">{price}</span>
-        {price !== "Custom" && <span className="text-zinc-500 font-medium">/mo</span>}
+        {price !== "Sur devis" && <span className="text-zinc-500 font-medium">/mo</span>}
       </div>
       <p className="text-zinc-500 text-sm mt-4">
         {tier === "Basic" && "Pour les hôtes débutants"}
@@ -192,14 +196,16 @@ const PricingCard = ({
       ))}
     </ul>
 
-    <Button
-      className={`w-full h-12 text-sm font-semibold rounded-xl transition-all duration-300 ${popular
-        ? "bg-white text-slate-900 hover:bg-zinc-200 hover:scale-[1.02] shadow-xl"
-        : "bg-white/5 hover:bg-white/10 text-white hover:scale-[1.02]"
-        } border-0`}
-    >
-      Choisir {tier}
-    </Button>
+    <Link href="/pricing" className="w-full">
+      <Button
+        className={`w-full h-12 text-sm font-semibold rounded-xl transition-all duration-300 ${popular
+          ? "bg-white text-slate-900 hover:bg-zinc-200 hover:scale-[1.02] shadow-xl"
+          : "bg-white/5 hover:bg-white/10 text-white hover:scale-[1.02]"
+          } border-0`}
+      >
+        Choisir {tier}
+      </Button>
+    </Link>
   </motion.div>
 );
 

@@ -3,21 +3,30 @@ import { supabase } from "@/lib/supabase";
 import { useState, useMemo } from "react";
 import { blockLibrary, blockRegistry } from "@/components/blocks/registry";
 import { Button } from "@/components/ui/Button";
-import type { Guide, BlockType } from "@/types/blocks";
+import type { Guide as GuideType } from "@/types/blocks"; // Renamed to avoid conflict with value import
 import { StyledGuideRenderer as GuideRenderer } from "@/components/guide/StyledGuideRenderer";
 import { Modal } from "@/components/ui/Modal";
 import { guideThemes as themes, type GuideTheme as Theme } from "@/types/themes";
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
-import { Settings, ChevronRight, Trash2, Check, ExternalLink, ChevronLeft } from "lucide-react";
+import { Settings, ChevronRight, Trash2, Check, ExternalLink, ChevronLeft, Plus, Lock, Check as CheckIcon } from "lucide-react";
+import { canUseFeature } from "@/lib/subscription";
+import { UserSubscription } from "@/types/subscription";
+import { Guide, BlockType } from "@/types/blocks"; // Value import for Guide and BlockType
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 const STORAGE_KEY = "eguidehq_demo_guide_v1";
 
+const ESSENTIAL_THEMES = ["minimal-white", "soft-gray", "ocean", "nature", "sunset"];
+
 // Icons for blocks - using MinimalIcons directly in render
 
 
-export function EnhancedBuilder({ initialGuide }: { initialGuide: Guide }) {
+export function EnhancedBuilder({ initialGuide, subscription }: { initialGuide: Guide; subscription?: UserSubscription }) {
     function getKey(id: string) { return `guide-${id}`; }
+
+    // --- SUBSCRIPTION CHECK ---
+    const planId = subscription?.planId || 'demo';
+    const unlockedThemes = canUseFeature(planId, 'themes'); // true = all, false = essential only
 
     // --- STATE ---
     const [guide, setGuide] = useState<Guide>(() => {
@@ -340,7 +349,6 @@ export function EnhancedBuilder({ initialGuide }: { initialGuide: Guide }) {
                     </div>
                 </aside>
             </div>
-
             {/* Modal Thèmes */}
             <Modal
                 isOpen={showThemes}
@@ -348,37 +356,59 @@ export function EnhancedBuilder({ initialGuide }: { initialGuide: Guide }) {
                 title="Design & Thème"
                 icon="🎨"
             >
+                {!unlockedThemes && (
+                    <div className="mb-4 p-3 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100 rounded-xl flex items-center gap-3 text-amber-800 text-xs font-medium">
+                        <span className="p-1.5 bg-amber-100 rounded-lg">👑</span>
+                        Passer en PRO pour débloquer tous les thèmes premium.
+                    </div>
+                )}
                 <div className="grid grid-cols-2 gap-4">
-                    {themes.map((theme) => (
-                        <button
-                            key={theme.id}
-                            onClick={() => {
-                                persist({ ...guide, theme: { themeId: theme.id } });
-                                setShowThemes(false);
-                            }}
-                            className={`
-                                group relative overflow-hidden rounded-2xl border-2 transition-all hover:scale-[1.02] text-left
-                                ${selectedTheme.id === theme.id ? 'border-blue-600 ring-2 ring-blue-100' : 'border-gray-100 hover:border-gray-300'}
+                    {themes.map((theme) => {
+                        const isLocked = !unlockedThemes && !ESSENTIAL_THEMES.includes(theme.id);
+
+                        return (
+                            <button
+                                key={theme.id}
+                                disabled={isLocked}
+                                onClick={() => {
+                                    if (isLocked) return;
+                                    persist({ ...guide, theme: { themeId: theme.id } });
+                                    setShowThemes(false);
+                                }}
+                                className={`
+                                group relative overflow-hidden rounded-2xl border-2 transition-all text-left
+                                ${selectedTheme.id === theme.id ? 'border-blue-600 ring-2 ring-blue-100' : 'border-gray-100'}
+                                ${isLocked ? 'opacity-60 cursor-not-allowed grayscale-[0.5]' : 'hover:scale-[1.02] hover:border-gray-300'}
                             `}
-                        >
-                            <div className="h-24 bg-gray-100 relative">
-                                <div
-                                    className="absolute inset-0 bg-cover bg-center"
-                                    style={{ backgroundColor: theme.primary, backgroundImage: theme.bgType === 'image' ? `url(${theme.bgImage})` : undefined }}
-                                />
-                                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
-                                {selectedTheme.id === theme.id && (
-                                    <div className="absolute top-2 right-2 bg-blue-600 text-white p-1 rounded-full shadow-lg">
-                                        <CheckIcon size={12} />
-                                    </div>
-                                )}
-                            </div>
-                            <div className="p-4 bg-white">
-                                <h3 className="font-bold text-gray-900">{theme.name}</h3>
-                                <p className="text-xs text-gray-500">{theme.description}</p>
-                            </div>
-                        </button>
-                    ))}
+                            >
+                                <div className="h-24 bg-gray-100 relative">
+                                    <div
+                                        className="absolute inset-0 bg-cover bg-center"
+                                        style={{ backgroundColor: theme.primary, backgroundImage: theme.bgType === 'image' ? `url(${theme.bgImage})` : undefined }}
+                                    />
+                                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
+
+                                    {selectedTheme.id === theme.id && (
+                                        <div className="absolute top-2 right-2 bg-blue-600 text-white p-1 rounded-full shadow-lg">
+                                            <CheckIcon size={12} />
+                                        </div>
+                                    )}
+
+                                    {isLocked && (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px]">
+                                            <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white">
+                                                <Lock size={14} />
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="p-4 bg-white">
+                                    <h3 className="font-bold text-gray-900">{theme.name}</h3>
+                                    <p className="text-xs text-gray-500">{theme.description}</p>
+                                </div>
+                            </button>
+                        )
+                    })}
                 </div>
             </Modal>
         </div>

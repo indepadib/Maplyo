@@ -11,9 +11,8 @@ export function MaplyoLogo({
     monochrome?: boolean;
     classNamePath?: string;
 }) {
-    // Minimal geometric "M" - Clean and Premium
-    // Points: M starts bottom left, goes up, goes to middle, goes up, goes down.
-    // Simplifying to a solid, bold shape.
+    // Abstract geometric "M" formed by a folded map concept (Original Design)
+    const path = "M4 6V18C4 18 8 16 12 18S20 18 20 18V6C20 6 16 8 12 6S4 6 4 6Z M12 6V18";
 
     return (
         <div className="flex items-center gap-2">
@@ -23,20 +22,20 @@ export function MaplyoLogo({
                 xmlns="http://www.w3.org/2000/svg"
                 className={className}
             >
-                <path
-                    d="M4 19V5C4 5 8 5 12 9C16 5 20 5 20 5V19"
-                    stroke={monochrome ? "currentColor" : "url(#brandGradient)"}
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className={monochrome || classNamePath !== "text-current" ? classNamePath : ""}
-                />
                 <defs>
-                    <linearGradient id="brandGradient" x1="4" y1="5" x2="20" y2="19" gradientUnits="userSpaceOnUse">
+                    <linearGradient id="brandGradient" x1="4" y1="6" x2="20" y2="18" gradientUnits="userSpaceOnUse">
                         <stop offset="0%" stopColor="#f43f5e" />
                         <stop offset="100%" stopColor="#9333ea" />
                     </linearGradient>
                 </defs>
+                <path
+                    d={path}
+                    stroke={monochrome ? "currentColor" : "url(#brandGradient)"}
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={monochrome || classNamePath !== "text-current" ? classNamePath : ""}
+                />
             </svg>
             {showText && <span className={`font-bold tracking-tight ${classNameText}`}>Maplyo</span>}
         </div>

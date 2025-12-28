@@ -75,7 +75,7 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotPr
 
             {/* CHAT WINDOW */}
             {isOpen && (
-                <div className="fixed bottom-24 right-6 md:right-10 w-[calc(100vw-3rem)] md:w-96 h-[500px] max-h-[70vh] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
+                <div className="fixed bottom-0 left-0 right-0 top-auto h-[85vh] rounded-t-[2rem] md:bottom-24 md:left-auto md:right-10 md:top-auto md:w-96 md:h-[500px] md:max-h-[70vh] md:rounded-2xl bg-white shadow-2xl border-t md:border border-gray-100 flex flex-col overflow-hidden z-50 animate-in slide-in-from-bottom-full md:slide-in-from-bottom-5 fade-in duration-300">
                     {/* Header */}
                     <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-100 p-4 flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center">
@@ -96,8 +96,8 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotPr
                             <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                 <div
                                     className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${m.role === 'user'
-                                            ? 'bg-blue-600 text-white rounded-br-none'
-                                            : 'bg-white border border-gray-100 text-gray-700 shadow-sm rounded-bl-none'
+                                        ? 'bg-blue-600 text-white rounded-br-none'
+                                        : 'bg-white border border-gray-100 text-gray-700 shadow-sm rounded-bl-none'
                                         }`}
                                 >
                                     {m.content}
