@@ -58,7 +58,22 @@ const DICTIONARY = {
         excursion: "Partez en excursion à",
         nightlife: "Sortez le soir à",
         walk: "Baladez-vous à",
-        items: "éléments"
+        items: "éléments",
+        tipOfTheDay: "Conseil du Jour",
+        sunday: "Dimanche",
+        monday: "Lundi",
+        tuesday: "Mardi",
+        wednesday: "Mercredi",
+        thursday: "Jeudi",
+        friday: "Vendredi",
+        saturday: "Samedi",
+        lazy: "Détente",
+        mood: "Motivé",
+        discovery: "Découverte",
+        tasty: "Gourmand",
+        adventure: "Aventure",
+        festive: "Festif",
+        outing: "Sortie",
     },
     en: {
         searchPlaceholder: "Search info, codes...",
@@ -103,7 +118,22 @@ const DICTIONARY = {
         excursion: "Go on an excursion",
         nightlife: "Nightlife in",
         walk: "Walk around",
-        items: "items"
+        items: "items",
+        tipOfTheDay: "Tip of the Day",
+        sunday: "Sunday",
+        monday: "Monday",
+        tuesday: "Tuesday",
+        wednesday: "Wednesday",
+        thursday: "Thursday",
+        friday: "Friday",
+        saturday: "Saturday",
+        lazy: "Lazy",
+        mood: "Mood",
+        discovery: "Discovery",
+        tasty: "Tasty",
+        adventure: "Adventure",
+        festive: "Festive",
+        outing: "Outing",
     }
 };
 
@@ -665,14 +695,14 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                     </p>
 
                                     {/* City & Badges */}
-                                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-2">
-                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md border border-white/10 rounded-full text-white text-sm font-bold shadow-sm">
-                                            <MapPin className="w-3.5 h-3.5" />
+                                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-4">
+                                        <div className="flex items-center gap-2 px-4 py-1.5 bg-white text-black rounded-full text-sm font-bold shadow-lg transform hover:scale-105 transition-transform">
+                                            <MapPin className="w-4 h-4 text-rose-500 fill-rose-500" />
                                             {city}
                                         </div>
                                         {/* Display Badges from Hero Data if available */}
                                         {(heroBlock.data as any).badges?.map((badge: string, i: number) => (
-                                            <span key={i} className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-white/90 text-xs font-semibold uppercase tracking-wider">
+                                            <span key={i} className="px-3 py-1.5 bg-black/40 backdrop-blur-md border border-white/20 rounded-full text-white text-xs font-bold uppercase tracking-wider shadow-sm">
                                                 {badge}
                                             </span>
                                         ))}
@@ -840,7 +870,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                     <SelectedDef.Traveler
                         title={selectedBlock.title}
                         data={selectedBlock.data}
-                        ctx={{ mode: "traveler", unlocked }}
+                        ctx={{ mode: "traveler", unlocked, lang }}
                         visibility={selectedBlock.visibility}
                     />
                 )}

@@ -34,7 +34,7 @@ import {
   VisibilityRule
 } from "@/types/blocks";
 
-export type BlockRenderContext = { mode: "traveler" | "builder"; unlocked: boolean };
+export type BlockRenderContext = { mode: "traveler" | "builder"; unlocked: boolean; lang?: 'fr' | 'en' };
 
 export type BlockDefinition = {
   type: BlockType;
