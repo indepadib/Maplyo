@@ -112,8 +112,7 @@ export default function SettingsPage() {
                                         <label className="block text-sm font-bold mb-2">Avatar URL</label>
                                         <FileUploader
                                             value={avatarUrl}
-                                            onChange={setAvatarUrl}
-                                            folder="avatars"
+                                            onUpload={setAvatarUrl}
                                         />
                                     </div>
                                 </div>
