@@ -4,16 +4,17 @@ export function MaplyoLogo({
     className = "w-8 h-8",
     classNameText = "text-xl",
     showText = true,
-    monochrome = false
+    monochrome = false,
+    classNamePath = "text-current"
 }: {
     className?: string;
     classNameText?: string;
     showText?: boolean;
     monochrome?: boolean;
+    classNamePath?: string;
 }) {
     // Abstract geometric "M" formed by a folded map concept
     const path = "M4 6V18C4 18 8 16 12 18S20 18 20 18V6C20 6 16 8 12 6S4 6 4 6Z M12 6V18";
-    const classNamePath = "text-current";
 
     return (
         <div className="flex items-center gap-2">
@@ -35,7 +36,7 @@ export function MaplyoLogo({
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={monochrome ? classNamePath : ""}
+                    className={monochrome || classNamePath !== "text-current" ? classNamePath : ""}
                 />
             </svg>
             {showText && <span className={`font-bold tracking-tight ${classNameText}`}>Maplyo</span>}
