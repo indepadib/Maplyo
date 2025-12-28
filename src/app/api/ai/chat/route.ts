@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getOpenAIClient } from "@/lib/ai/openai";
+import { createOpenAIClient } from "@/lib/ai/openai";
 
 export async function POST(req: Request) {
     try {
@@ -9,7 +9,12 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing messages or context" }, { status: 400 });
         }
 
-        const openai = getOpenAIClient();
+        const openai = createOpenAIClient();
+        if (!openai) {
+            console.error("OpenAI API Key missing");
+            // Fail gracefully or return mock response if needed, but for now 500
+            return NextResponse.json({ error: "OpenAI configuration missing" }, { status: 500 });
+        }
 
         // Create a system prompt that injects the guide data
         const systemPrompt = `
