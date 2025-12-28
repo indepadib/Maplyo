@@ -267,292 +267,268 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr'
 
 function WifiCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
     const t = DICTIONARY[lang];
+
+    // Safety check
+    if (!data || !data.networkName) return null;
+
+    // Ensure data values are strings for QRCode
+    // Format: WIFI:S:<SSID>;T:<WPA|WEP>;P:<PASSWORD>;;
+    const qrValue = `WIFI:S:${data.networkName};T:WPA;P:${data.password};;`;
+
     return (
         <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={onClick}
-            className={`relative overflow-hidden rounded-[24px] md:rounded-[32px] p-5 text-left shadow-sm group w-full h-full flex flex-col justify-between ${className || ''}`}
+            className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
-            <div className="absolute top-0 right-0 p-5 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Wifi className="w-16 h-16 md:w-20 md:h-20" />
+            <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity -rotate-12">
+                <Wifi className="w-32 h-32" />
             </div>
 
-            <div className="flex items-start justify-between relative z-10 w-full mb-4">
-                <div className="p-2.5 rounded-2xl bg-blue-500/10 text-blue-600">
-                    <Wifi className="w-6 h-6" />
+            <div className="relative z-10 flex flex-col items-center gap-4">
+                <div className="bg-white p-2 rounded-xl shadow-sm">
+                    <QRCodeSVG
+                        value={qrValue}
+                        size={80}
+                        level="M"
+                        bgColor="#ffffff"
+                        fgColor="#000000"
+                        className="rounded-lg"
+                    />
                 </div>
-                <div className="bg-white p-1.5 rounded-xl shadow-sm hidden md:block">
-                    <QRCodeSVG value={`WIFI:S:${data.networkName};T:WPA;P:${data.password};;`} size={40} />
+                <div>
+                    <div className="font-bold text-lg">{data.networkName}</div>
+                    <div className="text-xs opacity-60 font-mono mt-1 select-all">{data.password || "••••••••"}</div>
+                </div>
+            </div>
+        </motion.button>
+    );
+}
+
+function AccessCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+    const t = DICTIONARY[lang];
+    return (
+        <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={onClick}
+            className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            style={{ backgroundColor: theme.cardBg, color: theme.text }}
+        >
+            <div className="absolute -bottom-4 -right-4 opacity-5 group-hover:opacity-10 transition-opacity rotate-[-15deg]">
+                <Key className="w-32 h-32" />
+            </div>
+
+            <div className="p-2.5 w-fit rounded-2xl bg-amber-500/10 text-amber-600 mb-2">
+                <Key className="w-6 h-6" />
+            </div>
+
+            <div>
+                <div className="font-bold text-lg leading-none mb-1">{t.access}</div>
+                <div className="text-xs opacity-60 font-medium">{t.secureAccess}</div>
+            </div>
+        </motion.button>
+    );
+}
+
+function StandardCard({ icon: Icon, title, onClick, theme, className }: { icon: any; title: string; onClick: () => void; theme: any; className?: string }) {
+    return (
+        <motion.button
+            whileTap={{ scale: 0.95 }}
+            whileHover={{ y: -2 }}
+            onClick={onClick}
+            className={`rounded-[24px] md:rounded-[28px] flex flex-col items-center justify-center p-4 gap-3 text-center shadow-sm transition-all w-full h-full ${className || ''}`}
+            style={{ backgroundColor: theme.cardBg, color: theme.text }}
+        >
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center transition-colors"
+                style={{ backgroundColor: `${theme.primary}10`, color: theme.primary }}
+            >
+                <Icon className="w-6 h-6" />
+            </div>
+            <span className="font-bold text-sm leading-tight line-clamp-2 px-1">{title}</span>
+        </motion.button>
+    );
+}
+
+
+function TimeCard({ type, data, onClick, theme, className, lang }: { type: string; data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+    const t = DICTIONARY[lang];
+    const isCheckIn = type === "checkin";
+    const label = isCheckIn ? t.checkin : t.checkout;
+    const time = data.time || (isCheckIn ? "15:00" : "11:00");
+    const Icon = MinimalIcons[type as BlockType] || MinimalIcons.hero;
+
+    return (
+        <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={onClick}
+            className={`rounded-[24px] md:rounded-[32px] p-4 md:p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            style={{ backgroundColor: theme.cardBg, color: theme.text }}
+        >
+            <div className="flex justify-between items-start w-full">
+                <div className="p-2.5 rounded-2xl bg-gray-100 text-gray-600">
+                    <Icon className="w-5 h-5" />
+                </div>
+            </div>
+
+            <div>
+                <div className="text-2xl md:text-3xl font-black tracking-tighter mb-1 relative z-10">
+                    {time}
+                </div>
+                <div className="text-[10px] md:text-xs font-bold opacity-60 uppercase tracking-wider">{label}</div>
+            </div>
+        </motion.button>
+    );
+}
+
+function LocationCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+    const t = DICTIONARY[lang];
+    const mapLink = data.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.address || "")}`;
+
+    return (
+        <motion.a
+            href={mapLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            whileTap={{ scale: 0.98 }}
+            className={`block rounded-[24px] md:rounded-[32px] relative overflow-hidden shadow-sm group text-left w-full h-full ${className || ''}`}
+            style={{ backgroundColor: theme.cardBg, color: theme.text }}
+        >
+            {/* Pseudo-Map Background */}
+            <div className="absolute inset-0 opacity-40 hover:opacity-100 transition-opacity duration-500 bg-cover bg-center"
+                style={{
+                    backgroundImage: "url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')" // Placeholder
+                }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+            <div className="absolute top-4 left-4 p-2 rounded-2xl bg-white text-rose-500 shadow-md z-10">
+                <MinimalIcons.location className="w-6 h-6" />
+            </div>
+
+            <div className="absolute bottom-4 left-4 right-4 text-white z-10">
+                <div className="text-lg font-bold leading-tight mb-1 line-clamp-2">
+                    {data.address ? data.address.split(',')[0] : t.location}
+                </div>
+                <div className="text-xs font-medium opacity-80 uppercase tracking-wider flex items-center gap-1">
+                    {t.viewMap} <ExternalLink className="w-3 h-3" />
+                </div>
+            </div>
+        </motion.a>
+    )
+}
+
+function ListCard({ title, icon: Icon, items, theme, className }: { title: string; icon: any; items: any[]; theme: any; className?: string }) {
+    const count = items.length;
+
+    return (
+        <motion.button
+            whileTap={{ scale: 0.98 }}
+            className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            style={{ backgroundColor: theme.cardBg, color: theme.text }}
+        >
+            <div className="flex justify-between items-start w-full relative z-10">
+                <div className="p-2.5 rounded-2xl bg-orange-500/10 text-orange-600">
+                    <Icon className="w-6 h-6" />
+                </div>
+                <div className="font-bold text-[10px] opacity-60 uppercase tracking-wider bg-black/5 px-2 py-1 rounded-lg">
+                    {count}
+                </div>
+            </div>
+
+            <div className="relative z-10 mt-4">
+                <div className="font-bold text-lg mb-2">{title}</div>
+                <div className="space-y-1">
+                    {items.slice(0, 2).map((item, i) => (
+                        <div key={i} className="flex items-center gap-2 text-sm opacity-70">
+                            <span className="w-1 h-1 rounded-full bg-current" />
+                            <span className="truncate">{item.name || item.title || "Item"}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </motion.button>
+    )
+}
+
+function UpsellsCard({ data, onClick, theme, className }: { data: any; onClick: () => void; theme: any; className?: string }) {
+    return (
+        <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={onClick}
+            className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            style={{ backgroundColor: theme.cardBg, color: theme.text }}
+        >
+            <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity rotate-12">
+                <MinimalIcons.upsells className="w-24 h-24" />
+            </div>
+
+            <div className="flex justify-between items-start w-full relative z-10">
+                <div className="p-2.5 rounded-2xl bg-green-500/10 text-green-600">
+                    <MinimalIcons.upsells className="w-6 h-6" />
+                </div>
+                <div className="font-bold text-[10px] text-white bg-green-500 px-2 py-1 rounded-lg shadow-sm">
+                    Shop
                 </div>
             </div>
 
             <div className="relative z-10">
-                <div className="text-xs font-bold opacity-50 uppercase tracking-wider mb-1">{t.wifi}</div>
-                <div className="text-xl font-bold mb-2 truncate w-full">{data.networkName || "Réseau"}</div>
-                <div className="font-mono text-sm opacity-70 bg-black/5 inline-block px-3 py-1.5 rounded-lg truncate max-w-full">
-                    {data.password || "••••••••"}
+                <div className="font-bold text-lg mb-1">Extras</div>
+                <div className="font-medium text-sm opacity-70">
+                    Découvrez nos services exclusifs
                 </div>
-                if (!data || !data.networkName) return null; // Safety check
-
-                // Ensure data values are strings for QRCode
-                const qrValue = `WIFI:S:${data.networkName};T:WPA;P:${data.password};;`;
-
-                return (
-                <motion.button
-                    whileTap={{ scale: 0.98 }}
-                    onClick={onClick}
-                    className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
-                    style={{ backgroundColor: theme.cardBg, color: theme.text }}
-                >
-                    <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity -rotate-12">
-                        <Wifi className="w-32 h-32" />
-                    </div>
-
-                    <div className="relative z-10 flex flex-col items-center gap-4">
-                        <div className="bg-white p-2 rounded-xl shadow-sm">
-                            {/* Ensure QRCodeSVG is imported */}
-                            <QRCodeSVG
-                                value={qrValue}
-                                size={80}
-                                level="M"
-                                bgColor="#ffffff"
-                                fgColor="#000000"
-                                className="rounded-lg"
-                            />
-                        </div>
-                        <div>
-                            <div className="font-bold text-lg">{data.networkName}</div>
-                            <div className="text-xs opacity-60 font-mono mt-1 select-all">{data.password}</div>
-                        </div>
-                    </div>
-                </motion.button>
-                );
+            </div>
+        </motion.button>
+    )
 }
 
-                function AccessCard({data, onClick, theme, className, lang}: {data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
-    const t = DICTIONARY[lang];
-                return (
-                <motion.button
-                    whileTap={{ scale: 0.98 }}
-                    onClick={onClick}
-                    className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
-                    style={{ backgroundColor: theme.cardBg, color: theme.text }}
-                >
-                    <div className="absolute -bottom-4 -right-4 opacity-5 group-hover:opacity-10 transition-opacity rotate-[-15deg]">
-                        <Key className="w-32 h-32" />
-                    </div>
-
-                    <div className="p-2.5 w-fit rounded-2xl bg-amber-500/10 text-amber-600 mb-2">
-                        <Key className="w-6 h-6" />
-                    </div>
-
-                    <div>
-                        <div className="font-bold text-lg leading-none mb-1">{t.access}</div>
-                        <div className="text-xs opacity-60 font-medium">{t.secureAccess}</div>
-                    </div>
-                </motion.button>
-                );
-}
-
-                function StandardCard({icon: Icon, title, onClick, theme, className }: {icon: any; title: string; onClick: () => void; theme: any; className?: string }) {
+// --- SUB-CARDS (Rules, FAQ, Amenities, Contact) ---
+// Simplified square versions to match "Apple" grid
+function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, onClick, className }: any) {
     return (
-                <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    whileHover={{ y: -2 }}
-                    onClick={onClick}
-                    className={`rounded-[24px] md:rounded-[28px] flex flex-col items-center justify-center p-4 gap-3 text-center shadow-sm transition-all w-full h-full ${className || ''}`}
-                    style={{ backgroundColor: theme.cardBg, color: theme.text }}
-                >
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center transition-colors"
-                        style={{ backgroundColor: `${theme.primary}10`, color: theme.primary }}
-                    >
-                        <Icon className="w-6 h-6" />
-                    </div>
-                    <span className="font-bold text-sm leading-tight line-clamp-2 px-1">{title}</span>
-                </motion.button>
-                );
+        <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={onClick}
+            className={`rounded-[24px] md:rounded-[28px] p-4 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            style={{ backgroundColor: theme.cardBg, color: theme.text }}
+        >
+            <div className="flex justify-between items-start w-full relative z-10">
+                <div className={`p-2.5 rounded-2xl ${colorClass}`}>
+                    <Icon className="w-5 h-5" />
+                </div>
+            </div>
+
+            <div className="relative z-10 mt-2">
+                {count !== undefined && (
+                    <div className="text-[10px] font-bold opacity-50 uppercase tracking-wider mb-0.5">{count} items</div>
+                )}
+                <div className="font-bold text-base leading-tight">{title}</div>
+            </div>
+        </motion.button>
+    )
 }
 
+// --- MAIN RENDERER ---
 
-                function TimeCard({type, data, onClick, theme, className, lang}: {type: string; data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
-    const t = DICTIONARY[lang];
-                const isCheckIn = type === "checkin";
-                const label = isCheckIn ? t.checkin : t.checkout;
-                const time = data.time || (isCheckIn ? "15:00" : "11:00");
-                const Icon = MinimalIcons[type as BlockType] || MinimalIcons.hero;
-
-                return (
-                <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    onClick={onClick}
-                    className={`rounded-[24px] md:rounded-[32px] p-4 md:p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
-                    style={{ backgroundColor: theme.cardBg, color: theme.text }}
-                >
-                    <div className="flex justify-between items-start w-full">
-                        <div className="p-2.5 rounded-2xl bg-gray-100 text-gray-600">
-                            <Icon className="w-5 h-5" />
-                        </div>
-                    </div>
-
-                    <div>
-                        <div className="text-2xl md:text-3xl font-black tracking-tighter mb-1 relative z-10">
-                            {time}
-                        </div>
-                        <div className="text-[10px] md:text-xs font-bold opacity-60 uppercase tracking-wider">{label}</div>
-                    </div>
-                </motion.button>
-                );
-}
-
-                function LocationCard({data, onClick, theme, className, lang}: {data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
-    const t = DICTIONARY[lang];
-                const mapLink = data.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.address || "")}`;
-
-                return (
-                <motion.a
-                    href={mapLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileTap={{ scale: 0.98 }}
-                    className={`block rounded-[24px] md:rounded-[32px] relative overflow-hidden shadow-sm group text-left w-full h-full ${className || ''}`}
-                    style={{ backgroundColor: theme.cardBg, color: theme.text }}
-                >
-                    {/* Pseudo-Map Background */}
-                    <div className="absolute inset-0 opacity-40 hover:opacity-100 transition-opacity duration-500 bg-cover bg-center"
-                        style={{
-                            backgroundImage: "url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')" // Placeholder
-                        }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-                    <div className="absolute top-4 left-4 p-2 rounded-2xl bg-white text-rose-500 shadow-md z-10">
-                        <MinimalIcons.location className="w-6 h-6" />
-                    </div>
-
-                    <div className="absolute bottom-4 left-4 right-4 text-white z-10">
-                        <div className="text-lg font-bold leading-tight mb-1 line-clamp-2">
-                            {data.address ? data.address.split(',')[0] : t.location}
-                        </div>
-                        <div className="text-xs font-medium opacity-80 uppercase tracking-wider flex items-center gap-1">
-                            {t.viewMap} <ExternalLink className="w-3 h-3" />
-                        </div>
-                    </div>
-                </motion.a>
-                )
-}
-
-                function ListCard({title, icon: Icon, items, theme, className }: {title: string; icon: any; items: any[]; theme: any; className?: string }) {
-    const count = items.length;
-
-                return (
-                <motion.button
-                    whileTap={{ scale: 0.98 }}
-                    className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
-                    style={{ backgroundColor: theme.cardBg, color: theme.text }}
-                >
-                    <div className="flex justify-between items-start w-full relative z-10">
-                        <div className="p-2.5 rounded-2xl bg-orange-500/10 text-orange-600">
-                            <Icon className="w-6 h-6" />
-                        </div>
-                        <div className="font-bold text-[10px] opacity-60 uppercase tracking-wider bg-black/5 px-2 py-1 rounded-lg">
-                            {count}
-                        </div>
-                    </div>
-
-                    <div className="relative z-10 mt-4">
-                        <div className="font-bold text-lg mb-2">{title}</div>
-                        <div className="space-y-1">
-                            {items.slice(0, 2).map((item, i) => (
-                                <div key={i} className="flex items-center gap-2 text-sm opacity-70">
-                                    <span className="w-1 h-1 rounded-full bg-current" />
-                                    <span className="truncate">{item.name || item.title || "Item"}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </motion.button>
-                )
-}
-
-                function UpsellsCard({data, onClick, theme, className}: {data: any; onClick: () => void; theme: any; className?: string }) {
-    return (
-                <motion.button
-                    whileTap={{ scale: 0.98 }}
-                    onClick={onClick}
-                    className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
-                    style={{ backgroundColor: theme.cardBg, color: theme.text }}
-                >
-                    <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity rotate-12">
-                        <MinimalIcons.upsells className="w-24 h-24" />
-                    </div>
-
-                    <div className="flex justify-between items-start w-full relative z-10">
-                        <div className="p-2.5 rounded-2xl bg-green-500/10 text-green-600">
-                            <MinimalIcons.upsells className="w-6 h-6" />
-                        </div>
-                        <div className="font-bold text-[10px] text-white bg-green-500 px-2 py-1 rounded-lg shadow-sm">
-                            Shop
-                        </div>
-                    </div>
-
-                    <div className="relative z-10">
-                        <div className="font-bold text-lg mb-1">Extras</div>
-                        <div className="font-medium text-sm opacity-70">
-                            Découvrez nos services exclusifs
-                        </div>
-                    </div>
-                </motion.button>
-                )
-}
-
-                // --- SUB-CARDS (Rules, FAQ, Amenities, Contact) ---
-                // Simplified square versions to match "Apple" grid
-                function MiniInfoCard({icon: Icon, title, count, subtitle, colorClass, theme, onClick, className }: any) {
-    return (
-                <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    onClick={onClick}
-                    className={`rounded-[24px] md:rounded-[28px] p-4 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
-                    style={{ backgroundColor: theme.cardBg, color: theme.text }}
-                >
-                    <div className="flex justify-between items-start w-full relative z-10">
-                        <div className={`p-2.5 rounded-2xl ${colorClass}`}>
-                            <Icon className="w-5 h-5" />
-                        </div>
-                    </div>
-
-                    <div className="relative z-10 mt-2">
-                        {count !== undefined && (
-                            <div className="text-[10px] font-bold opacity-50 uppercase tracking-wider mb-0.5">{count} items</div>
-                        )}
-                        <div className="font-bold text-base leading-tight">{title}</div>
-                    </div>
-                </motion.button>
-                )
-}
-
-                // --- MAIN RENDERER ---
-
-                export function StyledGuideRenderer({guide, unlocked, forceMobile = false}: {guide: Guide; unlocked: boolean; forceMobile?: boolean }) {
+export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { guide: Guide; unlocked: boolean; forceMobile?: boolean }) {
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-                const [searchQuery, setSearchQuery] = useState("");
-                const [lang, setLang] = useState<'fr' | 'en'>('fr');
-                // Notification state
-                const [showTip, setShowTip] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [lang, setLang] = useState<'fr' | 'en'>('fr');
+    // Notification state
+    const [showTip, setShowTip] = useState(true);
 
-                // Disable Desktop enhancements if forceMobile is on (for Builder Preview)
-                const isDesktop = !forceMobile;
-                const t = DICTIONARY[lang];
+    // Disable Desktop enhancements if forceMobile is on (for Builder Preview)
+    const isDesktop = !forceMobile;
+    const t = DICTIONARY[lang];
 
-                const {scrollY} = useScroll();
-                const heroY = useTransform(scrollY, [0, 500], [0, 200]);
-                const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
-                const gridY = useTransform(scrollY, [0, 400], [0, -40]);
+    const { scrollY } = useScroll();
+    const heroY = useTransform(scrollY, [0, 500], [0, 200]);
+    const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
+    const gridY = useTransform(scrollY, [0, 400], [0, -40]);
 
-                // Theme resolution
-                // @ts-ignore
-                const themeId = guide.theme?.themeId;
+    // Theme resolution
+    // @ts-ignore
+    const themeId = guide.theme?.themeId;
     const currentTheme = guideThemes.find(t => t.id === themeId) || guideThemes[0];
 
     const heroBlock = guide.blocks.find(b => b.type === "hero");
@@ -560,318 +536,318 @@ function WifiCard({ data, onClick, theme, className, lang }: { data: any; onClic
     const accessBlock = guide.blocks.find(b => b.type === "access_codes");
     const locationBlock = guide.blocks.find(b => b.type === "location");
 
-                // Extract city from location for Smart Recommendations
-                const city = (locationBlock && (locationBlock.data as any).address
-                ? (locationBlock.data as any).address.split(',').slice(-1)[0].trim()
-                : "") || "Destination";
+    // Extract city from location for Smart Recommendations
+    const city = (locationBlock && (locationBlock.data as any).address
+        ? (locationBlock.data as any).address.split(',').slice(-1)[0].trim()
+        : "") || "Destination";
 
     // Intelligent Filter logic
     const gridBlocks = useMemo(() => {
         const all = guide.blocks.filter(b => !["hero", "wifi", "access_codes"].includes(b.type));
-                if (!searchQuery) return all;
+        if (!searchQuery) return all;
 
-                const q = searchQuery.toLowerCase();
+        const q = searchQuery.toLowerCase();
 
         return all.filter(b => {
             // 1. Direct Text Match
             if (b.title?.toLowerCase().includes(q)) return true;
-                if (JSON.stringify(b.data).toLowerCase().includes(q)) return true;
+            if (JSON.stringify(b.data).toLowerCase().includes(q)) return true;
 
-                // 2. Type Label Match
-                if (blockRegistry[b.type]?.label.toLowerCase().includes(q)) return true;
+            // 2. Type Label Match
+            if (blockRegistry[b.type]?.label.toLowerCase().includes(q)) return true;
 
-                // 3. Smart Keyword Match
-                const keywords = SEARCH_KEYWORDS[b.type] || [];
+            // 3. Smart Keyword Match
+            const keywords = SEARCH_KEYWORDS[b.type] || [];
             if (keywords.some(k => k.includes(q))) return true;
 
-                return false;
+            return false;
         });
     }, [guide.blocks, searchQuery]);
 
 
     const selectedBlock = guide.blocks.find(b => b.id === selectedBlockId);
-                const SelectedDef = selectedBlock ? blockRegistry[selectedBlock.type] : null;
+    const SelectedDef = selectedBlock ? blockRegistry[selectedBlock.type] : null;
 
-                return (
-                <div
-                    className="min-h-screen bg-gray-50 pb-20 selection:bg-rose-500/30 font-sans relative"
-                    style={{
-                        backgroundColor: currentTheme.background
-                    }}
-                >
-                    {currentTheme.bgType === "image" && currentTheme.bgImage && (
-                        <div className="fixed inset-0 z-0">
+    return (
+        <div
+            className="min-h-screen bg-gray-50 pb-20 selection:bg-rose-500/30 font-sans relative"
+            style={{
+                backgroundColor: currentTheme.background
+            }}
+        >
+            {currentTheme.bgType === "image" && currentTheme.bgImage && (
+                <div className="fixed inset-0 z-0">
+                    <Image
+                        src={currentTheme.bgImage}
+                        alt="Background"
+                        fill
+                        className="object-cover opacity-100"
+                        priority
+                        quality={90}
+                    />
+                    <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
+                </div>
+            )}
+
+            <div className={`w-full relative z-10 ${isDesktop ? '' : 'max-w-md mx-auto'}`}>
+
+                {/* CINEMATIC HERO */}
+                <div className={`relative overflow-hidden h-[50vh] ${isDesktop ? 'md:h-[85vh] md:-mb-12' : ''}`}>
+                    <motion.div
+                        style={{ y: heroY, opacity: heroOpacity }}
+                        className="absolute inset-0 w-full h-full"
+                    >
+                        {heroBlock && (heroBlock.data as any).coverImageUrl ? (
                             <Image
-                                src={currentTheme.bgImage}
-                                alt="Background"
+                                src={(heroBlock.data as any).coverImageUrl}
+                                alt="Hero Cover"
                                 fill
-                                className="object-cover opacity-100"
+                                className="object-cover"
                                 priority
-                                quality={90}
+                                sizes="(max-width: 768px) 100vw, 100vw"
                             />
-                            <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
-                        </div>
-                    )}
+                        ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black" />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-                    <div className={`w-full relative z-10 ${isDesktop ? '' : 'max-w-md mx-auto'}`}>
-
-                        {/* CINEMATIC HERO */}
-                        <div className={`relative overflow-hidden h-[50vh] ${isDesktop ? 'md:h-[85vh] md:-mb-12' : ''}`}>
-                            <motion.div
-                                style={{ y: heroY, opacity: heroOpacity }}
-                                className="absolute inset-0 w-full h-full"
-                            >
-                                {heroBlock && (heroBlock.data as any).coverImageUrl ? (
-                                    <Image
-                                        src={(heroBlock.data as any).coverImageUrl}
-                                        alt="Hero Cover"
-                                        fill
-                                        className="object-cover"
-                                        priority
-                                        sizes="(max-width: 768px) 100vw, 100vw"
+                        {/* Top Bar with Search & Lang */}
+                        <div className="absolute top-0 left-0 right-0 p-4 z-50 flex flex-col gap-4">
+                            <div className="flex justify-between items-start gap-4">
+                                <div className="bg-black/30 backdrop-blur-xl rounded-full p-1.5 flex items-center border border-white/20 w-full shadow-lg">
+                                    <Search className="w-4 h-4 text-white/70 ml-3" />
+                                    <input
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        placeholder={t.searchPlaceholder}
+                                        className="bg-transparent border-none outline-none text-white text-sm px-2 py-1 w-full placeholder:text-white/50"
                                     />
-                                ) : (
-                                    <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black" />
+                                </div>
+
+                                <button
+                                    onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
+                                    className="bg-black/30 backdrop-blur-xl rounded-full px-3 py-2.5 flex items-center gap-2 border border-white/20 text-white text-xs font-bold uppercase hover:bg-black/40 transition-colors shadow-lg"
+                                >
+                                    <Globe className="w-3.5 h-3.5" />
+                                    {lang}
+                                </button>
+                            </div>
+
+                            {/* TIP ALERT - Floating Notification Style */}
+                            <AnimatePresence>
+                                {/* Removed city check to fix visibility issue if city is undefined */}
+                                {!searchQuery && showTip && (
+                                    <DailyRecommendation city={city} lang={lang} onClose={() => setShowTip(false)} />
                                 )}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-
-                                {/* Top Bar with Search & Lang */}
-                                <div className="absolute top-0 left-0 right-0 p-4 z-50 flex flex-col gap-4">
-                                    <div className="flex justify-between items-start gap-4">
-                                        <div className="bg-black/30 backdrop-blur-xl rounded-full p-1.5 flex items-center border border-white/20 w-full shadow-lg">
-                                            <Search className="w-4 h-4 text-white/70 ml-3" />
-                                            <input
-                                                value={searchQuery}
-                                                onChange={(e) => setSearchQuery(e.target.value)}
-                                                placeholder={t.searchPlaceholder}
-                                                className="bg-transparent border-none outline-none text-white text-sm px-2 py-1 w-full placeholder:text-white/50"
-                                            />
-                                        </div>
-
-                                        <button
-                                            onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
-                                            className="bg-black/30 backdrop-blur-xl rounded-full px-3 py-2.5 flex items-center gap-2 border border-white/20 text-white text-xs font-bold uppercase hover:bg-black/40 transition-colors shadow-lg"
-                                        >
-                                            <Globe className="w-3.5 h-3.5" />
-                                            {lang}
-                                        </button>
-                                    </div>
-
-                                    {/* TIP ALERT - Floating Notification Style */}
-                                    <AnimatePresence>
-                                        {/* Removed city check to fix visibility issue if city is undefined */}
-                                        {!searchQuery && showTip && (
-                                            <DailyRecommendation city={city} lang={lang} onClose={() => setShowTip(false)} />
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-
-                                <div className={`absolute left-0 right-0 px-6 max-w-7xl mx-auto z-20 ${isDesktop ? 'bottom-16 md:bottom-24 md:px-12 text-center md:text-left' : 'bottom-16 text-center'}`}>
-                                    <motion.div
-                                        initial={{ y: 30, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        transition={{ duration: 0.8 }}
-                                    >
-                                        <h1 className={`font-black mb-3 text-white tracking-tight leading-[1.1] drop-shadow-2xl text-3xl ${isDesktop ? 'md:text-8xl md:mb-4' : ''}`}>
-                                            {(heroBlock?.data as any)?.title || guide.title}
-                                        </h1>
-                                    </motion.div>
-
-                                    {heroBlock && (
-                                        <motion.div
-                                            initial={{ y: 30, opacity: 0 }}
-                                            animate={{ y: 0, opacity: 1 }}
-                                            transition={{ delay: 0.2, duration: 0.8 }}
-                                            className={`flex flex-col gap-4 items-center ${isDesktop ? 'md:flex-row md:items-start' : ''}`}
-                                        >
-                                            <p className={`text-white/90 max-w-xl font-medium leading-relaxed drop-shadow-md text-base md:text-xl`}>
-                                                {(heroBlock.data as any).subtitle}
-                                            </p>
-
-                                            {/* City & Badges */}
-                                            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-2">
-                                                <div className="flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md border border-white/10 rounded-full text-white text-sm font-bold shadow-sm">
-                                                    <MapPin className="w-3.5 h-3.5" />
-                                                    {city}
-                                                </div>
-                                                {/* Display Badges from Hero Data if available */}
-                                                {(heroBlock.data as any).badges?.map((badge: string, i: number) => (
-                                                    <span key={i} className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-white/90 text-xs font-semibold uppercase tracking-wider">
-                                                        {badge}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </motion.div>
-                                    )}
-                                </div>
-                            </motion.div>
+                            </AnimatePresence>
                         </div>
 
-                        {/* BENTO GRID */}
-                        <motion.div
-                            initial={{ y: 100, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.4, duration: 0.6 }}
-                            style={{ y: gridY }}
-                            className={`relative max-w-5xl mx-auto px-4 ${isDesktop ? 'md:px-12' : ''}`}
-                        >
-                            <div className={`bg-white/5 backdrop-blur-2xl border border-white/10 rounded-t-[32px] md:rounded-[48px] shadow-2xl min-h-[50vh] p-4 ${isDesktop ? 'md:p-10' : ''}`}>
+                        <div className={`absolute left-0 right-0 px-6 max-w-7xl mx-auto z-20 ${isDesktop ? 'bottom-16 md:bottom-24 md:px-12 text-center md:text-left' : 'bottom-16 text-center'}`}>
+                            <motion.div
+                                initial={{ y: 30, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ duration: 0.8 }}
+                            >
+                                <h1 className={`font-black mb-3 text-white tracking-tight leading-[1.1] drop-shadow-2xl text-3xl ${isDesktop ? 'md:text-8xl md:mb-4' : ''}`}>
+                                    {(heroBlock?.data as any)?.title || guide.title}
+                                </h1>
+                            </motion.div>
 
-                                {/* 
+                            {heroBlock && (
+                                <motion.div
+                                    initial={{ y: 30, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.2, duration: 0.8 }}
+                                    className={`flex flex-col gap-4 items-center ${isDesktop ? 'md:flex-row md:items-start' : ''}`}
+                                >
+                                    <p className={`text-white/90 max-w-xl font-medium leading-relaxed drop-shadow-md text-base md:text-xl`}>
+                                        {(heroBlock.data as any).subtitle}
+                                    </p>
+
+                                    {/* City & Badges */}
+                                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-2">
+                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md border border-white/10 rounded-full text-white text-sm font-bold shadow-sm">
+                                            <MapPin className="w-3.5 h-3.5" />
+                                            {city}
+                                        </div>
+                                        {/* Display Badges from Hero Data if available */}
+                                        {(heroBlock.data as any).badges?.map((badge: string, i: number) => (
+                                            <span key={i} className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-white/90 text-xs font-semibold uppercase tracking-wider">
+                                                {badge}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            )}
+                        </div>
+                    </motion.div>
+                </div>
+
+                {/* BENTO GRID */}
+                <motion.div
+                    initial={{ y: 100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.4, duration: 0.6 }}
+                    style={{ y: gridY }}
+                    className={`relative max-w-5xl mx-auto px-4 ${isDesktop ? 'md:px-12' : ''}`}
+                >
+                    <div className={`bg-white/5 backdrop-blur-2xl border border-white/10 rounded-t-[32px] md:rounded-[48px] shadow-2xl min-h-[50vh] p-4 ${isDesktop ? 'md:p-10' : ''}`}>
+
+                        {/* 
                             GRID REFINEMENT: 
                             Mobile: 2 Cols
                             Desktop: 4 Cols but contained in max-w-5xl (Compact)
                         */}
-                                <div className={`grid gap-3 md:gap-4 grid-cols-2 ${isDesktop ? 'md:grid-cols-4' : ''}`}>
+                        <div className={`grid gap-3 md:gap-4 grid-cols-2 ${isDesktop ? 'md:grid-cols-4' : ''}`}>
 
-                                    {/* 1. WIFI (Rectangle 2x1) */}
-                                    {wifiBlock && !searchQuery && (
-                                        <div className="col-span-2 md:col-span-2 aspect-[2/1] md:aspect-auto md:h-52">
-                                            <WifiCard
-                                                data={wifiBlock.data}
-                                                onClick={() => setSelectedBlockId(wifiBlock.id)}
-                                                theme={currentTheme}
-                                                lang={lang}
-                                            />
-                                        </div>
-                                    )}
-
-                                    {/* 2. ACCESS CODES */}
-                                    {accessBlock && !searchQuery && (
-                                        <div className="col-span-2 md:col-span-2 aspect-[2/1] md:aspect-auto md:h-52">
-                                            <AccessCard
-                                                data={accessBlock.data}
-                                                onClick={() => setSelectedBlockId(accessBlock.id)}
-                                                theme={currentTheme}
-                                                lang={lang}
-                                            />
-                                        </div>
-                                    )}
-
-                                    {/* 3. DYNAMIC BLOCKS */}
-                                    {gridBlocks.map((b, i) => {
-                                        const def = blockRegistry[b.type];
-                                        const Icon = MinimalIcons[b.type] || MinimalIcons.hero;
-
-                                        // APPLE STYLE SIZING LOGIC
-                                        // ------------------------
-
-                                        // Default: Square (1x1)
-                                        let colSpan = "col-span-1";
-                                        let aspect = "aspect-square"; // Enforce Square
-
-                                        // "Rich" Blocks: Rectangle (2x1)
-                                        const isRichBlock = ["location", "places", "events", "upsells", "marketing_hero", "documents"].includes(b.type);
-
-                                        if (isRichBlock) {
-                                            colSpan = "col-span-2"; // Full width on mobile (2 cols), Half width on Desktop (2 of 4)
-                                            aspect = "aspect-[2/1]"; // Enforce Rect
-                                        }
-
-                                        // Special Case: Location on Desktop can be huge
-                                        if (b.type === "location" && isDesktop) {
-                                            colSpan = "md:col-span-2 md:row-span-2";
-                                            aspect = "aspect-square md:aspect-square"; // Square on mobile too for visibility
-                                        } else if (isRichBlock) {
-                                            colSpan = "col-span-2";
-                                            aspect = "aspect-[2/1]";
-                                        }
-
-                                        const cardProps = {
-                                            data: b.data,
-                                            onClick: () => setSelectedBlockId(b.id),
-                                            theme: currentTheme,
-                                            lang: lang
-                                        };
-
-                                        const wrapperClass = `${colSpan} ${aspect} relative group`;
-
-
-                                        // COMPONENT SELECTION
-
-                                        if (isRichBlock) {
-                                            if (b.type === "location") return <div key={b.id} className={wrapperClass}><LocationCard {...cardProps} /></div>;
-                                            if (b.type === "upsells") return <div key={b.id} className={wrapperClass}><UpsellsCard {...cardProps} /></div>;
-
-                                            // Translate default title if needed
-                                            const displayTitle = b.title || (t[b.type as keyof typeof t] || def.label);
-
-                                            return <div key={b.id} className={wrapperClass}><ListCard title={displayTitle} icon={Icon} items={(b.data as any).items || []} theme={currentTheme} /></div>;
-                                        }
-
-                                        if (b.type === "checkin" || b.type === "checkout") {
-                                            return <div key={b.id} className={wrapperClass}><TimeCard type={b.type} {...cardProps} /></div>;
-                                        }
-
-                                        // Mini Cards (Square)
-                                        if (["contact", "rules", "amenities", "faq"].includes(b.type)) {
-                                            let colorClass = "bg-gray-100 text-gray-600";
-                                            let startTitle = b.title || (t[b.type as keyof typeof t] || def.label);
-                                            let count = undefined;
-
-                                            if (b.type === "contact") { colorClass = "bg-green-100 text-green-600"; }
-                                            if (b.type === "rules") { colorClass = "bg-rose-100 text-rose-600"; count = (b.data as any).items?.length; }
-                                            if (b.type === "amenities") { colorClass = "bg-blue-100 text-blue-600"; count = (b.data as any).items?.length; }
-                                            if (b.type === "faq") { colorClass = "bg-purple-100 text-purple-600"; count = (b.data as any).items?.length; }
-
-                                            return (
-                                                <div key={b.id} className={wrapperClass}>
-                                                    <MiniInfoCard
-                                                        icon={Icon}
-                                                        title={startTitle}
-                                                        count={count}
-                                                        colorClass={colorClass}
-                                                        theme={currentTheme}
-                                                        onClick={() => setSelectedBlockId(b.id)}
-                                                    />
-                                                </div>
-                                            )
-                                        }
-
-                                        // Fallback
-                                        return (
-                                            <div key={b.id} className={wrapperClass}>
-                                                <StandardCard icon={Icon} title={b.title || def.label} {...cardProps} />
-                                            </div>
-                                        );
-                                    })}
+                            {/* 1. WIFI (Rectangle 2x1) */}
+                            {wifiBlock && !searchQuery && (
+                                <div className="col-span-2 md:col-span-2 aspect-[2/1] md:aspect-auto md:h-52">
+                                    <WifiCard
+                                        data={wifiBlock.data}
+                                        onClick={() => setSelectedBlockId(wifiBlock.id)}
+                                        theme={currentTheme}
+                                        lang={lang}
+                                    />
                                 </div>
+                            )}
 
-                                {/* Empty State */}
-                                {gridBlocks.length === 0 && !wifiBlock && !accessBlock && (
-                                    <div className="py-20 text-center text-white/50">
-                                        <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                                        <p className="text-lg font-medium">{t.empty}</p>
+                            {/* 2. ACCESS CODES */}
+                            {accessBlock && !searchQuery && (
+                                <div className="col-span-2 md:col-span-2 aspect-[2/1] md:aspect-auto md:h-52">
+                                    <AccessCard
+                                        data={accessBlock.data}
+                                        onClick={() => setSelectedBlockId(accessBlock.id)}
+                                        theme={currentTheme}
+                                        lang={lang}
+                                    />
+                                </div>
+                            )}
+
+                            {/* 3. DYNAMIC BLOCKS */}
+                            {gridBlocks.map((b, i) => {
+                                const def = blockRegistry[b.type];
+                                const Icon = MinimalIcons[b.type] || MinimalIcons.hero;
+
+                                // APPLE STYLE SIZING LOGIC
+                                // ------------------------
+
+                                // Default: Square (1x1)
+                                let colSpan = "col-span-1";
+                                let aspect = "aspect-square"; // Enforce Square
+
+                                // "Rich" Blocks: Rectangle (2x1)
+                                const isRichBlock = ["location", "places", "events", "upsells", "marketing_hero", "documents"].includes(b.type);
+
+                                if (isRichBlock) {
+                                    colSpan = "col-span-2"; // Full width on mobile (2 cols), Half width on Desktop (2 of 4)
+                                    aspect = "aspect-[2/1]"; // Enforce Rect
+                                }
+
+                                // Special Case: Location on Desktop can be huge
+                                if (b.type === "location" && isDesktop) {
+                                    colSpan = "md:col-span-2 md:row-span-2";
+                                    aspect = "aspect-square md:aspect-square"; // Square on mobile too for visibility
+                                } else if (isRichBlock) {
+                                    colSpan = "col-span-2";
+                                    aspect = "aspect-[2/1]";
+                                }
+
+                                const cardProps = {
+                                    data: b.data,
+                                    onClick: () => setSelectedBlockId(b.id),
+                                    theme: currentTheme,
+                                    lang: lang
+                                };
+
+                                const wrapperClass = `${colSpan} ${aspect} relative group`;
+
+
+                                // COMPONENT SELECTION
+
+                                if (isRichBlock) {
+                                    if (b.type === "location") return <div key={b.id} className={wrapperClass}><LocationCard {...cardProps} /></div>;
+                                    if (b.type === "upsells") return <div key={b.id} className={wrapperClass}><UpsellsCard {...cardProps} /></div>;
+
+                                    // Translate default title if needed
+                                    const displayTitle = b.title || (t[b.type as keyof typeof t] || def.label);
+
+                                    return <div key={b.id} className={wrapperClass}><ListCard title={displayTitle} icon={Icon} items={(b.data as any).items || []} theme={currentTheme} /></div>;
+                                }
+
+                                if (b.type === "checkin" || b.type === "checkout") {
+                                    return <div key={b.id} className={wrapperClass}><TimeCard type={b.type} {...cardProps} /></div>;
+                                }
+
+                                // Mini Cards (Square)
+                                if (["contact", "rules", "amenities", "faq"].includes(b.type)) {
+                                    let colorClass = "bg-gray-100 text-gray-600";
+                                    let startTitle = b.title || (t[b.type as keyof typeof t] || def.label);
+                                    let count = undefined;
+
+                                    if (b.type === "contact") { colorClass = "bg-green-100 text-green-600"; }
+                                    if (b.type === "rules") { colorClass = "bg-rose-100 text-rose-600"; count = (b.data as any).items?.length; }
+                                    if (b.type === "amenities") { colorClass = "bg-blue-100 text-blue-600"; count = (b.data as any).items?.length; }
+                                    if (b.type === "faq") { colorClass = "bg-purple-100 text-purple-600"; count = (b.data as any).items?.length; }
+
+                                    return (
+                                        <div key={b.id} className={wrapperClass}>
+                                            <MiniInfoCard
+                                                icon={Icon}
+                                                title={startTitle}
+                                                count={count}
+                                                colorClass={colorClass}
+                                                theme={currentTheme}
+                                                onClick={() => setSelectedBlockId(b.id)}
+                                            />
+                                        </div>
+                                    )
+                                }
+
+                                // Fallback
+                                return (
+                                    <div key={b.id} className={wrapperClass}>
+                                        <StandardCard icon={Icon} title={b.title || def.label} {...cardProps} />
                                     </div>
-                                )}
+                                );
+                            })}
+                        </div>
 
-                                <div className="text-center mt-12 mb-4 flex items-center justify-center gap-2 opacity-50">
-                                    <span className="w-1 h-1 rounded-full bg-current"></span>
-                                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white">Maplyo</p>
-                                    <span className="w-1 h-1 rounded-full bg-current"></span>
-                                </div>
+                        {/* Empty State */}
+                        {gridBlocks.length === 0 && !wifiBlock && !accessBlock && (
+                            <div className="py-20 text-center text-white/50">
+                                <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                                <p className="text-lg font-medium">{t.empty}</p>
                             </div>
-                        </motion.div>
-                    </div>
-
-                    {/* DRAWER FOR DETAILS */}
-                    <BottomSheet
-                        isOpen={!!selectedBlockId}
-                        onClose={() => setSelectedBlockId(null)}
-                        title={selectedBlock?.title || SelectedDef?.label || "Détail"}
-                    >
-                        {selectedBlock && SelectedDef && (
-                            <SelectedDef.Traveler
-                                title={selectedBlock.title}
-                                data={selectedBlock.data}
-                                ctx={{ mode: "traveler", unlocked }}
-                                visibility={selectedBlock.visibility}
-                            />
                         )}
-                    </BottomSheet>
 
-                    {/* AI CHATBOT INTEGRATION */}
-                    <GuideChatbot guide={guide} primaryColor={currentTheme.primary} />
-                </div>
-                );
+                        <div className="text-center mt-12 mb-4 flex items-center justify-center gap-2 opacity-50">
+                            <span className="w-1 h-1 rounded-full bg-current"></span>
+                            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white">Maplyo</p>
+                            <span className="w-1 h-1 rounded-full bg-current"></span>
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* DRAWER FOR DETAILS */}
+            <BottomSheet
+                isOpen={!!selectedBlockId}
+                onClose={() => setSelectedBlockId(null)}
+                title={selectedBlock?.title || SelectedDef?.label || "Détail"}
+            >
+                {selectedBlock && SelectedDef && (
+                    <SelectedDef.Traveler
+                        title={selectedBlock.title}
+                        data={selectedBlock.data}
+                        ctx={{ mode: "traveler", unlocked }}
+                        visibility={selectedBlock.visibility}
+                    />
+                )}
+            </BottomSheet>
+
+            {/* AI CHATBOT INTEGRATION */}
+            <GuideChatbot guide={guide} primaryColor={currentTheme.primary} />
+        </div>
+    );
 }
