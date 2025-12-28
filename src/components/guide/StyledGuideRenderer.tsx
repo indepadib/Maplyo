@@ -33,7 +33,31 @@ const DICTIONARY = {
         secureAccess: "Accès sécurisé",
         network: "Réseau",
         password: "Mot de passe",
-        tipOfTheDay: "Tip du jour"
+        tipOfTheDay: "Tip du jour",
+        // Days
+        sunday: "Dimanche",
+        monday: "Lundi",
+        tuesday: "Mardi",
+        wednesday: "Mercredi",
+        thursday: "Jeudi",
+        friday: "Vendredi",
+        saturday: "Samedi",
+        // Daily Tips Defaults
+        lazy: "Détente",
+        mood: "Motivé",
+        discovery: "Découverte",
+        tasty: "Gourmand",
+        adventure: "Aventure",
+        festive: "Festif",
+        outing: "Sortie",
+        brunch: "Un brunch à",
+        explore: "Explorez le centre de",
+        museums: "Visitez les musées de",
+        taste: "Goutez aux spécialités de",
+        excursion: "Partez en excursion à",
+        nightlife: "Sortez le soir à",
+        walk: "Baladez-vous à",
+        items: "éléments"
     },
     en: {
         searchPlaceholder: "Search info, codes...",
