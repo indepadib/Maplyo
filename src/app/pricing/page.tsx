@@ -1,15 +1,5 @@
 "use client";
 
-import { CheckCircle2, X, ShieldCheck, Lock } from "lucide-react";
-import { PLANS } from "@/types/subscription";
-import { Button } from "@/components/ui/Button";
-import { useState } from "react";
-import { useAuth } from "@/components/auth/AuthProvider";
-import { useRouter } from "next/navigation";
-import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
-
-"use client";
-
 import { CheckCircle2, X, ShieldCheck, Lock, Sparkles, Zap } from "lucide-react";
 import { PLANS } from "@/types/subscription";
 import { Button } from "@/components/ui/Button";
@@ -202,5 +192,3 @@ export default function PricingPage() {
         </div>
     );
 }
-
-
