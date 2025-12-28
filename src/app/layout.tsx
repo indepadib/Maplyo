@@ -15,12 +15,15 @@ export const viewport = {
 
 
 import { AuthProvider } from "@/components/auth/AuthProvider";
+import { LanguageProvider } from "@/components/providers/LanguageProvider";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <LanguageProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

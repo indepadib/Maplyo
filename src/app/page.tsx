@@ -29,12 +29,14 @@ const PhoneMockup3D = dynamic(() => import("@/components/landing/PhoneMockup3D")
   loading: () => <div className="w-[300px] h-[600px] bg-white/5 rounded-[3rem] animate-pulse mx-auto" />
 });
 import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
+import { useTranslation } from "@/components/providers/LanguageProvider";
 
 // --- Components ---
 
 const Nav = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t, lang, setLang } = useTranslation();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -60,20 +62,27 @@ const Nav = () => {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           <Link href="#features" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
-            Fonctionnalités
+            {t.footer.links.features}
           </Link>
           <Link href="#pricing" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
-            Tarifs
+            {t.footer.links.pricing}
           </Link>
+          {/* Language Switcher */}
+          <button
+            onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
+            className="text-sm font-bold text-zinc-400 hover:text-white border border-white/10 rounded-full px-3 py-1 transition-colors uppercase ml-4"
+          >
+            {lang}
+          </button>
           <div className="flex items-center gap-4 ml-4">
             <Link href="/login">
               <Button variant="secondary" className="bg-white/5 hover:bg-white/10 text-white border-white/10 backdrop-blur-sm">
-                Connexion
+                {t.common.login}
               </Button>
             </Link>
             <Link href="/signup">
               <Button className="bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white border-0 shadow-lg shadow-rose-600/20">
-                Commencer
+                {t.common.getStarted}
               </Button>
             </Link>
           </div>
@@ -226,6 +235,7 @@ const ScrollProgress = () => {
 };
 
 export default function LandingPage() {
+  const { t } = useTranslation();
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -408,11 +418,11 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 className="text-4xl md:text-6xl font-bold text-white mb-6"
               >
-                Tout ce dont vous avez besoin. <br />
-                <span className="text-zinc-600">Rien de superflu.</span>
+                {t.features.title} <br />
+                <span className="text-zinc-600">{t.features.subtitle}</span>
               </motion.h2>
               <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-                Des outils puissants pour automatiser votre accueil et rassurer vos voyageurs, sans la complexité technique.
+                {t.features.description}
               </p>
             </div>
 
@@ -420,33 +430,33 @@ export default function LandingPage() {
               {[
                 {
                   icon: Smartphone,
-                  title: "100% Mobile First",
-                  desc: "Pas d'application à télécharger. Vos guides s'ouvrent instantanément dans n'importe quel navigateur mobile."
+                  title: t.features.items.mobileFirst.title,
+                  desc: t.features.items.mobileFirst.desc
                 },
                 {
                   icon: Lock,
-                  title: "Codes Sécurisés",
-                  desc: "Protégez l'accès au WiFi et aux boîtes à clés. Déverrouillage par email ou code unique."
+                  title: t.features.items.secure.title,
+                  desc: t.features.items.secure.desc
                 },
                 {
                   icon: MapIcon,
-                  title: "Carte Interactive",
-                  desc: "Intégrez vos restaurants, bars et activités préférés avec itinéraires Google Maps en un clic."
+                  title: t.features.items.map.title,
+                  desc: t.features.items.map.desc
                 },
                 {
                   icon: Zap,
-                  title: "Modifications Live",
-                  desc: "Changez le code WiFi ou une recommandation, c'est mis à jour instantanément sur tous les téléphones."
+                  title: t.features.items.live.title,
+                  desc: t.features.items.live.desc
                 },
                 {
                   icon: Globe,
-                  title: "Traduction Auto",
-                  desc: "Détecte automatiquement la langue du téléphone du visiteur et traduit votre guide."
+                  title: t.features.items.translate.title,
+                  desc: t.features.items.translate.desc
                 },
                 {
                   icon: Check,
-                  title: "Check-lists",
-                  desc: "Instructions claires pour l'arrivée et le départ. Réduisez les questions répétitives de 80%."
+                  title: t.features.items.checklist.title,
+                  desc: t.features.items.checklist.desc
                 }
               ].map((f, i) => (
                 <FeatureCard key={i} {...f} index={i} delay={i * 0.1} />
@@ -462,34 +472,22 @@ export default function LandingPage() {
 
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-20">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Tarification Transparente</h2>
-              <p className="text-xl text-zinc-400">Commencez gratuitement. Évoluez quand vous voulez.</p>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">{t.pricing.title}</h2>
+              <p className="text-xl text-zinc-400">{t.pricing.subtitle}</p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
               <PricingCard
                 tier="Basic"
-                price="49 DH"
-                features={[
-                  "1 Guide Actif",
-                  "Design Standard",
-                  "Support Email",
-                  "Hébergement Inclus"
-                ]}
+                price={`49 DH`}
+                features={t.pricing.plans.basic.features}
                 delay={0}
               />
               <PricingCard
                 tier="Pro"
-                price="99 DH"
+                price={`99 DH`}
                 popular={true}
-                features={[
-                  "2 Guides Inclus",
-                  "Guide supp. à 10 DH",
-                  "Design Premium",
-                  "Priorité Support",
-                  "Marque Blanche (No Logo)",
-                  "Statistiques Avancées"
-                ]}
+                features={t.pricing.plans.pro.features}
                 delay={0.1}
               />
               <PricingCard
@@ -507,9 +505,9 @@ export default function LandingPage() {
             </div>
 
             <div className="mt-20 p-8 rounded-3xl bg-white/[0.03] border border-white/5 text-center max-w-3xl mx-auto">
-              <h3 className="text-white font-bold text-lg mb-2">Besoin d'une solution Enterprise ?</h3>
-              <p className="text-zinc-500 mb-6">Pour les gestionnaires de plus de 50 propriétés, nous proposons des tarifs dégressifs et une intégration PMS.</p>
-              <Button variant="secondary" className="border-white/10 text-white hover:bg-white/10">Contacter l'équipe commerciale</Button>
+              <h3 className="text-white font-bold text-lg mb-2">{t.pricing.enterprise.title}</h3>
+              <p className="text-zinc-500 mb-6">{t.pricing.enterprise.desc}</p>
+              <Button variant="secondary" className="border-white/10 text-white hover:bg-white/10">{t.pricing.enterprise.cta}</Button>
             </div>
           </div>
         </section>
@@ -519,18 +517,18 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-rose-900/20 pointer-events-none" />
           <div className="max-w-4xl mx-auto relative z-10">
             <h2 className="text-5xl md:text-7xl font-bold text-white mb-8 tracking-tight">
-              Prêt à impressionner ?
+              {t.cta.title}
             </h2>
             <p className="text-xl md:text-2xl text-zinc-400 mb-12 max-w-2xl mx-auto">
-              Rejoignez la nouvelle génération d'hôtes qui offrent une expérience exceptionnelle.
+              {t.cta.subtitle}
             </p>
             <Link href="/signup">
               <Button className="h-16 px-12 text-xl bg-white text-slate-950 font-bold hover:scale-105 transition-transform shadow-2xl shadow-rose-500/20 border-0 rounded-full">
-                Créer mon premier guide
+                {t.cta.button}
               </Button>
             </Link>
             <p className="mt-8 text-zinc-500 text-sm">
-              Aucune carte de crédit requise • Annulable à tout moment
+              {t.cta.subtext}
             </p>
           </div>
         </section>
@@ -546,50 +544,50 @@ export default function LandingPage() {
                 <span className="text-xl font-bold text-white">Maplyo</span>
               </Link>
               <p className="text-zinc-500 text-sm leading-relaxed max-w-xs">
-                Maplyo aide les hôtes et les conciergeries à offrir une expérience 5 étoiles grâce à des guides digitaux intelligents.
+                {t.footer.desc}
               </p>
             </div>
 
             <div>
-              <h4 className="text-white font-bold mb-6">Produit</h4>
+              <h4 className="text-white font-bold mb-6">{t.footer.product}</h4>
               <ul className="space-y-4 text-sm text-zinc-500">
-                <li><Link href="#" className="hover:text-rose-400 transition-colors">Fonctionnalités</Link></li>
-                <li><Link href="#" className="hover:text-rose-400 transition-colors">Tarifs</Link></li>
-                <li><Link href="#" className="hover:text-rose-400 transition-colors">Témoignages</Link></li>
-                <li><Link href="#" className="hover:text-rose-400 transition-colors">Roadmap</Link></li>
+                <li><Link href="#" className="hover:text-rose-400 transition-colors">{t.footer.links.features}</Link></li>
+                <li><Link href="#" className="hover:text-rose-400 transition-colors">{t.footer.links.pricing}</Link></li>
+                <li><Link href="#" className="hover:text-rose-400 transition-colors">{t.footer.links.testimonials}</Link></li>
+                <li><Link href="#" className="hover:text-rose-400 transition-colors">{t.footer.links.roadmap}</Link></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="text-white font-bold mb-6">Support</h4>
+              <h4 className="text-white font-bold mb-6">{t.footer.support}</h4>
               <ul className="space-y-4 text-sm text-zinc-500">
-                <li><Link href="#" className="hover:text-rose-400 transition-colors">Aide</Link></li>
-                <li><Link href="#" className="hover:text-rose-400 transition-colors">Contact</Link></li>
+                <li><Link href="#" className="hover:text-rose-400 transition-colors">{t.footer.links.help}</Link></li>
+                <li><Link href="#" className="hover:text-rose-400 transition-colors">{t.footer.links.contact}</Link></li>
                 <li><Link href="#" className="hover:text-rose-400 transition-colors">API Docs</Link></li>
                 <li><Link href="#" className="hover:text-rose-400 transition-colors">Status</Link></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="text-white font-bold mb-6">Légal</h4>
+              <h4 className="text-white font-bold mb-6">{t.footer.legal}</h4>
               <ul className="space-y-4 text-sm text-zinc-500">
-                <li><Link href="#" className="hover:text-rose-400 transition-colors">Confidentialité</Link></li>
-                <li><Link href="#" className="hover:text-rose-400 transition-colors">Conditions</Link></li>
-                <li><Link href="#" className="hover:text-rose-400 transition-colors">Mentions légales</Link></li>
+                <li><Link href="#" className="hover:text-rose-400 transition-colors">{t.footer.links.privacy}</Link></li>
+                <li><Link href="#" className="hover:text-rose-400 transition-colors">{t.footer.links.terms}</Link></li>
+                <li><Link href="#" className="hover:text-rose-400 transition-colors">{t.footer.links.legal}</Link></li>
               </ul>
             </div>
           </div>
 
           <div className="max-w-7xl mx-auto pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-zinc-600 text-sm">
-              © {new Date().getFullYear()} Maplyo. Tous droits réservés.
+              © {new Date().getFullYear()} Maplyo. {t.footer.rights}
             </p>
             <div className="flex gap-6 items-center">
               <span className="text-xs text-zinc-600 font-semibold uppercase tracking-wider flex items-center gap-2">
                 <svg className="w-3 h-3 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
-                Paiement Sécurisé
+                {t.footer.securePayment}
               </span>
               {/* Payment Icons (Text for now to allow SVG icons later if needed) */}
               <div className="flex gap-4">
