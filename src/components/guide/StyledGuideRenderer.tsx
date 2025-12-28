@@ -104,7 +104,6 @@ const DICTIONARY = {
         nightlife: "Nightlife in",
         walk: "Walk around",
         items: "items",
-        tipOfTheDay: "Tip of the Day",
     }
 };
 
