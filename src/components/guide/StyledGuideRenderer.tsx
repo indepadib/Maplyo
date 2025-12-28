@@ -604,7 +604,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                 fill
                                 className="object-cover"
                                 priority
-                                sizes="(max-width: 768px) 100vw, 100vw"
+                                sizes="100vw"
                             />
                         ) : (
                             <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black" />
@@ -642,7 +642,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                             </AnimatePresence>
                         </div>
 
-                        <div className={`absolute left-0 right-0 px-6 max-w-7xl mx-auto z-20 ${isDesktop ? 'bottom-16 md:bottom-24 md:px-12 text-center md:text-left' : 'bottom-16 text-center'}`}>
+                        <div className={`absolute left-0 right-0 px-6 max-w-7xl mx-auto z-20 ${isDesktop ? 'bottom-40 md:bottom-48 md:px-12 text-center md:text-left' : 'bottom-32 text-center'}`}>
                             <motion.div
                                 initial={{ y: 30, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
