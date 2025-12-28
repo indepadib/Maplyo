@@ -571,8 +571,8 @@ export default function LandingPage() {
             <div>
               <h4 className="text-white font-bold mb-6">{t.footer.legal}</h4>
               <ul className="space-y-4 text-sm text-zinc-500">
-                <li><Link href="#" className="hover:text-rose-400 transition-colors">{t.footer.links.privacy}</Link></li>
-                <li><Link href="#" className="hover:text-rose-400 transition-colors">{t.footer.links.terms}</Link></li>
+                <li><Link href="/legal/privacy" className="hover:text-rose-400 transition-colors">{t.footer.links.privacy}</Link></li>
+                <li><Link href="/legal/terms" className="hover:text-rose-400 transition-colors">{t.footer.links.terms}</Link></li>
                 <li><Link href="#" className="hover:text-rose-400 transition-colors">{t.footer.links.legal}</Link></li>
               </ul>
             </div>
