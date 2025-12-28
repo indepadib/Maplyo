@@ -34,7 +34,6 @@ const DICTIONARY = {
         secureAccess: "Accès sécurisé",
         network: "Réseau",
         password: "Mot de passe",
-        password: "Mot de passe",
         // Days
         sunday: "Dimanche",
         monday: "Lundi",
