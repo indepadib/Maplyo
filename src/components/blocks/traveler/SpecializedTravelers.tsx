@@ -266,15 +266,15 @@ export function TrashTraveler({ data }: { data: any }) {
                     </div>
                 )}
             </div>
-        </div>
+
 
             {
-        data.instructions && (
-            <div className="prose prose-sm max-w-none text-gray-600 bg-white p-4 rounded-2xl border border-gray-100">
-                <p>{data.instructions}</p>
-            </div>
-        )
-    }
+                data.instructions && (
+                    <div className="prose prose-sm max-w-none text-gray-600 bg-white p-4 rounded-2xl border border-gray-100">
+                        <p>{data.instructions}</p>
+                    </div>
+                )
+            }
         </div >
     );
 }
