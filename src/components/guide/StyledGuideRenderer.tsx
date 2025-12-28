@@ -592,7 +592,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
             <div className={`w-full relative z-10 ${isDesktop ? '' : 'max-w-md mx-auto'}`}>
 
                 {/* CINEMATIC HERO */}
-                <div className={`relative overflow-hidden h-[50vh] ${isDesktop ? 'md:h-[85vh] md:-mb-12' : ''}`}>
+                <div className={`relative overflow-hidden h-[50vh] ${isDesktop ? 'md:h-[85vh] md:-mb-32' : ''}`}>
                     <motion.div
                         style={{ y: heroY, opacity: heroOpacity }}
                         className="absolute inset-0 w-full h-full"
@@ -658,7 +658,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
                                     initial={{ y: 30, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.2, duration: 0.8 }}
-                                    className={`flex flex-col gap-4 items-center ${isDesktop ? 'md:flex-row md:items-start' : ''}`}
+                                    className={`flex flex-col gap-4 items-center ${isDesktop ? 'md:items-start' : ''}`}
                                 >
                                     <p className={`text-white/90 max-w-xl font-medium leading-relaxed drop-shadow-md text-base md:text-xl`}>
                                         {(heroBlock.data as any).subtitle}

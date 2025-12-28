@@ -466,7 +466,7 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
               <PricingCard
                 tier="Basic"
-                price="50 DH"
+                price="99 DH"
                 features={[
                   "1 Guide Actif",
                   "Design Standard",
@@ -477,7 +477,7 @@ export default function LandingPage() {
               />
               <PricingCard
                 tier="Pro"
-                price="100 DH"
+                price="299 DH"
                 popular={true}
                 features={[
                   "5 Guides Actifs",
@@ -490,7 +490,7 @@ export default function LandingPage() {
               />
               <PricingCard
                 tier="Business"
-                price="200 DH"
+                price="Sur devis"
                 features={[
                   "Guides Illimités",
                   "Design 100% Custom",
@@ -588,9 +588,9 @@ export default function LandingPage() {
                 Paiement Sécurisé
               </span>
               {/* Payment Icons (Text for now to allow SVG icons later if needed) */}
-              <div className="flex gap-2 opacity-40 grayscale">
-                <div className="h-5 w-8 bg-white/10 rounded flex items-center justify-center text-[8px] font-bold text-zinc-500">VISA</div>
-                <div className="h-5 w-8 bg-white/10 rounded flex items-center justify-center text-[8px] font-bold text-zinc-500">MC</div>
+              <div className="flex gap-2">
+                <svg className="h-6 w-auto" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path className="fill-[#fff]" d="M13.623 0L9.049 23.594H3.012L7.586 0h6.037z" /><path className="fill-[#fff]" d="M37.98 0l-3.003 14.739c-.198.857-1.127 1.401-1.896 1.401h-4.664l2.87-16.14h6.693z" /><path className="fill-[#F79E1B]" d="M26.262 18.068C26.96 17.07 27.696 15.65 28.16 13.91l2.05-10.02a18.257 18.257 0 00-6.732-1.076c-3.13 0-5.32 1.636-5.32 3.996 0 2.228 2.016 3.447 3.535 4.192 1.57.771 2.096 1.258 2.096 1.944 0 1.054-1.267 1.536-2.44 1.536-1.63 0-3.32-.821-4.28-1.78l-2.618 3.326c1.64 1.492 4.675 2.14 6.84 2.14 3.73 0 6.07-1.868 6.07-4.57 0-1.874-1.04-3.21-3.664-4.498-1.46-.73-2.396-1.503-2.396-2.636 0-1.18 1.15-1.995 2.502-1.995 1.43 0 2.89.542 3.82 1.156L26.26 18.068z" /><path className="fill-[#fff]" d="M9.162 0L6.72 15.66s-.31.877-1.428 1.11C3.33 17.152.013 15.86.013 15.86L.002 16c1.86.417 5.068 2.126 6.574 2.126 3.02 0 4.65-1.528 4.88-3.053L14.735 0H9.162z" /></svg>
+                <div className="h-6 w-9 bg-white/10 rounded flex items-center justify-center text-[8px] font-bold text-zinc-500">MC</div>
               </div>
             </div>
           </div>

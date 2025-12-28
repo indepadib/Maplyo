@@ -4,7 +4,7 @@ export interface SubscriptionPlan {
     id: PlanId;
     name: string;
     price: number;
-    currency: string;
+    currency: 'MAD' | 'EUR';
     features: string[];
     limits: {
         guides: number;
@@ -18,7 +18,7 @@ export const PLANS: Record<PlanId, SubscriptionPlan> = {
         id: 'demo',
         name: 'Démo',
         price: 0,
-        currency: 'EUR',
+        currency: 'MAD',
         features: [
             'Accès au Créateur',
             'Pas de publication',
@@ -33,13 +33,14 @@ export const PLANS: Record<PlanId, SubscriptionPlan> = {
     basic: {
         id: 'basic',
         name: 'Basique',
-        price: 9,
-        currency: 'EUR',
+        price: 99,
+        currency: 'MAD',
         features: [
             '1 Guide Actif',
             'Thèmes Essentiels',
             'Support Standard',
-            'Hébergement Inclus'
+            'Hébergement Inclus',
+            'QR Code'
         ],
         limits: {
             guides: 1,
@@ -50,8 +51,8 @@ export const PLANS: Record<PlanId, SubscriptionPlan> = {
     pro: {
         id: 'pro',
         name: 'Pro',
-        price: 29,
-        currency: 'EUR',
+        price: 299,
+        currency: 'MAD',
         features: [
             '3 Guides Actifs',
             'Assistant IA Invités',
