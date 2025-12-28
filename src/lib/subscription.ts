@@ -14,17 +14,22 @@ export async function getUserSubscription(userId: string): Promise<UserSubscript
 
     // MOCK FOR NOW until DB is confirmed
     return {
-        planId: 'free', // Default to free for everyone
-        status: 'active'
+        userId: userId,
+        planId: 'demo', // Default to demo
+        status: 'active',
+        currentPeriodEnd: Date.now() + 10000000
     };
 }
 
-export function checkLimit(planId: 'free' | 'pro', resource: 'guides' | 'blocks', currentCount: number): boolean {
-    const plan = PLANS[planId];
+export function checkLimit(planId: string, resource: 'guides', currentCount: number): boolean {
+    // @ts-ignore
+    const plan = PLANS[planId] || PLANS.demo;
     const limit = plan.limits[resource];
     return currentCount < limit;
 }
 
-export function canUseFeature(planId: 'free' | 'pro', feature: 'mediaUploads' | 'aiTips'): boolean {
-    return PLANS[planId].limits[feature];
+export function canUseFeature(planId: string, feature: 'ai' | 'themes'): boolean {
+    // @ts-ignore
+    const plan = PLANS[planId] || PLANS.demo;
+    return plan.limits[feature];
 }

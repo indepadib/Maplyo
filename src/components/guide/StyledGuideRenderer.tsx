@@ -11,6 +11,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { QRCodeSVG } from "qrcode.react";
 import { Wifi, Key, X, ExternalLink, Search, Globe, ChevronRight, CheckCircle2, MapPin, Sun, Moon, Coffee, Utensils, Music, Camera } from "lucide-react";
 import { GuideChatbot } from "./GuideChatbot";
+import { TipModal } from "./TipModal";
 
 // --- TRANSLATIONS ---
 const DICTIONARY = {
@@ -175,6 +176,7 @@ function BottomSheet({ isOpen, onClose, children, title }: { isOpen: boolean; on
 function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr' | 'en'; onClose: () => void }) {
     const [tip, setTip] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Fetch AI Tip on Mount
     useState(() => {
@@ -228,27 +230,36 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr'
     const text = tip ? tip.text : fallback.text;
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="mx-auto max-w-md bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl p-3 flex items-center gap-3 shadow-2xl relative overflow-hidden group cursor-pointer hover:bg-white/20 transition-colors z-[100]"
-        >
-            <div className="p-2 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg relative">
-                <Icon className="w-5 h-5 text-white relative z-10" />
-                {loading && <div className="absolute inset-0 bg-white/20 animate-pulse rounded-xl" />}
-            </div>
-            <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">{t.tipOfTheDay}</span>
-                    <span className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
+        <>
+            <motion.div
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="mx-auto max-w-md bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl p-3 flex items-center gap-3 shadow-2xl relative overflow-hidden group cursor-pointer hover:bg-white/20 transition-colors z-[100]"
+                onClick={() => setIsModalOpen(true)}
+            >
+                <div className="p-2 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg relative">
+                    <Icon className="w-5 h-5 text-white relative z-10" />
+                    {loading && <div className="absolute inset-0 bg-white/20 animate-pulse rounded-xl" />}
                 </div>
-                <div className="font-bold text-sm line-clamp-2 leading-tight">{title} : <span className="font-normal opacity-90">{text}</span></div>
-            </div>
-            <button onClick={(e) => { e.stopPropagation(); onClose(); }} className="p-1 hover:bg-white/20 rounded-full transition-colors">
-                <X className="w-4 h-4 opacity-70" />
-            </button>
-        </motion.div>
+                <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">{t.tipOfTheDay}</span>
+                        <span className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
+                    </div>
+                    <div className="font-bold text-sm line-clamp-2 leading-tight">{title} : <span className="font-normal opacity-90">{text}</span></div>
+                </div>
+                <button onClick={(e) => { e.stopPropagation(); onClose(); }} className="p-1 hover:bg-white/20 rounded-full transition-colors">
+                    <X className="w-4 h-4 opacity-70" />
+                </button>
+            </motion.div>
+
+            <TipModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                tip={tip ? tip : { title: fallback.title, text: fallback.text, location: city }}
+            />
+        </>
     );
 }
 

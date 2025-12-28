@@ -8,7 +8,7 @@ import { StyledGuideRenderer as GuideRenderer } from "@/components/guide/StyledG
 import { Modal } from "@/components/ui/Modal";
 import { guideThemes as themes, type GuideTheme as Theme } from "@/types/themes";
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
-import { Settings, ChevronRight, Trash2, Check, ExternalLink } from "lucide-react";
+import { Settings, ChevronRight, Trash2, Check, ExternalLink, ChevronLeft } from "lucide-react";
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 const STORAGE_KEY = "eguidehq_demo_guide_v1";
@@ -120,12 +120,17 @@ export function EnhancedBuilder({ initialGuide }: { initialGuide: Guide }) {
             {/* TOP BAR */}
             <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-20 shrink-0">
                 <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold">
-                        G
-                    </div>
-                    <div>
-                        <h1 className="font-bold text-sm text-gray-900">{guide.title}</h1>
-                        <p className="text-xs text-gray-500">Mode Éditeur</p>
+                    <a href="/dashboard" className="p-2 -ml-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" title="Retour au Dashboard">
+                        <ChevronLeft size={20} />
+                    </a>
+                    <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold">
+                            G
+                        </div>
+                        <div>
+                            <h1 className="font-bold text-sm text-gray-900">{guide.title}</h1>
+                            <p className="text-xs text-gray-500">Mode Éditeur</p>
+                        </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">

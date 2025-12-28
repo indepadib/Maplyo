@@ -1,46 +1,75 @@
-export type SubscriptionPlan = 'free' | 'pro';
+export type PlanId = 'demo' | 'basic' | 'pro';
 
-export const PLANS = {
-    free: {
-        id: 'free',
-        name: 'Gratuit',
+export interface SubscriptionPlan {
+    id: PlanId;
+    name: string;
+    price: number;
+    currency: string;
+    features: string[];
+    limits: {
+        guides: number;
+        ai: boolean;
+        themes: boolean; // all themes
+    };
+}
+
+export const PLANS: Record<PlanId, SubscriptionPlan> = {
+    demo: {
+        id: 'demo',
+        name: 'Démo',
         price: 0,
+        currency: 'EUR',
+        features: [
+            'Accès au Créateur',
+            'Pas de publication',
+            'Thèmes limités'
+        ],
+        limits: {
+            guides: 1, // Can create 1 but not publish (handled elsewhere)
+            ai: false,
+            themes: false
+        }
+    },
+    basic: {
+        id: 'basic',
+        name: 'Basique',
+        price: 9,
+        currency: 'EUR',
+        features: [
+            '1 Guide Actif',
+            'Thèmes Essentiels',
+            'Support Standard',
+            'Hébergement Inclus'
+        ],
         limits: {
             guides: 1,
-            blocks: 15,
-            mediaUploads: false, // Videos/Images in blocks
-            aiTips: false,
-        },
-        features: [
-            "1 Guide",
-            "Blocs basiques (Wifi, Check-in)",
-            "QR Code simple",
-            "Support communautaire"
-        ]
+            ai: false,
+            themes: false
+        }
     },
     pro: {
         id: 'pro',
         name: 'Pro',
-        price: 9, // €/month
-        limits: {
-            guides: 100,
-            blocks: 1000,
-            mediaUploads: true,
-            aiTips: true,
-        },
+        price: 29,
+        currency: 'EUR',
         features: [
-            "Guides illimités",
-            "Tous les blocs (Vidéos, Maps dynamiques)",
-            "IA Génératrice de contenu",
-            "Support Prioritaire",
-            "Marque blanche (Logo perso)" // Future
-        ]
+            '3 Guides Actifs',
+            'Assistant IA Invités',
+            'Tous les Thèmes Premium',
+            'Support Prioritaire',
+            'Statistiques Avancées'
+        ],
+        limits: {
+            guides: 3,
+            ai: true,
+            themes: true
+        }
     }
-} as const;
-
-export type UserSubscription = {
-    planId: SubscriptionPlan;
-    status: 'active' | 'past_due' | 'canceled' | 'trialing' | null;
-    stripeCustomerId?: string;
-    currentPeriodEnd?: string;
 };
+
+export interface UserSubscription {
+    userId: string;
+    planId: PlanId;
+    status: 'active' | 'past_due' | 'canceled' | 'incomplete';
+    currentPeriodEnd: number;
+}

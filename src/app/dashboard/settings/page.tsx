@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { User, CreditCard, Settings, ChevronLeft, Upload, Package, ShoppingBag, Sparkles } from "lucide-react";
+import { User, CreditCard, Settings, ChevronLeft, Upload, Package, ShoppingBag, Sparkles, Check, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { supabase } from "@/lib/supabase";
 import { FileUploader } from "@/components/ui/FileUploader";
@@ -154,17 +154,20 @@ export default function SettingsPage() {
                                     <div className="relative z-10">
                                         <div className="text-sm text-zinc-400 mb-1">Plan Actuel</div>
                                         <div className="text-3xl font-black text-rose-400 mb-4 uppercase tracking-wider">
-                                            {subscription?.planId === "pro" ? "PRO" : "GRATUIT"}
+                                            {subscription?.planId === "pro" ? "PRO" : subscription?.planId === "basic" ? "BASIQUE" : "DÉMO"}
                                         </div>
                                         <div className="flex flex-col gap-2 text-sm text-zinc-300">
                                             <div className="flex items-center gap-2">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                                                {subscription?.planId === "pro" ? "Guides illimités" : "1 Guide maximum"}
+                                                <span className={`w-1.5 h-1.5 rounded-full ${subscription?.planId === "demo" ? "bg-yellow-400" : "bg-green-400"}`} />
+                                                {subscription?.planId === "pro" ? "3 Guides actifs" : "1 Guide maximum"}
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                                                {subscription?.planId === "pro" ? "Support prioritaire" : "Support standard"}
+                                                <span className={`w-1.5 h-1.5 rounded-full ${subscription?.planId === "pro" ? "bg-green-400" : "bg-zinc-500"}`} />
+                                                {subscription?.planId === "pro" ? "Support Prioritaire" : "Support Standard"}
                                             </div>
+                                            {subscription?.planId === "demo" && (
+                                                <div className="text-yellow-400 text-xs mt-2">Mode démo : création uniquement</div>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="absolute right-0 top-0 p-8 opacity-10">
@@ -191,38 +194,74 @@ export default function SettingsPage() {
                         )}
 
                         {activeTab === "shop" && (
-                            <div className="space-y-6">
-                                <h2 className="text-xl font-bold mb-4">Boutique & Extras</h2>
+                            <div className="space-y-8">
+                                <div className="flex items-center justify-between">
+                                    <h2 className="text-xl font-bold">Boutique & Extras</h2>
+                                    <div className="flex items-center gap-2 text-xs text-zinc-400 bg-white/5 px-3 py-1 rounded-full">
+                                        <ShieldCheck className="w-4 h-4 text-green-400" />
+                                        Paiement Sécurisé Stripe
+                                    </div>
+                                </div>
 
-                                <div className="grid md:grid-cols-2 gap-4">
-                                    <div className="p-6 rounded-2xl bg-slate-800 border border-white/10 hover:border-rose-500/50 transition-colors group">
-                                        <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                            <Package className="w-6 h-6 text-rose-400" />
+                                <div className="grid lg:grid-cols-2 gap-6">
+                                    {/* Physical QR Code Product */}
+                                    <div className="relative group p-1 rounded-3xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 hover:border-rose-500/50 transition-all hover:shadow-2xl hover:shadow-rose-500/10">
+                                        <div className="absolute top-4 right-4 bg-rose-500 text-white text-[10px] font-bold px-2 py-1 rounded-full animate-pulse">
+                                            BEST SELLER
                                         </div>
-                                        <h3 className="font-bold text-lg mb-1">QR Code Imprimé</h3>
-                                        <p className="text-sm text-zinc-400 mb-4">
-                                            Recevez un QR Code haute qualité imprimé sur toile, prêt à être affiché dans votre logement.
-                                        </p>
-                                        <div className="flex items-center justify-between mt-4">
-                                            <span className="text-xl font-bold text-white">200 DH</span>
-                                            <button className="bg-white text-black px-4 py-2 rounded-lg text-sm font-bold hover:bg-zinc-200 transition-colors">
-                                                Commander
-                                            </button>
+                                        <div className="bg-slate-900 rounded-[22px] p-6 h-full flex flex-col">
+                                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg shadow-rose-500/20 group-hover:scale-110 transition-transform duration-300">
+                                                <Package className="w-8 h-8 text-white" />
+                                            </div>
+
+                                            <h3 className="font-bold text-xl mb-2 text-white">QR Code sur Toile</h3>
+                                            <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
+                                                Offrez une expérience premium dès l'arrivée. Recevez un QR code unique imprimé sur une toile de qualité musée (20x20cm), prêt à être accroché.
+                                            </p>
+
+                                            <ul className="space-y-2 mb-8 flex-1">
+                                                <li className="flex items-center gap-2 text-sm text-zinc-300">
+                                                    <Check className="w-4 h-4 text-rose-500" />
+                                                    Impression Haute Définition
+                                                </li>
+                                                <li className="flex items-center gap-2 text-sm text-zinc-300">
+                                                    <Check className="w-4 h-4 text-rose-500" />
+                                                    Cadre en bois inclus
+                                                </li>
+                                                <li className="flex items-center gap-2 text-sm text-zinc-300">
+                                                    <Check className="w-4 h-4 text-rose-500" />
+                                                    Livraison Suivie (Monde)
+                                                </li>
+                                            </ul>
+
+                                            <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                                                <div className="flex flex-col">
+                                                    <span className="text-2xl font-bold text-white">200 DH</span>
+                                                    <span className="text-[10px] text-zinc-500">TTC + Livraison</span>
+                                                </div>
+                                                <button className="bg-white text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-zinc-200 transition-colors shadow-lg active:scale-95">
+                                                    Commander
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="p-6 rounded-2xl bg-slate-800 border border-white/10 opacity-50 cursor-not-allowed">
-                                        <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-4">
-                                            <Sparkles className="w-6 h-6 text-purple-400" />
+                                    {/* Themes Pack - Coming Soon */}
+                                    <div className="relative p-6 rounded-3xl bg-slate-900 border border-white/5 flex flex-col opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                                        <div className="absolute top-4 right-4 bg-zinc-800 text-zinc-400 text-[10px] font-bold px-2 py-1 rounded-full">
+                                            BIENTÔT
                                         </div>
-                                        <h3 className="font-bold text-lg mb-1">Pack de Thèmes</h3>
-                                        <p className="text-sm text-zinc-400 mb-4">
-                                            Débloquez 10 thèmes premium supplémentaires pour vos guides.
+                                        <div className="w-16 h-16 rounded-2xl bg-zinc-800 flex items-center justify-center mb-6">
+                                            <Sparkles className="w-8 h-8 text-purple-400" />
+                                        </div>
+                                        <h3 className="font-bold text-xl mb-2 text-white">Pack Ultimate Themes</h3>
+                                        <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
+                                            Débloquez instantanément 20 thèmes premium créés par des designers pour sublimer vos guides.
                                         </p>
-                                        <div className="flex items-center justify-between mt-4">
-                                            <span className="text-xl font-bold text-white">100 DH</span>
-                                            <button disabled className="bg-white/10 text-white px-4 py-2 rounded-lg text-sm font-bold">
-                                                Bientôt
+                                        <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
+                                            <span className="text-2xl font-bold text-white">100 DH</span>
+                                            <button disabled className="bg-white/10 text-white px-6 py-3 rounded-xl text-sm font-bold cursor-not-allowed">
+                                                M'alerter
                                             </button>
                                         </div>
                                     </div>
