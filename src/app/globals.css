@@ -4,3 +4,18 @@
 
 :root{color-scheme:light;}
 body{@apply bg-zinc-50 text-zinc-900;}
+
+@layer utilities {
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}

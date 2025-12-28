@@ -120,45 +120,53 @@ export default function PricingPage() {
                         </Button>
                     </div>
 
-                    {/* BASIC PLAN */}
-                    <div className="bg-white rounded-[2rem] p-8 border-2 border-rose-500 shadow-2xl shadow-rose-500/10 flex flex-col relative scale-[1.02] z-10 md:-mt-4">
-                        <div className="absolute top-0 right-0 left-0 bg-rose-500 text-white text-xs font-bold py-2 text-center uppercase tracking-widest rounded-t-[1.8rem]">
-                            {t.common.popular}
-                        </div>
-                        <div className="mb-6 mt-6">
-                            <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 text-rose-500">
-                                <Home className="w-6 h-6" />
+                    {/* BASIC PLAN - Premium Gradient Border */}
+                    <div className="relative group z-10 md:-mt-4">
+                        <div className="absolute -inset-[2px] bg-gradient-to-br from-rose-500 via-orange-500 to-rose-600 rounded-[2rem] opacity-100 blur-[1px]" />
+                        <div className="relative bg-white rounded-[2rem] p-8 h-full flex flex-col shadow-2xl shadow-rose-500/20">
+                            <div className="absolute top-0 right-0 left-0 bg-gradient-to-r from-rose-500 to-orange-500 text-white text-xs font-bold py-2 text-center uppercase tracking-widest rounded-t-[1.8rem]">
+                                {t.common.popular}
                             </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">{t.pricing.plans.basic.name}</h3>
-                            <div className="flex items-baseline gap-1">
-                                <span className="text-5xl font-black text-gray-900">{PLANS.basic.price} DH</span>
-                                <span className="text-gray-400 font-medium">{t.common.month}</span>
+                            <div className="mb-6 mt-6">
+                                <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 text-rose-500 group-hover:scale-110 transition-transform duration-300">
+                                    <Home className="w-6 h-6" />
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-900 mb-2">{t.pricing.plans.basic.name}</h3>
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-5xl font-black text-gray-900">{PLANS.basic.price} DH</span>
+                                    <span className="text-gray-400 font-medium">{t.common.month}</span>
+                                </div>
+                                <p className="text-rose-600/80 mt-4 text-sm font-medium">{t.pricing.plans.basic.desc}</p>
                             </div>
-                            <p className="text-rose-600/80 mt-4 text-sm font-medium">{t.pricing.plans.basic.desc}</p>
+                            <ul className="space-y-4 mb-8 flex-1">
+                                {t.pricing.plans.basic.features.map((f, i) => (
+                                    <li key={i} className="flex items-start gap-3 text-gray-700 text-sm font-medium">
+                                        <CheckCircle2 className="w-5 h-5 text-rose-500 shrink-0" />
+                                        <span>{f}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                            <Button
+                                onClick={() => handleSubscribe('basic')}
+                                className="w-full h-14 rounded-2xl bg-[linear-gradient(110deg,#f43f5e,45%,#fb7185,55%,#f43f5e)] bg-[length:200%_100%] animate-shimmer text-white text-base font-bold shadow-lg shadow-rose-500/30 hover:shadow-rose-500/50 hover:-translate-y-1 transition-all border-0"
+                                disabled={loading === 'basic'}
+                            >
+                                {loading === 'basic' ? t.common.loading : `${t.pricing.plans.basic.button} (${PLANS.basic.price} DH)`}
+                            </Button>
                         </div>
-                        <ul className="space-y-4 mb-8 flex-1">
-                            {t.pricing.plans.basic.features.map((f, i) => (
-                                <li key={i} className="flex items-start gap-3 text-gray-700 text-sm font-medium">
-                                    <CheckCircle2 className="w-5 h-5 text-rose-500 shrink-0" />
-                                    <span>{f}</span>
-                                </li>
-                            ))}
-                        </ul>
-                        <Button
-                            onClick={() => handleSubscribe('basic')}
-                            className="w-full h-14 rounded-2xl bg-gradient-to-r from-rose-500 to-rose-600 hover:to-rose-700 text-white text-base font-bold shadow-lg shadow-rose-500/30 hover:shadow-rose-500/40 hover:-translate-y-1 transition-all"
-                            disabled={loading === 'basic'}
-                        >
-                            {loading === 'basic' ? t.common.loading : `${t.pricing.plans.basic.button} (${PLANS.basic.price} DH)`}
-                        </Button>
                     </div>
 
-                    {/* PRO PLAN */}
-                    <div className="bg-slate-900 rounded-[2rem] p-8 border border-slate-800 shadow-2xl flex flex-col relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
+                    {/* PRO PLAN - Dark luxury */}
+                    <div className="bg-slate-950 rounded-[2rem] p-8 border border-white/10 shadow-2xl flex flex-col relative overflow-hidden group">
+                        {/* Background Effects */}
+                        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-purple-600/20 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none" />
+                        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-rose-600/10 rounded-full blur-[80px] -ml-20 -mb-20 pointer-events-none" />
 
-                        <div className="mb-6 relative">
-                            <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-purple-400">
+                        {/* Star pattern overlay (using simple dots via radial gradient) */}
+                        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
+
+                        <div className="mb-6 relative z-10">
+                            <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-purple-400 border border-white/10 backdrop-blur-sm group-hover:scale-110 group-hover:bg-white/20 transition-all duration-300">
                                 <Sparkles className="w-6 h-6" />
                             </div>
                             <h3 className="text-xl font-bold text-white mb-2">{t.pricing.plans.pro.name}</h3>
@@ -166,11 +174,15 @@ export default function PricingPage() {
                                 <span className="text-5xl font-black text-white">{PLANS.pro.price} DH</span>
                                 <span className="text-slate-400 font-medium">{t.common.month}</span>
                             </div>
-                            <p className="text-purple-200 mt-4 text-sm font-medium bg-white/10 p-2 rounded-lg border border-white/5">
-                                {t.pricing.bestOffer} <span className="text-white font-bold block">{t.pricing.addon}</span>
-                            </p>
+                            <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-500/30 backdrop-blur-md">
+                                <p className="text-purple-200 text-sm font-medium mb-1">{t.pricing.bestOffer}</p>
+                                <span className="text-white font-bold flex items-center gap-2">
+                                    <Sparkles size={14} className="text-yellow-400 fill-yellow-400" />
+                                    {t.pricing.addon}
+                                </span>
+                            </div>
                         </div>
-                        <ul className="space-y-4 mb-8 flex-1 relative">
+                        <ul className="space-y-4 mb-8 flex-1 relative z-10">
                             {t.pricing.plans.pro.features.map((f, i) => (
                                 <li key={i} className="flex items-start gap-3 text-slate-300 text-sm">
                                     <CheckCircle2 className="w-5 h-5 text-purple-400 shrink-0" />
@@ -180,7 +192,7 @@ export default function PricingPage() {
                         </ul>
                         <Button
                             onClick={() => handleSubscribe('pro')}
-                            className="w-full h-14 rounded-2xl bg-white text-slate-900 hover:bg-gray-100 text-base font-bold shadow-lg relative z-10 hover:-translate-y-1 transition-all border-none"
+                            className="w-full h-14 rounded-2xl bg-white text-slate-950 hover:bg-zinc-100 text-base font-bold shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] relative z-10 hover:-translate-y-1 transition-all border-none"
                             disabled={loading === 'pro'}
                         >
                             {loading === 'pro' ? t.common.loading : `${t.pricing.plans.pro.button} (${PLANS.pro.price} DH)`}
