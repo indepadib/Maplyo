@@ -33,7 +33,7 @@ export const PLANS: Record<PlanId, SubscriptionPlan> = {
     basic: {
         id: 'basic',
         name: 'Basique',
-        price: 99,
+        price: 49,
         currency: 'MAD',
         features: [
             '1 Guide Actif',
@@ -51,17 +51,17 @@ export const PLANS: Record<PlanId, SubscriptionPlan> = {
     pro: {
         id: 'pro',
         name: 'Pro',
-        price: 299,
+        price: 99,
         currency: 'MAD',
         features: [
-            '3 Guides Actifs',
+            '2 Guides Inclus (+10 DH/guide supp.)',
             'Assistant IA Invités',
             'Tous les Thèmes Premium',
             'Support Prioritaire',
             'Statistiques Avancées'
         ],
         limits: {
-            guides: 3,
+            guides: 2,
             ai: true,
             themes: true
         }

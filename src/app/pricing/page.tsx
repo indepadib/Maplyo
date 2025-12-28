@@ -147,7 +147,7 @@ export default function PricingPage() {
                             className="w-full h-14 rounded-2xl bg-gradient-to-r from-rose-500 to-rose-600 hover:to-rose-700 text-white text-base font-bold shadow-lg shadow-rose-500/30 hover:shadow-rose-500/40 hover:-translate-y-1 transition-all"
                             disabled={loading === 'basic'}
                         >
-                            {loading === 'basic' ? "Chargement..." : "Commencer (99 DH)"}
+                            {loading === 'basic' ? "Chargement..." : "Commencer (49 DH)"}
                         </Button>
                     </div>
 
@@ -164,7 +164,9 @@ export default function PricingPage() {
                                 <span className="text-5xl font-black text-white">{PLANS.pro.price} DH</span>
                                 <span className="text-slate-400 font-medium">/mois</span>
                             </div>
-                            <p className="text-slate-400 mt-4 text-sm font-medium">Pour les pros et conciergeries.</p>
+                            <p className="text-purple-200 mt-4 text-sm font-medium bg-white/10 p-2 rounded-lg border border-white/5">
+                                La meilleure offre du monde : <span className="text-white font-bold block">+10 DH / guide supplémentaire</span>
+                            </p>
                         </div>
                         <ul className="space-y-4 mb-8 flex-1 relative">
                             {PLANS.pro.features.map((f, i) => (
@@ -179,7 +181,7 @@ export default function PricingPage() {
                             className="w-full h-14 rounded-2xl bg-white text-slate-900 hover:bg-gray-100 text-base font-bold shadow-lg relative z-10 hover:-translate-y-1 transition-all border-none"
                             disabled={loading === 'pro'}
                         >
-                            {loading === 'pro' ? "Chargement..." : "Devenir Pro (299 DH)"}
+                            {loading === 'pro' ? "Chargement..." : "Devenir Pro (99 DH)"}
                         </Button>
                     </div>
                 </div>

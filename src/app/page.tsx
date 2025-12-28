@@ -469,7 +469,7 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
               <PricingCard
                 tier="Basic"
-                price="99 DH"
+                price="49 DH"
                 features={[
                   "1 Guide Actif",
                   "Design Standard",
@@ -480,10 +480,11 @@ export default function LandingPage() {
               />
               <PricingCard
                 tier="Pro"
-                price="299 DH"
+                price="99 DH"
                 popular={true}
                 features={[
-                  "5 Guides Actifs",
+                  "2 Guides Inclus",
+                  "Guide supp. à 10 DH",
                   "Design Premium",
                   "Priorité Support",
                   "Marque Blanche (No Logo)",
