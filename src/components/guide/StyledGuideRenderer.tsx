@@ -105,20 +105,6 @@ const DICTIONARY = {
         walk: "Walk around",
         items: "items",
         tipOfTheDay: "Tip of the Day",
-        sunday: "Sunday",
-        monday: "Monday",
-        tuesday: "Tuesday",
-        wednesday: "Wednesday",
-        thursday: "Thursday",
-        friday: "Friday",
-        saturday: "Saturday",
-        lazy: "Lazy",
-        mood: "Mood",
-        discovery: "Discovery",
-        tasty: "Tasty",
-        adventure: "Adventure",
-        festive: "Festive",
-        outing: "Outing",
     }
 };
 
