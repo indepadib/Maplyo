@@ -70,7 +70,11 @@ export const PLANS: Record<PlanId, SubscriptionPlan> = {
 
 export interface UserSubscription {
     userId: string;
-    planId: PlanId;
-    status: 'active' | 'past_due' | 'canceled' | 'incomplete';
+    planId: string;
+    status: 'active' | 'canceled' | 'past_due' | 'trialing'; // Added trialing
     currentPeriodEnd: number;
+    addons?: {
+        themes?: boolean;
+        extra_guides?: number;
+    };
 }
