@@ -45,9 +45,8 @@ export default function SignupPage() {
       if (data.session) {
         window.location.href = "/onboarding";
       } else {
-        alert("Compte créé ! Veuillez vérifier vos emails.");
-        window.location.href = "/login";
-        setLoading(false);
+        // Show Success View instead of Alert
+        setSuccess(true);
       }
     }
   };

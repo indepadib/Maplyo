@@ -73,8 +73,26 @@ export default function PrintPage({ params }: { params: Promise<{ id: string }> 
             </div>
 
             {/* A4 Preview Container */}
-            <div className="print:w-full print:h-full">
-                <PrintLayout guide={guide} />
+            <div className="print:w-full print:h-full relative">
+                <div className={`transition-all duration-500 ${guide?.id === 'demo' ? 'blur-xl select-none pointer-events-none opacity-50' : ''}`}>
+                    <PrintLayout guide={guide} />
+                </div>
+
+                {/* Lock Overlay for Content Protection */}
+                {guide?.id === 'demo' && (
+                    <div className="absolute inset-0 z-50 flex flex-col items-center justify-center p-8 text-center bg-white/30 print:hidden">
+                        <div className="bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/50 max-w-md mx-auto">
+                            <span className="text-4xl mb-4 block">🔒</span>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-2">Fonctionnalité Premium</h2>
+                            <p className="text-gray-600 mb-6">
+                                L'exportation PDF et l'impression QR Code sont réservées aux membres Pro.
+                            </p>
+                            <Link href="/pricing" className="inline-flex w-full justify-center px-6 py-3 bg-gray-900 text-white font-bold rounded-xl shadow-lg hover:bg-black transition-all">
+                                Passer en Pro
+                            </Link>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Print Styles */}

@@ -8,7 +8,7 @@ import { StyledGuideRenderer as GuideRenderer } from "@/components/guide/StyledG
 import { Modal } from "@/components/ui/Modal";
 import { guideThemes as themes, type GuideTheme as Theme } from "@/types/themes";
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
-import { Settings, ChevronRight, Trash2, ExternalLink, ChevronLeft, Plus, Lock, Check as CheckIcon } from "lucide-react";
+import { Settings, ChevronRight, Trash2, ExternalLink, ChevronLeft, Plus, Lock, Check as CheckIcon, Palette, QrCode, Monitor, Smartphone } from "lucide-react";
 import { canUseFeature } from "@/lib/subscription";
 import { UserSubscription } from "@/types/subscription";
 import { Guide, BlockType } from "@/types/blocks"; // Value import for Guide and BlockType
@@ -48,6 +48,8 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
     const [editingId, setEditingId] = useState<string | null>(null);
     const [draggedId, setDraggedId] = useState<string | null>(null);
     const [showThemes, setShowThemes] = useState(false);
+    const [showSubscribe, setShowSubscribe] = useState(false);
+    const [previewDevice, setPreviewDevice] = useState<'mobile' | 'desktop'>('mobile');
 
     // Initialize theme
     const selectedTheme = useMemo(() => {
@@ -153,11 +155,11 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Button variant="secondary" onClick={() => setShowThemes(true)} className="gap-2 text-sm bg-gray-100 hover:bg-gray-200 border-0">
-                        <span className="text-lg">🎨</span> Thème
+                    <Button variant="secondary" onClick={() => setShowThemes(true)} className="gap-2 text-sm bg-gray-100 hover:bg-gray-200 border-0 text-gray-700">
+                        <Palette className="w-4 h-4" /> Thème
                     </Button>
-                    <a href={`/app/guides/${guide.id}/print`} className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-gray-100 hover:bg-gray-200 rounded-md transition-colors text-black no-underline">
-                        <span className="text-lg">🖨️</span> QR
+                    <a href={`/app/guides/${guide.id}/print`} className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-gray-100 hover:bg-gray-200 rounded-md transition-colors text-gray-700 no-underline">
+                        <QrCode className="w-4 h-4" /> QR
                     </a>
 
                     <div className="h-6 w-px bg-gray-200 mx-2" />
@@ -192,8 +194,7 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
                             onClick={async () => {
                                 // 1. CHECK PLAN
                                 if (subscription?.planId === 'demo') {
-                                    alert("Le plan Démo ne permet pas de publier. Passez à la version Pro !");
-                                    window.location.href = '/pricing';
+                                    setShowSubscribe(true);
                                     return;
                                 }
 
@@ -332,16 +333,27 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
                     {/* TOP: PREVIEW */}
                     <div className="h-[55%] bg-gray-50 flex flex-col border-b border-gray-200 relative">
                         <div className="absolute top-4 right-4 z-10 flex gap-2">
-                            <span className="px-2 py-1 bg-white/80 backdrop-blur rounded-md text-xs font-bold text-gray-500 shadow-sm border border-gray-200 pointer-events-none">
-                                Aperçu Mobile
-                            </span>
+                            <div className="bg-white/80 backdrop-blur rounded-lg p-1 flex border border-gray-200 shadow-sm">
+                                <button
+                                    onClick={() => setPreviewDevice('mobile')}
+                                    className={`p-1.5 rounded-md transition-all ${previewDevice === 'mobile' ? 'bg-white shadow text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}
+                                >
+                                    <Smartphone size={16} />
+                                </button>
+                                <button
+                                    onClick={() => setPreviewDevice('desktop')}
+                                    className={`p-1.5 rounded-md transition-all ${previewDevice === 'desktop' ? 'bg-white shadow text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}
+                                >
+                                    <Monitor size={16} />
+                                </button>
+                            </div>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto overflow-x-hidden p-6 flex justify-center items-start">
-                            <div className="w-[320px] min-h-[600px] bg-white rounded-[3rem] border-[8px] border-gray-900 shadow-2xl overflow-hidden relative transform scale-90 origin-top">
-                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-900 rounded-b-2xl z-20"></div>
+                        <div className={`flex-1 overflow-y-auto overflow-x-hidden p-6 flex justify-center items-start ${previewDevice === 'desktop' ? 'bg-gray-100' : ''}`}>
+                            <div className={`${previewDevice === 'desktop' ? 'w-[1024px] h-[640px] scale-[0.4] origin-top' : 'w-[320px] min-h-[600px] scale-90 origin-top'} bg-white rounded-[3rem] border-[8px] border-gray-900 shadow-2xl overflow-hidden relative transition-all duration-300`}>
+                                {previewDevice === 'mobile' && <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-900 rounded-b-2xl z-20"></div>}
                                 <div className="h-full overflow-y-auto no-scrollbar bg-white" style={{ backgroundColor: selectedTheme.background }}>
-                                    <GuideRenderer guide={guide} unlocked={true} forceMobile={true} />
+                                    <GuideRenderer guide={guide} unlocked={true} forceMobile={previewDevice === 'mobile'} />
                                 </div>
                             </div>
                         </div>
@@ -471,8 +483,28 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
                         )
                     })}
                 </div>
-            </Modal>
         </div>
+            </Modal >
+
+        {/* Modal Subscribe */ }
+        < Modal
+    isOpen = { showSubscribe }
+    onClose = {() => setShowSubscribe(false)
+}
+title = "Débloquez la publication"
+icon = "🚀"
+    >
+    <div className="text-center p-4">
+        <p className="text-gray-600 mb-6">
+            La publication de guides est réservée aux membres Pro.
+            Abonnez-vous pour partager vos guides avec vos invités !
+        </p>
+        <a href="/pricing" className="inline-flex w-full justify-center px-6 py-3 bg-gradient-to-r from-rose-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:opacity-90 transition-opacity">
+            Voir les offres
+        </a>
+    </div>
+            </Modal >
+        </div >
     );
 }
 
