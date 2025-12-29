@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { UserSubscription, PLANS } from "@/types/subscription";
+import { UserSubscription, PLANS, PlanId } from "@/types/subscription";
 
 // Addons interface
 interface UserAddons {
@@ -36,7 +36,7 @@ export async function getUserSubscription(userId: string): Promise<UserSubscript
 }
 
 export function checkLimit(subscription: UserSubscription, resource: 'guides', currentCount: number): boolean {
-    const plan = PLANS[subscription.planId] || PLANS.demo;
+    const plan = PLANS[subscription.planId as PlanId] || PLANS.demo;
 
     let limit = plan.limits[resource];
 
@@ -51,7 +51,7 @@ export function checkLimit(subscription: UserSubscription, resource: 'guides', c
 }
 
 export function canUseFeature(subscription: UserSubscription, feature: 'ai' | 'themes'): boolean {
-    const plan = PLANS[subscription.planId] || PLANS.demo;
+    const plan = PLANS[subscription.planId as PlanId] || PLANS.demo;
 
     // 1. Check native plan limits
     if (plan.limits[feature]) return true;
