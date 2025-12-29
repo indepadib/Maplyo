@@ -21,7 +21,7 @@ const ESSENTIAL_THEMES = ["minimal-white", "soft-gray", "ocean", "nature", "suns
 // Icons for blocks - using MinimalIcons directly in render
 
 
-export function EnhancedBuilder({ initialGuide, subscription }: { initialGuide: Guide; subscription?: UserSubscription }) {
+export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }: { initialGuide: Guide; subscription?: UserSubscription, isGuest?: boolean }) {
     function getKey(id: string) { return `guide-${id}`; }
 
     // --- SUBSCRIPTION CHECK ---
@@ -65,17 +65,19 @@ export function EnhancedBuilder({ initialGuide, subscription }: { initialGuide: 
         if (typeof window !== "undefined") window.localStorage.setItem(getKey(next.id), JSON.stringify(next));
 
         // Save to Supabase
-        const { error } = await supabase
-            .from("guides")
-            .update({
-                title: next.title,
-                theme_id: next.theme.themeId,
-                content: { blocks: next.blocks },
-                updated_at: new Date().toISOString()
-            })
-            .eq("id", next.id);
+        if (!isGuest) {
+            const { error } = await supabase
+                .from("guides")
+                .update({
+                    title: next.title,
+                    theme_id: next.theme.themeId,
+                    content: { blocks: next.blocks },
+                    updated_at: new Date().toISOString()
+                })
+                .eq("id", next.id);
 
-        if (error) console.error("Error saving guide:", error);
+            if (error) console.error("Error saving guide:", error);
+        }
     }
 
     function addBlock(type: BlockType) {
@@ -130,9 +132,16 @@ export function EnhancedBuilder({ initialGuide, subscription }: { initialGuide: 
             {/* TOP BAR */}
             <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-20 shrink-0">
                 <div className="flex items-center gap-4">
-                    <a href="/dashboard" className="p-2 -ml-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" title="Retour au Dashboard">
-                        <ChevronLeft size={20} />
-                    </a>
+                    {/* Back Button Behavior */}
+                    {isGuest ? (
+                        <a href="/" className="p-2 -ml-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" title="Retour à l'accueil">
+                            <ChevronLeft size={20} />
+                        </a>
+                    ) : (
+                        <a href="/dashboard" className="p-2 -ml-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" title="Retour au Dashboard">
+                            <ChevronLeft size={20} />
+                        </a>
+                    )}
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold">
                             G
@@ -153,8 +162,14 @@ export function EnhancedBuilder({ initialGuide, subscription }: { initialGuide: 
 
                     <div className="h-6 w-px bg-gray-200 mx-2" />
 
-                    {/* PUBLISH TOGGLE */}
-                    {guide.isPublished ? (
+                    {/* PUBLISH TOGGLE / GUEST PROMPT */}
+                    {isGuest ? (
+                        <div className="flex items-center gap-2">
+                            <a href="/signup" className="flex items-center gap-2 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors text-sm font-bold shadow-lg shadow-rose-200">
+                                🚀 Créer mon compte
+                            </a>
+                        </div>
+                    ) : (guide.isPublished ? (
                         <div className="flex items-center gap-2">
                             <a href={`/g/${guide.slug}`} target="_blank" className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-bold shadow-green-200 shadow-lg">
                                 <ExternalLink size={16} /> En Ligne
@@ -184,6 +199,7 @@ export function EnhancedBuilder({ initialGuide, subscription }: { initialGuide: 
 
                                 // 2. CHECK LIMITS (Optimistic check, strict check should be server-side or count based)
                                 // Ideally fetch current count here against limit. For this demo, we assume the user dashboard blocked creation if full.
+
                                 // But enabling publishing might need double check.
 
                                 // 3. PUBLISH
@@ -197,7 +213,7 @@ export function EnhancedBuilder({ initialGuide, subscription }: { initialGuide: 
                         >
                             🚀 Publier
                         </button>
-                    )}
+                    ))}
                 </div>
             </header>
 

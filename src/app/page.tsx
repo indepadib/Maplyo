@@ -316,9 +316,10 @@ export default function LandingPage() {
                     Commencer Gratuitement
                   </Button>
                 </Link>
-                <Link href="/g/demo" className="w-full sm:w-auto">
-                  <Button variant="secondary" className="w-full sm:w-auto h-14 px-8 text-lg bg-transparent hover:bg-white/5 text-white border border-white/20 backdrop-blur-sm group">
-                    <Play className="w-4 h-4 mr-2 fill-current" /> Voir la démo
+                <Link href="/demo">
+                  <Button variant="secondary" className="h-14 px-8 text-lg bg-white/5 text-white border-white/10 hover:bg-white/10 backdrop-blur-sm rounded-full">
+                    <Play className="w-5 h-5 mr-2 fill-current" />
+                    {t.hero.demo}
                   </Button>
                 </Link>
               </motion.div>
@@ -389,13 +390,13 @@ export default function LandingPage() {
               {/* Logos placeholders - duplicated for seamless loop */}
               {[
                 "HOSTPILOT",
-                "ZENATA",
-                "CABO NEGRO",
+                "CONCIERGERIE ZENATA",
+                "CONCIERGERIE CABO NEGRO",
                 "BNB MANAGER",
                 "KEY CONCIERGE",
                 "HOSTPILOT",
-                "ZENATA",
-                "CABO NEGRO"
+                "CONCIERGERIE ZENATA",
+                "CONCIERGERIE CABO NEGRO"
               ].map((name, i) => (
                 <div key={i} className="flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity duration-300 px-6">
                   {/* Abstract Geometric Logo for each */}
@@ -539,7 +540,7 @@ export default function LandingPage() {
             <div className="col-span-2 md:col-span-1">
               <Link href="/" className="flex items-center gap-2 mb-6">
                 <div className="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center">
-                  <MaplyoLogo className="w-5 h-5" classNamePath="fill-white" />
+                  <MaplyoLogo className="w-5 h-5" classNamePath="fill-white" showText={false} />
                 </div>
                 <span className="text-xl font-bold text-white">Maplyo</span>
               </Link>

@@ -223,7 +223,7 @@ export default function DashboardPage() {
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                     <Link href="/dashboard" className="flex items-center gap-3 group">
                         <div className="w-10 h-10 bg-gradient-to-br from-rose-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-rose-500/20 group-hover:scale-105 transition-transform duration-300">
-                            <MaplyoLogo className="w-6 h-6" classNamePath="fill-white" />
+                            <MaplyoLogo className="w-6 h-6" classNamePath="fill-white" showText={false} />
                         </div>
                         <h1 className="font-bold text-xl tracking-tight text-white">Maplyo</h1>
                     </Link>

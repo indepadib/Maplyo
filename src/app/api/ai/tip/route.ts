@@ -19,9 +19,13 @@ export async function POST(request: NextRequest) {
         - Language: ${lang || "en"} (Output strictly in this language)
 
         Requirements:
-        1. BE SPECIFIC: Name a real restaurant, museum, park, or event. Do NOT say "visit a local museum", say "Visit the Louvre".
-        2. BE TIMELY: If it's raining, suggest an indoor activity. If it's generic, you fail.
-        3. BE BRIEF: 2 sentences max.
+        2. BE SPECIFIC: Name a real restaurant, museum, park, or event. Do NOT say "visit a local museum", say "Visit the Louvre".
+        3. BE TIMELY: If it's raining, suggest an indoor activity.
+        4. GEOGRAPHIC RANGE: You can recommend places within a **100km radius** of ${city}.
+           - Example: If the city is Zenata, recommending a place in Rabat or Casablanca is PERFECTLY FINE because they are nearby.
+           - Do NOT restrict yourself to the exact city limits if a better experience is available nearby.
+           - Be coherent: Ensure the place is actually within ~1 hour drive.
+        5. BE BRIEF: 2 sentences max.
 
         Output JSON:
         {

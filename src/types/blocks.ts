@@ -188,6 +188,7 @@ export type Guide = {
   theme: GuideTheme;
   blocks: GuideBlock[];
   updatedAt?: string;
+  isPublished?: boolean;
 };
 
 export function isSensitiveBlock(type: BlockType) {
