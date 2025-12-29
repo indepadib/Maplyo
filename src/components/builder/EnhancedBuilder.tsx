@@ -483,28 +483,26 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
                         )
                     })}
                 </div>
-        </div>
-            </Modal >
+            </Modal>
 
-        {/* Modal Subscribe */ }
-        < Modal
-    isOpen = { showSubscribe }
-    onClose = {() => setShowSubscribe(false)
-}
-title = "Débloquez la publication"
-icon = "🚀"
-    >
-    <div className="text-center p-4">
-        <p className="text-gray-600 mb-6">
-            La publication de guides est réservée aux membres Pro.
-            Abonnez-vous pour partager vos guides avec vos invités !
-        </p>
-        <a href="/pricing" className="inline-flex w-full justify-center px-6 py-3 bg-gradient-to-r from-rose-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:opacity-90 transition-opacity">
-            Voir les offres
-        </a>
-    </div>
-            </Modal >
-        </div >
+            {/* Modal Subscribe */}
+            <Modal
+                isOpen={showSubscribe}
+                onClose={() => setShowSubscribe(false)}
+                title="Débloquez la publication"
+                icon="🚀"
+            >
+                <div className="text-center p-4">
+                    <p className="text-gray-600 mb-6">
+                        La publication de guides est réservée aux membres Pro.
+                        Abonnez-vous pour partager vos guides avec vos invités !
+                    </p>
+                    <a href="/pricing" className="inline-flex w-full justify-center px-6 py-3 bg-gradient-to-r from-rose-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:opacity-90 transition-opacity">
+                        Voir les offres
+                    </a>
+                </div>
+            </Modal>
+        </div>
     );
 }
 
