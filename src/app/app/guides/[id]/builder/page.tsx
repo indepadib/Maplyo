@@ -35,7 +35,8 @@ export default async function GuideBuilderPage({ params }: { params: Promise<{ i
             title: data.title,
             theme: { themeId: data.theme_id || "minimal-white" },
             blocks: data.content?.blocks || [],
-            updatedAt: data.updated_at
+            updatedAt: data.updated_at,
+            isPublished: data.is_published || false
         };
     } else {
         // Fallback or Create (should ideally not happen if created from Dashboard, but useful for direct access/dev)

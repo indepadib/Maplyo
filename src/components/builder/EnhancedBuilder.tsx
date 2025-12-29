@@ -26,7 +26,8 @@ export function EnhancedBuilder({ initialGuide, subscription }: { initialGuide: 
 
     // --- SUBSCRIPTION CHECK ---
     const planId = subscription?.planId || 'demo';
-    const unlockedThemes = canUseFeature(planId, 'themes'); // true = all, false = essential only
+    // @ts-ignore
+    const unlockedThemes = subscription ? canUseFeature(subscription, 'themes') : false;
 
     // --- STATE ---
     const [guide, setGuide] = useState<Guide>(() => {
@@ -142,17 +143,61 @@ export function EnhancedBuilder({ initialGuide, subscription }: { initialGuide: 
                         </div>
                     </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                     <Button variant="secondary" onClick={() => setShowThemes(true)} className="gap-2 text-sm bg-gray-100 hover:bg-gray-200 border-0">
                         <span className="text-lg">🎨</span> Thème
                     </Button>
                     <a href={`/app/guides/${guide.id}/print`} className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-gray-100 hover:bg-gray-200 rounded-md transition-colors text-black no-underline">
-                        <span className="text-lg">🖨️</span> Poster QR
+                        <span className="text-lg">🖨️</span> QR
                     </a>
+
                     <div className="h-6 w-px bg-gray-200 mx-2" />
-                    <a href={`/g/${guide.slug}`} target="_blank" className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-bold">
-                        <ExternalLink size={16} /> Aperçu Public
-                    </a>
+
+                    {/* PUBLISH TOGGLE */}
+                    {guide.isPublished ? (
+                        <div className="flex items-center gap-2">
+                            <a href={`/g/${guide.slug}`} target="_blank" className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-bold shadow-green-200 shadow-lg">
+                                <ExternalLink size={16} /> En Ligne
+                            </a>
+                            <button
+                                onClick={async () => {
+                                    if (confirm("Voulez-vous vraiment retirer ce guide du public ?")) {
+                                        await supabase.from("guides").update({ is_published: false }).eq("id", guide.id);
+                                        setGuide({ ...guide, isPublished: false });
+                                    }
+                                }}
+                                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg"
+                                title="Dépublier"
+                            >
+                                <Lock size={16} />
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={async () => {
+                                // 1. CHECK PLAN
+                                if (subscription?.planId === 'demo') {
+                                    alert("Le plan Démo ne permet pas de publier. Passez à la version Pro !");
+                                    window.location.href = '/pricing';
+                                    return;
+                                }
+
+                                // 2. CHECK LIMITS (Optimistic check, strict check should be server-side or count based)
+                                // Ideally fetch current count here against limit. For this demo, we assume the user dashboard blocked creation if full.
+                                // But enabling publishing might need double check.
+
+                                // 3. PUBLISH
+                                const { error } = await supabase.from("guides").update({ is_published: true }).eq("id", guide.id);
+                                if (!error) {
+                                    setGuide({ ...guide, isPublished: true });
+                                    alert("Guide publié avec succès ! 🚀");
+                                }
+                            }}
+                            className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-black transition-colors text-sm font-bold shadow-xl"
+                        >
+                            🚀 Publier
+                        </button>
+                    )}
                 </div>
             </header>
 

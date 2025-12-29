@@ -157,7 +157,7 @@ export default function DashboardPage() {
         if (!user || !subscription) return;
 
         // CHECK LIMITS
-        const canCreate = checkLimit(subscription.planId, 'guides', guides.length);
+        const canCreate = checkLimit(subscription, 'guides', guides.length);
         if (!canCreate) {
             // Redirect to Pricing
             setIsCreateModalOpen(false); // Close modal

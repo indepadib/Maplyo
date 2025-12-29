@@ -1,35 +1,63 @@
 import { createClient } from "@supabase/supabase-js";
 import { UserSubscription, PLANS } from "@/types/subscription";
 
+// Addons interface
+interface UserAddons {
+    themes?: boolean;
+    extra_guides?: number;
+}
+
 // Initialize Supabase Client (Client-Side / Shared)
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder";
 
 // Helper check
 export async function getUserSubscription(userId: string): Promise<UserSubscription> {
-    // In a real app, this would fetch from a 'subscriptions' or 'profiles' table properly.
-    // We will assume a 'profiles' table with 'plan' column.
+    if (!userId) return { userId: 'anon', planId: 'demo', status: 'active', currentPeriodEnd: 0 };
 
-    // const { data } = await supabase.from('profiles').select('plan, stripe_status').eq('id', userId).single();
+    const { data } = await supabase
+        .from('profiles')
+        .select('plan_variant, subscription_status, addons')
+        .eq('id', userId)
+        .single();
 
-    // MOCK FOR NOW until DB is confirmed
+    const planId = (data?.plan_variant as any) || 'demo';
+    const status = (data?.subscription_status as any) || 'active';
+    const addons = (data?.addons as UserAddons) || {};
+
     return {
         userId: userId,
-        planId: 'demo', // Default to demo
-        status: 'active',
-        currentPeriodEnd: Date.now() + 10000000
+        planId: planId,
+        status: status,
+        currentPeriodEnd: Date.now() + 30 * 24 * 60 * 60 * 1000,
+        addons: addons // Attach addons to checking object
     };
 }
 
-export function checkLimit(planId: string, resource: 'guides', currentCount: number): boolean {
+export function checkLimit(subscription: UserSubscription, resource: 'guides', currentCount: number): boolean {
+    const plan = PLANS[subscription.planId] || PLANS.demo;
+
+    let limit = plan.limits[resource];
+
+    // Check for add-ons
     // @ts-ignore
-    const plan = PLANS[planId] || PLANS.demo;
-    const limit = plan.limits[resource];
+    if (subscription.addons?.extra_guides) {
+        // @ts-ignore
+        limit += subscription.addons.extra_guides;
+    }
+
     return currentCount < limit;
 }
 
-export function canUseFeature(planId: string, feature: 'ai' | 'themes'): boolean {
+export function canUseFeature(subscription: UserSubscription, feature: 'ai' | 'themes'): boolean {
+    const plan = PLANS[subscription.planId] || PLANS.demo;
+
+    // 1. Check native plan limits
+    if (plan.limits[feature]) return true;
+
+    // 2. Check addons
     // @ts-ignore
-    const plan = PLANS[planId] || PLANS.demo;
-    return plan.limits[feature];
+    if (feature === 'themes' && subscription.addons?.themes) return true;
+
+    return false;
 }

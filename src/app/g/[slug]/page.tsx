@@ -45,6 +45,7 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
         .from("guides")
         .select("*")
         .eq("slug", slug)
+        .eq("is_published", true) // Only fetch if published
         .single();
 
     let guide: Guide;
