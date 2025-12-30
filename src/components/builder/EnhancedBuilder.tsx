@@ -369,8 +369,31 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
                         </div>
 
                         <div className={`flex-1 overflow-y-auto overflow-x-hidden p-6 flex justify-center items-start ${previewDevice === 'desktop' ? 'bg-gray-100' : ''}`}>
-                            <div className={`${previewDevice === 'desktop' ? 'w-[1024px] h-[640px] scale-[0.4] origin-top' : 'w-[320px] min-h-[600px] scale-90 origin-top'} bg-white rounded-[3rem] border-[8px] border-gray-900 shadow-2xl overflow-hidden relative transition-all duration-300`}>
+                            <div
+                                className={`
+                                    ${previewDevice === 'desktop'
+                                        ? 'w-[1280px] h-[800px] scale-[0.35] origin-top rounded-lg border-4 border-gray-800'
+                                        : 'w-[320px] min-h-[600px] scale-90 origin-top rounded-[3rem] border-[8px] border-gray-900'} 
+                                    bg-white shadow-2xl overflow-hidden relative transition-all duration-300
+                                `}
+                            >
+                                {/* Mobile Notch */}
                                 {previewDevice === 'mobile' && <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-900 rounded-b-2xl z-20"></div>}
+
+                                {/* Desktop Browser Header */}
+                                {previewDevice === 'desktop' && (
+                                    <div className="h-8 bg-gray-800 flex items-center px-4 gap-2 z-20">
+                                        <div className="flex gap-1.5">
+                                            <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
+                                            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                                            <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+                                        </div>
+                                        <div className="flex-1 bg-gray-700/50 rounded-md h-5 mx-4 flex items-center justify-center">
+                                            <span className="text-[10px] text-gray-400 font-mono opacity-50">maplyo.com/g/{guide.slug}</span>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className="h-full overflow-y-auto no-scrollbar bg-white" style={{ backgroundColor: selectedTheme.background }}>
                                     <GuideRenderer guide={guide} unlocked={true} forceMobile={previewDevice === 'mobile'} />
                                 </div>
