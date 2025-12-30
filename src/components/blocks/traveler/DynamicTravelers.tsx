@@ -69,15 +69,17 @@ export function PlacesTraveler({ data }: { data: any }) {
                         {item.description && <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 mb-3">{item.description}</p>}
 
                         {item.address && (
-                            <a
-                                href={`https://maps.google.com/?q=${item.address}`}
-                                target="_blank"
-                                className="flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-blue-500 transition-colors p-2 rounded-lg hover:bg-blue-50 -ml-2 w-fit"
-                            >
-                                <MapPin className="w-3.5 h-3.5" />
-                                <span className="underline decoration-dotted">{item.address}</span>
-                            </a>
-                        )}
+                            {(item.address || item.mapUrl) && (
+                                <a
+                                    href={item.mapUrl || `https://maps.google.com/?q=${item.address}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-blue-500 transition-colors p-2 rounded-lg hover:bg-blue-50 -ml-2 w-fit"
+                                >
+                                    <MapPin className="w-3.5 h-3.5" />
+                                    <span className="underline decoration-dotted">{item.address || "Voir sur la carte"}</span>
+                                </a>
+                            )}
                     </div>
                 </div>
             ))}
@@ -99,108 +101,93 @@ export function EventsTraveler({ data }: { data: any }) {
                         <span className="text-xs font-bold uppercase">{item.month || "XXX"}</span>
                         <span className="text-xl font-bold leading-none">{item.day || "00"}</span>
                     </div>
-                    <div>
-                        <h4 className="font-bold text-gray-900 leading-tight mb-1">{item.title || "Événement"}</h4>
-                        <div className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-1">
-                            {item.time && <span>⏰ {item.time}</span>}
-                            {item.location && <span>📍 {item.location}</span>}
-                        </div>
-                        {item.description && <p className="text-sm text-gray-600 line-clamp-2">{item.description}</p>}
-                    </div>
-                </div>
-            ))}
-        </div>
-    );
-}
-
-// --- DOCUMENTS (Files) ---
-export function DocumentsTraveler({ data }: { data: any }) {
+            export function DocumentsTraveler({data}: {data: any }) {
     const items = Array.isArray(data.items) ? data.items : [];
 
-    if (items.length === 0) return <div className="text-center p-8 text-gray-400">Aucun document</div>;
+            if (items.length === 0) return <div className="text-center p-8 text-gray-400">Aucun document</div>;
 
-    return (
-        <div className="grid gap-3">
-            {items.map((item: any, i: number) => (
-                <a
-                    key={i}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center p-4 bg-white border border-gray-100 rounded-2xl hover:border-blue-200 hover:shadow-md transition-all group"
-                >
-                    <div className="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
-                        <FileText className="w-5 h-5" />
-                    </div>
-                    <div className="flex-1">
-                        <div className="font-bold text-gray-900">{item.title || "Document"}</div>
-                        {item.description && <div className="text-xs text-gray-500">{item.description}</div>}
-                    </div>
-                    <div className="p-2 text-gray-400 group-hover:text-blue-500 transition-colors">
-                        <Download className="w-5 h-5" />
-                    </div>
-                </a>
-            ))}
-        </div>
-    );
+            return (
+            <div className="grid gap-3">
+                {items.map((item: any, i: number) => (
+                    <a
+                        key={i}
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center p-4 bg-white border border-gray-100 rounded-2xl hover:border-blue-200 hover:shadow-md transition-all group"
+                    >
+                        <div className="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
+                            <FileText className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1">
+                            <div className="font-bold text-gray-900">{item.title || "Document"}</div>
+                            {item.description && <div className="text-xs text-gray-500">{item.description}</div>}
+                        </div>
+                        <div className="p-2 text-gray-400 group-hover:text-blue-500 transition-colors">
+                            <Download className="w-5 h-5" />
+                        </div>
+                    </a>
+                ))}
+            </div>
+            );
 }
 
-// --- UPSELLS (Extras) ---
-export function UpsellsTraveler({ data }: { data: any }) {
+            // --- UPSELLS (Extras) ---
+            export function UpsellsTraveler({data}: {data: any }) {
     const items = Array.isArray(data.items) ? data.items : [];
 
-    if (items.length === 0) return <div className="text-center p-8 text-gray-400">Aucune offre</div>;
+            if (items.length === 0) return <div className="text-center p-8 text-gray-400">Aucune offre</div>;
 
-    return (
-        <div className="space-y-4">
-            {items.map((item: any, i: number) => (
-                <div key={i} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg transition-all">
-                    {item.imageUrl && (
-                        <div className="h-40 overflow-hidden">
-                            <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        </div>
-                    )}
-                    <div className="p-5">
-                        <div className="flex justify-between items-start mb-2">
-                            <h4 className="text-lg font-bold text-gray-900">{item.title || "Offre"}</h4>
-                            {item.price && (
-                                <span className="bg-green-100 text-green-700 font-bold px-3 py-1 rounded-full text-sm">
-                                    {item.price}
-                                </span>
+            return (
+            <div className="space-y-4">
+                {items.map((item: any, i: number) => (
+                    <div key={i} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg transition-all">
+                        {item.imageUrl && (
+                            <div className="h-40 overflow-hidden">
+                                <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            </div>
+                        )}
+                        <div className="p-5">
+                            <div className="flex justify-between items-start mb-2">
+                                <h4 className="text-lg font-bold text-gray-900">{item.title || "Offre"}</h4>
+                                {item.price && (
+                                    <span className="bg-green-100 text-green-700 font-bold px-3 py-1 rounded-full text-sm">
+                                        {item.price}
+                                    </span>
+                                )}
+                            </div>
+                            <p className="text-gray-600 text-sm mb-4 leading-relaxed">{item.description}</p>
+
+                            {item.url && (
+                                <a
+                                    href={item.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center w-full py-3 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-black transition-colors"
+                                >
+                                    <ShoppingBag className="w-4 h-4 mr-2" />
+                                    {item.cta || "Réserver"}
+                                </a>
                             )}
                         </div>
-                        <p className="text-gray-600 text-sm mb-4 leading-relaxed">{item.description}</p>
-
-                        {item.url && (
-                            <a
-                                href={item.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center w-full py-3 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-black transition-colors"
-                            >
-                                <ShoppingBag className="w-4 h-4 mr-2" />
-                                {item.cta || "Réserver"}
-                            </a>
-                        )}
                     </div>
-                </div>
-            ))}
-        </div>
-    );
+                ))}
+            </div>
+            );
 }
 
-// --- EMBED (Iframe) ---
-export function EmbedTraveler({ data }: { data: any }) {
+            // --- EMBED (Iframe) ---
+            export function EmbedTraveler({data}: {data: any }) {
     if (!data.url) return <div className="text-center p-8 text-gray-400">Aucune URL définie</div>;
 
-    return (
-        <div className="rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 aspect-[9/16] md:aspect-video shadow-sm">
-            <iframe
-                src={data.url}
-                className="w-full h-full"
-                allowFullScreen
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            />
-        </div>
-    );
+            return (
+            <div className="rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 aspect-[9/16] md:aspect-video shadow-sm">
+                <iframe
+                    src={data.url}
+                    className="w-full h-full"
+                    allowFullScreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                />
+            </div>
+            );
 }

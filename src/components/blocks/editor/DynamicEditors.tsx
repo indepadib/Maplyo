@@ -155,7 +155,10 @@ export function PlacesEditor({ data, onChange }: { data: any; onChange: (d: any)
                             </div>
                             <InputField label="Adresse" value={item.address} onChange={(v: string) => updateItem(i, "address", v)} />
                             <div className="col-span-1">
-                                <InputField label="Lien URL" value={item.url} onChange={(v: string) => updateItem(i, "url", v)} />
+                                <InputField label="Lien URL (Site Web)" value={item.url} onChange={(v: string) => updateItem(i, "url", v)} />
+                            </div>
+                            <div className="col-span-1">
+                                <InputField label="Lien Google Maps (Optionnel)" value={item.mapUrl} onChange={(v: string) => updateItem(i, "mapUrl", v)} />
                             </div>
                             <div className="col-span-1">
                                 <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Prix</label>
@@ -250,6 +253,10 @@ export function EventsEditor({ data, onChange }: { data: any; onChange: (d: any)
                         <div className="grid grid-cols-2 gap-3">
                             <InputField label="Heure" value={item.time} onChange={(v: string) => updateItem(i, "time", v)} placeholder="20:00" />
                             <InputField label="Lieu" value={item.location} onChange={(v: string) => updateItem(i, "location", v)} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3 mb-3">
+                            <InputField label="Lien URL (Site/Billeterie)" value={item.url} onChange={(v: string) => updateItem(i, "url", v)} placeholder="https://..." />
+                            <InputField label="Lien Google Maps" value={item.mapUrl} onChange={(v: string) => updateItem(i, "mapUrl", v)} placeholder="https://goo.gl/maps/..." />
                         </div>
                         <TextAreaField label="Description" value={item.description} onChange={(v: string) => updateItem(i, "description", v)} />
                     </div>

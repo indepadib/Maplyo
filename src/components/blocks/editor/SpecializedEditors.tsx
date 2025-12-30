@@ -311,6 +311,12 @@ export function TrashEditor({ data, onChange }: { data: any; onChange: (d: any) 
                 onChange={(v: string) => onChange({ ...data, location: v })}
                 placeholder="ex: Dans le garage, au fond à droite"
             />
+            <InputField
+                label="Lien Google Maps (Local)"
+                value={data.mapUrl}
+                onChange={(v: string) => onChange({ ...data, mapUrl: v })}
+                placeholder="https://maps.google.com/..."
+            />
             <FileUploader
                 label="Photo du local"
                 value={data.imageUrl}
