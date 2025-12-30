@@ -152,21 +152,38 @@ export default function SettingsPage() {
 
                                 <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 relative overflow-hidden">
                                     <div className="relative z-10">
-                                        <div className="text-sm text-zinc-400 mb-1">Plan Actuel</div>
-                                        <div className="text-3xl font-black text-rose-400 mb-4 uppercase tracking-wider">
-                                            {subscription?.planId === "pro" ? "PRO" : subscription?.planId === "basic" ? "BASIQUE" : "DÉMO"}
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <div className="text-sm text-zinc-400 mb-1">Plan Actuel</div>
+                                                <div className="text-3xl font-black text-rose-400 mb-4 uppercase tracking-wider">
+                                                    {subscription?.planId === "pro" ? "PRO" : subscription?.planId === "basic" ? "BASIQUE" : "DÉMO"}
+                                                </div>
+                                            </div>
+                                            {subscription?.status === 'active' && (
+                                                <div className="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full border border-green-500/20">
+                                                    ACTIF
+                                                </div>
+                                            )}
                                         </div>
+
                                         <div className="flex flex-col gap-2 text-sm text-zinc-300">
                                             <div className="flex items-center gap-2">
                                                 <span className={`w-1.5 h-1.5 rounded-full ${subscription?.planId === "demo" ? "bg-yellow-400" : "bg-green-400"}`} />
-                                                {subscription?.planId === "pro" ? "3 Guides actifs" : "1 Guide maximum"}
+                                                {subscription?.planId === "pro" ? "Guides illimités" : subscription?.planId === "basic" ? "1 Guide inclus" : "1 Guide (Brouillon)"}
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                <span className={`w-1.5 h-1.5 rounded-full ${subscription?.planId === "pro" ? "bg-green-400" : "bg-zinc-500"}`} />
-                                                {subscription?.planId === "pro" ? "Support Prioritaire" : "Support Standard"}
-                                            </div>
-                                            {subscription?.planId === "demo" && (
-                                                <div className="text-yellow-400 text-xs mt-2">Mode démo : création uniquement</div>
+
+                                            {/* Addons Display */}
+                                            {subscription?.addons?.themes && (
+                                                <div className="flex items-center gap-2">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                                                    Pack Thèmes Débloqué
+                                                </div>
+                                            )}
+                                            {subscription?.addons?.extra_guides > 0 && (
+                                                <div className="flex items-center gap-2">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                                                    +{subscription.addons.extra_guides} Guide(s) Supplémentaire(s)
+                                                </div>
                                             )}
                                         </div>
                                     </div>
@@ -186,8 +203,25 @@ export default function SettingsPage() {
                                         </button>
                                     )}
 
-                                    <button className="text-zinc-400 hover:text-white px-4 font-medium">
-                                        Gérer la facturation (Stripe)
+                                    <button
+                                        onClick={async () => {
+                                            if (!user) return;
+                                            setLoading(true);
+                                            try {
+                                                const res = await fetch('/api/stripe/portal', {
+                                                    method: 'POST',
+                                                    headers: { Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}` }
+                                                });
+                                                const data = await res.json();
+                                                if (data.url) window.location.href = data.url;
+                                                else alert("Pas de compte de facturation trouvé.");
+                                            } catch (e) { console.error(e); }
+                                            setLoading(false);
+                                        }}
+                                        disabled={loading}
+                                        className="text-zinc-400 hover:text-white px-4 font-medium"
+                                    >
+                                        {loading ? "Chargement..." : "Gérer la facturation (Stripe)"}
                                     </button>
                                 </div>
                             </div>
