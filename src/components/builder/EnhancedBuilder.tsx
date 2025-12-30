@@ -372,8 +372,8 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
                             <div
                                 className={`
                                     ${previewDevice === 'desktop'
-                                        ? 'w-[1280px] h-[800px] scale-[0.45] origin-top rounded-xl border border-gray-200/50'
-                                        : 'w-[320px] min-h-[600px] scale-90 origin-top rounded-[3rem] border-[8px] border-gray-900'}
+                                        ? 'w-[1280px] min-w-[1280px] h-[800px] scale-[0.45] origin-top rounded-xl border border-gray-200/50 shrink-0'
+                                        : 'w-[320px] min-w-[320px] min-h-[600px] scale-90 origin-top rounded-[3rem] border-[8px] border-gray-900 shrink-0'} 
                                     bg-white shadow-2xl overflow-hidden relative transition-all duration-300
                                 `}
                             >
