@@ -620,7 +620,8 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                 </div>
             )}
 
-            <div className={`w-full relative z-10 ${isDesktop ? '' : 'max-w-md mx-auto'}`}>
+            {/* Container for content */}
+            <div className={`w-full relative z-10 ${isResponsive ? 'max-w-md mx-auto md:max-w-none md:mx-0' : (forceDesktop ? '' : 'max-w-md mx-auto')}`}>
 
                 {/* CINEMATIC HERO */}
                 <div className={`relative overflow-hidden ${heroHeightClass}`}>
