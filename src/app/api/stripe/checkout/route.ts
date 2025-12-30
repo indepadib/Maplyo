@@ -33,12 +33,19 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { plan } = body; // 'pro'
+        const { plan } = body; // 'basic' | 'pro'
 
-        // Mock price ID for demo (replace with real Stripe Price ID)
-        // In production: const priceId = "price_1Q...";
-        // For testing use: 'price_1Q...' (Test mode price)
-        const priceId = process.env.STRIPE_PRO_PRICE_ID || "price_H5ggYwtDq4fbrJ";
+        let priceId = "";
+
+        if (plan === 'basic') {
+            priceId = process.env.STRIPE_BASIC_PRICE_ID!;
+        } else if (plan === 'pro') {
+            priceId = process.env.STRIPE_PRO_PRICE_ID!;
+        }
+
+        if (!priceId) {
+            return NextResponse.json({ error: "Invalid Plan or Missing Price ID" }, { status: 400 });
+        }
 
         const session = await stripe.checkout.sessions.create({
             mode: "subscription",
@@ -50,10 +57,11 @@ export async function POST(req: Request) {
                 },
             ],
             success_url: `${req.headers.get("origin")}/dashboard?success=true`,
-            cancel_url: `${req.headers.get("origin")}/onboarding?canceled=true`,
+            cancel_url: `${req.headers.get("origin")}/pricing?canceled=true`,
             customer_email: user.email,
             metadata: {
-                userId: user.id
+                userId: user.id,
+                planId: plan
             }
         });
 

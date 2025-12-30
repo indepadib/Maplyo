@@ -22,8 +22,8 @@ export async function getUserSubscription(userId: string): Promise<UserSubscript
         .eq('id', userId)
         .single();
 
-    const planId = (data?.plan_variant as any) || 'demo';
-    const status = (data?.subscription_status as any) || 'active';
+    const planId = (data?.plan_variant as PlanId) || 'demo';
+    const status = (data?.subscription_status as any) || 'free';
     const addons = (data?.addons as UserAddons) || {};
 
     return {
@@ -31,7 +31,7 @@ export async function getUserSubscription(userId: string): Promise<UserSubscript
         planId: planId,
         status: status,
         currentPeriodEnd: Date.now() + 30 * 24 * 60 * 60 * 1000,
-        addons: addons // Attach addons to checking object
+        addons: addons
     };
 }
 
