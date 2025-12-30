@@ -33,55 +33,7 @@ function useMediaQuery(query: string) {
     return matches;
 }
 
-// --- HOOKS ---
-function useMediaQuery(query: string) {
-    const [matches, setMatches] = useState(false);
 
-    // Safety check for SSR
-    if (typeof window === 'undefined') return false;
-
-    // Use effect to listen
-    // Note: React 18+ might need useSyncExternalStore for perfect hydration match but this is sufficient for now
-    // We need useEffect import.
-    // Actually, let's put it inside the component or just outside. 
-    // Wait, I need to make sure I import useEffect.
-    return matches;
-}
-// Rethinking: standard hook pattern requires import.
-// Let's implement it inside the file properly.
-
-export function useMediaQueryHook(query: string) {
-    const [matches, setMatches] = useState(false);
-
-    useEffect(() => {
-        const media = window.matchMedia(query);
-        if (media.matches !== matches) {
-            setMatches(media.matches);
-        }
-        const listener = () => setMatches(media.matches);
-        media.addEventListener("change", listener);
-        return () => media.removeEventListener("change", listener);
-    }, [matches, query]);
-
-    return matches;
-}
-// wait, I can just define it at top level.
-
-function useMediaQueryCustom(query: string) {
-    const [matches, setMatches] = useState(false);
-    useEffect(() => {
-        if (typeof window === "undefined") return;
-        const media = window.matchMedia(query);
-        setMatches(media.matches);
-        const listener = () => setMatches(media.matches);
-        media.addListener(listener);
-        return () => media.removeListener(listener);
-    }, [query]);
-    return matches;
-}
-
-// I will replace line 130 to use useMediaQueryCustom and define it.
-// Actually, easier to just define it at the bottom or top.
 
 
 
