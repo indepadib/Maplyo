@@ -1,15 +1,17 @@
-
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 
-// Initialize Stripe safely
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_placeholder", {
-    apiVersion: "2025-12-15.clover" as any,
-});
+// Initialize Stripe safely (Lazy)
+const getStripe = () => {
+    return new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_placeholder", {
+        apiVersion: "2025-01-27.acacia" as any, // Updated to match webhook
+    });
+};
 
 export async function POST(req: Request) {
     try {
+        const stripe = getStripe();
         const authHeader = req.headers.get("Authorization");
         if (!authHeader) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

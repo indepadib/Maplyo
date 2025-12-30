@@ -3,10 +3,15 @@ import { headers } from "next/headers";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 
-// Init Stripe
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2025-01-27.acacia" as any, // Use latest or matching version
-});
+// Helper for lazy init
+const getStripe = () => {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) throw new Error("Missing STRIPE_SECRET_KEY");
+    return new Stripe(key, { apiVersion: "2025-01-27.acacia" as any });
+};
+
+// Init Supabase Admin (Bypass RLS to update user status)
+// ...
 
 // Init Supabase Admin (Bypass RLS to update user status)
 const supabase = createClient(
@@ -24,6 +29,7 @@ export async function POST(req: Request) {
 
     // 1. Verify Signature
     try {
+        const stripe = getStripe();
         event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
     } catch (err: any) {
         console.error(`❌ Webhook signature verification failed: ${err.message}`);
