@@ -28,7 +28,9 @@ BEGIN
     phone, 
     business_name, 
     subscription_status, 
-    plan_variant
+    plan_variant,
+    extra_guides,
+    themes_unlocked
   )
   VALUES (
     new.id, 
@@ -37,7 +39,9 @@ BEGIN
     new.raw_user_meta_data->>'phone',
     new.raw_user_meta_data->>'business_name',
     'free',
-    'demo'
+    'demo',
+    0,
+    false
   )
   ON CONFLICT (id) DO UPDATE SET
     email = EXCLUDED.email,
@@ -67,7 +71,9 @@ INSERT INTO public.profiles (
     phone, 
     business_name, 
     subscription_status, 
-    plan_variant
+    plan_variant,
+    extra_guides,
+    themes_unlocked
 )
 SELECT 
     id, 
@@ -76,6 +82,8 @@ SELECT
     raw_user_meta_data->>'phone',
     raw_user_meta_data->>'business_name',
     'free',
-    'demo'
+    'demo',
+    0,
+    false
 FROM auth.users
 WHERE id NOT IN (SELECT id FROM public.profiles);

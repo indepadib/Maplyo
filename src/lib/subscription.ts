@@ -18,13 +18,18 @@ export async function getUserSubscription(userId: string): Promise<UserSubscript
 
     const { data } = await supabase
         .from('profiles')
-        .select('plan_variant, subscription_status, addons')
+        .select('plan_variant, subscription_status, addons, extra_guides, themes_unlocked')
         .eq('id', userId)
         .single();
 
     const planId = (data?.plan_variant as PlanId) || 'demo';
     const status = (data?.subscription_status as any) || 'free';
-    const addons = (data?.addons as UserAddons) || {};
+
+    // Construct addons object from DB columns
+    const addons = {
+        themes: data?.themes_unlocked || false,
+        extra_guides: data?.extra_guides || 0
+    };
 
     return {
         userId: userId,

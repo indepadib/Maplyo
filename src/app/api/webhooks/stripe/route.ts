@@ -104,14 +104,23 @@ async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
 
     const status = sub.status; // active, past_due, etc.
 
-    // Check for Add-ons (Extra Guides)
+    // Check for Add-ons (Extra Guides & Themes)
     const addonPriceId = process.env.STRIPE_ADDON_PRICE_ID;
-    let extraGuides = 0;
+    const themesPriceId = process.env.STRIPE_THEMES_PRICE_ID;
 
-    if (addonPriceId && sub.items && sub.items.data) {
-        const addonItem = sub.items.data.find(item => item.price.id === addonPriceId);
-        if (addonItem) {
-            extraGuides = addonItem.quantity || 0;
+    let extraGuides = 0;
+    let themesUnlocked = false;
+
+    if (sub.items && sub.items.data) {
+        // Extras
+        if (addonPriceId) {
+            const addonItem = sub.items.data.find(item => item.price.id === addonPriceId);
+            if (addonItem) extraGuides = addonItem.quantity || 0;
+        }
+        // Themes
+        if (themesPriceId) {
+            const themesItem = sub.items.data.find(item => item.price.id === themesPriceId);
+            if (themesItem) themesUnlocked = true;
         }
     }
 
@@ -119,11 +128,12 @@ async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
         .from("profiles")
         .update({
             subscription_status: status,
-            extra_guides: extraGuides
+            extra_guides: extraGuides,
+            themes_unlocked: themesUnlocked
         })
         .eq("id", profiles.id);
 
-    console.log(`🔄 Subscription updated for ${profiles.id} -> ${status}, Extra Guides: ${extraGuides}`);
+    console.log(`🔄 Subscription updated for ${profiles.id}: Status=${status}, Extra=${extraGuides}, Themes=${themesUnlocked}`);
 }
 
 async function handleSubscriptionDeleted(sub: Stripe.Subscription) {
