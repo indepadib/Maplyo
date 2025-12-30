@@ -395,7 +395,12 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
                                 )}
 
                                 <div className="h-full overflow-y-auto no-scrollbar bg-white" style={{ backgroundColor: selectedTheme.background }}>
-                                    <GuideRenderer guide={guide} unlocked={true} forceMobile={previewDevice === 'mobile'} />
+                                    <GuideRenderer
+                                        guide={guide}
+                                        unlocked={true}
+                                        forceMobile={previewDevice === 'mobile'}
+                                        forceDesktop={previewDevice === 'desktop'}
+                                    />
                                 </div>
                             </div>
                         </div>

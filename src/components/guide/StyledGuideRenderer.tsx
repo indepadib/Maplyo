@@ -514,15 +514,42 @@ function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, o
 
 // --- MAIN RENDERER ---
 
-export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { guide: Guide; unlocked: boolean; forceMobile?: boolean }) {
+export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forceDesktop = false }: { guide: Guide; unlocked: boolean; forceMobile?: boolean; forceDesktop?: boolean }) {
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [lang, setLang] = useState<'fr' | 'en'>('fr');
     // Notification state
     const [showTip, setShowTip] = useState(true);
 
-    // Disable Desktop enhancements if forceMobile is on (for Builder Preview)
-    const isDesktop = !forceMobile;
+    // LAYOUT LOGIC
+    // responsive: use md: prefixes
+    // forceDesktop: use direct classes (simulate desktop on any screen)
+    // forceMobile: use direct mobile classes (simulate mobile on any screen)
+    const isResponsive = !forceMobile && !forceDesktop;
+
+    // Helper to conditionally apply classes
+    // If Responsive: val="h-[50vh] md:h-[85vh]"
+    // If Desktop: val="h-[85vh]"
+    // If Mobile: val="h-[50vh]"
+
+    const heroHeightBase = "h-[50vh]";
+    const heroHeightDesktop = "h-[85vh] -mb-32";
+    const heroHeightClass = isResponsive
+        ? `${heroHeightBase} md:h-[85vh] md:-mb-32`
+        : (forceDesktop ? heroHeightDesktop : heroHeightBase);
+
+    const gridColsBase = "grid-cols-2";
+    const gridColsDesktop = "grid-cols-4";
+    const gridColsClass = isResponsive
+        ? `${gridColsBase} md:grid-cols-4`
+        : (forceDesktop ? gridColsDesktop : gridColsBase);
+
+    const paddingBase = "p-4";
+    const paddingDesktop = "p-10";
+    const paddingClass = isResponsive
+        ? `${paddingBase} md:p-10`
+        : (forceDesktop ? paddingDesktop : paddingBase);
+
     const t = DICTIONARY[lang];
 
     const { scrollY } = useScroll();
