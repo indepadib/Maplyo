@@ -13,10 +13,15 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Helper check
-export async function getUserSubscription(userId: string): Promise<UserSubscription> {
+import { SupabaseClient } from "@supabase/supabase-js";
+
+export async function getUserSubscription(userId: string, supabaseClient?: SupabaseClient): Promise<UserSubscription> {
     if (!userId) return { userId: 'anon', planId: 'demo', status: 'active', currentPeriodEnd: 0 };
 
-    const { data } = await supabase
+    // Use provided client or fallback (fallback is likely anon)
+    const client = supabaseClient || supabase;
+
+    const { data } = await client
         .from('profiles')
         .select('plan_variant, subscription_status, addons, extra_guides, themes_unlocked')
         .eq('id', userId)

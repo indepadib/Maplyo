@@ -1,22 +1,29 @@
 import { EnhancedBuilder } from "@/components/builder/EnhancedBuilder";
 import { BlockType } from "@/types/blocks";
-import { supabase } from "@/lib/supabase";
+import { createSupabaseServerClient } from "@/lib/supabase-server"; // NEW
 import { getUserSubscription } from "@/lib/subscription";
 
 export default async function GuideBuilderPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
+    const supabase = await createSupabaseServerClient(); // NEW
 
     // Get Current User
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    console.log("Builder Server Debug:", {
+        hasUser: !!user,
+        userId: user?.id,
+        authError: authError?.message,
+        cookies: (await import("next/headers")).cookies().toString()
+    });
 
     // In a real app we should redirect if no user
     if (!user) {
-        // redirect('/login'); // We can't use redirect in async component body easily without treating it specific.
-        // For now let's pass a dummy or handle it gracefully. 
-        // ideally: return redirect('/login');
+        // redirect('/login'); 
     }
 
-    const subscription = await getUserSubscription(user?.id || 'anon');
+    const subscription = await getUserSubscription(user?.id || 'anon', supabase);
+    console.log("Builder Subscription Debug:", subscription);
 
     // Fetch from Supabase
     const { data, error } = await supabase

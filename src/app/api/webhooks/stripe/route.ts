@@ -105,35 +105,51 @@ async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
     const status = sub.status; // active, past_due, etc.
 
     // Check for Add-ons (Extra Guides & Themes)
+    // Check for Plans & Add-ons
     const addonPriceId = process.env.STRIPE_ADDON_PRICE_ID;
     const themesPriceId = process.env.STRIPE_THEMES_PRICE_ID;
+    const proPriceId = process.env.STRIPE_PRO_PRICE_ID;
+    const basicPriceId = process.env.STRIPE_BASIC_PRICE_ID;
 
     let extraGuides = 0;
     let themesUnlocked = false;
+    let planVariant = null;
 
     if (sub.items && sub.items.data) {
-        // Extras
-        if (addonPriceId) {
-            const addonItem = sub.items.data.find(item => item.price.id === addonPriceId);
-            if (addonItem) extraGuides = addonItem.quantity || 0;
+        for (const item of sub.items.data) {
+            const priceId = item.price.id;
+
+            // Detect Plan
+            if (priceId === proPriceId) planVariant = 'pro';
+            else if (priceId === basicPriceId) planVariant = 'basic';
+
+            // Detect Add-ons
+            if (addonPriceId && priceId === addonPriceId) {
+                extraGuides += (item.quantity || 0);
+            }
+            if (themesPriceId && priceId === themesPriceId) {
+                themesUnlocked = true;
+            }
         }
-        // Themes
-        if (themesPriceId) {
-            const themesItem = sub.items.data.find(item => item.price.id === themesPriceId);
-            if (themesItem) themesUnlocked = true;
-        }
+    }
+
+    const updateData: any = {
+        subscription_status: status,
+        extra_guides: extraGuides,
+        themes_unlocked: themesUnlocked
+    };
+
+    // Only update plan_variant if we found a recognized plan price
+    if (planVariant) {
+        updateData.plan_variant = planVariant;
     }
 
     await supabase
         .from("profiles")
-        .update({
-            subscription_status: status,
-            extra_guides: extraGuides,
-            themes_unlocked: themesUnlocked
-        })
+        .update(updateData)
         .eq("id", profiles.id);
 
-    console.log(`🔄 Subscription updated for ${profiles.id}: Status=${status}, Extra=${extraGuides}, Themes=${themesUnlocked}`);
+    console.log(`🔄 Subscription updated for ${profiles.id}: Plan=${planVariant}, Status=${status}, Extra=${extraGuides}, Themes=${themesUnlocked}`);
 }
 
 async function handleSubscriptionDeleted(sub: Stripe.Subscription) {

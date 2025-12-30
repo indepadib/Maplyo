@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import { blockRegistry } from "@/components/blocks/registry";
 import type { Guide, BlockType } from "@/types/blocks";
 import { guideThemes } from "@/types/themes";
@@ -179,7 +179,11 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr'
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Fetch AI Tip on Mount
-    useState(() => {
+    const [mounted, setMounted] = useState(false);
+
+    // Use Effect to fetch tip on mount
+    useEffect(() => {
+        setMounted(true);
         const fetchTip = async () => {
             try {
                 const res = await fetch('/api/ai/tip', {
@@ -198,7 +202,7 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr'
             }
         };
         fetchTip();
-    });
+    }, [city, lang]);
 
     const t = DICTIONARY[lang];
 

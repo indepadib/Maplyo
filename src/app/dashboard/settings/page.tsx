@@ -7,6 +7,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { supabase } from "@/lib/supabase";
 import { FileUploader } from "@/components/ui/FileUploader";
 import { getUserSubscription } from "@/lib/subscription";
+import { Modal } from "@/components/ui/Modal";
 
 export default function SettingsPage() {
     const { user } = useAuth();
@@ -20,7 +21,7 @@ export default function SettingsPage() {
         if (!user) return;
         const load = async () => {
             // Load Sub
-            const sub = await getUserSubscription(user.id);
+            const sub = await getUserSubscription(user.id, supabase);
             setSubscription(sub);
 
             // Load Profile
@@ -34,6 +35,18 @@ export default function SettingsPage() {
         load();
     }, [user]);
 
+    const [modal, setModal] = useState<{ isOpen: boolean; title: string; content: React.ReactNode; icon?: string }>({
+        isOpen: false,
+        title: "",
+        content: null
+    });
+
+    const showModal = (title: string, content: React.ReactNode, icon?: string) => {
+        setModal({ isOpen: true, title, content, icon });
+    };
+
+    const closeModal = () => setModal(prev => ({ ...prev, isOpen: false }));
+
     const updateProfile = async () => {
         if (!user) return;
         setLoading(true);
@@ -45,10 +58,10 @@ export default function SettingsPage() {
                 updated_at: new Date().toISOString(),
             });
             if (error) throw error;
-            alert("Profil mis à jour !");
+            showModal("Succès", <div className="text-center p-4">Votre profil a été mis à jour avec succès ! 🎉</div>, "✅");
         } catch (e) {
             console.error(e);
-            alert("Erreur lors de la mise à jour.");
+            showModal("Erreur", <div className="text-center p-4 text-red-600">Une erreur est survenue lors de la mise à jour.</div>, "⚠️");
         } finally {
             setLoading(false);
         }
@@ -214,7 +227,7 @@ export default function SettingsPage() {
                                                 });
                                                 const data = await res.json();
                                                 if (data.url) window.location.href = data.url;
-                                                else alert("Pas de compte de facturation trouvé.");
+                                                else showModal("Info", <p className="text-center p-4">Pas de compte de facturation trouvé.</p>, "ℹ️");
                                             } catch (e) { console.error(e); }
                                             setLoading(false);
                                         }}
@@ -303,26 +316,41 @@ export default function SettingsPage() {
                                                 <button
                                                     onClick={async () => {
                                                         if (subscription?.planId !== 'pro') {
-                                                            alert("Vous devez être Pro pour ajouter des guides.");
+                                                            showModal("Réservé aux Pros", <p className="text-center p-4">Vous devez avoir le plan Pro pour ajouter des guides.</p>, "🚫");
                                                             return;
                                                         }
-                                                        if (!confirm("Ajouter 1 guide supplémentaire pour 20dh/mois ?")) return;
 
-                                                        setLoading(true);
-                                                        try {
-                                                            const res = await fetch('/api/stripe/addon', {
-                                                                method: 'POST',
-                                                                headers: { Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}` }
-                                                            });
-                                                            const data = await res.json();
-                                                            if (data.success) {
-                                                                alert("Guide ajouté ! Votre limite a été augmentée.");
-                                                                window.location.reload();
-                                                            } else {
-                                                                alert(data.error || "Erreur");
-                                                            }
-                                                        } catch (e) { console.error(e); alert("Erreur serveur"); }
-                                                        setLoading(false);
+                                                        showModal(
+                                                            "Ajouter un Guide",
+                                                            <div className="text-center p-4">
+                                                                <p className="mb-6">Ajouter 1 guide supplémentaire pour 20 DH/mois ?</p>
+                                                                <div className="flex justify-center gap-4">
+                                                                    <button onClick={closeModal} className="px-4 py-2 rounded-xl bg-gray-100 font-bold hover:bg-gray-200">Annuler</button>
+                                                                    <button onClick={async () => {
+                                                                        closeModal();
+                                                                        setLoading(true);
+                                                                        try {
+                                                                            const res = await fetch('/api/stripe/addon', {
+                                                                                method: 'POST',
+                                                                                headers: { Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}` }
+                                                                            });
+                                                                            const data = await res.json();
+                                                                            if (data.success) {
+                                                                                showModal("Guide Ajouté ! 📚", <p className="text-center p-4">Votre limite a été augmentée avec succès.</p>, "✅");
+                                                                                setTimeout(() => window.location.reload(), 2000);
+                                                                            } else {
+                                                                                showModal("Erreur", <p className="text-center text-red-500 p-4">{data.error}</p>, "⚠️");
+                                                                            }
+                                                                        } catch (e) {
+                                                                            console.error(e);
+                                                                            showModal("Erreur", <p className="text-center text-red-500 p-4">Erreur serveur.</p>, "⚠️");
+                                                                        }
+                                                                        setLoading(false);
+                                                                    }} className="px-4 py-2 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700">Confirmer</button>
+                                                                </div>
+                                                            </div>,
+                                                            "➕"
+                                                        );
                                                     }}
                                                     disabled={loading || subscription?.planId !== 'pro'}
                                                     className="bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -348,7 +376,7 @@ export default function SettingsPage() {
                                             Débloquez instantanément 20 thèmes premium créés par des designers pour sublimer vos guides.
                                         </p>
                                         <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
-                                            <span className="text-2xl font-bold text-white">10 DH <span className="text-xs text-zinc-500 font-normal">/mois</span></span>
+                                            <span className="text-2xl font-bold text-white">15 DH <span className="text-xs text-zinc-500 font-normal">/mois</span></span>
 
                                             {subscription?.planId === 'pro' || subscription?.addons?.themes ? (
                                                 <button disabled className="bg-green-500/20 text-green-400 px-6 py-3 rounded-xl text-sm font-bold cursor-not-allowed">
@@ -357,22 +385,37 @@ export default function SettingsPage() {
                                             ) : (
                                                 <button
                                                     onClick={async () => {
-                                                        if (!confirm("Débloquer les thèmes pour 10dh/mois ?")) return;
-                                                        setLoading(true);
-                                                        try {
-                                                            const res = await fetch('/api/stripe/themes', {
-                                                                method: 'POST',
-                                                                headers: { Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}` }
-                                                            });
-                                                            const data = await res.json();
-                                                            if (data.success) {
-                                                                alert("Thèmes débloqués ! 🎨");
-                                                                window.location.reload();
-                                                            } else {
-                                                                alert(data.error || "Erreur");
-                                                            }
-                                                        } catch (e) { console.error(e); alert("Erreur serveur"); }
-                                                        setLoading(false);
+                                                        showModal(
+                                                            "Confirmer l'achat",
+                                                            <div className="text-center p-4">
+                                                                <p className="mb-6">Voulez-vous débloquer tous les thèmes pour 15 DH/mois ?</p>
+                                                                <div className="flex justify-center gap-4">
+                                                                    <button onClick={closeModal} className="px-4 py-2 rounded-xl bg-gray-100 font-bold hover:bg-gray-200">Annuler</button>
+                                                                    <button onClick={async () => {
+                                                                        closeModal();
+                                                                        setLoading(true);
+                                                                        try {
+                                                                            const res = await fetch('/api/stripe/themes', {
+                                                                                method: 'POST',
+                                                                                headers: { Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}` }
+                                                                            });
+                                                                            const data = await res.json();
+                                                                            if (data.success) {
+                                                                                showModal("Félicitations ! 🎨", <p className="text-center p-4">Les thèmes sont débloqués. Profitez-en !</p>, "🎉");
+                                                                                setTimeout(() => window.location.reload(), 2000);
+                                                                            } else {
+                                                                                showModal("Erreur", <p className="text-center text-red-500 p-4">{data.error}</p>, "⚠️");
+                                                                            }
+                                                                        } catch (e) {
+                                                                            console.error(e);
+                                                                            showModal("Erreur", <p className="text-center text-red-500 p-4">Erreur serveur.</p>, "⚠️");
+                                                                        }
+                                                                        setLoading(false);
+                                                                    }} className="px-4 py-2 rounded-xl bg-rose-600 text-white font-bold hover:bg-rose-700">Confirmer</button>
+                                                                </div>
+                                                            </div>,
+                                                            "🛍️"
+                                                        );
                                                     }}
                                                     disabled={loading}
                                                     className="bg-white text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-zinc-200 transition-colors shadow-lg active:scale-95"
@@ -388,6 +431,15 @@ export default function SettingsPage() {
                     </div>
                 </div>
             </div>
+            {/* Modal Global */}
+            <Modal
+                isOpen={modal.isOpen}
+                onClose={closeModal}
+                title={modal.title}
+                icon={modal.icon}
+            >
+                {modal.content}
+            </Modal>
         </div>
     );
 }

@@ -128,7 +128,7 @@ export default function DashboardPage() {
             }
 
             // 2. Load Subscription
-            const sub = await getUserSubscription(user.id);
+            const sub = await getUserSubscription(user.id, supabase);
             setSubscription(sub);
 
             setLoading(false);
