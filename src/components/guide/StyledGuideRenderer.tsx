@@ -697,7 +697,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                     </p>
 
                                     {/* City & Badges */}
-                                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-4">
+                                    <div className={`flex flex-wrap items-center gap-3 mt-4 ${isResponsive ? 'justify-center md:justify-start' : (forceDesktop ? 'justify-start' : 'justify-center')}`}>
                                         <div className="flex items-center gap-2 px-4 py-1.5 bg-white text-black rounded-full text-sm font-bold shadow-lg transform hover:scale-105 transition-transform">
                                             <MapPin className="w-4 h-4 text-rose-500 fill-rose-500" />
                                             {city}
