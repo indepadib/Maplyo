@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Edit2, Trash2, ExternalLink, Moon, Sun, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings } from "lucide-react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Plus, Edit2, Trash2, ExternalLink, Moon, Sun, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { guideThemes } from "@/types/themes";
 import { Modal } from "@/components/ui/Modal";
@@ -24,10 +25,14 @@ type GuideSummary = {
 
 export default function DashboardPage() {
     const { user, signOut } = useAuth();
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
     const [guides, setGuides] = useState<GuideSummary[]>([]);
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
     const [sortBy, setSortBy] = useState<"recent" | "name">("recent");
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isProModalOpen, setIsProModalOpen] = useState(false);
     const [newGuideTitle, setNewGuideTitle] = useState("");
     const [loading, setLoading] = useState(true);
     const [subscription, setSubscription] = useState<UserSubscription | null>(null);
@@ -105,6 +110,12 @@ export default function DashboardPage() {
     useEffect(() => {
         if (!user) return;
 
+        // Check for success param (Stripe Return)
+        if (searchParams.get('success')) {
+            setIsProModalOpen(true);
+            router.replace('/dashboard'); // Clean URL
+        }
+
         const load = async () => {
             // 1. Load Guides
             const { data, error } = await supabase
@@ -134,7 +145,7 @@ export default function DashboardPage() {
             setLoading(false);
         };
         load();
-    }, [user]);
+    }, [user, searchParams, router]);
 
     const filteredGuides = [...guides].sort((a, b) => {
         if (sortBy === "name") return a.title.localeCompare(b.title);
@@ -510,6 +521,47 @@ export default function DashboardPage() {
                         </button>
                     </div>
                 </form>
+            </Modal>
+
+            {/* Welcome Pro Modal */}
+            <Modal
+                isOpen={isProModalOpen}
+                onClose={() => setIsProModalOpen(false)}
+                title="Félicitations ! 🚀"
+                icon="🎉"
+            >
+                <div className="text-center py-6">
+                    <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-green-200">
+                        <Sparkles className="w-10 h-10 animate-pulse" />
+                    </div>
+
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Bienvenue dans Maplyo Pro</h3>
+                    <p className="text-gray-500 mb-8 leading-relaxed">
+                        Votre abonnement est actif ! Vous avez désormais accès à :
+                    </p>
+
+                    <div className="bg-gray-50 rounded-2xl p-6 text-left space-y-4 border border-gray-100 mb-8">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-blue-100 text-blue-600 rounded-lg"><Settings size={18} /></div>
+                            <span className="font-medium text-gray-700">Guides illimités & Sans pub</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-purple-100 text-purple-600 rounded-lg"><Sparkles size={18} /></div>
+                            <span className="font-medium text-gray-700">Thèmes Premium & IA</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-orange-100 text-orange-600 rounded-lg"><CheckCircle2 size={18} /></div>
+                            <span className="font-medium text-gray-700">Publication Instantanée</span>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={() => setIsProModalOpen(false)}
+                        className="w-full py-4 rounded-xl bg-gray-900 text-white font-bold text-lg hover:bg-black transition-all shadow-xl"
+                    >
+                        C'est parti !
+                    </button>
+                </div>
             </Modal>
         </div>
     );

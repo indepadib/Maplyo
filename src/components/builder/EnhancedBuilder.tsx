@@ -487,10 +487,14 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
                                     )}
 
                                     {isLocked && (
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px]">
-                                            <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white">
-                                                <Lock size={14} />
-                                            </div>
+                                        <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <a
+                                                href="/dashboard/settings?tab=billing&addon=themes"
+                                                target="_blank"
+                                                className="bg-white text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-lg hover:scale-105 transition-transform flex items-center gap-1 no-underline"
+                                            >
+                                                <Plus size={12} /> Débloquer
+                                            </a>
                                         </div>
                                     )}
                                 </div>

@@ -12,9 +12,7 @@ interface GuideChatbotProps {
 
 export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([
-        { role: 'assistant', content: "Bonjour ! Je suis l'assistant virtuel de ce guide. Avez-vous des questions sur les codes wifi, le parking, ou les recommandations ?" }
-    ]);
+    const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -75,29 +73,44 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotPr
 
             {/* CHAT WINDOW */}
             {isOpen && (
-                <div className="fixed bottom-0 left-0 right-0 top-auto h-[60vh] rounded-t-[2rem] md:bottom-24 md:left-auto md:right-10 md:top-auto md:w-96 md:h-[500px] md:max-h-[70vh] md:rounded-2xl bg-white shadow-2xl border-t md:border border-gray-100 flex flex-col overflow-hidden z-50 animate-in slide-in-from-bottom-full md:slide-in-from-bottom-5 fade-in duration-300">
+                <div className="fixed inset-0 h-[100dvh] w-full md:bottom-24 md:left-auto md:right-10 md:top-auto md:w-96 md:h-[550px] md:max-h-[70vh] md:rounded-2xl bg-white md:shadow-2xl flex flex-col overflow-hidden z-[100] animate-in slide-in-from-bottom-5 fade-in duration-300">
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-100 p-4 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center">
-                            <Sparkles className="w-4 h-4" />
-                        </div>
-                        <div>
-                            <h3 className="font-bold text-gray-800 text-sm">Assistant Guide</h3>
-                            <div className="flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                                <span className="text-xs text-green-600 font-medium">En ligne</span>
+                    <div className="bg-white border-b border-gray-100 p-4 flex items-center justify-between gap-3 shrink-0">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center">
+                                <Sparkles className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-gray-900 text-sm">Assistant Guide</h3>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                                    <span className="text-xs text-green-600 font-medium">IA en ligne</span>
+                                </div>
                             </div>
                         </div>
+                        {/* Mobile Close Button */}
+                        <button
+                            onClick={() => setIsOpen(false)}
+                            className="p-2 -mr-2 text-gray-400 hover:text-gray-900 md:hidden"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
                     </div>
 
                     {/* Messages */}
                     <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50/50">
+                        {messages.length === 0 && (
+                            <div className="flex flex-col items-center justify-center h-full text-center p-6 opacity-40">
+                                <Sparkles className="w-12 h-12 mb-4 text-gray-300" />
+                                <p className="text-sm font-medium text-gray-600">Posez une question sur ce guide.</p>
+                            </div>
+                        )}
                         {messages.map((m, i) => (
                             <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                 <div
-                                    className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${m.role === 'user'
-                                        ? 'bg-blue-600 text-white rounded-br-none'
-                                        : 'bg-white border border-gray-100 text-gray-700 shadow-sm rounded-bl-none'
+                                    className={`max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed ${m.role === 'user'
+                                        ? 'bg-blue-600 text-white rounded-br-sm'
+                                        : 'bg-white border border-gray-100 text-gray-800 shadow-sm rounded-bl-sm'
                                         }`}
                                 >
                                     {m.content}
@@ -106,9 +119,9 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotPr
                         ))}
                         {isLoading && (
                             <div className="flex justify-start">
-                                <div className="bg-white border border-gray-100 p-3 rounded-2xl rounded-bl-none shadow-sm flex items-center gap-2">
+                                <div className="bg-white border border-gray-100 p-3 rounded-2xl rounded-bl-sm shadow-sm flex items-center gap-2">
                                     <Loader2 className="w-3 h-3 text-gray-400 animate-spin" />
-                                    <span className="text-xs text-gray-400">Réflexion...</span>
+                                    <span className="text-xs text-gray-500">Rédaction...</span>
                                 </div>
                             </div>
                         )}
@@ -116,21 +129,22 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotPr
                     </div>
 
                     {/* Input */}
-                    <div className="p-3 bg-white border-t border-gray-100 flex gap-2">
+                    <div className="p-3 bg-white border-t border-gray-100 flex gap-2 shrink-0 pb-safe-area">
                         <input
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                            placeholder="Posez votre question..."
+                            placeholder="Message..."
+                            autoFocus={false} // Prevent jump on mobile
                             disabled={isLoading}
-                            className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                            className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all"
                         />
                         <button
                             onClick={handleSend}
                             disabled={isLoading || !input.trim()}
-                            className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600 transition-colors"
+                            className="w-11 h-11 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600 transition-colors shadow-sm"
                         >
-                            <Send className="w-4 h-4" />
+                            <Send className="w-4 h-4 ml-0.5" />
                         </button>
                     </div>
                 </div>
