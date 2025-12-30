@@ -55,7 +55,7 @@ export function AccessCodesTraveler({
                 onChange={(e) => setCode(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleUnlock()}
               />
-              <Button onClick={handleUnlock} size="sm" variant={error ? "destructive" : "default"}>
+              <Button onClick={handleUnlock} size="sm" variant={error ? "secondary" : "primary"}>
                 {error ? <XIcon className="w-4 h-4" /> : "OK"}
               </Button>
             </div>
