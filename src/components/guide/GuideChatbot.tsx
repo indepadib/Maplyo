@@ -73,7 +73,7 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotPr
 
             {/* CHAT WINDOW */}
             {isOpen && (
-                <div className="fixed bottom-0 left-0 right-0 h-[75vh] w-full md:bottom-24 md:left-auto md:right-10 md:top-auto md:w-96 md:h-[550px] md:max-h-[70vh] rounded-t-3xl md:rounded-2xl bg-white shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)] md:shadow-2xl flex flex-col overflow-hidden z-[100] animate-in slide-in-from-bottom-full md:slide-in-from-bottom-5 fade-in duration-300">
+                <div className="fixed bottom-4 left-4 right-4 h-[75vh] w-auto md:bottom-24 md:left-auto md:right-10 md:top-auto md:w-96 md:h-[550px] md:max-h-[70vh] rounded-3xl md:rounded-2xl bg-white shadow-[0_0_40px_-10px_rgba(0,0,0,0.2)] md:shadow-2xl flex flex-col overflow-hidden z-[100] animate-in slide-in-from-bottom-10 fade-in duration-300 border border-gray-100">
                     {/* Header */}
                     <div className="bg-white border-b border-gray-100 p-4 flex items-center justify-between gap-3 shrink-0">
                         <div className="flex items-center gap-3">
