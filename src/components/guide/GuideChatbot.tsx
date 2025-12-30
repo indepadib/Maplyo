@@ -10,7 +10,7 @@ interface GuideChatbotProps {
     primaryColor?: string;
 }
 
-export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotProps) {
+export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = false }: GuideChatbotProps & { forceMobile?: boolean }) {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
     const [input, setInput] = useState("");
@@ -34,7 +34,7 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotPr
         setIsLoading(true);
 
         try {
-            // Prepare context: remove heavy objects if needed, but guide blocks are essential
+            // Prepare context
             const condensedGuide = {
                 title: guide.title,
                 blocks: guide.blocks.map(b => ({ type: b.type, title: b.title, data: b.data }))
@@ -60,12 +60,26 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotPr
         }
     };
 
+    // If forceMobile is true, we act as if we are on mobile (ignore md: styles for layout)
+    // OR we can just standardise the mobile view and let the container constrain it.
+    // The issue is 'fixed' positioning.
+    // If forceMobile is true, we want the "bottom-4 left-4 right-4" style.
+    // If forceMobile is false, we want the responsive behaviour (Desktop widget, Mobile popup).
+
+    // We can disable the `md:` prefixes when forceMobile is true? No, that's hard with standard Tailwind classes.
+    // Instead we selectively apply classes.
+
+    const isDesktopMode = !forceMobile; // If forceMobile, we are NOT in desktop mode.
+
     return (
         <>
             {/* TOGGLE BUTTON */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="fixed bottom-6 right-6 md:bottom-10 md:right-10 w-14 h-14 bg-gradient-to-br from-rose-500 to-purple-600 rounded-full shadow-2xl flex items-center justify-center text-white z-50 hover:scale-105 transition-transform"
+                className={`
+                    fixed w-14 h-14 bg-gradient-to-br from-rose-500 to-purple-600 rounded-full shadow-2xl flex items-center justify-center text-white z-50 hover:scale-105 transition-transform
+                    ${isDesktopMode ? 'bottom-6 right-6 md:bottom-10 md:right-10' : 'bottom-6 right-6'}
+                `}
                 style={{ backgroundColor: primaryColor }}
             >
                 {isOpen ? <X className="w-6 h-6" /> : <Sparkles className="w-6 h-6 animate-pulse" />}
@@ -73,7 +87,13 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotPr
 
             {/* CHAT WINDOW */}
             {isOpen && (
-                <div className="fixed bottom-4 left-4 right-4 h-[75vh] w-auto md:bottom-24 md:left-auto md:right-10 md:top-auto md:w-96 md:h-[550px] md:max-h-[70vh] rounded-3xl md:rounded-2xl bg-white shadow-[0_0_40px_-10px_rgba(0,0,0,0.2)] md:shadow-2xl flex flex-col overflow-hidden z-[100] animate-in slide-in-from-bottom-10 fade-in duration-300 border border-gray-100">
+                <div className={`
+                    fixed flex flex-col overflow-hidden z-[100] bg-white border border-gray-100 fade-in duration-300
+                    ${isDesktopMode
+                        ? 'bottom-4 left-4 right-4 h-[75vh] w-auto rounded-3xl md:bottom-24 md:left-auto md:right-10 md:top-auto md:w-96 md:h-[550px] md:max-h-[70vh] md:rounded-2xl md:shadow-2xl animate-in slide-in-from-bottom-10 md:slide-in-from-bottom-5'
+                        : 'bottom-4 left-4 right-4 h-[75vh] w-auto rounded-3xl shadow-[0_0_40px_-10px_rgba(0,0,0,0.2)] animate-in slide-in-from-bottom-10'
+                    }
+                `}>
                     {/* Header */}
                     <div className="bg-white border-b border-gray-100 p-4 flex items-center justify-between gap-3 shrink-0">
                         <div className="flex items-center gap-3">
@@ -91,7 +111,7 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotPr
                         {/* Mobile Close Button */}
                         <button
                             onClick={() => setIsOpen(false)}
-                            className="p-2 -mr-2 text-gray-400 hover:text-gray-900 md:hidden"
+                            className={`p-2 -mr-2 text-gray-400 hover:text-gray-900 ${isDesktopMode ? 'md:hidden' : ''}`}
                         >
                             <X className="w-6 h-6" />
                         </button>
@@ -135,7 +155,7 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48" }: GuideChatbotPr
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                             placeholder="Message..."
-                            autoFocus={false} // Prevent jump on mobile
+                            autoFocus={false}
                             disabled={isLoading}
                             className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all"
                         />

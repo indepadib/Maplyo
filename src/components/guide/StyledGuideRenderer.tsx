@@ -851,7 +851,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false }: { 
             </BottomSheet>
 
             {/* AI CHATBOT INTEGRATION */}
-            <GuideChatbot guide={guide} primaryColor={currentTheme.primary} />
+            <GuideChatbot guide={guide} primaryColor={currentTheme.primary} forceMobile={forceMobile} />
         </div>
     );
 }
