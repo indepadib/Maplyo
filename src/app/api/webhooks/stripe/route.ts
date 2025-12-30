@@ -103,14 +103,27 @@ async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
     if (!profiles) return; // User not found (maybe mismatch)
 
     const status = sub.status; // active, past_due, etc.
-    // logic to map stripe status to app status if needed
+
+    // Check for Add-ons (Extra Guides)
+    const addonPriceId = process.env.STRIPE_ADDON_PRICE_ID;
+    let extraGuides = 0;
+
+    if (addonPriceId && sub.items && sub.items.data) {
+        const addonItem = sub.items.data.find(item => item.price.id === addonPriceId);
+        if (addonItem) {
+            extraGuides = addonItem.quantity || 0;
+        }
+    }
 
     await supabase
         .from("profiles")
-        .update({ subscription_status: status })
+        .update({
+            subscription_status: status,
+            extra_guides: extraGuides
+        })
         .eq("id", profiles.id);
 
-    console.log(`🔄 Subscription updated for ${profiles.id} -> ${status}`);
+    console.log(`🔄 Subscription updated for ${profiles.id} -> ${status}, Extra Guides: ${extraGuides}`);
 }
 
 async function handleSubscriptionDeleted(sub: Stripe.Subscription) {

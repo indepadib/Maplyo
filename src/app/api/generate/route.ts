@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
                 // Check Profile Plan
                 const { data: profile } = await supabase
                     .from("profiles")
-                    .select("plan_variant")
+                    .select("plan_variant, extra_guides")
                     .eq("id", user.id)
                     .single();
 
@@ -36,13 +36,17 @@ export async function POST(request: NextRequest) {
                     .eq("user_id", user.id);
 
                 const isPro = profile?.plan_variant === "pro";
-                const guideLimit = isPro ? Infinity : 1;
+                const baseLimit = isPro ? 2 : 1;
+                const extra = profile?.extra_guides || 0;
+                const guideLimit = baseLimit + extra;
 
                 if ((count || 0) >= guideLimit) {
                     return NextResponse.json({
                         error: "Limit reached",
                         isLimitReached: true,
-                        message: "Upgrade to Pro to create more guides."
+                        message: isPro
+                            ? "Vous avez atteint la limite de 2 guides inclus dans le plan Pro."
+                            : "Le plan Basic inclut 1 seul guide. Passez au plan Pro pour en créer plus."
                     }, { status: 403 });
                 }
             }

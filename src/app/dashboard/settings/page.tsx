@@ -280,6 +280,59 @@ export default function SettingsPage() {
                                         </div>
                                     </div>
 
+                                    {/* Extra Guides Add-on */}
+                                    <div className="relative group p-1 rounded-3xl bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-white/10 hover:border-blue-500/50 transition-all hover:shadow-2xl hover:shadow-blue-500/10">
+                                        <div className="absolute top-4 right-4 bg-blue-500 text-white text-[10px] font-bold px-2 py-1 rounded-full">
+                                            REQUIS: PRO
+                                        </div>
+                                        <div className="bg-slate-900 rounded-[22px] p-6 h-full flex flex-col">
+                                            <div className="w-16 h-16 rounded-2xl bg-blue-500/20 flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300">
+                                                <Settings className="w-8 h-8 text-blue-400" />
+                                            </div>
+
+                                            <h3 className="font-bold text-xl mb-2 text-white">Guide Supplémentaire</h3>
+                                            <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
+                                                Besoin de plus de 2 guides ? Ajoutez un emplacement supplémentaire à votre abonnement Pro.
+                                            </p>
+
+                                            <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
+                                                <div className="flex flex-col">
+                                                    <span className="text-2xl font-bold text-white">20 DH</span>
+                                                    <span className="text-[10px] text-zinc-500">/mois par guide</span>
+                                                </div>
+                                                <button
+                                                    onClick={async () => {
+                                                        if (subscription?.planId !== 'pro') {
+                                                            alert("Vous devez être Pro pour ajouter des guides.");
+                                                            return;
+                                                        }
+                                                        if (!confirm("Ajouter 1 guide supplémentaire pour 20dh/mois ?")) return;
+
+                                                        setLoading(true);
+                                                        try {
+                                                            const res = await fetch('/api/stripe/addon', {
+                                                                method: 'POST',
+                                                                headers: { Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}` }
+                                                            });
+                                                            const data = await res.json();
+                                                            if (data.success) {
+                                                                alert("Guide ajouté ! Votre limite a été augmentée.");
+                                                                window.location.reload();
+                                                            } else {
+                                                                alert(data.error || "Erreur");
+                                                            }
+                                                        } catch (e) { console.error(e); alert("Erreur serveur"); }
+                                                        setLoading(false);
+                                                    }}
+                                                    disabled={loading || subscription?.planId !== 'pro'}
+                                                    className="bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                >
+                                                    {loading ? "..." : "Ajouter (+1)"}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     {/* Themes Pack - Coming Soon */}
                                     <div className="relative p-6 rounded-3xl bg-slate-900 border border-white/5 flex flex-col opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
                                         <div className="absolute top-4 right-4 bg-zinc-800 text-zinc-400 text-[10px] font-bold px-2 py-1 rounded-full">
