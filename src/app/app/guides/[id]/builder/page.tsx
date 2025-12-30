@@ -10,12 +10,7 @@ export default async function GuideBuilderPage({ params }: { params: Promise<{ i
     // Get Current User
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-    console.log("Builder Server Debug:", {
-        hasUser: !!user,
-        userId: user?.id,
-        authError: authError?.message,
-        cookies: (await import("next/headers")).cookies().toString()
-    });
+
 
     // In a real app we should redirect if no user
     if (!user) {
@@ -23,7 +18,7 @@ export default async function GuideBuilderPage({ params }: { params: Promise<{ i
     }
 
     const subscription = await getUserSubscription(user?.id || 'anon', supabase);
-    console.log("Builder Subscription Debug:", subscription);
+
 
     // Fetch from Supabase
     const { data, error } = await supabase
