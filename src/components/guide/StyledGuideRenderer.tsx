@@ -623,7 +623,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
             <div className={`w-full relative z-10 ${isDesktop ? '' : 'max-w-md mx-auto'}`}>
 
                 {/* CINEMATIC HERO */}
-                <div className={`relative overflow-hidden h-[50vh] ${isDesktop ? 'md:h-[85vh] md:-mb-32' : ''}`}>
+                <div className={`relative overflow-hidden ${heroHeightClass}`}>
                     <motion.div
                         style={{ y: heroY, opacity: heroOpacity }}
                         className="absolute inset-0 w-full h-full"
@@ -673,13 +673,13 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                             </AnimatePresence>
                         </div>
 
-                        <div className={`absolute left-0 right-0 px-6 max-w-7xl mx-auto z-20 ${isDesktop ? 'bottom-40 md:bottom-48 md:px-12 text-center md:text-left' : 'bottom-32 text-center'}`}>
+                        <div className={`absolute left-0 right-0 px-6 max-w-7xl mx-auto z-20 ${isResponsive ? 'bottom-40 md:bottom-48 md:px-12 text-center md:text-left' : (forceDesktop ? 'bottom-48 px-12 text-left' : 'bottom-32 text-center')}`}>
                             <motion.div
                                 initial={{ y: 30, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ duration: 0.8 }}
                             >
-                                <h1 className={`font-black mb-3 text-white tracking-tight leading-[1.1] drop-shadow-2xl text-3xl ${isDesktop ? 'md:text-8xl md:mb-4' : ''}`}>
+                                <h1 className={`font-black mb-3 text-white tracking-tight leading-[1.1] drop-shadow-2xl text-3xl ${isResponsive ? 'md:text-8xl md:mb-4' : (forceDesktop ? 'text-8xl mb-4' : '')}`}>
                                     {(heroBlock?.data as any)?.title || guide.title}
                                 </h1>
                             </motion.div>
@@ -689,7 +689,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                     initial={{ y: 30, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.2, duration: 0.8 }}
-                                    className={`flex flex-col gap-4 items-center ${isDesktop ? 'md:items-start' : ''}`}
+                                    className={`flex flex-col gap-4 items-center ${isResponsive ? 'md:items-start' : (forceDesktop ? 'items-start' : '')}`}
                                 >
                                     <p className={`text-white/90 max-w-xl font-medium leading-relaxed drop-shadow-md text-base md:text-xl`}>
                                         {(heroBlock.data as any).subtitle}
@@ -720,16 +720,16 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4, duration: 0.6 }}
                     style={{ y: gridY }}
-                    className={`relative max-w-5xl mx-auto px-4 ${isDesktop ? 'md:px-12' : ''}`}
+                    className={`relative max-w-5xl mx-auto px-4 ${isResponsive ? 'md:px-12' : (forceDesktop ? 'px-12' : '')}`}
                 >
-                    <div className={`bg-white/5 backdrop-blur-2xl border border-white/10 rounded-t-[32px] md:rounded-[48px] shadow-2xl min-h-[50vh] p-4 ${isDesktop ? 'md:p-10' : ''}`}>
+                    <div className={`bg-white/5 backdrop-blur-2xl border border-white/10 rounded-t-[32px] md:rounded-[48px] shadow-2xl min-h-[50vh] ${paddingClass}`}>
 
                         {/* 
                             GRID REFINEMENT: 
                             Mobile: 2 Cols
                             Desktop: 4 Cols but contained in max-w-5xl (Compact)
                         */}
-                        <div className={`grid gap-3 md:gap-4 grid-cols-2 ${isDesktop ? 'md:grid-cols-4' : ''}`}>
+                        <div className={`grid gap-3 md:gap-4 ${gridColsClass}`}>
 
                             {/* 1. WIFI (Rectangle 2x1) */}
                             {wifiBlock && !searchQuery && (
@@ -776,9 +776,10 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                 }
 
                                 // Special Case: Location on Desktop can be huge
-                                if (b.type === "location" && isDesktop) {
-                                    colSpan = "md:col-span-2 md:row-span-2";
-                                    aspect = "aspect-square md:aspect-square"; // Square on mobile too for visibility
+                                const allowDesktopLayout = isResponsive || forceDesktop;
+                                if (b.type === "location" && allowDesktopLayout) {
+                                    colSpan = isResponsive ? "md:col-span-2 md:row-span-2" : "col-span-2 row-span-2";
+                                    aspect = "aspect-square";
                                 } else if (isRichBlock) {
                                     colSpan = "col-span-2";
                                     aspect = "aspect-[2/1]";
