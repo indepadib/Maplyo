@@ -341,15 +341,15 @@ function StandardCard({ icon: Icon, title, onClick, theme, className }: { icon: 
             whileTap={{ scale: 0.95 }}
             whileHover={{ y: -2 }}
             onClick={onClick}
-            className={`rounded-[24px] md:rounded-[28px] flex flex-col items-center justify-center p-4 gap-3 text-center shadow-sm transition-all w-full h-full ${className || ''}`}
+            className={`rounded-[24px] md:rounded-[28px] flex flex-col items-center justify-center p-3 gap-2 text-center shadow-sm transition-all w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center transition-colors"
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center transition-colors shrink-0"
                 style={{ backgroundColor: `${theme.primary}10`, color: theme.primary }}
             >
-                <Icon className="w-6 h-6" />
+                <Icon className="w-5 h-5 md:w-6 md:h-6" />
             </div>
-            <span className="font-bold text-sm leading-tight line-clamp-2 px-1">{title}</span>
+            <span className="font-bold text-xs md:text-sm leading-tight line-clamp-2 px-1 w-full break-words">{title}</span>
         </motion.button>
     );
 }
@@ -366,7 +366,7 @@ function TimeCard({ type, data, onClick, theme, className, lang }: { type: strin
         <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={onClick}
-            className={`rounded-[24px] md:rounded-[32px] p-4 md:p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            className={`rounded-[24px] md:rounded-[32px] p-4 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             <div className="flex justify-between items-start w-full">
@@ -375,11 +375,11 @@ function TimeCard({ type, data, onClick, theme, className, lang }: { type: strin
                 </div>
             </div>
 
-            <div>
-                <div className="text-2xl md:text-3xl font-black tracking-tighter mb-1 relative z-10">
+            <div className="mt-auto pt-2">
+                <div className="text-2xl md:text-3xl font-black tracking-tighter mb-0.5 relative z-10">
                     {time}
                 </div>
-                <div className="text-[10px] md:text-xs font-bold opacity-60 uppercase tracking-wider">{label}</div>
+                <div className="text-[10px] md:text-xs font-bold opacity-60 uppercase tracking-wider truncate w-full">{label}</div>
             </div>
         </motion.button>
     );
@@ -428,24 +428,24 @@ function ListCard({ title, icon: Icon, items, theme, className }: { title: strin
     return (
         <motion.button
             whileTap={{ scale: 0.98 }}
-            className={`rounded-[24px] md:rounded-[32px] p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            className={`rounded-[24px] md:rounded-[32px] p-4 md:p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             <div className="flex justify-between items-start w-full relative z-10">
-                <div className="p-2.5 rounded-2xl bg-orange-500/10 text-orange-600">
-                    <Icon className="w-6 h-6" />
+                <div className="p-2 md:p-2.5 rounded-2xl bg-orange-500/10 text-orange-600">
+                    <Icon className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
-                <div className="font-bold text-[10px] opacity-60 uppercase tracking-wider bg-black/5 px-2 py-1 rounded-lg">
+                <div className="font-bold text-[9px] md:text-[10px] opacity-60 uppercase tracking-wider bg-black/5 px-2 py-1 rounded-lg">
                     {count}
                 </div>
             </div>
 
-            <div className="relative z-10 mt-4">
-                <div className="font-bold text-lg mb-2">{title}</div>
-                <div className="space-y-1">
+            <div className="relative z-10 mt-2">
+                <div className="font-bold text-base md:text-lg mb-1 truncate">{title}</div>
+                <div className="space-y-0.5">
                     {items.slice(0, 2).map((item, i) => (
-                        <div key={i} className="flex items-center gap-2 text-sm opacity-70">
-                            <span className="w-1 h-1 rounded-full bg-current" />
+                        <div key={i} className="flex items-center gap-1.5 text-xs opacity-70">
+                            <span className="w-1 h-1 rounded-full bg-current shrink-0" />
                             <span className="truncate">{item.name || item.title || "Item"}</span>
                         </div>
                     ))}
@@ -493,20 +493,20 @@ function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, o
         <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={onClick}
-            className={`rounded-[24px] md:rounded-[28px] p-4 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
+            className={`rounded-[24px] md:rounded-[28px] p-3 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
             <div className="flex justify-between items-start w-full relative z-10">
-                <div className={`p-2.5 rounded-2xl ${colorClass}`}>
+                <div className={`p-2 rounded-2xl ${colorClass}`}>
                     <Icon className="w-5 h-5" />
                 </div>
             </div>
 
-            <div className="relative z-10 mt-2">
+            <div className="relative z-10 mt-1 w-full">
                 {count !== undefined && (
-                    <div className="text-[10px] font-bold opacity-50 uppercase tracking-wider mb-0.5">{count} items</div>
+                    <div className="text-[9px] font-bold opacity-50 uppercase tracking-wider mb-0.5">{count} items</div>
                 )}
-                <div className="font-bold text-base leading-tight">{title}</div>
+                <div className="font-bold text-sm leading-tight break-words w-full">{title}</div>
             </div>
         </motion.button>
     )
