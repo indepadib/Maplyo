@@ -147,7 +147,7 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
     const isMobile = useMediaQuery("(max-width: 768px)");
 
     return (
-        <div className="flex h-screen w-screen overflow-hidden bg-gray-50">
+        <div className="flex flex-col h-screen w-screen overflow-hidden bg-gray-50">
 
 
             {/* TOP BAR */}
