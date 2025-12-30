@@ -43,8 +43,8 @@ export type BlockDefinition = {
   schema?: unknown;
   defaultData: unknown;
   isSensitive?: boolean;
-  Traveler: (props: { title?: string; data: any; ctx: BlockRenderContext; visibility?: VisibilityRule }) => React.JSX.Element;
-  Editor: (props: { title?: string; data: any; onChange: (data: any) => void; visibility?: VisibilityRule; onChangeVisibility?: (v: VisibilityRule) => void }) => React.JSX.Element;
+  Traveler: (props: { title?: string; data: any; ctx: BlockRenderContext; visibility?: VisibilityRule }) => React.ReactNode;
+  Editor: (props: { title?: string; data: any; onChange: (data: any) => void; visibility?: VisibilityRule; onChangeVisibility?: (v: VisibilityRule) => void }) => React.ReactNode;
 };
 
 export const blockRegistry: Record<BlockType, BlockDefinition> = {
