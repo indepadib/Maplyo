@@ -34,11 +34,15 @@ export const viewport = {
 
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
       <body>
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+        )}
         <LanguageProvider>
           <AuthProvider>{children}</AuthProvider>
         </LanguageProvider>
