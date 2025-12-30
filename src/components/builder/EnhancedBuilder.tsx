@@ -143,6 +143,7 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
     }
 
     // --- UI HELPERS ---
+    const categories = ["Essentiels", "Voyage", "Business"];
     const isMobile = useMediaQuery("(max-width: 768px)");
 
     // --- DEBUG BANNER (TEMP) ---
