@@ -372,8 +372,8 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
                             <div
                                 className={`
                                     ${previewDevice === 'desktop'
-                                        ? 'w-[1280px] h-[800px] scale-[0.35] origin-top rounded-lg border-4 border-gray-800'
-                                        : 'w-[320px] min-h-[600px] scale-90 origin-top rounded-[3rem] border-[8px] border-gray-900'} 
+                                        ? 'w-[1280px] h-[800px] scale-[0.45] origin-top rounded-xl border border-gray-200/50'
+                                        : 'w-[320px] min-h-[600px] scale-90 origin-top rounded-[3rem] border-[8px] border-gray-900'}
                                     bg-white shadow-2xl overflow-hidden relative transition-all duration-300
                                 `}
                             >
@@ -382,14 +382,15 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
 
                                 {/* Desktop Browser Header */}
                                 {previewDevice === 'desktop' && (
-                                    <div className="h-8 bg-gray-800 flex items-center px-4 gap-2 z-20">
+                                    <div className="h-10 bg-white/80 backdrop-blur-md border-b border-gray-200 flex items-center px-4 gap-3 z-50 sticky top-0">
                                         <div className="flex gap-1.5">
-                                            <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
-                                            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-                                            <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+                                            <div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/50" />
+                                            <div className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]/50" />
+                                            <div className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]/50" />
                                         </div>
-                                        <div className="flex-1 bg-gray-700/50 rounded-md h-5 mx-4 flex items-center justify-center">
-                                            <span className="text-[10px] text-gray-400 font-mono opacity-50">maplyo.com/g/{guide.slug}</span>
+                                        <div className="flex-1 max-w-2xl bg-gray-100 rounded-md h-7 mx-4 flex items-center px-3 gap-2">
+                                            <div className="w-3 h-3 rounded-full border border-gray-400 opacity-50"></div>
+                                            <span className="text-[11px] text-gray-500 font-medium font-sans">maplyo.com/g/{guide.slug}</span>
                                         </div>
                                     </div>
                                 )}
