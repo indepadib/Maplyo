@@ -127,10 +127,19 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
     }
 
     // --- UI HELPERS ---
-    const categories = ["Essentiels", "Voyage", "Business"];
+    const isMobile = useMediaQuery("(max-width: 768px)");
+
+    // --- DEBUG BANNER (TEMP) ---
+    const debugInfo = JSON.stringify(subscription, null, 2);
+    // ---------------------------
 
     return (
-        <div className="h-screen flex flex-col bg-gray-50 overflow-hidden font-sans text-gray-900">
+        <div className="flex h-screen w-screen overflow-hidden bg-gray-50">
+            {/* DEBUG OVERLAY */}
+            <div className="fixed top-0 left-0 right-0 z-[9999] bg-red-600 text-white text-xs font-mono p-1 text-center opacity-90 hover:opacity-100 transition-opacity pointer-events-none">
+                DEBUG: {debugInfo}
+            </div>
+
             {/* TOP BAR */}
             <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-20 shrink-0">
                 <div className="flex items-center gap-4">
