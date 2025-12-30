@@ -40,7 +40,8 @@ export default function PricingPage() {
             if (data.url) {
                 window.location.href = data.url;
             } else {
-                alert("Erreur de configuration Stripe (Mode Dev).");
+                console.error("Stripe Error:", data);
+                alert(data.error || "Erreur de configuration Stripe (Mode Dev).");
             }
         } catch (e) {
             console.error(e);
