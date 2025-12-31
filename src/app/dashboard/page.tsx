@@ -367,9 +367,19 @@ function DashboardContent() {
                                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent opacity-90" />
 
                                             <div className="absolute top-4 right-4 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
-                                                <Link href={`/g/${guide.slug}`} target="_blank" className="p-3 bg-black/40 backdrop-blur-md border border-white/20 rounded-xl text-white hover:bg-white hover:text-black transition-colors shadow-lg" title="Voir le guide public">
-                                                    <ExternalLink size={18} />
-                                                </Link>
+                                                {subscription?.plan !== 'demo' ? (
+                                                    <Link href={`/g/${guide.slug}`} target="_blank" className="p-3 bg-black/40 backdrop-blur-md border border-white/20 rounded-xl text-white hover:bg-white hover:text-black transition-colors shadow-lg" title="Voir le guide public">
+                                                        <ExternalLink size={18} />
+                                                    </Link>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => setIsProModalOpen(true)}
+                                                        className="p-3 bg-rose-500/80 backdrop-blur-md border border-rose-400/20 rounded-xl text-white hover:bg-rose-500 transition-colors shadow-lg"
+                                                        title="Passer Pro pour partager"
+                                                    >
+                                                        <span className="text-xs font-bold">PRO</span>
+                                                    </button>
+                                                )}
                                             </div>
 
                                             <div className="absolute bottom-4 left-5 right-5">
