@@ -36,7 +36,7 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     - Mood: ${mood || "welcoming"}
 
     Required Blocks (in order):
-    1. welcome (Warm intro, mention city context)
+    1. hero (Essential! Title of the guide, subtitle, and an appealing cover image URL)
     2. wifi (Suggest a secure password, mock credentials)
     3. checkin (Standard 3PM, mock code)
     4. rules (Appropriate for audience)
@@ -49,7 +49,7 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     {
       "title": "string",
       "blocks": [
-        { "type": "welcome", "title": "string", "data": { "message": "string", "coverImage": "url_string" } },
+        { "type": "hero", "title": "string", "data": { "title": "string", "subtitle": "string", "coverImageUrl": "url_string", "badges": ["string"] } },
         { "type": "wifi", "title": "string", "data": { "networkName": "string", "password": "string" } },
         { "type": "checkin", "title": "string", "data": { "time": "15:00", "instruction": "string" } },
         { "type": "rules", "title": "string", "data": { "items": [{ "text": "string" }] } },
@@ -88,10 +88,25 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
             data: b.data || {}
         }));
 
-        // Inject Theme Background into Welcome if missing
-        const welcomeBlock = blocks.find((b: any) => b.type === "welcome");
-        if (welcomeBlock && !welcomeBlock.data.coverImage) {
-            welcomeBlock.data.coverImage = matchedTheme.bgImage;
+        // Fallback: Ensure Hero exists if AI forgot it
+        let heroBlock = blocks.find((b: any) => b.type === "hero");
+        if (!heroBlock) {
+            // Create default Hero from Welcome or scratch
+            heroBlock = {
+                id: uid(),
+                type: "hero",
+                title: "Hero",
+                visibility: { mode: "always" },
+                data: {
+                    title: json.title || `Guide ${city}`,
+                    subtitle: "Bienvenue dans votre guide personnel",
+                    coverImageUrl: matchedTheme.bgImage,
+                    badges: ["Wi-Fi", "Piscine"]
+                }
+            };
+            blocks.unshift(heroBlock);
+        } else if (!heroBlock.data.coverImageUrl) {
+            heroBlock.data.coverImageUrl = matchedTheme.bgImage;
         }
 
         return {
@@ -111,26 +126,46 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
 
 // Keep the old mock function as fallback
 async function generateMockGuide(prompt: GuidePrompt): Promise<Guide> {
-    // ... (Keep existing mock logic for safety/fallback)
-    // For brevity in this edit, I will produce a minimal mock fallback manually here to save tokens vs copying the whole old file, 
-    // but in a real scenario I'd preserve the old function body.
-
-    // Re-implementing a minimal version of the previous mock for fallback:
     const { city, language } = prompt;
     const lang = language;
+    const theme = guideThemes[0];
 
     return {
         id: uid(),
         slug: `mock-${city}`,
-        title: `Guide ${city} (Offline Mode)`,
-        theme: { themeId: guideThemes[0].id },
+        title: `Guide ${city} (Fallback Mode)`,
+        theme: { themeId: theme.id },
         blocks: [
             {
                 id: uid(),
-                type: "welcome",
-                title: lang === 'fr' ? "Bienvenue" : "Welcome",
+                type: "hero",
+                title: "Hero",
                 visibility: { mode: "always" },
-                data: { message: "OpenAI Key missing. This is a demo guide.", coverImage: guideThemes[0].bgImage }
+                data: {
+                    title: `Bienvenue à ${city}`,
+                    subtitle: "Ce guide est généré localement (Erreur IA)",
+                    coverImageUrl: theme.bgImage,
+                    badges: ["4G", "Central"]
+                }
+            },
+            {
+                id: uid(),
+                type: "wifi",
+                title: "Wi-Fi",
+                visibility: { mode: "always" },
+                data: { networkName: "MonWifi", password: "password123" }
+            },
+            {
+                id: uid(),
+                type: "places",
+                title: "Lieux",
+                visibility: { mode: "always" },
+                data: {
+                    items: [
+                        { name: "Café de la Place", description: "Le meilleur café du coin.", address: "123 Rue Principale" },
+                        { name: "Bistro le Gourmand", description: "Cuisine locale authentique.", address: "45 Avenue de la Liberté" }
+                    ]
+                }
             }
         ],
         updatedAt: new Date().toISOString()
