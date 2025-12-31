@@ -13,8 +13,8 @@ export const DICTIONARY = {
         },
         hero: {
             tag: "POUR LES HÔTES ET CONCIERGERIES",
-            title: "L'expérience 5 étoiles",
-            subtitle: "Créez des guides digitaux magnifiques pour vos voyageurs. Partagez le WiFi, les codes d'accès et vos meilleures adresses en un clic.",
+            title: "Ne répétez plus jamais le code WiFi.",
+            subtitle: "Digitalisez votre livret d'accueil. Offrez une expérience 5 étoiles, réduisez les messages de 50%, et augmentez vos avis positifs.",
             cta: "Créer mon guide gratuit",
             demo: "Voir un exemple",
             noCreditCard: "Pas de carte requise",
@@ -96,6 +96,19 @@ export const DICTIONARY = {
                         'Support Prioritaire',
                         'Statistiques Avancées'
                     ]
+                },
+                business: {
+                    name: "Business",
+                    desc: "Pour gérer 50+ propriétés.",
+                    button: "Contacter l'équipe",
+                    price: "Sur devis",
+                    features: [
+                        'Guides Illimités',
+                        'Marque Blanche (White Label)',
+                        'Accès API & Webhooks',
+                        'Intégration PMS',
+                        'Manager Dédié'
+                    ]
                 }
             },
             trust: "Paiement chiffré SSL • Annulation en 1 clic"
@@ -138,8 +151,8 @@ export const DICTIONARY = {
         },
         hero: {
             tag: "FOR HOSTS AND CONCIERGES",
-            title: "The 5-Star Experience",
-            subtitle: "Create beautiful digital guides for your travelers. Share WiFi, access codes, and your best recommendations in one click.",
+            title: "Never repeat the WiFi code again.",
+            subtitle: "Digitize your welcome book. Offer a 5-star experience, reduce messages by 50%, and boost your positive reviews.",
             cta: "Create my free guide",
             demo: "View example",
             noCreditCard: "No credit card required",
@@ -220,6 +233,19 @@ export const DICTIONARY = {
                         'All Premium Themes',
                         'Priority Support',
                         'Advanced Stats'
+                    ]
+                },
+                business: {
+                    name: "Business",
+                    desc: "To manage 50+ properties.",
+                    button: "Contact Sales",
+                    price: "Custom",
+                    features: [
+                        'Unlimited Guides',
+                        'White Label',
+                        'API Access & Webhooks',
+                        'PMS Integration',
+                        'Dedicated Manager'
                     ]
                 }
             },

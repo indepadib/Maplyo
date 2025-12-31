@@ -30,6 +30,7 @@ const PhoneMockup3D = dynamic(() => import("@/components/landing/PhoneMockup3D")
 });
 import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 import { useTranslation } from "@/components/providers/LanguageProvider";
+import { GuideShowcase } from "@/components/landing/GuideShowcase";
 
 // --- Components ---
 
@@ -410,6 +411,9 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* --- Guide Showcase (Examples) --- */}
+        <GuideShowcase />
+
         {/* --- Features Section --- */}
         <section id="features" className="py-32 px-6 relative">
           <div className="max-w-7xl mx-auto">
@@ -492,15 +496,9 @@ export default function LandingPage() {
                 delay={0.1}
               />
               <PricingCard
-                tier="Business"
-                price="Sur devis"
-                features={[
-                  "Guides Illimités",
-                  "Design 100% Custom",
-                  "Manager de Conciergerie",
-                  "API Access",
-                  "Formation Équipe"
-                ]}
+                tier={t.pricing.plans.business.name}
+                price={t.pricing.plans.business.price}
+                features={t.pricing.plans.business.features}
                 delay={0.2}
               />
             </div>
