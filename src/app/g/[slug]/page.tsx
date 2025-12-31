@@ -43,7 +43,7 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
     // Fetch guide by slug (or id if you want to support both, but slug is cleaner for public)
     const { data } = await supabase
         .from("guides")
-        .select("*")
+        .select("*, profiles!inner(plan_variant)")
         .eq("slug", slug)
         .eq("is_published", true) // Only fetch if published
         .single();
@@ -51,14 +51,40 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
     let guide: Guide;
 
     if (data) {
-        guide = {
-            id: data.id,
-            slug: data.slug,
-            title: data.title,
-            theme: { themeId: data.theme_id || "minimal-white" },
-            blocks: data.content?.blocks || [],
-            updatedAt: data.updated_at
-        };
+        // SECURITY CHECK: If owner is on "Demo" plan, do NOT show guide publicly
+        // Unless we are in a preview context (which this page isn't really, usually preview is in /builder)
+        // But let's say /g/[slug] is strictly PUBLIC access.
+        const plan = data.profiles?.plan_variant || 'demo';
+
+        if (plan === 'demo' && slug !== 'demo') {
+            // Fallback to "Restricted" view
+            guide = {
+                id: "restricted",
+                slug,
+                title: "Guide Privé",
+                theme: { themeId: "minimal-white" },
+                blocks: [
+                    {
+                        id: "restricted",
+                        type: "welcome",
+                        visibility: { mode: "always" },
+                        data: {
+                            title: "Guide Privé",
+                            content: "Ce guide est en mode démonstration et n'est pas accessible au public. Veuillez contacter l'hôte."
+                        }
+                    }
+                ]
+            };
+        } else {
+            guide = {
+                id: data.id,
+                slug: data.slug,
+                title: data.title,
+                theme: { themeId: data.theme_id || "minimal-white" },
+                blocks: data.content?.blocks || [],
+                updatedAt: data.updated_at
+            };
+        }
     } else {
         // Fallback for "demo" or not found -> Show a 404 block or generic Welcome
         guide = {
