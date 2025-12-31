@@ -120,11 +120,11 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
             ]
         };
     }
-}
 
-return (
-    <main className="min-h-screen bg-white">
-        <GuideClient guide={guide} />
-    </main>
-);
+
+    return (
+        <main className="min-h-screen bg-white">
+            <GuideClient guide={guide} />
+        </main>
+    );
 }
