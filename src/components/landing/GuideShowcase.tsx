@@ -6,50 +6,52 @@ import { ExternalLink, Star } from "lucide-react";
 import Image from "next/image";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 
-const examples = [
-    {
-        title: "City Loft Paris",
-        type: "Appartement",
-        image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",
-        stats: ["Code WiFi", "Métro", "Cafés"],
-        color: "from-rose-500 to-rose-600",
-        review: {
-            text: "Merci pour le guide, l'arrivée était super simple !",
-            author: "Sarah",
-            rating: "+5★"
-        }
-    },
-    {
-        title: "Villa Atlas",
-        type: "Maison de Vacances",
-        image: "https://plus.unsplash.com/premium_photo-1661964014750-963a28aeddea?q=80&w=2669&auto=format&fit=crop", // Fixed image
-        stats: ["Piscine", "Chef à dom.", "Excursions"],
-        color: "from-emerald-500 to-teal-600",
-        review: {
-            text: "On a adoré les recos de restos !",
-            author: "Marc & Julie",
-            rating: "+15%"
-        }
-    },
-    {
-        title: "Riad Al Jazira",
-        type: "Maison d'Hôtes",
-        image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80",
-        stats: ["Hammam", "Thé", "Souks"],
-        color: "from-amber-500 to-orange-600",
-        review: {
-            text: "Le QR code WiFi a sauvé notre arrivée.",
-            author: "Thomas",
-            rating: "Top !"
-        }
-    }
-];
+
 
 export function GuideShowcase() {
     const { t, lang } = useTranslation();
 
     // Local translation helper for demo content
     const tr = (fr: string, en: string) => lang === 'fr' ? fr : en;
+
+    const examples = [
+        {
+            title: "City Loft Paris",
+            type: tr("Appartement", "Apartment"),
+            image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",
+            stats: [tr("Code WiFi", "WiFi Code"), tr("Métro", "Subway"), tr("Cafés", "Coffee")],
+            color: "from-rose-500 to-rose-600",
+            review: {
+                text: tr("Merci pour le guide, l'arrivée était super simple !", "Thanks for the guide, check-in was super easy!"),
+                author: "Sarah",
+                rating: "+5★"
+            }
+        },
+        {
+            title: "Villa Atlas",
+            type: tr("Maison de Vacances", "Vacation Home"),
+            image: "https://plus.unsplash.com/premium_photo-1661964014750-963a28aeddea?q=80&w=2669&auto=format&fit=crop", // Fixed image
+            stats: [tr("Piscine", "Pool"), tr("Chef à dom.", "Private Chef"), tr("Excursions", "Tours")],
+            color: "from-emerald-500 to-teal-600",
+            review: {
+                text: tr("On a adoré les recos de restos !", "We loved the restaurant recs!"),
+                author: "Marc & Julie",
+                rating: "+15%"
+            }
+        },
+        {
+            title: "Riad Al Jazira",
+            type: tr("Maison d'Hôtes", "Guesthouse"),
+            image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80",
+            stats: [tr("Hammam", "Hammam"), tr("Thé", "Tea"), tr("Souks", "Souks")],
+            color: "from-amber-500 to-orange-600",
+            review: {
+                text: tr("Le QR code WiFi a sauvé notre arrivée.", "The WiFi QR code saved our arrival."),
+                author: "Thomas",
+                rating: "Top !"
+            }
+        }
+    ];
 
     return (
         <section className="py-24 bg-slate-950 relative overflow-hidden">

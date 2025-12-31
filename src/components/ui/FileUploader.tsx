@@ -45,7 +45,6 @@ export function FileUploader({ value, onUpload, label = "Upload Image", accept =
 
             onUpload(data.publicUrl);
         } catch (err: any) {
-            console.error("Upload error:", err);
             setError("Erreur lors de l'upload. Vérifiez votre connexion.");
         } finally {
             setUploading(false);

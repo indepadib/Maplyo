@@ -180,6 +180,15 @@ export const DICTIONARY = {
         excursion: "Partez en excursion.",
         nightlife: "La vie nocturne de",
         walk: "Baladez-vous à",
+        guide: {
+            accessCode: "Codes d'accès",
+            locked: "Ce bloc est protégé par un code.",
+            enterCode: "Code d'accès",
+            apartmentDoor: "Porte logement :",
+            buildingDoor: "Porte immeuble :",
+            gate: "Portail :",
+            notes: "Notes"
+        },
         upsells: "Extras"
     },
     en: {
@@ -361,6 +370,15 @@ export const DICTIONARY = {
         excursion: "Go on a trip.",
         nightlife: "Nightlife in",
         walk: "Walk around",
+        guide: {
+            accessCode: "Access Codes",
+            locked: "This block is protected by a code.",
+            enterCode: "Access Code",
+            apartmentDoor: "Apartment Door:",
+            buildingDoor: "Building Door:",
+            gate: "Gate:",
+            notes: "Notes"
+        },
         upsells: "Extras"
     }
 };

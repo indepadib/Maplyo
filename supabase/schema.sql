@@ -18,6 +18,7 @@ alter table public.profiles enable row level security;
 
 -- Policies for Profiles
 create policy "Users can view own profile" on profiles for select using (auth.uid() = id);
+create policy "Public can view profiles" on profiles for select using (true);
 create policy "Users can update own profile" on profiles for update using (auth.uid() = id);
 
 -- GUIDES

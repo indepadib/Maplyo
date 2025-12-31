@@ -55,7 +55,6 @@ export async function POST(req: Request) {
                 break;
             }
             default:
-                console.log(`ℹ️ Unhandled event type: ${event.type}`);
         }
     } catch (error: any) {
         console.error(`❌ Handler failed: ${error.message}`);
