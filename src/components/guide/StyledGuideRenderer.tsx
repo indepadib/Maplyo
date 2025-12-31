@@ -336,7 +336,7 @@ function AccessCard({ data, onClick, theme, className, lang }: { data: any; onCl
     );
 }
 
-function StandardCard({ icon: Icon, title, onClick, theme, className }: { icon: any; title: string; onClick: () => void; theme: any; className?: string }) {
+function StandardCard({ icon: Icon, title, onClick, theme, className, lang }: { icon: any; title: string; onClick: () => void; theme: any; className?: string, lang: 'fr' | 'en' }) {
     return (
         <motion.button
             whileTap={{ scale: 0.95 }}
@@ -350,7 +350,9 @@ function StandardCard({ icon: Icon, title, onClick, theme, className }: { icon: 
             >
                 <Icon className="w-5 h-5 md:w-6 md:h-6" />
             </div>
-            <span className="font-bold text-xs md:text-sm leading-tight line-clamp-2 px-1 w-full break-words">{title}</span>
+            <span className="font-bold text-xs md:text-sm leading-tight line-clamp-2 px-1 w-full break-words">
+                <TranslatedText text={title} lang={lang} />
+            </span>
         </motion.button>
     );
 }
@@ -491,7 +493,7 @@ function UpsellsCard({ data, onClick, theme, className }: { data: any; onClick: 
 
 // --- SUB-CARDS (Rules, FAQ, Amenities, Contact) ---
 // Simplified square versions to match "Apple" grid
-function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, onClick, className }: any) {
+function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, onClick, className, lang }: any) {
     return (
         <motion.button
             whileTap={{ scale: 0.95 }}
@@ -509,7 +511,9 @@ function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, o
                 {count !== undefined && (
                     <div className="text-[9px] font-bold opacity-50 uppercase tracking-wider mb-0.5">{count} items</div>
                 )}
-                <div className="font-bold text-sm leading-tight break-words w-full">{title}</div>
+                <div className="font-bold text-sm leading-tight break-words w-full">
+                    <TranslatedText text={title} lang={lang} />
+                </div>
             </div>
         </motion.button>
     )
@@ -805,10 +809,9 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                     if (b.type === "location") return <div key={b.id} className={wrapperClass}><LocationCard {...cardProps} /></div>;
                                     if (b.type === "upsells") return <div key={b.id} className={wrapperClass}><UpsellsCard {...cardProps} /></div>;
 
-                                    // Translate default title if needed
                                     const displayTitle = b.title || (t[b.type as keyof typeof t] || def.label);
 
-                                    return <div key={b.id} className={wrapperClass}><ListCard title={displayTitle} icon={Icon} items={(b.data as any).items || []} theme={currentTheme} /></div>;
+                                    return <div key={b.id} className={wrapperClass}><ListCard title={displayTitle} icon={Icon} items={(b.data as any).items || []} theme={currentTheme} lang={lang} /></div>;
                                 }
 
                                 if (b.type === "checkin" || b.type === "checkout") {
@@ -835,6 +838,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                                 colorClass={colorClass}
                                                 theme={currentTheme}
                                                 onClick={() => setSelectedBlockId(b.id)}
+                                                lang={lang}
                                             />
                                         </div>
                                     )
