@@ -13,6 +13,10 @@ export const DICTIONARY = {
             choose: "Choisir",
             viewGuide: "Voir le guide complet",
             more: "Voir plus",
+            checkin: "Arrivée",
+            checkout: "Départ",
+            location: "Localisation",
+            viewOnMap: "Voir sur la carte",
         },
         socialProof: {
             trustpilot: "4.9/5 par 500+ Hôtes",
@@ -190,6 +194,10 @@ export const DICTIONARY = {
             choose: "Select",
             viewGuide: "View Full Guide",
             more: "See More",
+            checkin: "Check-in",
+            checkout: "Check-out",
+            location: "Location",
+            viewOnMap: "View on Map",
         },
         socialProof: {
             trustpilot: "4.9/5 by 500+ Hosts",

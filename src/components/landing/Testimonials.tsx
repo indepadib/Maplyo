@@ -3,30 +3,44 @@
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
+import { useTranslation } from "@/components/providers/LanguageProvider";
+
 export function Testimonials() {
+    const { t, lang } = useTranslation();
+    const tr = (fr: string, en: string) => lang === 'fr' ? fr : en;
+
     const testimonials = [
         {
             name: "Jean-Philippe R.",
             role: "Superhost Airbnb (Marrakech)",
             image: "https://randomuser.me/api/portraits/men/32.jpg",
-            text: "Mes voyageurs arrêtaient pas de demander le code Wifi ou comment allumer la clim. Avec Maplyo, ils ont tout sur leur téléphone. J'ai gagné facile 2h par semaine.",
-            result: "-60% de messages",
+            text: tr(
+                "Mes voyageurs arrêtaient pas de demander le code Wifi ou comment allumer la clim. Avec Maplyo, ils ont tout sur leur téléphone. J'ai gagné facile 2h par semaine.",
+                "My guests kept asking for the Wifi code or how to turn on the AC. With Maplyo, they have everything on their phone. I easily saved 2 hours a week."
+            ),
+            result: tr("-60% de messages", "-60% messages"),
             logo: "Airbnb"
         },
         {
             name: "Sofia B.",
-            role: "Gérante Conciergerie (Casablanca)",
+            role: tr("Gérante Conciergerie (Casablanca)", "Concierge Manager (Casablanca)"),
             image: "https://randomuser.me/api/portraits/women/44.jpg",
-            text: "Le game changer pour nous, c'est l'upsell. On propose des services de ménage ou de transport directement dans le guide. Ça a boosté notre chiffre d'affaires.",
-            result: "+15% revenus",
+            text: tr(
+                "Le game changer pour nous, c'est l'upsell. On propose des services de ménage ou de transport directement dans le guide. Ça a boosté notre chiffre d'affaires.",
+                "The game changer for us is the upsell. We offer cleaning or transport services directly in the guide. It boosted our revenue."
+            ),
+            result: tr("+15% revenus", "+15% revenue"),
             logo: "Booking.com"
         },
         {
             name: "Karim M.",
-            role: "Propriétaire Riad (Fès)",
+            role: tr("Propriétaire Riad (Fès)", "Riad Owner (Fes)"),
             image: "https://randomuser.me/api/portraits/men/85.jpg",
-            text: "Très pro. L'aspect multilingue est bluffant, mes clients américains et espagnols sont ravis d'avoir les infos dans leur langue sans que je fasse rien.",
-            result: "5★ Avis",
+            text: tr(
+                "Très pro. L'aspect multilingue est bluffant, mes clients américains et espagnols sont ravis d'avoir les infos dans leur langue sans que je fasse rien.",
+                "Very professional. The multilingual aspect is stunning, my American and Spanish clients are delighted to have info in their language without me doing anything."
+            ),
+            result: tr("5★ Avis", "5★ Reviews"),
             logo: "Expedia"
         }
     ];
@@ -40,10 +54,10 @@ export function Testimonials() {
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-                        Approuvé par les Pros
+                        {tr("Approuvé par les Pros", "Approved by Pros")}
                     </h2>
                     <p className="text-zinc-400 max-w-2xl mx-auto">
-                        Rejoignez plus de 500 hôtes qui ont automatisé leur accueil.
+                        {tr("Rejoignez plus de 500 hôtes qui ont automatisé leur accueil.", "Join over 500 hosts who automated their welcome.")}
                     </p>
                 </div>
 
