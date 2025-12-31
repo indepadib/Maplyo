@@ -1,31 +1,39 @@
-"use strict";
-"use client";
-
-import { motion } from "framer-motion";
-import { ExternalLink, Star } from "lucide-react";
-import Image from "next/image";
-
 const examples = [
     {
         title: "City Loft Paris",
         type: "Appartement",
         image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",
         stats: ["Code WiFi", "Métro", "Cafés"],
-        color: "from-rose-500 to-rose-600"
+        color: "from-rose-500 to-rose-600",
+        review: {
+            text: "Merci pour le guide, l'arrivée était super simple !",
+            author: "Sarah",
+            rating: "+5★"
+        }
     },
     {
         title: "Villa Atlas",
         type: "Maison de Vacances",
-        image: "https://images.unsplash.com/photo-1512918760383-561978813424?w=800&q=80",
-        stats: ["Piscine", "Chef", "Excursions"],
-        color: "from-emerald-500 to-teal-600"
+        image: "https://plus.unsplash.com/premium_photo-1661964014750-963a28aeddea?q=80&w=2669&auto=format&fit=crop", // Fixed image
+        stats: ["Piscine", "Chef à dom.", "Excursions"],
+        color: "from-emerald-500 to-teal-600",
+        review: {
+            text: "On a adoré les recos de restos !",
+            author: "Marc & Julie",
+            rating: "+15%"
+        }
     },
     {
         title: "Riad Al Jazira",
         type: "Maison d'Hôtes",
         image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80",
         stats: ["Hammam", "Thé", "Souks"],
-        color: "from-amber-500 to-orange-600"
+        color: "from-amber-500 to-orange-600",
+        review: {
+            text: "Le QR code WiFi a sauvé notre arrivée.",
+            author: "Thomas",
+            rating: "Top !"
+        }
     }
 ];
 
@@ -94,8 +102,8 @@ export function GuideShowcase() {
                                             <Star size={16} fill="currentColor" />
                                         </div>
                                         <div>
-                                            <p className="text-xs text-gray-500 font-medium">Message Voyageur</p>
-                                            <p className="text-sm font-bold text-gray-900">"Waw, le guide est génial !"</p>
+                                            <p className="text-xs text-gray-500 font-medium">Message de {ex.review.author}</p>
+                                            <p className="text-sm font-bold text-gray-900">"{ex.review.text}"</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center justify-between pt-4 border-t border-gray-100">
@@ -105,7 +113,7 @@ export function GuideShowcase() {
                                             ))}
                                         </div>
                                         <span className="text-xs text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full">
-                                            +20% d'avis
+                                            {ex.review.rating}
                                         </span>
                                     </div>
                                 </div>

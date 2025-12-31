@@ -31,6 +31,7 @@ const PhoneMockup3D = dynamic(() => import("@/components/landing/PhoneMockup3D")
 import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { GuideShowcase } from "@/components/landing/GuideShowcase";
+import { Testimonials } from "@/components/landing/Testimonials";
 
 // --- Components ---
 
@@ -281,7 +282,7 @@ export default function LandingPage() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
                 </span>
-                <span className="text-xs font-semibold text-zinc-300 tracking-wide uppercase">Le Futur De L'Accueil</span>
+                <span className="text-xs font-semibold text-zinc-300 tracking-wide uppercase">{t.hero.tag}</span>
               </motion.div>
 
               <motion.h1
@@ -290,10 +291,7 @@ export default function LandingPage() {
                 transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
                 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-8 leading-[1.1]"
               >
-                Sublimez <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-purple-400 to-rose-400 animate-gradient bg-[length:200%_auto]">
-                  votre accueil.
-                </span>
+                {t.hero.title}
               </motion.h1>
 
               <motion.p
@@ -302,8 +300,7 @@ export default function LandingPage() {
                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                 className="text-lg md:text-xl text-zinc-400 max-w-2xl mb-10 leading-relaxed font-light"
               >
-                Créez des guides voyageurs interactifs, élégants et intelligents.
-                Impressionnez vos locataires avant même qu'ils ne posent leurs valises.
+                {t.hero.subtitle}
               </motion.p>
 
               <motion.div
@@ -414,6 +411,9 @@ export default function LandingPage() {
         {/* --- Guide Showcase (Examples) --- */}
         <GuideShowcase />
 
+        {/* --- Testimonials --- */}
+        <Testimonials />
+
         {/* --- Features Section --- */}
         <section id="features" className="py-32 px-6 relative">
           <div className="max-w-7xl mx-auto">
@@ -506,7 +506,7 @@ export default function LandingPage() {
             <div className="mt-20 p-8 rounded-3xl bg-white/[0.03] border border-white/5 text-center max-w-3xl mx-auto">
               <h3 className="text-white font-bold text-lg mb-2">{t.pricing.enterprise.title}</h3>
               <p className="text-zinc-500 mb-6">{t.pricing.enterprise.desc}</p>
-              <Button variant="secondary" className="border-white/10 text-white hover:bg-white/10">{t.pricing.enterprise.cta}</Button>
+              <Button variant="secondary" className="border-white/20 bg-white text-slate-900 hover:bg-zinc-200 font-bold">{t.pricing.enterprise.cta}</Button>
             </div>
           </div>
         </section>

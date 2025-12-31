@@ -55,7 +55,7 @@ export const DICTIONARY = {
             title: "Tarification Transparente",
             subtitle: "Commencez gratuitement. Évoluez quand vous voulez.",
             bestOffer: "La meilleure offre du monde :",
-            addon: "+10 DH / guide supplémentaire",
+            addon: "+20 DH / guide supplémentaire",
             enterprise: {
                 title: "Besoin d'une solution Enterprise ?",
                 desc: "Pour les gestionnaires de plus de 50 propriétés, nous proposons des tarifs dégressifs et une intégration PMS.",
@@ -90,7 +90,7 @@ export const DICTIONARY = {
                     desc: "Pour les pros et conciergeries.",
                     button: "Devenir Pro",
                     features: [
-                        '2 Guides Inclus (+10 DH/guide supp.)',
+                        '2 Guides Inclus (+20 DH/guide supp.)',
                         'Assistant IA Invités',
                         'Tous les Thèmes Premium',
                         'Support Prioritaire',
@@ -193,7 +193,7 @@ export const DICTIONARY = {
             title: "Transparent Pricing",
             subtitle: "Start for free. Scale when you want.",
             bestOffer: "Best offer in the world:",
-            addon: "+10 DH / additional guide",
+            addon: "+20 DH / additional guide",
             enterprise: {
                 title: "Need an Enterprise solution?",
                 desc: "For managers with 50+ properties, we offer volume pricing and PMS integration.",
@@ -228,7 +228,7 @@ export const DICTIONARY = {
                     desc: "For pros and concierges.",
                     button: "Go Pro",
                     features: [
-                        '2 Guides Included (+10 DH/add. guide)',
+                        '2 Guides Included (+20 DH/add. guide)',
                         'Guest AI Assistant',
                         'All Premium Themes',
                         'Priority Support',
