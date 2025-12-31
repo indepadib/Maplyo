@@ -1,3 +1,10 @@
+"use strict";
+"use client";
+
+import { motion } from "framer-motion";
+import { ExternalLink, Star } from "lucide-react";
+import Image from "next/image";
+
 const examples = [
     {
         title: "City Loft Paris",
