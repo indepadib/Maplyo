@@ -101,31 +101,31 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
             };
         }
     } else {
-        // Not Found Logic
-    } else {
-        // Fallback for "demo" or not found -> Show a 404 block or generic Welcome
-        guide = {
-            id: "not-found",
-            slug,
-            title: "Guide Introuvable",
-            theme: { themeId: "minimal-white" },
-            blocks: [
-                {
-                    id: "404",
-                    type: "welcome",
-                    visibility: { mode: "always" },
-                    data: {
-                        title: "Guide Introuvable",
-                        content: "Le guide que vous cherchez n'existe pas ou a été supprimé."
-                    }
-                }
-            ]
-        };
+        // Not Found Log (optional) or just fall through to the guide = not-found block
     }
+    // Fallback for "demo" or not found -> Show a 404 block or generic Welcome
+    guide = {
+        id: "not-found",
+        slug,
+        title: "Guide Introuvable",
+        theme: { themeId: "minimal-white" },
+        blocks: [
+            {
+                id: "404",
+                type: "welcome",
+                visibility: { mode: "always" },
+                data: {
+                    title: "Guide Introuvable",
+                    content: "Le guide que vous cherchez n'existe pas ou a été supprimé."
+                }
+            }
+        ]
+    };
+}
 
-    return (
-        <main className="min-h-screen bg-white">
-            <GuideClient guide={guide} />
-        </main>
-    );
+return (
+    <main className="min-h-screen bg-white">
+        <GuideClient guide={guide} />
+    </main>
+);
 }
