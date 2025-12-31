@@ -148,7 +148,7 @@ const FeatureCard = ({ icon: Icon, title, desc, delay, index }: { icon: any, tit
       <p className="text-zinc-400 leading-relaxed group-hover:text-zinc-300 transition-colors">{desc}</p>
     </div>
   </motion.div>
-)};
+);
 
 import { PricingCard } from "@/components/landing/PricingCard";
 
