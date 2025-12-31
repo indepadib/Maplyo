@@ -110,16 +110,16 @@ const Nav = () => {
           >
             <div className="p-6 flex flex-col gap-4">
               <Link href="#features" className="text-zinc-300 py-3 border-b border-white/5" onClick={() => setMobileMenuOpen(false)}>
-                Fonctionnalités
+                {t.footer.links.features}
               </Link>
               <Link href="#pricing" className="text-zinc-300 py-3 border-b border-white/5" onClick={() => setMobileMenuOpen(false)}>
-                Tarifs
+                {t.footer.links.pricing}
               </Link>
               <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="secondary" className="w-full justify-center mt-2">Connexion</Button>
+                <Button variant="secondary" className="w-full justify-center mt-2">{t.common.login}</Button>
               </Link>
               <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full justify-center bg-rose-600">Commencer</Button>
+                <Button className="w-full justify-center bg-rose-600">{t.common.getStarted}</Button>
               </Link>
             </div>
           </motion.div>
@@ -214,7 +214,7 @@ const PricingCard = ({
           : "bg-white/5 hover:bg-white/10 text-white hover:scale-[1.02]"
           } border-0`}
       >
-        Choisir {tier}
+        {t.common.choose} {tier}
       </Button>
     </Link>
   </motion.div>
@@ -311,7 +311,7 @@ export default function LandingPage() {
               >
                 <Link href="/signup" className="w-full sm:w-auto">
                   <Button className="w-full sm:w-auto h-14 px-8 text-lg bg-white text-slate-950 font-bold hover:bg-zinc-200 border-0 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transform hover:scale-105 transition-all duration-300">
-                    Commencer Gratuitement
+                    {t.common.getStarted}
                   </Button>
                 </Link>
                 <Link href="/demo">

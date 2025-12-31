@@ -460,7 +460,8 @@ function ListCard({ title, icon: Icon, items, theme, className, lang }: { title:
     )
 }
 
-function UpsellsCard({ data, onClick, theme, className }: { data: any; onClick: () => void; theme: any; className?: string }) {
+function UpsellsCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+    const t = DICTIONARY[lang];
     return (
         <motion.button
             whileTap={{ scale: 0.98 }}
@@ -477,14 +478,14 @@ function UpsellsCard({ data, onClick, theme, className }: { data: any; onClick: 
                     <MinimalIcons.upsells className="w-6 h-6" />
                 </div>
                 <div className="font-bold text-[10px] text-white bg-green-500 px-2 py-1 rounded-lg shadow-sm">
-                    Shop
+                    {lang === 'fr' ? 'Boutique' : 'Shop'}
                 </div>
             </div>
 
             <div className="relative z-10">
-                <div className="font-bold text-lg mb-1">Extras</div>
+                <div className="font-bold text-lg mb-1">{t.upsells}</div>
                 <div className="font-medium text-sm opacity-70">
-                    Découvrez nos services exclusifs
+                    <TranslatedText text="Découvrez nos services exclusifs" lang={lang} />
                 </div>
             </div>
         </motion.button>

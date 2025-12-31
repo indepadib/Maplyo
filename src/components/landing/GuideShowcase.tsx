@@ -4,6 +4,7 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Star } from "lucide-react";
 import Image from "next/image";
+import { useTranslation } from "@/components/providers/LanguageProvider";
 
 const examples = [
     {
@@ -45,6 +46,11 @@ const examples = [
 ];
 
 export function GuideShowcase() {
+    const { t, lang } = useTranslation();
+
+    // Local translation helper for demo content
+    const tr = (fr: string, en: string) => lang === 'fr' ? fr : en;
+
     return (
         <section className="py-24 bg-slate-950 relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -54,17 +60,17 @@ export function GuideShowcase() {
                         whileInView={{ opacity: 1 }}
                         className="text-rose-500 font-bold uppercase tracking-widest text-sm"
                     >
-                        Exemples Concrets
+                        {tr("Exemples Concrets", "Real Examples")}
                     </motion.span>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-3xl md:text-5xl font-bold text-white mt-4 mb-6"
                     >
-                        Adapté à chaque propriété
+                        {tr("Adapté à chaque propriété", "Tailored to every property")}
                     </motion.h2>
                     <p className="text-zinc-400 max-w-2xl mx-auto">
-                        Que vous gériez un studio ou un hôtel, Maplyo s'adapte à votre style.
+                        {tr("Que vous gériez un studio ou un hôtel, Maplyo s'adapte à votre style.", "Whether you manage a studio or a hotel, Maplyo adapts to your style.")}
                     </p>
                 </div>
 
@@ -109,7 +115,7 @@ export function GuideShowcase() {
                                             <Star size={16} fill="currentColor" />
                                         </div>
                                         <div>
-                                            <p className="text-xs text-gray-500 font-medium">Message de {ex.review.author}</p>
+                                            <p className="text-xs text-gray-500 font-medium">{tr("Message de", "Message from")} {ex.review.author}</p>
                                             <p className="text-sm font-bold text-gray-900">"{ex.review.text}"</p>
                                         </div>
                                     </div>
@@ -127,7 +133,7 @@ export function GuideShowcase() {
 
                                 <div className="mt-8 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="/demo" className="text-white flex items-center gap-2 text-sm font-bold hover:text-rose-400 transition-colors">
-                                        Voir le guide complet <ExternalLink size={16} />
+                                        {tr("Voir le guide complet", "View full guide")} <ExternalLink size={16} />
                                     </a>
                                 </div>
                             </div>
