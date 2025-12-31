@@ -40,22 +40,36 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function PublicGuidePage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
 
-    // Fetch guide by slug (or id if you want to support both, but slug is cleaner for public)
-    const { data } = await supabase
+    // 1. Fetch guide first (NO JOINS) to ensure we find it if it exists
+    const { data: guideData, error: guideError } = await supabase
         .from("guides")
-        .select("*, profiles!inner(plan_variant)")
+        .select("*")
         .eq("slug", slug)
-        .eq("is_published", true) // Only fetch if published
         .single();
 
+    // Debug info: Check if is_published matches
+    let isPublished = guideData?.is_published;
+
+    // Handle "Draft" state manually for clarity
+    if (guideData && !isPublished) {
+        // Return 404-like state but we know it exists
+        console.log("Guide found but not published:", slug);
+    }
+
+    // 2. If found and published, fetch profile separately
     let guide: Guide;
 
-    if (data) {
-        // SECURITY CHECK: If owner is on "Demo" plan, do NOT show guide publicly
-        // Unless we are in a preview context (which this page isn't really, usually preview is in /builder)
-        // But let's say /g/[slug] is strictly PUBLIC access.
-        const plan = data.profiles?.plan_variant || 'demo';
+    if (guideData && isPublished) {
+        // Fetch plan separately (safer than join with RLS)
+        const { data: profileData } = await supabase
+            .from("profiles")
+            .select("plan_variant")
+            .eq("id", guideData.user_id)
+            .single();
 
+        const plan = profileData?.plan_variant || 'demo';
+
+        // SECURITY CHECK: If owner is on "Demo" plan, do NOT show guide publicly
         if (plan === 'demo' && slug !== 'demo') {
             // Fallback to "Restricted" view
             guide = {
@@ -76,15 +90,18 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
                 ]
             };
         } else {
+            // Success: Full Guide
             guide = {
-                id: data.id,
-                slug: data.slug,
-                title: data.title,
-                theme: { themeId: data.theme_id || "minimal-white" },
-                blocks: data.content?.blocks || [],
-                updatedAt: data.updated_at
+                id: guideData.id,
+                slug: guideData.slug,
+                title: guideData.title,
+                theme: { themeId: guideData.theme_id || "minimal-white" },
+                blocks: guideData.content?.blocks || [],
+                updatedAt: guideData.updated_at
             };
         }
+    } else {
+        // Not Found Logic
     } else {
         // Fallback for "demo" or not found -> Show a 404 block or generic Welcome
         guide = {
