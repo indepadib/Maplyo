@@ -262,6 +262,7 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr'
             <TipModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+                lang={lang}
                 tip={tip ? tip : { title: fallback.title, text: fallback.text, location: city }}
             />
         </>
