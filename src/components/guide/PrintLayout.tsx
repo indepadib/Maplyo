@@ -17,8 +17,9 @@ export function PrintLayout({ guide }: PrintLayoutProps) {
         ? `WIFI:S:${wifiData.networkName || wifiData.ssid};T:${wifiData.security || 'WPA'};P:${wifiData.password};;`
         : null;
 
-    // TODO: Use real domain from env or window location
-    const guideUrl = `https://maplyo.com/g/${guide.slug}`;
+    // Use dynamic domain or fallback
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://maplyo.com');
+    const guideUrl = `${baseUrl}/g/${guide.slug}`;
 
     // Theme styling
     // @ts-ignore

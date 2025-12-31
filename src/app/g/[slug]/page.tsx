@@ -1,4 +1,4 @@
-import { mockGuide } from "@/lib/mockGuide";
+
 import { GuideClient } from "./GuideClient";
 
 import { supabase } from "@/lib/supabase";
@@ -53,7 +53,6 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
     // Handle "Draft" state manually for clarity
     if (guideData && !isPublished) {
         // Return 404-like state but we know it exists
-        console.log("Guide found but not published:", slug);
     }
 
     // 2. If found and published, fetch profile separately
