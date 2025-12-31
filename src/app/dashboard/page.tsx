@@ -97,9 +97,6 @@ function DashboardContent() {
                         title: data.guide.title,
                         slug: data.guide.slug + "-" + Math.floor(Math.random() * 1000),
                         theme_id: data.guide.theme.themeId,
-                        title: data.guide.title,
-                        slug: data.guide.slug + "-" + Math.floor(Math.random() * 1000),
-                        theme_id: data.guide.theme.themeId,
                         user_id: user.id,
                         content: { blocks: data.guide.blocks },
                         is_published: true // Auto-publish AI guides for instant gratification
