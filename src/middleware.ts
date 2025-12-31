@@ -13,7 +13,8 @@ export async function middleware(request: NextRequest) {
     const hasLangCookie = request.cookies.get('maplyo-lang');
     if (!hasLangCookie) {
         // Netlify / Vercel provide geo info in request.geo
-        const country = request.geo?.country?.toLowerCase();
+        // @ts-ignore
+        const country = (request.geo?.country || request.headers.get('x-vercel-ip-country') || request.headers.get('x-country') || '').toLowerCase();
 
         // Simple logic: if FR/BE/CH/MA -> 'fr', else -> 'en'
         // This is a heuristic.
