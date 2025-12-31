@@ -10,6 +10,21 @@ export const DICTIONARY = {
             popular: "Le plus populaire",
             month: "/mois",
             loading: "Chargement...",
+            choose: "Choisir",
+            viewGuide: "Voir le guide complet",
+            more: "Voir plus",
+        },
+        socialProof: {
+            trustpilot: "4.9/5 par 500+ Hôtes",
+            usedBy: "Utilisé par les meilleures conciergeries",
+            autoTranslate: {
+                title: "Auto-Traduit",
+                desc: "Vos guides parlent la langue de vos invités."
+            },
+            googleMaps: {
+                title: "Google Maps Intégré",
+                desc: "Google Maps directement dans le guide."
+            }
         },
         hero: {
             tag: "POUR LES HÔTES ET CONCIERGERIES",
@@ -148,6 +163,21 @@ export const DICTIONARY = {
             popular: "Most Popular",
             month: "/month",
             loading: "Loading...",
+            choose: "Select",
+            viewGuide: "View Full Guide",
+            more: "See More",
+        },
+        socialProof: {
+            trustpilot: "4.9/5 by 500+ Hosts",
+            usedBy: "Used by top concierges",
+            autoTranslate: {
+                title: "Auto-Translated",
+                desc: "Your guides speak your guests' language."
+            },
+            googleMaps: {
+                title: "Google Maps Built-in",
+                desc: "Google Maps directly inside the guide."
+            }
         },
         hero: {
             tag: "FOR HOSTS AND CONCIERGES",

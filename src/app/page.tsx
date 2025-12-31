@@ -381,7 +381,7 @@ export default function LandingPage() {
         {/* --- Social Proof Marquee --- */}
         <section className="py-10 border-y border-white/5 bg-black/20 overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 mb-6 text-center">
-            <p className="text-sm font-medium text-zinc-500 uppercase tracking-widest">Utilisé par les meilleures conciergeries</p>
+            <p className="text-sm font-medium text-zinc-500 uppercase tracking-widest">{t.socialProof.usedBy}</p>
           </div>
           <div className="relative flex overflow-x-hidden group">
             <div className="animate-marquee whitespace-nowrap flex space-x-12 items-center">
