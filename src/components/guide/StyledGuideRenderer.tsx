@@ -210,13 +210,13 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr'
     // FALLBACK PLANS (If AI fails or loading)
     const day = new Date().getDay();
     const PLANS = [
-        { day: 0, icon: Coffee, title: lang === 'fr' ? "Dimanche Détente" : `${t.sunday} ${t.lazy}`, text: lang === 'fr' ? `Un brunch à ${city || "ville"} ?` : `${t.brunch} ${city || "town"}?` },
-        { day: 1, icon: Sun, title: lang === 'fr' ? "Lundi Motivé" : `${t.monday} ${t.mood}`, text: lang === 'fr' ? `Explorez le centre de ${city}.` : `${t.explore} ${city}.` },
-        { day: 2, icon: Camera, title: lang === 'fr' ? "Mardi Découverte" : `${t.tuesday} ${t.discovery}`, text: lang === 'fr' ? `Visitez les musées de ${city}.` : `${t.museums} ${city}.` },
-        { day: 3, icon: Utensils, title: lang === 'fr' ? "Mercredi Gourmand" : `${t.wednesday} ${t.tasty}`, text: lang === 'fr' ? `Goutez aux spécialités de ${city} !` : `${t.taste} ${city}!` },
-        { day: 4, icon: MapPin, title: lang === 'fr' ? "Jeudi Aventure" : `${t.thursday} ${t.adventure}`, text: lang === 'fr' ? `Partez en excursion.` : `${t.excursion}.` },
-        { day: 5, icon: Music, title: lang === 'fr' ? "Vendredi Festif" : `${t.friday} ${t.festive}`, text: lang === 'fr' ? `La vie nocturne de ${city} !` : `${t.nightlife} ${city}!` },
-        { day: 6, icon: Sun, title: lang === 'fr' ? "Samedi Sortie" : `${t.saturday} ${t.outing}`, text: lang === 'fr' ? `Baladez-vous à ${city}.` : `${t.walk} ${city}.` },
+        { day: 0, icon: Coffee, title: `${t.sunday} ${t.lazy}`, text: `${t.brunch} ${city || ""} ?` },
+        { day: 1, icon: Sun, title: `${t.monday} ${t.mood}`, text: `${t.explore} ${city || ""}.` },
+        { day: 2, icon: Camera, title: `${t.tuesday} ${t.discovery}`, text: `${t.museums} ${city || ""}.` },
+        { day: 3, icon: Utensils, title: `${t.wednesday} ${t.tasty}`, text: `${t.taste} ${city || ""} !` },
+        { day: 4, icon: MapPin, title: `${t.thursday} ${t.adventure}`, text: `${t.excursion}` },
+        { day: 5, icon: Music, title: `${t.friday} ${t.festive}`, text: `${t.nightlife} ${city || ""} !` },
+        { day: 6, icon: Sun, title: `${t.saturday} ${t.outing}`, text: `${t.walk} ${city || ""}.` },
     ];
 
     const fallback = PLANS[day];

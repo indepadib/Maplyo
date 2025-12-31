@@ -152,7 +152,31 @@ export const DICTIONARY = {
             subtitle: "Rejoignez la nouvelle génération d'hôtes qui offrent une expérience exceptionnelle.",
             button: "Créer mon premier guide",
             subtext: "Aucune carte de crédit requise • Annulable à tout moment"
-        }
+        },
+        // Daily Tips
+        tipOfTheDay: "Conseil du Jour",
+        sunday: "Dimanche",
+        monday: "Lundi",
+        tuesday: "Mardi",
+        wednesday: "Mercredi",
+        thursday: "Jeudi",
+        friday: "Vendredi",
+        saturday: "Samedi",
+        lazy: "Détente",
+        mood: "Motivé",
+        discovery: "Découverte",
+        tasty: "Gourmand",
+        adventure: "Aventure",
+        festive: "Festif",
+        outing: "Sortie",
+        brunch: "Un brunch à",
+        explore: "Explorez le centre de",
+        museums: "Visitez les musées de",
+        taste: "Goutez aux spécialités de",
+        excursion: "Partez en excursion.",
+        nightlife: "La vie nocturne de",
+        walk: "Baladez-vous à",
+        upsells: "Extras"
     },
     en: {
         common: {
@@ -305,6 +329,30 @@ export const DICTIONARY = {
             subtitle: "Join the new generation of hosts offering exceptional experiences.",
             button: "Create my first guide",
             subtext: "No credit card required • Cancel anytime"
-        }
+        },
+        // Daily Tips
+        tipOfTheDay: "Tip of the Day",
+        sunday: "Sunday",
+        monday: "Monday",
+        tuesday: "Tuesday",
+        wednesday: "Wednesday",
+        thursday: "Thursday",
+        friday: "Friday",
+        saturday: "Saturday",
+        lazy: "Chill",
+        mood: "Mood",
+        discovery: "Discovery",
+        tasty: "Tasty",
+        adventure: "Adventure",
+        festive: "Festive",
+        outing: "Outing",
+        brunch: "Brunch in",
+        explore: "Explore the center of",
+        museums: "Visit museums in",
+        taste: "Taste specialties of",
+        excursion: "Go on a trip.",
+        nightlife: "Nightlife in",
+        walk: "Walk around",
+        upsells: "Extras"
     }
 };
