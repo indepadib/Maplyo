@@ -8,6 +8,30 @@ export async function middleware(request: NextRequest) {
         },
     });
 
+    // --- LANGUAGE DETECTION ---
+    // If user hasn't manually selected a language (cookie), try to detect via Geo or Headers
+    const hasLangCookie = request.cookies.get('maplyo-lang');
+    if (!hasLangCookie) {
+        // Netlify / Vercel provide geo info in request.geo
+        const country = request.geo?.country?.toLowerCase();
+
+        // Simple logic: if FR/BE/CH/MA -> 'fr', else -> 'en'
+        // This is a heuristic.
+        let detectedLang = 'en';
+        if (['fr', 'be', 'ch', 'ma', 'sn', 'ci'].includes(country || '')) {
+            detectedLang = 'fr';
+        } else {
+            // Fallback to Accept-Language header
+            const acceptLang = request.headers.get('accept-language')?.toLowerCase() || '';
+            if (acceptLang.includes('fr')) {
+                detectedLang = 'fr';
+            }
+        }
+
+        // Set the cookie for future client-side use
+        response.cookies.set('maplyo-lang', detectedLang);
+    }
+
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

@@ -12,6 +12,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { Wifi, Key, X, ExternalLink, Search, Globe, ChevronRight, CheckCircle2, MapPin, Sun, Moon, Coffee, Utensils, Music, Camera } from "lucide-react";
 import { GuideChatbot } from "./GuideChatbot";
 import { TipModal } from "./TipModal";
+import { TranslatedText } from "@/components/ui/TranslatedText";
 
 // --- TRANSLATIONS ---
 const DICTIONARY = {
@@ -422,7 +423,7 @@ function LocationCard({ data, onClick, theme, className, lang }: { data: any; on
     )
 }
 
-function ListCard({ title, icon: Icon, items, theme, className }: { title: string; icon: any; items: any[]; theme: any; className?: string }) {
+function ListCard({ title, icon: Icon, items, theme, className, lang }: { title: string; icon: any; items: any[]; theme: any; className?: string, lang: 'fr' | 'en' }) {
     const count = items.length;
 
     return (
@@ -441,12 +442,14 @@ function ListCard({ title, icon: Icon, items, theme, className }: { title: strin
             </div>
 
             <div className="relative z-10 mt-2">
-                <div className="font-bold text-base md:text-lg mb-1 truncate">{title}</div>
+                <div className="font-bold text-base md:text-lg mb-1 truncate"><TranslatedText text={title} lang={lang} /></div>
                 <div className="space-y-0.5">
                     {items.slice(0, 2).map((item, i) => (
                         <div key={i} className="flex items-center gap-1.5 text-xs opacity-70">
                             <span className="w-1 h-1 rounded-full bg-current shrink-0" />
-                            <span className="truncate">{item.name || item.title || "Item"}</span>
+                            <span className="truncate">
+                                <TranslatedText text={item.name || item.title || "Item"} lang={lang} />
+                            </span>
                         </div>
                     ))}
                 </div>
@@ -681,7 +684,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                 transition={{ duration: 0.8 }}
                             >
                                 <h1 className={`font-black mb-3 text-white tracking-tight leading-[1.1] drop-shadow-2xl text-3xl ${isResponsive ? 'md:text-8xl md:mb-4' : (forceDesktop ? 'text-8xl mb-4' : '')}`}>
-                                    {(heroBlock?.data as any)?.title || guide.title}
+                                    <TranslatedText text={(heroBlock?.data as any)?.title || guide.title} lang={lang} />
                                 </h1>
                             </motion.div>
 
@@ -693,7 +696,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                     className={`flex flex-col gap-4 items-center ${isResponsive ? 'md:items-start' : (forceDesktop ? 'items-start' : '')}`}
                                 >
                                     <p className={`text-white/90 max-w-xl font-medium leading-relaxed drop-shadow-md text-base md:text-xl`}>
-                                        {(heroBlock.data as any).subtitle}
+                                        <TranslatedText text={(heroBlock.data as any).subtitle} lang={lang} />
                                     </p>
 
                                     {/* City & Badges */}
@@ -705,7 +708,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                         {/* Display Badges from Hero Data if available */}
                                         {(heroBlock.data as any).badges?.map((badge: string, i: number) => (
                                             <span key={i} className="px-3 py-1.5 bg-black/40 backdrop-blur-md border border-white/20 rounded-full text-white text-xs font-bold uppercase tracking-wider shadow-sm">
-                                                {badge}
+                                                <TranslatedText text={badge} lang={lang} />
                                             </span>
                                         ))}
                                     </div>
