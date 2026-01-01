@@ -172,8 +172,6 @@ function BottomSheet({ isOpen, onClose, children, title }: { isOpen: boolean; on
 
 // --- DAILY RECOMMENDATION WIDGET (NOTIFICATION STYLE) ---
 
-// --- DAILY RECOMMENDATION WIDGET (NOTIFICATION STYLE) ---
-
 function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr' | 'en'; onClose: () => void }) {
     const [tip, setTip] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -426,12 +424,13 @@ function LocationCard({ data, onClick, theme, className, lang }: { data: any; on
     )
 }
 
-function ListCard({ title, icon: Icon, items, theme, className, lang }: { title: string; icon: any; items: any[]; theme: any; className?: string, lang: 'fr' | 'en' }) {
+function ListCard({ title, icon: Icon, items, theme, onClick, className, lang }: { title: string; icon: any; items: any[]; theme: any; onClick: () => void; className?: string, lang: 'fr' | 'en' }) {
     const count = items.length;
 
     return (
         <motion.button
             whileTap={{ scale: 0.98 }}
+            onClick={onClick}
             className={`rounded-[24px] md:rounded-[32px] p-4 md:p-5 flex flex-col justify-between text-left shadow-sm relative overflow-hidden group w-full h-full ${className || ''}`}
             style={{ backgroundColor: theme.cardBg, color: theme.text }}
         >
@@ -583,6 +582,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
 
     // Intelligent Filter logic
     const gridBlocks = useMemo(() => {
+        // @ts-ignore
         const all = guide.blocks.filter(b => !["hero", "wifi", "access_codes"].includes(b.type));
         if (!searchQuery) return all;
 
@@ -676,10 +676,13 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
 
                             {/* TIP ALERT - Floating Notification Style */}
                             <AnimatePresence>
-                                {/* Removed city check to fix visibility issue if city is undefined */}
                                 {!searchQuery && showTip && (
                                     <DailyRecommendation city={city} lang={lang} onClose={() => setShowTip(false)} />
                                 )}
+
+
+                                {/* GUIDE AI ASSISTANT WIDGET */}
+                                <GuideChatbot guide={guide} primaryColor={currentTheme.primary} forceMobile={forceMobile} lang={lang} />
                             </AnimatePresence>
                         </div>
 
@@ -813,7 +816,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
 
                                     const displayTitle = b.title || (t[b.type as keyof typeof t] || def.label);
 
-                                    return <div key={b.id} className={wrapperClass}><ListCard title={displayTitle} icon={Icon} items={(b.data as any).items || []} theme={currentTheme} lang={lang} /></div>;
+                                    return <div key={b.id} className={wrapperClass}><ListCard title={displayTitle} icon={Icon} items={(b.data as any).items || []} {...cardProps} /></div>;
                                 }
 
                                 if (b.type === "checkin" || b.type === "checkout") {
@@ -870,11 +873,12 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                         </div>
                     </div>
                 </motion.div>
-            </div>
+            </div >
 
             {/* DRAWER FOR DETAILS */}
-            <BottomSheet
-                isOpen={!!selectedBlockId}
+            < BottomSheet
+                isOpen={!!selectedBlockId
+                }
                 onClose={() => setSelectedBlockId(null)}
                 title={selectedBlock?.title || SelectedDef?.label || "Détail"}
             >
@@ -886,10 +890,10 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                         visibility={selectedBlock.visibility}
                     />
                 )}
-            </BottomSheet>
+            </BottomSheet >
 
             {/* AI CHATBOT INTEGRATION */}
-            <GuideChatbot guide={guide} primaryColor={currentTheme.primary} forceMobile={forceMobile} />
-        </div>
+            < GuideChatbot guide={guide} primaryColor={currentTheme.primary} forceMobile={forceMobile} lang={lang} />
+        </div >
     );
 }

@@ -189,6 +189,14 @@ export const DICTIONARY = {
             gate: "Portail :",
             notes: "Notes"
         },
+        ai: {
+            assistant: "Assistant Guide",
+            online: "IA en ligne",
+            placeholder: "Message...",
+            empty: "Posez une question sur ce guide.",
+            error: "Désolé, je ne parviens pas à répondre pour le moment.",
+            thinking: "Rédaction..."
+        },
         upsells: "Extras"
     },
     en: {
@@ -378,6 +386,14 @@ export const DICTIONARY = {
             buildingDoor: "Building Door:",
             gate: "Gate:",
             notes: "Notes"
+        },
+        ai: {
+            assistant: "Guide Assistant",
+            online: "AI Online",
+            placeholder: "Message...",
+            empty: "Ask a question about this guide.",
+            error: "Sorry, I cannot answer right now.",
+            thinking: "Thinking..."
         },
         upsells: "Extras"
     }

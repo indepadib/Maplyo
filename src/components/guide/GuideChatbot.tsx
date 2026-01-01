@@ -5,17 +5,32 @@ import { Send, Sparkles, X, MessageSquare, Loader2 } from "lucide-react";
 import { Guide } from "@/types/blocks";
 import { Button } from "@/components/ui/Button";
 
+import { useTranslation } from "@/components/providers/LanguageProvider"; // Though usually we pass lang as prop here to avoid context if desired, or just use dictionary logic
+import { TranslatedText } from "@/components/ui/TranslatedText";
+
+// Better: we reuse the Dictionary for standard static strings, 
+// OR we rely on the `lang` prop passed from parent.
+// Since `StyledGuideRenderer` has `DICTIONARY`, let's import it or define it?
+// Actually, `StyledGuideRenderer` defines `DICTIONARY` locally. 
+// We should preferably import `DICTIONARY` from `@/lib/i18n/dictionary`.
+
+import { DICTIONARY } from "@/lib/i18n/dictionary";
+
 interface GuideChatbotProps {
     guide: Guide;
     primaryColor?: string;
+    lang: 'fr' | 'en'; // Added lang prop
 }
 
-export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = false }: GuideChatbotProps & { forceMobile?: boolean }) {
+export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = false, lang }: GuideChatbotProps & { forceMobile?: boolean }) {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Get translations
+    const t = DICTIONARY[lang].ai;
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -45,7 +60,8 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = fa
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: messages.concat([{ role: 'user', content: userMsg }]),
-                    guideContext: condensedGuide
+                    guideContext: condensedGuide,
+                    lang: lang // Pass lang to backend for better answers
                 })
             });
 
@@ -54,22 +70,13 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = fa
             const data = await res.json();
             setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
         } catch (e) {
-            setMessages(prev => [...prev, { role: 'assistant', content: "Désolé, je ne parviens pas à répondre pour le moment." }]);
+            setMessages(prev => [...prev, { role: 'assistant', content: t.error }]);
         } finally {
             setIsLoading(false);
         }
     };
 
-    // If forceMobile is true, we act as if we are on mobile (ignore md: styles for layout)
-    // OR we can just standardise the mobile view and let the container constrain it.
-    // The issue is 'fixed' positioning.
-    // If forceMobile is true, we want the "bottom-4 left-4 right-4" style.
-    // If forceMobile is false, we want the responsive behaviour (Desktop widget, Mobile popup).
-
-    // We can disable the `md:` prefixes when forceMobile is true? No, that's hard with standard Tailwind classes.
-    // Instead we selectively apply classes.
-
-    const isDesktopMode = !forceMobile; // If forceMobile, we are NOT in desktop mode.
+    const isDesktopMode = !forceMobile;
 
     return (
         <>
@@ -101,10 +108,10 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = fa
                                 <Sparkles className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="font-bold text-gray-900 text-sm">Assistant Guide</h3>
+                                <h3 className="font-bold text-gray-900 text-sm">{t.assistant}</h3>
                                 <div className="flex items-center gap-1.5">
                                     <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                                    <span className="text-xs text-green-600 font-medium">IA en ligne</span>
+                                    <span className="text-xs text-green-600 font-medium">{t.online}</span>
                                 </div>
                             </div>
                         </div>
@@ -122,7 +129,7 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = fa
                         {messages.length === 0 && (
                             <div className="flex flex-col items-center justify-center h-full text-center p-6 opacity-40">
                                 <Sparkles className="w-12 h-12 mb-4 text-gray-300" />
-                                <p className="text-sm font-medium text-gray-600">Posez une question sur ce guide.</p>
+                                <p className="text-sm font-medium text-gray-600">{t.empty}</p>
                             </div>
                         )}
                         {messages.map((m, i) => (
@@ -141,7 +148,7 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = fa
                             <div className="flex justify-start">
                                 <div className="bg-white border border-gray-100 p-3 rounded-2xl rounded-bl-sm shadow-sm flex items-center gap-2">
                                     <Loader2 className="w-3 h-3 text-gray-400 animate-spin" />
-                                    <span className="text-xs text-gray-500">Rédaction...</span>
+                                    <span className="text-xs text-gray-500">{t.thinking}</span>
                                 </div>
                             </div>
                         )}
@@ -154,7 +161,7 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = fa
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                            placeholder="Message..."
+                            placeholder={t.placeholder}
                             autoFocus={false}
                             disabled={isLoading}
                             className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all"
