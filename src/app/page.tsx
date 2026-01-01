@@ -442,14 +442,14 @@ export default function LandingPage() {
               <Button variant="secondary" className="border-white/20 bg-white text-slate-900 hover:bg-zinc-200 font-bold">{t.pricing.enterprise.cta}</Button>
             </div>
           </div>
-          </div>
-          
+
+
           {/* Trust Badges */}
           <div className="mt-12 flex justify-center items-center gap-6 text-sm text-zinc-500 font-medium">
-             <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-500" />
-                {t.pricing.trust}
-             </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-green-500" />
+              {t.pricing.trust}
+            </div>
           </div>
         </section>
 
