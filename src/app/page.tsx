@@ -32,6 +32,7 @@ import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { GuideShowcase } from "@/components/landing/GuideShowcase";
 import { Testimonials } from "@/components/landing/Testimonials";
+import { QrCodeWall } from "@/components/landing/QrCodeWall";
 
 // --- Components ---
 

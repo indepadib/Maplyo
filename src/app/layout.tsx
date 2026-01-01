@@ -2,25 +2,52 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://maplyo.com'), // Replace with actual domain
+  metadataBase: new URL('https://maplyo.com'),
   title: {
-    default: "Maplyo — Guides de voyage modernes",
+    default: "Maplyo — Le Guide Numérique pour Hôtes Airbnb & Gîtes",
     template: "%s | Maplyo"
   },
-  description: "Créez des guides numériques pour vos voyageurs. Beaux, rapides, et faciles à maintenir. Augmentez vos revenus directs.",
+  description: "Créez des livrets d'accueil numériques irrésistibles. Partagez codes Wi-Fi, digicodes et bonnes adresses par QR Code. Gratuit pour démarrer.",
+  keywords: ["livret d'accueil numérique", "airbnb guide", "guide voyageur", "qr code wifi", "gestion locative", "conciergerie", "location saisonnière"],
+  alternates: {
+    canonical: '/',
+    languages: {
+      'fr-FR': '/fr',
+      'en-US': '/en',
+    },
+  },
   openGraph: {
-    title: "Maplyo — Guides de voyage modernes",
-    description: "Créez des guides numériques pour vos voyageurs. Beaux, rapides, et faciles à maintenir.",
+    title: "Maplyo — Sublimez l'accueil de vos voyageurs",
+    description: "Le livret d'accueil nouvelle génération. QR Code Wi-Fi instantané, guide local interactif, et upsells pour augmenter vos revenus.",
     url: 'https://maplyo.com',
     siteName: 'Maplyo',
     locale: 'fr_FR',
     type: 'website',
+    images: [
+      {
+        url: 'https://maplyo.com/og-image.jpg', // Ensure this image exists eventually
+        width: 1200,
+        height: 630,
+        alt: 'Maplyo Dashboard Preview',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Maplyo — Guides de voyage modernes",
-    description: "Créez des guides numériques pour vos voyageurs.",
+    title: "Maplyo — Votre Livret d'Accueil 2.0",
+    description: "Fini les PDF moches. Passez au guide web interactif que vos voyageurs vont adorer.",
     creator: '@maplyo_app',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 
