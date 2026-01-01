@@ -1,0 +1,7 @@
+<svg width="200" height="50" viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Icon -->
+    <path d="M14 11V39C14 39 22 35 30 39S46 39 46 39V11C46 11 38 15 30 13S14 11 14 11Z M30 11V39" stroke="#e11d48" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" transform="translate(-4, 0)"/>
+    
+    <!-- Text -->
+    <text x="60" y="32" font-family="system-ui, -apple-system, sans-serif" font-weight="bold" font-size="28" fill="#1e293b" letter-spacing="-0.02em">Maplyo</text>
+</svg>
