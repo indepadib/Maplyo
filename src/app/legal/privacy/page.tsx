@@ -1,7 +1,7 @@
 export default function PrivacyPage() {
     return (
-        <div className="max-w-3xl mx-auto py-20 px-6 prose prose-slate">
-            <h1 className="text-3xl font-bold mb-6">Politique de Confidentialité</h1>
+        <div className="prose prose-invert prose-lg max-w-none">
+            <h1 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">Politique de Confidentialité</h1>
             <p className="text-sm text-gray-500 mb-8">Dernière mise à jour : {new Date().toLocaleDateString()}</p>
 
             <section className="space-y-4">
