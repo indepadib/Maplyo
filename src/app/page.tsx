@@ -33,6 +33,7 @@ import { useTranslation } from "@/components/providers/LanguageProvider";
 import { GuideShowcase } from "@/components/landing/GuideShowcase";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { QrCodeWall } from "@/components/landing/QrCodeWall";
+import { FAQ } from "@/components/landing/FAQ";
 
 // --- Components ---
 
@@ -441,7 +442,19 @@ export default function LandingPage() {
               <Button variant="secondary" className="border-white/20 bg-white text-slate-900 hover:bg-zinc-200 font-bold">{t.pricing.enterprise.cta}</Button>
             </div>
           </div>
+          </div>
+          
+          {/* Trust Badges */}
+          <div className="mt-12 flex justify-center items-center gap-6 text-sm text-zinc-500 font-medium">
+             <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-green-500" />
+                {t.pricing.trust}
+             </div>
+          </div>
         </section>
+
+        {/* --- FAQ Section --- */}
+        <FAQ />
 
         {/* --- Final CTA --- */}
         <section className="py-32 px-6 text-center relative overflow-hidden">
@@ -556,6 +569,6 @@ export default function LandingPage() {
             animation: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
       `}</style>
-    </div>
+    </div >
   );
 }

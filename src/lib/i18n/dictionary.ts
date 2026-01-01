@@ -82,55 +82,55 @@ export const DICTIONARY = {
             },
             plans: {
                 demo: {
-                    name: "Démo",
+                    name: "Découverte",
                     price: "Gratuit",
-                    desc: "Parfait pour tester l'éditeur sans engagement.",
-                    button: "Essayer Gratuitement",
+                    desc: "Testez la puissance de Maplyo sans carte bancaire.",
+                    button: "Créer un guide (Gratuit)",
                     features: [
-                        'Accès au Créateur',
-                        'Pas de publication',
-                        'Thèmes limités'
+                        'Accès complet au Créateur',
+                        'Prévisualisation Mobile',
+                        'Sans publication'
                     ]
                 },
                 basic: {
-                    name: "Basique",
-                    desc: "L'essentiel pour digitaliser votre logement.",
-                    button: "Commencer",
+                    name: "Essentiel", // Was Basic
+                    desc: "Pour lancer votre première propriété.",
+                    button: "Démarrer",
                     features: [
-                        '1 Guide Actif',
-                        'Thèmes Essentiels',
-                        'Support Standard',
-                        'Hébergement Inclus',
-                        'QR Code'
+                        'Livret Digital Complet',
+                        'QR Code WiFi Instantané',
+                        'Carte Interactive (Google Maps)',
+                        'Check-lists Arrivée/Départ',
+                        'Support par Email'
                     ]
                 },
                 pro: {
-                    name: "Pro",
-                    desc: "Pour les pros et conciergeries.",
-                    button: "Devenir Pro",
+                    name: "Croissance", // Was Pro
+                    desc: "Pour maximiser vos revenus & avis.",
+                    button: "Passer en Croissance",
                     features: [
-                        '2 Guides Inclus (+20 DH/guide supp.)',
-                        'Assistant IA Invités',
-                        'Tous les Thèmes Premium',
-                        'Support Prioritaire',
-                        'Statistiques Avancées'
+                        'Tout du plan Essentiel',
+                        'Traduction Automatique (IA)', // Highlighted
+                        'Assistant Voyageur 24/7 (IA)',
+                        'Recommandations "Coups de Cœur"',
+                        'Support Prioritaire WhatsApp'
                     ]
                 },
                 business: {
-                    name: "Business",
-                    desc: "Pour gérer 50+ propriétés.",
-                    button: "Contacter l'équipe",
-                    price: "Sur devis",
+                    name: "Agence",
+                    desc: "Pour les portfolios de 10+ biens.",
+                    button: "Parler à un Expert",
+                    price: "Sur mesure",
                     features: [
                         'Guides Illimités',
-                        'Marque Blanche (White Label)',
-                        'Accès API & Webhooks',
-                        'Intégration PMS',
-                        'Manager Dédié'
+                        'Tableau de Bord Multi-Propriétés',
+                        'Marque Blanche (Sans logo Maplyo)',
+                        'Intégration PMS & Channel Mgr',
+                        'Facturation Centralisée'
                     ]
                 }
             },
-            trust: "Paiement chiffré SSL • Annulation en 1 clic"
+            trust: "Garantie Satisfait ou Remboursé (30 jours) • Paiement Sécurisé SSL"
         },
         footer: {
             product: "Produit",
