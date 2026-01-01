@@ -118,15 +118,22 @@ async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
         for (const item of sub.items.data) {
             const priceId = item.price.id;
 
+            console.log(`🔎 Checking Price ID: ${priceId}`);
+            console.log(`   Expect Pro: ${proPriceId}`);
+            console.log(`   Expect Addon: ${addonPriceId}`);
+            console.log(`   Expect Themes: ${themesPriceId}`);
+
             // Detect Plan
             if (priceId === proPriceId) planVariant = 'pro';
             else if (priceId === basicPriceId) planVariant = 'basic';
 
             // Detect Add-ons
             if (addonPriceId && priceId === addonPriceId) {
+                console.log(`   ✅ Matched Addon! Qty: ${item.quantity}`);
                 extraGuides += (item.quantity || 0);
             }
             if (themesPriceId && priceId === themesPriceId) {
+                console.log(`   ✅ Matched Themes!`);
                 themesUnlocked = true;
             }
         }
