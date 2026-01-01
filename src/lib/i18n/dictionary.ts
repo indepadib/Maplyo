@@ -100,8 +100,8 @@ export const DICTIONARY = {
                         'Livret Digital Complet',
                         'QR Code WiFi Instantané',
                         'Carte Interactive (Google Maps)',
-                        'Check-lists Arrivée/Départ',
-                        'Support par Email'
+                        'Thèmes Gratuits (Pack Premium +15 DH)',
+                        '1 Guide Unique'
                     ]
                 },
                 pro: {
@@ -109,10 +109,10 @@ export const DICTIONARY = {
                     desc: "Pour maximiser vos revenus & avis.",
                     button: "Passer en Croissance",
                     features: [
-                        'Tout du plan Essentiel',
-                        'Traduction Automatique (IA)', // Highlighted
+                        'Guides Illimités (+20 DH/supp.)',
+                        'Thèmes Premium INCLUS',
+                        'Traduction Automatique (IA)',
                         'Assistant Voyageur 24/7 (IA)',
-                        'Recommandations "Coups de Cœur"',
                         'Support Prioritaire WhatsApp'
                     ]
                 },
