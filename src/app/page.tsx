@@ -399,6 +399,9 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* --- QR Code Wall Section --- */}
+        <QrCodeWall />
+
         {/* --- Pricing Section --- */}
         <section id="pricing" className="py-32 relative overflow-hidden px-6 bg-slate-900/20">
           {/* Background Glows */}
