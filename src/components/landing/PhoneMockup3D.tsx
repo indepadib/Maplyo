@@ -51,9 +51,9 @@ export const PhoneMockup3D = () => {
                 className="relative w-[300px] h-[600px] bg-zinc-900 rounded-[3rem] border-8 border-zinc-800 shadow-2xl"
             >
                 {/* --- Phone Bezel & Body Layers for Depth --- */}
-                {/* Layer -1: Back Shadow */}
+                {/* Layer -1: Back Shadow (Optimized) */}
                 <div
-                    className="absolute inset-0 bg-black/50 rounded-[2.5rem] blur-xl translate-z-[-20px]"
+                    className="absolute inset-0 bg-black/50 rounded-[2.5rem] translate-z-[-20px]"
                     style={{ transform: "translateZ(-50px) scale(0.9)" }}
                 />
 

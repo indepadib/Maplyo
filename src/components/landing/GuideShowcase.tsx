@@ -89,10 +89,12 @@ export function GuideShowcase() {
                             {/* Image Header */}
                             <div className="h-64 relative overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent z-10" />
-                                <img
+                                <Image
                                     src={ex.image}
                                     alt={ex.title}
-                                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
+                                    className="object-cover transform group-hover:scale-110 transition-transform duration-700"
                                 />
                                 <div className={`absolute top-4 right-4 px-3 py-1 rounded-full bg-gradient-to-r ${ex.color} text-white text-xs font-bold z-20 shadow-lg`}>
                                     {ex.type}

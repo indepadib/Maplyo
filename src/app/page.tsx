@@ -184,15 +184,11 @@ export default function LandingPage() {
       <Nav />
 
       {/* --- Dynamic Background --- */}
+      {/* --- Dynamic Background (Optimized) --- */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <motion.div
-          style={{ y: yBackground, opacity: 0.5 }}
-          className="absolute top-[-20%] left-[-10%] w-[80vw] h-[80vw] bg-rose-600/10 rounded-full blur-3xl mix-blend-screen"
-        />
-        <motion.div
-          style={{ y: useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]), opacity: 0.3 }}
-          className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-purple-600/10 rounded-full blur-3xl mix-blend-screen"
-        />
+        {/* Pre-rendered gradients instead of real-time blurs */}
+        <div className="absolute top-[-20%] right-[-10%] w-[80vw] h-[80vw] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-rose-600/10 via-transparent to-transparent opacity-50" />
+        <div className="absolute bottom-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-600/10 via-transparent to-transparent opacity-30" />
         <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03]" />
       </div>
 
