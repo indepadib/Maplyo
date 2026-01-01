@@ -866,10 +866,19 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                             </div>
                         )}
 
-                        <div className="text-center mt-12 mb-4 flex items-center justify-center gap-2 opacity-50">
-                            <span className="w-1 h-1 rounded-full bg-current"></span>
-                            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white">Maplyo</p>
-                            <span className="w-1 h-1 rounded-full bg-current"></span>
+                        <div className="text-center mt-12 mb-8 opacity-80 hover:opacity-100 transition-opacity">
+                            <a
+                                href="https://maplyo.com/start?ref=guide_footer"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/20 backdrop-blur-md border border-white/10 hover:bg-black/40 transition-all group"
+                            >
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 group-hover:text-rose-400 transition-colors">Powered by</span>
+                                <span className="font-bold text-sm text-white flex items-center gap-1">
+                                    Maplyo
+                                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                                </span>
+                            </a>
                         </div>
                     </div>
                 </motion.div>

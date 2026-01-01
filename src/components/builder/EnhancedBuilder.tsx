@@ -37,7 +37,19 @@ function useMediaQuery(query: string) {
 
 
 
-export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }: { initialGuide: Guide; subscription?: UserSubscription, isGuest?: boolean }) {
+export function EnhancedBuilder({
+    initialGuide,
+    subscription,
+    isGuest = false,
+    isDemoMode = false,
+    onSave
+}: {
+    initialGuide: Guide;
+    subscription?: UserSubscription;
+    isGuest?: boolean;
+    isDemoMode?: boolean;
+    onSave?: (guide: Guide) => void;
+}) {
     function getKey(id: string) { return `guide-${id}`; }
 
     // --- SUBSCRIPTION CHECK ---
@@ -81,6 +93,9 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
         setGuide(next);
         // Optimistic update to LocalStorage (optional but good for safety)
         if (typeof window !== "undefined") window.localStorage.setItem(getKey(next.id), JSON.stringify(next));
+
+        // DEMO MODE: Bypass Supabase
+        if (isDemoMode) return;
 
         // Save to Supabase
         if (!isGuest) {
@@ -189,6 +204,15 @@ export function EnhancedBuilder({ initialGuide, subscription, isGuest = false }:
                             <a href="/signup" className="flex items-center gap-2 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors text-sm font-bold shadow-lg shadow-rose-200">
                                 🚀 Créer mon compte
                             </a>
+                        </div>
+                    ) : isDemoMode ? (
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => onSave?.(guide)}
+                                className="flex items-center gap-2 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors text-sm font-bold shadow-lg shadow-rose-200"
+                            >
+                                💾 Sauvegarder (Créer compte)
+                            </button>
                         </div>
                     ) : (guide.isPublished ? (
                         <div className="flex items-center gap-2">

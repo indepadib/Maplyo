@@ -17,18 +17,20 @@ export function MaplyoLogo({
     return (
         <div className="flex items-center gap-2">
             <svg
-                viewBox="0 0 24 24"
+                viewBox="0 0 100 100"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 className={className}
             >
+                <path d="M20 20 L40 20 L40 80 L20 60 Z" className={monochrome ? classNamePath : "fill-rose-600"} />
+                <path d="M80 20 L60 20 L60 80 L80 60 Z" className={monochrome ? classNamePath : "fill-purple-600"} />
+                <path d="M40 20 L60 20 L60 55 L50 65 L40 55 Z" className={monochrome ? classNamePath : "fill-pink-700"} />
                 <path
-                    d={path}
-                    stroke="currentColor"
-                    strokeWidth="2.5"
+                    d="M25 85 L50 95 L75 85"
+                    stroke={monochrome ? "currentColor" : "#be185d"}
+                    strokeWidth="6"
                     strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className={classNamePath}
+                    className={monochrome ? classNamePath : ""}
                 />
             </svg>
             {showText && <span className={`font-bold tracking-tight ${classNameText}`}>Maplyo</span>}

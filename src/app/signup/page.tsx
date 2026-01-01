@@ -46,6 +46,15 @@ export default function SignupPage() {
       if (data.session) {
         window.location.href = "/onboarding";
       } else {
+        // TRIGGER WELCOME EMAIL (Fire & Forget)
+        fetch('/api/email/welcome', {
+          method: 'POST',
+          body: JSON.stringify({
+            email: formData.email,
+            name: formData.firstName
+          })
+        });
+
         // Show Success View instead of Alert
         setSuccess(true);
       }
