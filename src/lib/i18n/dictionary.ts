@@ -197,7 +197,83 @@ export const DICTIONARY = {
             error: "Désolé, je ne parviens pas à répondre pour le moment.",
             thinking: "Rédaction..."
         },
-        upsells: "Extras"
+        upsells: "Extras",
+        legalPage: {
+            titlePrivacy: "Politique de Confidentialité",
+            titleTerms: "Conditions Générales d'Utilisation (CGU)",
+            lastUpdated: "Dernière mise à jour :",
+            effectiveDate: "En vigueur au :",
+            privacy: {
+                intro: "La présente politique de confidentialité décrit comment Maplyo ('nous', 'notre') collecte, utilise et protège vos données personnelles, conformément à la loi marocaine n° 09-08 relative à la protection des personnes physiques à l'égard du traitement des données à caractère personnel.",
+                section1: {
+                    title: "1. Collecte des Données",
+                    items: [
+                        "Données d'identification : Nom, prénom, adresse email.",
+                        "Données de transaction : Historique de paiements (traités de manière sécurisée par Stripe, nous ne stockons pas vos données bancaires complètes).",
+                        "Données d'utilisation : Informations sur la création et la consultation des guides numériques."
+                    ]
+                },
+                section2: {
+                    title: "2. Finalités du Traitement",
+                    intro: "Vos données sont collectées pour :",
+                    items: [
+                        "Fournir et gérer le service de guide numérique.",
+                        "Gérer votre abonnement et la facturation.",
+                        "Vous communiquer les mises à jour importantes du service.",
+                        "Améliorer nos fonctionnalités grâce à des statistiques anonymisées."
+                    ]
+                },
+                section3: {
+                    title: "3. Partage des Données",
+                    content: "Nous ne vendons jamais vos données. Elles peuvent être partagées uniquement avec nos prestataires techniques essentiels (ex: Stripe pour les paiements, Supabase pour l'hébergement, Resend pour les emails) qui sont tenus à une stricte confidentialité."
+                },
+                section4: {
+                    title: "4. Sécurité",
+                    content: "Nous mettons en œuvre des mesures de sécurité techniques (chiffrement SSL, protocoles sécurisés) pour protéger vos données contre tout accès non autorisé."
+                },
+                section5: {
+                    title: "5. Vos Droits",
+                    content: "Conformément à la loi 09-08, vous disposez d'un droit d'accès, de rectification et d'opposition concernant vos données.",
+                    contact: "Pour exercer ce droit, contactez-nous à : support@maplyo.com"
+                }
+            },
+            terms: {
+                intro: "Bienvenue sur Maplyo. En accédant à notre plateforme ou en utilisant nos services, vous acceptez d'être lié par les présentes Conditions Générales d'Utilisation.",
+                section1: {
+                    title: "1. Description du Service",
+                    content: "Maplyo est une plateforme SaaS (Software as a Service) permettant aux hôtes et gestionnaires immobiliers de créer, héberger et partager des livrets d'accueil numériques pour leurs voyageurs."
+                },
+                section2: {
+                    title: "2. Abonnements et Paiements",
+                    items: [
+                        "Facturation : Les services sont facturés mensuellement ou annuellement, d'avance.",
+                        "Annulation : Vous pouvez annuler votre abonnement à tout moment via votre tableau de bord. L'accès aux fonctionnalités Premium reste actif jusqu'à la fin de la période facturée.",
+                        "Remboursement : Nous offrons une garantie 'Satisfait ou Remboursé' de 30 jours pour tout nouvel abonnement."
+                    ]
+                },
+                section3: {
+                    title: "3. Responsabilités de l'Utilisateur",
+                    intro: "Vous vous engagez à :",
+                    items: [
+                        "Fournir des informations exactes lors de votre inscription.",
+                        "Ne pas publier de contenu illicite, diffamatoire ou contraire aux bonnes mœurs dans vos guides.",
+                        "Être seul responsable des informations (codes wifi, adresses) partagées avec vos voyageurs."
+                    ]
+                },
+                section4: {
+                    title: "4. Propriété Intellectuelle",
+                    content: "Maplyo reste propriétaire de la plateforme, du code, et de la marque. Vous restez propriétaire du contenu (textes, photos) que vous ajoutez dans vos guides."
+                },
+                section5: {
+                    title: "5. Limitation de Responsabilité",
+                    content: "Maplyo ne saurait être tenu responsable des dommages indirects, pertes de revenus ou problèmes survenus suite à l'utilisation d'informations contenues dans les guides créés par les utilisateurs."
+                },
+                section6: {
+                    title: "6. Droit Applicable",
+                    content: "Ces conditions sont régies par le droit marocain. Tout litige relatif à leur interprétation et/ou à leur exécution relève des tribunaux compétents de Casablanca."
+                }
+            }
+        }
     },
     en: {
         common: {

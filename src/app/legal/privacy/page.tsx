@@ -1,40 +1,48 @@
+"use client";
+
+import { useTranslation } from "@/components/providers/LanguageProvider";
+
 export default function PrivacyPage() {
+    const { t } = useTranslation();
+    const legal = t.legalPage;
+    const p = legal.privacy;
+
     return (
         <div className="prose prose-invert prose-lg max-w-none">
-            <h1 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">Politique de Confidentialité</h1>
-            <p className="text-sm text-gray-500 mb-8">Dernière mise à jour : {new Date().toLocaleDateString()}</p>
+            <h1 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
+                {legal.titlePrivacy}
+            </h1>
+            <p className="text-sm text-gray-500 mb-8">
+                {legal.lastUpdated} {new Date().toLocaleDateString()}
+            </p>
 
             <section className="space-y-4">
-                <p>
-                    La présente politique de confidentialité décrit comment <strong>Maplyo</strong> ("nous", "notre") collecte, utilise et protège vos données personnelles, conformément à la loi marocaine n° 09-08 relative à la protection des personnes physiques à l'égard du traitement des données à caractère personnel.
-                </p>
+                <p dangerouslySetInnerHTML={{ __html: p.intro.replace("'nous', 'notre'", "<strong>'nous'</strong>, <strong>'notre'</strong>") }} />
 
-                <h3 className="text-xl font-bold mt-8">1. Collecte des Données</h3>
+                <h3 className="text-xl font-bold mt-8">{p.section1.title}</h3>
                 <ul className="list-disc pl-5 space-y-2">
-                    <li><strong>Données d'identification :</strong> Nom, prénom, adresse email.</li>
-                    <li><strong>Données de transaction :</strong> Historique de paiements (traités de manière sécurisée par Stripe, nous ne stockons pas vos données bancaires complètes).</li>
-                    <li><strong>Données d'utilisation :</strong> Informations sur la création et la consultation des guides numériques.</li>
+                    {p.section1.items.map((item: string, i: number) => (
+                        <li key={i}>{item}</li>
+                    ))}
                 </ul>
 
-                <h3 className="text-xl font-bold mt-8">2. Finalités du Traitement</h3>
-                <p>Vos données sont collectées pour :</p>
+                <h3 className="text-xl font-bold mt-8">{p.section2.title}</h3>
+                <p>{p.section2.intro}</p>
                 <ul className="list-disc pl-5 space-y-2">
-                    <li>Fournir et gérer le service de guide numérique.</li>
-                    <li>Gérer votre abonnement et la facturation.</li>
-                    <li>Vous communiquer les mises à jour importantes du service.</li>
-                    <li>Améliorer nos fonctionnalités grâce à des statistiques anonymisées.</li>
+                    {p.section2.items.map((item: string, i: number) => (
+                        <li key={i}>{item}</li>
+                    ))}
                 </ul>
 
-                <h3 className="text-xl font-bold mt-8">3. Partage des Données</h3>
-                <p>Nous ne vendons <strong>jamais</strong> vos données.</p>
-                <p>Elles peuvent être partagées uniquement avec nos prestataires techniques essentiels (ex: Stripe pour les paiements, Supabase pour l'hébergement, Resend pour les emails) qui sont tenus à une stricte confidentialité.</p>
+                <h3 className="text-xl font-bold mt-8">{p.section3.title}</h3>
+                <p>{p.section3.content}</p>
 
-                <h3 className="text-xl font-bold mt-8">4. Sécurité</h3>
-                <p>Nous mettons en œuvre des mesures de sécurité techniques (chiffrement SSL, protocoles sécurisés) pour protéger vos données contre tout accès non autorisé.</p>
+                <h3 className="text-xl font-bold mt-8">{p.section4.title}</h3>
+                <p>{p.section4.content}</p>
 
-                <h3 className="text-xl font-bold mt-8">5. Vos Droits</h3>
-                <p>Conformément à la loi 09-08, vous disposez d'un droit d'accès, de rectification et d'opposition concernant vos données.</p>
-                <p>Pour exercer ce droit, contactez-nous à : <strong>support@maplyo.com</strong></p>
+                <h3 className="text-xl font-bold mt-8">{p.section5.title}</h3>
+                <p>{p.section5.content}</p>
+                <p className="font-bold">{p.section5.contact}</p>
             </section>
         </div>
     );
