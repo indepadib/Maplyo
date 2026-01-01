@@ -15,10 +15,7 @@ const DEMO_GUIDE: Guide = {
         { id: "w1", type: "wifi", data: { networkName: "Superhost_Wifi", password: "ilovemaplyo" } },
         { id: "l1", type: "location", data: { address: "Tour Eiffel, Paris" } }
     ],
-    user_id: "demo-user",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    published: false,
+    updatedAt: new Date().toISOString(),
     isPublished: false
 };
 
