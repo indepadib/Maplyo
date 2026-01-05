@@ -25,27 +25,25 @@ export function QrCodeWall() {
                     >
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold uppercase tracking-wider mb-6">
                             <QrCode className="w-3 h-3" />
-                            <span>Phygital Experience</span>
+                            <span>{t.qrCodeWall.tag}</span>
                         </div>
 
                         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-                            Du mur à leur mobile<br />
+                            {t.qrCodeWall.titlePart1}<br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-500">
-                                en une seconde.
+                                {t.qrCodeWall.titlePart2}
                             </span>
                         </h2>
 
                         <p className="text-xl text-zinc-400 mb-8 leading-relaxed">
-                            Imprimez votre QR Code Maplyo et encadrez-le dans votre logement.
-                            Vos invités scannent, et hop : ils ont le <strong>Code Wi-Fi</strong>,
-                            les <strong>règles de la maison</strong> et vos <strong>bonnes adresses</strong>.
+                            {t.qrCodeWall.description}
                         </p>
 
                         <div className="flex flex-col gap-4">
                             {[
-                                { title: "Connexion Wi-Fi Instantanée", desc: "Plus de 'C'est quoi le code ?'" },
-                                { title: "Instructions toujours accessibles", desc: "Fini les classeurs papiers écornés." },
-                                { title: "Mise à jour à distance", desc: "Changez une info, le QR code reste le même." }
+                                { title: t.qrCodeWall.items.wifi.title, desc: t.qrCodeWall.items.wifi.desc },
+                                { title: t.qrCodeWall.items.perpetual.title, desc: t.qrCodeWall.items.perpetual.desc },
+                                { title: t.qrCodeWall.items.remote.title, desc: t.qrCodeWall.items.remote.desc }
                             ].map((item, i) => (
                                 <div key={i} className="flex gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.05] transition-colors">
                                     <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center shrink-0 border border-white/10">
@@ -95,8 +93,8 @@ export function QrCodeWall() {
                                     {/* Matrix */}
                                     <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-50 mix-blend-overlay"></div>
                                 </div>
-                                <h3 className="font-serif text-2xl text-slate-900 font-bold mb-1">Bienvenue</h3>
-                                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-sans">Scannez pour le guide</p>
+                                <h3 className="font-serif text-2xl text-slate-900 font-bold mb-1">{t.qrCodeWall.visual.welcome}</h3>
+                                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-sans">{t.qrCodeWall.visual.scan}</p>
                             </div>
                             {/* Tape Effect */}
                             <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-white/30 backdrop-blur-sm rotate-2 shadow-sm"></div>
@@ -120,7 +118,7 @@ export function QrCodeWall() {
 
                             {/* Scan Text */}
                             <div className="absolute bottom-20 left-1/2 -translate-x-1/2 bg-black/60 px-3 py-1 rounded-full text-white text-xs backdrop-blur-md whitespace-nowrap">
-                                Maplyo Guide Detected
+                                {t.qrCodeWall.visual.detected}
                             </div>
                         </div>
 
@@ -137,8 +135,8 @@ export function QrCodeWall() {
                                     <ArrowRight className="w-5 h-5 -rotate-45" />
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-[10px] text-zinc-500 font-medium uppercase">Safari • Main</p>
-                                    <p className="text-sm font-bold text-slate-900">Ouvrir le Guide</p>
+                                    <p className="text-[10px] text-zinc-500 font-medium uppercase">{t.qrCodeWall.visual.notification.app}</p>
+                                    <p className="text-sm font-bold text-slate-900">{t.qrCodeWall.visual.notification.title}</p>
                                 </div>
                             </motion.div>
                         </div>

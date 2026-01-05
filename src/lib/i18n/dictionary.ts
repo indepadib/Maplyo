@@ -234,7 +234,7 @@ export const DICTIONARY = {
                 section5: {
                     title: "5. Vos Droits",
                     content: "Conformément à la loi 09-08, vous disposez d'un droit d'accès, de rectification et d'opposition concernant vos données.",
-                    contact: "Pour exercer ce droit, contactez-nous à : support@maplyo.com"
+                    contact: "Pour exercer ce droit, contactez-nous à : contact@maplyo.com"
                 }
             },
             terms: {

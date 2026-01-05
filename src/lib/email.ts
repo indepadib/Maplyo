@@ -13,7 +13,7 @@ export const sendWelcomeEmail = async (email: string, name: string) => {
 
   try {
     const data = await resend.emails.send({
-      from: 'Maplyo <onboarding@maplyo.com>',
+      from: 'Maplyo <contact@maplyo.com>',
       to: email,
       subject: 'Bienvenue sur Maplyo ! 🚀',
       html: `
