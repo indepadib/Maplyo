@@ -213,13 +213,13 @@ export default function PricingPage() {
                                 </div>
 
                                 <ul className="space-y-4 mb-8 flex-1">
-                                    {t.pricing.plans.basic.features.map((f, i) => (
-                                        <li key={i} className="flex items-start gap-3 text-zinc-300 text-sm">
-                                            <CheckCircle2 className="w-5 h-5 text-rose-500 shrink-0" />
-                                            <span>{f}</span>
-                                        </li>
-                                    ))}
-                                </ul>
+                                {t.pricing.plans.basic.features.map((f: any, i: number) => (
+                                  <li key={i} className="flex items-start gap-3 text-zinc-300 text-sm">
+                                    <CheckCircle2 className="w-5 h-5 text-rose-500 shrink-0" />
+                                    <span>{f}</span>
+                                  </li>
+                                ))}
+                            </ul>
 
                                 <Button
                                     onClick={() => handleSubscribe('basic')}
@@ -255,11 +255,11 @@ export default function PricingPage() {
                             </div>
 
                             <ul className="space-y-4 mb-8 flex-1 relative z-10">
-                                {t.pricing.plans.pro.features.map((f, i) => (
-                                    <li key={i} className="flex items-start gap-3 text-zinc-300 text-sm">
-                                        <CheckCircle2 className="w-5 h-5 text-purple-400 shrink-0" />
-                                        <span>{f}</span>
-                                    </li>
+                                {t.pricing.plans.pro.features.map((f: any, i: number) => (
+                                  <li key={i} className="flex items-start gap-3 text-zinc-300 text-sm">
+                                    <CheckCircle2 className="w-5 h-5 text-purple-400 shrink-0" />
+                                    <span>{f}</span>
+                                  </li>
                                 ))}
                             </ul>
 
