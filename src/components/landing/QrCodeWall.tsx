@@ -25,7 +25,7 @@ export function QrCodeWall() {
                     >
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold uppercase tracking-wider mb-6">
                             <QrCode className="w-3 h-3" />
-                            <span>{t.qrCodeWall.tag}</span>
+                            <span>{(t as any).qrCodeWall || "Scannez pour tester"}</span>
                         </div>
 
                         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
