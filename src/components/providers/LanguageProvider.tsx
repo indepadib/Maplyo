@@ -6,7 +6,8 @@ import { DICTIONARY, Language } from '@/lib/i18n/dictionary';
 type LanguageContextType = {
     lang: Language;
     setLang: (lang: Language) => void;
-    t: typeof DICTIONARY['fr']; // Type inference from French dictionary
+    t: any;
+    //t: typeof DICTIONARY['fr']; // Type inference from French dictionary
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
