@@ -18,6 +18,7 @@ export const DICTIONARY = {
             checkout: "Départ",
             location: "Localisation",
             viewOnMap: "Voir sur la carte",
+            wifi: "WiFi",
         },
         socialProof: {
             trustpilot: "4.9/5 par 500+ Hôtes",
@@ -301,6 +302,7 @@ export const DICTIONARY = {
             checkout: "Check-out",
             location: "Location",
             viewOnMap: "View on map",
+            wifi: "WiFi",
         },
         socialProof: {
             trustpilot: "4.9/5 by 500+ Hosts",
