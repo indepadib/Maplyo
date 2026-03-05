@@ -174,11 +174,11 @@ export default function PricingPage() {
                                 <p className="text-zinc-500 text-sm">{t.pricing.plans.demo.desc}</p>
                             </div>
                             <ul className="space-y-4 mb-8 flex-1">
-                                {t.pricing.plans.demo.features.map((f, i) => (
-                                    <li key={i} className="flex items-start gap-3 text-zinc-400 text-sm">
-                                        <CheckCircle2 className="w-5 h-5 text-zinc-600 shrink-0" />
-                                        <span>{f}</span>
-                                    </li>
+                                {t.pricing.plans.demo.features.map((f: any, i: number) => (
+                                  <li key={i} className="flex items-start gap-3 text-zinc-400 text-sm">
+                                    <CheckCircle2 className="w-5 h-5 text-zinc-600 shrink-0" />
+                                    <span>{f}</span>
+                                  </li>
                                 ))}
                             </ul>
                             <Button onClick={() => handleSubscribe('demo')} variant="secondary" className="w-full h-12 rounded-xl bg-white/5 border-white/10 text-white hover:bg-white/10">
