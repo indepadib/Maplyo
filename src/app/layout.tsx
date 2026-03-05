@@ -79,7 +79,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     `,
   }}
 ></script>
-</script>
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
         )}
