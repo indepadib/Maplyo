@@ -198,6 +198,11 @@ export const DICTIONARY = {
             error: "Désolé, je ne parviens pas à répondre pour le moment.",
             thinking: "Rédaction..."
         },
+         qrCodeWall: {
+            titlePart1: "Partagez votre guide",
+            titlePart2: "partout",
+            description: "Un simple scan suffit pour vos voyageurs."
+        },
         upsells: "Extras",
         legalPage: {
             titlePrivacy: "Politique de Confidentialité",
@@ -473,6 +478,15 @@ export const DICTIONARY = {
             error: "Sorry, I cannot answer right now.",
             thinking: "Thinking..."
         },
-        upsells: "Extras"
+        
+       qrCodeWall: {
+            titlePart1: "Share your guide",
+            titlePart2: "everywhere",
+            description: "A simple scan is enough for your travelers."
+        },
+        upsells: "Extras",
+        legalPage: {
+            title: "Legal Notice"
+        }
     }
 };
