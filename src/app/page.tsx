@@ -49,17 +49,6 @@ const Nav = () => {
   }, []);
 
   return (
-    <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17994871567"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-17994871567');
-</script>
-    </head>
-    <!-- Google tag (gtag.js) -->
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-slate-950/80 backdrop-blur-md border-b border-white/5 py-4" : "bg-transparent py-6"
         }`}
