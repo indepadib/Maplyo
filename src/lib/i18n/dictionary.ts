@@ -281,6 +281,292 @@ export const DICTIONARY = {
             }
         }
     },
+
+
+
+    en: {
+        common: {
+            getStarted: "Get Started",
+            login: "Login",
+            signup: "Sign up",
+            tryFree: "Try for Free",
+            popular: "Most Popular",
+            month: "/month",
+            loading: "Loading...",
+            choose: "Choose",
+            viewGuide: "View full guide",
+            more: "See more",
+            checkin: "Check-in",
+            qrCodeWall: "Scan to test",
+            checkout: "Check-out",
+            location: "Location",
+            viewOnMap: "View on map",
+        },
+        socialProof: {
+            trustpilot: "4.9/5 by 500+ Hosts",
+            usedBy: "Used by top property managers",
+            autoTranslate: {
+                title: "Auto-Translated",
+                desc: "Your guides speak your guests' language."
+            },
+            googleMaps: {
+                title: "Integrated Google Maps",
+                desc: "Google Maps directly inside the guide."
+            }
+        },
+        hero: {
+            tag: "FOR HOSTS & PROPERTY MANAGERS",
+            title: "Never repeat the WiFi code again.",
+            subtitle: "Digitalize your welcome book. Offer a 5-star experience, reduce messages by 50%, and boost your positive reviews.",
+            cta: "Create my free guide",
+            demo: "See an example",
+            noCreditCard: "No credit card required",
+            setupTime: "Set up in 2 min",
+        },
+        features: {
+            title: "Everything you need.",
+            subtitle: "Nothing you don't.",
+            description: "Powerful tools to automate your guest welcome and reassure your travelers, without technical complexity.",
+            items: {
+                mobileFirst: {
+                    title: "100% Mobile First",
+                    desc: "No app to download. Your guides open instantly in any mobile browser."
+                },
+                secure: {
+                    title: "Secure Codes",
+                    desc: "Protect access to WiFi and key boxes. Unlock via email or unique code."
+                },
+                map: {
+                    title: "Interactive Map",
+                    desc: "Embed your favorite restaurants, bars, and activities with one-click Google Maps directions."
+                },
+                live: {
+                    title: "Live Updates",
+                    desc: "Change a WiFi code or a recommendation, it updates instantly on all phones."
+                },
+                translate: {
+                    title: "Auto-Translation",
+                    desc: "Automatically detects guest's phone language and translates your guide."
+                },
+                checklist: {
+                    title: "Checklists",
+                    desc: "Clear check-in and check-out instructions. Reduce repetitive questions by 80%."
+                }
+            }
+        },
+        pricing: {
+            title: "Transparent Pricing",
+            subtitle: "Start for free. Scale when you want.",
+            bestOffer: "The best offer in the world:",
+            addon: "+20 DH / additional guide",
+            enterprise: {
+                title: "Need an Enterprise solution?",
+                desc: "For managers with 50+ properties, we offer volume discounts and PMS integration.",
+                cta: "Contact Sales Team"
+            },
+            plans: {
+                demo: {
+                    name: "Discovery",
+                    price: "Free",
+                    desc: "Test the power of Maplyo without a credit card.",
+                    button: "Create a guide (Free)",
+                    features: [
+                        'Full access to Creator',
+                        'Mobile Preview',
+                        'No publishing'
+                    ]
+                },
+                basic: {
+                    name: "Essential",
+                    desc: "To launch your first property.",
+                    button: "Start Now",
+                    features: [
+                        'Complete Digital Guidebook',
+                        'Instant WiFi QR Code',
+                        'Interactive Map (Google Maps)',
+                        'Free Themes (Premium Pack +15 DH)',
+                        '1 Unique Guide'
+                    ]
+                },
+                pro: {
+                    name: "Growth",
+                    desc: "To maximize your revenue & reviews.",
+                    button: "Upgrade to Growth",
+                    features: [
+                        'Unlimited Guides (+20 DH/ea.)',
+                        'INCLUDED Premium Themes',
+                        'Automatic Translation (AI)',
+                        '24/7 Guest Assistant (AI)',
+                        'Priority WhatsApp Support'
+                    ]
+                },
+                business: {
+                    name: "Agency",
+                    desc: "For portfolios of 10+ properties.",
+                    button: "Talk to an Expert",
+                    price: "Custom",
+                    features: [
+                        'Unlimited Guides',
+                        'Multi-Property Dashboard',
+                        'White Label (No Maplyo logo)',
+                        'PMS & Channel Mgr Integration',
+                        'Centralized Billing'
+                    ]
+                }
+            },
+            trust: "30-Day Money Back Guarantee • Secure SSL Payment"
+        },
+        footer: {
+            product: "Product",
+            support: "Support",
+            legal: "Legal",
+            desc: "Maplyo helps hosts and property managers offer a 5-star experience with smart digital guides.",
+            links: {
+                features: "Features",
+                pricing: "Pricing",
+                testimonials: "Testimonials",
+                roadmap: "Roadmap",
+                help: "Help",
+                contact: "Contact",
+                privacy: "Privacy",
+                terms: "Terms",
+                legal: "Legal Notice"
+            },
+            securePayment: "Secure Payment",
+            rights: "All rights reserved."
+        },
+        cta: {
+            title: "Ready to impress?",
+            subtitle: "Join the new generation of hosts offering an exceptional experience.",
+            button: "Create my first guide",
+            subtext: "No credit card required • Cancel anytime"
+        },
+        tipOfTheDay: "Tip of the Day",
+        sunday: "Sunday",
+        monday: "Monday",
+        tuesday: "Tuesday",
+        wednesday: "Wednesday",
+        thursday: "Thursday",
+        friday: "Friday",
+        saturday: "Saturday",
+        lazy: "Relax",
+        mood: "Motivated",
+        discovery: "Discovery",
+        tasty: "Tasty",
+        adventure: "Adventure",
+        festive: "Festive",
+        outing: "Outing",
+        brunch: "A brunch at",
+        explore: "Explore the center of",
+        museums: "Visit the museums of",
+        taste: "Taste the specialties of",
+        excursion: "Go on an excursion.",
+        nightlife: "Nightlife in",
+        walk: "Take a walk in",
+        guide: {
+            accessCode: "Access Codes",
+            locked: "This block is protected by a code.",
+            enterCode: "Access code",
+            apartmentDoor: "Apartment door:",
+            buildingDoor: "Building door:",
+            gate: "Gate:",
+            notes: "Notes"
+        },
+        ai: {
+            assistant: "Guide Assistant",
+            online: "AI online",
+            placeholder: "Message...",
+            empty: "Ask a question about this guide.",
+            error: "Sorry, I can't answer right now.",
+            thinking: "Drafting..."
+        },
+        qrCodeWall: {
+            titlePart1: "Share your guide",
+            titlePart2: "everywhere",
+            description: "A simple scan is all it takes for your guests."
+        },
+        upsells: "Extras",
+        legalPage: {
+            titlePrivacy: "Privacy Policy",
+            titleTerms: "Terms of Use",
+            lastUpdated: "Last updated:",
+            effectiveDate: "Effective as of:",
+            privacy: {
+                intro: "This privacy policy describes how Maplyo ('we', 'us', 'our') collects, uses, and protects your personal data, in accordance with Moroccan Law No. 09-08 regarding the protection of individuals with respect to the processing of personal data.",
+                section1: {
+                    title: "1. Data Collection",
+                    items: [
+                        "Identification data: Last name, first name, email address.",
+                        "Transaction data: Payment history (processed securely by Stripe, we do not store your full bank details).",
+                        "Usage data: Information on the creation and consultation of digital guides."
+                    ]
+                },
+                section2: {
+                    title: "2. Purpose of Processing",
+                    intro: "Your data is collected to:",
+                    items: [
+                        "Provide and manage the digital guide service.",
+                        "Manage your subscription and billing.",
+                        "Communicate important service updates.",
+                        "Improve our features through anonymized statistics."
+                    ]
+                },
+                section3: {
+                    title: "3. Data Sharing",
+                    content: "We never sell your data. It may be shared only with our essential technical providers (e.g., Stripe for payments, Supabase for hosting, Resend for emails) who are bound by strict confidentiality."
+                },
+                section4: {
+                    title: "4. Security",
+                    content: "We implement technical security measures (SSL encryption, secure protocols) to protect your data from unauthorized access."
+                },
+                section5: {
+                    title: "5. Your Rights",
+                    content: "In accordance with Law 09-08, you have the right to access, rectify, and oppose your data.",
+                    contact: "To exercise this right, contact us at: contact@maplyo.com"
+                }
+            },
+            terms: {
+                intro: "Welcome to Maplyo. By accessing our platform or using our services, you agree to be bound by these Terms of Use.",
+                section1: {
+                    title: "1. Description of Service",
+                    content: "Maplyo is a SaaS (Software as a Service) platform allowing hosts and property managers to create, host, and share digital welcome books with their guests."
+                },
+                section2: {
+                    title: "2. Subscriptions and Payments",
+                    items: [
+                        "Billing: Services are billed monthly or annually, in advance.",
+                        "Cancellation: You can cancel your subscription at any time via your dashboard. Access to Premium features remains active until the end of the billed period.",
+                        "Refund: We offer a 30-day 'Money Back Guarantee' for all new subscriptions."
+                    ]
+                },
+                section3: {
+                    title: "3. User Responsibilities",
+                    intro: "You agree to:",
+                    items: [
+                        "Provide accurate information during registration.",
+                        "Not publish illegal, defamatory, or immoral content in your guides.",
+                        "Be solely responsible for the information (WiFi codes, addresses) shared with your guests."
+                    ]
+                },
+                section4: {
+                    title: "4. Intellectual Property",
+                    content: "Maplyo remains the owner of the platform, the code, and the brand. You remain the owner of the content (texts, photos) you add to your guides."
+                },
+                section5: {
+                    title: "5. Limitation of Liability",
+                    content: "Maplyo shall not be held liable for indirect damages, loss of revenue, or issues arising from the use of information contained in guides created by users."
+                },
+                section6: {
+                    title: "6. Governing Law",
+                    content: "These terms are governed by Moroccan law. Any dispute relating to their interpretation and/or execution shall be subject to the competent courts of Casablanca."
+                }
+            }
+        }
+    }
+
+
+    
+   /* 
     en: {
         common: {
             getStarted: "Get Started",
@@ -490,3 +776,4 @@ export const DICTIONARY = {
         }
     }
 };
+*/
