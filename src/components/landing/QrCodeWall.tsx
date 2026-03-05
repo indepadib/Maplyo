@@ -27,13 +27,17 @@ export function QrCodeWall() {
                             <QrCode className="w-3 h-3" />
                             <span>{(t as any).qrCodeWall || "Scannez pour tester"}</span>
                         </div>
-
-                        <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-                            {t.qrCodeWall.titlePart1}<br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-500">
-                                {t.qrCodeWall.titlePart2}
-                            </span>
-                        </h2>
+                        
+                            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                                {(t as any).qrCodeWall?.titlePart1}<br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-500">
+                                    {(t as any).qrCodeWall?.titlePart2}
+                                </span>
+                            </h2>
+                            <p className="text-lg text-zinc-400 mb-8 max-w-xl">
+                                {(t as any).qrCodeWall?.description}
+                            </p>
+                    
 
                         <p className="text-xl text-zinc-400 mb-8 leading-relaxed">
                             {t.qrCodeWall.description}
