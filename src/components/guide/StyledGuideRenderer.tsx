@@ -35,6 +35,13 @@ const DICTIONARY = {
         secureAccess: "Accès sécurisé",
         network: "Réseau",
         password: "Mot de passe",
+        trash: "Déchets",
+        parking: "Parking",
+        breakfast: "Petit Déjeuner",
+        transport: "Transports",
+        welcome: "Bienvenue",
+        faq: "FAQ",
+        embed: "Lien",
         // Days
         sunday: "Dimanche",
         monday: "Lundi",
@@ -80,6 +87,13 @@ const DICTIONARY = {
         secureAccess: "Secure Access",
         network: "Network",
         password: "Password",
+        trash: "Trash & Recycling",
+        parking: "Parking",
+        breakfast: "Breakfast",
+        transport: "Transport",
+        welcome: "Welcome",
+        faq: "FAQ",
+        embed: "Link",
         tipOfTheDay: "Daily Tip",
         // Days
         sunday: "Sunday",
@@ -814,7 +828,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                     if (b.type === "location") return <div key={b.id} className={wrapperClass}><LocationCard {...cardProps} /></div>;
                                     if (b.type === "upsells") return <div key={b.id} className={wrapperClass}><UpsellsCard {...cardProps} /></div>;
 
-                                    const displayTitle = b.title || (t[b.type as keyof typeof t] || def.label);
+                                    const displayTitle = b.title || ((t as any)[b.type] || def.label);
 
                                     return <div key={b.id} className={wrapperClass}><ListCard title={displayTitle} icon={Icon} items={(b.data as any).items || []} {...cardProps} /></div>;
                                 }
@@ -826,7 +840,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                 // Mini Cards (Square)
                                 if (["contact", "rules", "amenities", "faq"].includes(b.type)) {
                                     let colorClass = "bg-gray-100 text-gray-600";
-                                    let startTitle = b.title || (t[b.type as keyof typeof t] || def.label);
+                                    let startTitle = b.title || ((t as any)[b.type] || def.label);
                                     let count = undefined;
 
                                     if (b.type === "contact") { colorClass = "bg-green-100 text-green-600"; }
