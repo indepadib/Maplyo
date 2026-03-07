@@ -6,8 +6,8 @@ import { QrCode, Smartphone, Wifi, ArrowRight } from "lucide-react";
 import Image from "next/image";
 
 export const QrCodeWall = () => {
-  const { t: translations } = useTranslation();
-  const t = translations as any; // On force le type ici pour ignorer les erreurs suivantes
+    const { t: translations } = useTranslation();
+    const t = translations as any; // On force le type ici pour ignorer les erreurs suivantes
     return (
         <section className="py-32 bg-slate-950 relative overflow-hidden">
             {/* Background Atmosphere */}
@@ -25,21 +25,16 @@ export const QrCodeWall = () => {
                     >
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold uppercase tracking-wider mb-6">
                             <QrCode className="w-3 h-3" />
-                            <span>{(t as any).qrCodeWall || "Scannez pour tester"}</span>
+                            <span>{(t as any).common?.qrCodeWall || "Scannez pour tester"}</span>
                         </div>
-                        
-                            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-                                {(t as any).qrCodeWall?.titlePart1}<br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-500">
-                                    {(t as any).qrCodeWall?.titlePart2}
-                                </span>
-                            </h2>
-                            <p className="text-lg text-zinc-400 mb-8 max-w-xl">
-                                {(t as any).qrCodeWall?.description}
-                            </p>
-                    
 
-                        <p className="text-xl text-zinc-400 mb-8 leading-relaxed">
+                        <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                            {(t as any).qrCodeWall?.titlePart1}<br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-500">
+                                {(t as any).qrCodeWall?.titlePart2}
+                            </span>
+                        </h2>
+                        <p className="text-xl text-zinc-400 mb-8 leading-relaxed max-w-xl">
                             {t.qrCodeWall.description}
                         </p>
 
