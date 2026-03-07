@@ -199,10 +199,24 @@ export const DICTIONARY = {
             error: "Désolé, je ne parviens pas à répondre pour le moment.",
             thinking: "Rédaction..."
         },
-         qrCodeWall: {
+        qrCodeWall: {
             titlePart1: "Partagez votre guide",
             titlePart2: "partout",
-            description: "Un simple scan suffit pour vos voyageurs."
+            description: "Un simple scan suffit pour vos voyageurs.",
+            items: {
+                wifi: { title: "Connexion Wi-Fi", desc: "Le code est pré-complété" },
+                perpetual: { title: "Accès Permanent", desc: "Le lien reste valide" },
+                remote: { title: "Mises à jour en direct", desc: "Toujours à jour" }
+            },
+            visual: {
+                welcome: "Bienvenue",
+                scan: "Scannez-moi",
+                detected: "Code QR Détecté",
+                notification: {
+                    app: "Maplyo",
+                    title: "Ouvrir le guide"
+                }
+            }
         },
         upsells: "Extras",
         legalPage: {
@@ -485,7 +499,21 @@ export const DICTIONARY = {
         qrCodeWall: {
             titlePart1: "Share your guide",
             titlePart2: "everywhere",
-            description: "A simple scan is all it takes for your guests."
+            description: "A simple scan is all it takes for your guests.",
+            items: {
+                wifi: { title: "Wi-Fi Connection", desc: "Password pre-filled" },
+                perpetual: { title: "Permanent Access", desc: "The link remains valid" },
+                remote: { title: "Live Updates", desc: "Always up to date" }
+            },
+            visual: {
+                welcome: "Welcome",
+                scan: "Scan me",
+                detected: "QR Code Detected",
+                notification: {
+                    app: "Maplyo",
+                    title: "Open guide"
+                }
+            }
         },
         upsells: "Extras",
         legalPage: {
@@ -565,7 +593,7 @@ export const DICTIONARY = {
             }
         }
     }
-        }
+}
 
 
-    
+
