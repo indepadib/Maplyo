@@ -57,6 +57,15 @@ export default function PricingPage() {
     const [currency, setCurrency] = useState<CurrencyCode>('MAD');
 
     useEffect(() => {
+        // Allow URL override for testing (e.g., ?debug_currency=USD)
+        const params = new URLSearchParams(window.location.search);
+        const debugCurrency = params.get('debug_currency') as CurrencyCode | null;
+
+        if (debugCurrency && PRICING_BY_CURRENCY[debugCurrency]) {
+            setCurrency(debugCurrency);
+            return; // Skip cookie parsing if debug is used
+        }
+
         if (typeof document !== 'undefined') {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; maplyo-currency=`);
