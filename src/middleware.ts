@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getCurrencyByCountry, PRICING_BY_CURRENCY, CurrencyCode } from "@/lib/pricing/currencies";
 
 export async function middleware(request: NextRequest) {
     let response = NextResponse.next({
@@ -7,6 +8,13 @@ export async function middleware(request: NextRequest) {
             headers: request.headers,
         },
     });
+
+    const debugCurrency = request.nextUrl.searchParams.get('debug_currency') as CurrencyCode | null;
+    if (debugCurrency && PRICING_BY_CURRENCY[debugCurrency]) {
+        response.cookies.set('maplyo-currency', debugCurrency);
+        // Ensure downstream checks see it too for this request run
+        request.cookies.set('maplyo-currency', debugCurrency);
+    }
 
     // --- LANGUAGE DETECTION ---
     // If user hasn't manually selected a language (cookie), try to detect via Geo or Headers
@@ -42,10 +50,7 @@ export async function middleware(request: NextRequest) {
         }
 
         if (!hasCurrencyCookie) {
-            let currency = 'USD';
-            if (c === 'ma') currency = 'MAD';
-            else if (frCountries.includes(c) || ['es', 'it', 'de', 'nl', 'pt', 'gr', 'at', 'fi', 'ie'].includes(c)) currency = 'EUR';
-            else if (c === 'gb' || c === 'uk') currency = 'GBP';
+            const currency = getCurrencyByCountry(c);
             response.cookies.set('maplyo-currency', currency);
         }
     }
