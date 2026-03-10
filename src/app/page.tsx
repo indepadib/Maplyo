@@ -30,6 +30,7 @@ const PhoneMockup3D = dynamic(() => import("@/components/landing/PhoneMockup3D")
 });
 import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 import { useTranslation } from "@/components/providers/LanguageProvider";
+import { Language } from "@/lib/i18n/dictionary";
 import { GuideShowcase } from "@/components/landing/GuideShowcase";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { QrCodeWall } from "@/components/landing/QrCodeWall";
@@ -41,6 +42,9 @@ const Nav = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, lang, setLang } = useTranslation();
+  
+  const langs: Language[] = ['fr', 'en', 'es', 'ar'];
+  const nextLang = langs[(langs.indexOf(lang) + 1) % langs.length];
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -73,8 +77,8 @@ const Nav = () => {
           </Link>
           {/* Language Switcher */}
           <button
-            onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
-            className="text-sm font-bold text-zinc-400 hover:text-white border border-white/10 rounded-full px-3 py-1 transition-colors uppercase ml-4"
+            onClick={() => setLang(nextLang)}
+            className="text-sm font-bold text-zinc-400 hover:text-white border border-white/10 rounded-full px-3 py-1 w-12 transition-colors uppercase ml-4"
           >
             {lang}
           </button>
@@ -117,6 +121,13 @@ const Nav = () => {
               <Link href="#pricing" className="text-zinc-300 py-3 border-b border-white/5" onClick={() => setMobileMenuOpen(false)}>
                 {t.footer.links.pricing}
               </Link>
+              <button
+                onClick={() => setLang(nextLang)}
+                className="text-zinc-300 py-3 border-b border-white/5 text-left flex justify-between items-center"
+              >
+                Langue
+                <span className="text-xs font-bold bg-white/10 px-2 py-1 rounded uppercase">{lang}</span>
+              </button>
               <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
                 <Button variant="secondary" className="w-full justify-center mt-2">{t.common.login}</Button>
               </Link>
