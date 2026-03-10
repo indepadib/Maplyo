@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { motion, AnimatePresence } from "framer-motion";
+import { PRICING_BY_CURRENCY, CurrencyCode } from "@/lib/pricing/currencies";
+import { useEffect } from "react";
 
 // --- Components ---
 
@@ -52,6 +54,22 @@ export default function PricingPage() {
     const router = useRouter();
     const { t } = useTranslation();
     const [loading, setLoading] = useState<string | null>(null);
+    const [currency, setCurrency] = useState<CurrencyCode>('MAD');
+
+    useEffect(() => {
+        if (typeof document !== 'undefined') {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; maplyo-currency=`);
+            if (parts.length === 2) {
+                const cookieCurrency = parts.pop()?.split(';').shift() as CurrencyCode;
+                if (cookieCurrency && PRICING_BY_CURRENCY[cookieCurrency]) {
+                    setCurrency(cookieCurrency);
+                }
+            }
+        }
+    }, []);
+
+    const pricing = PRICING_BY_CURRENCY[currency] || PRICING_BY_CURRENCY['MAD'];
 
     const handleSubscribe = async (planId: string) => {
         if (!user) {
@@ -72,7 +90,7 @@ export default function PricingPage() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session?.access_token}`
                 },
-                body: JSON.stringify({ plan: planId })
+                body: JSON.stringify({ plan: planId, currency })
             });
             const data = await res.json();
             if (data.url) {
@@ -169,7 +187,7 @@ export default function PricingPage() {
                                 </div>
                                 <h3 className="text-xl font-bold text-white mb-2">{t.pricing.plans.demo.name}</h3>
                                 <div className="flex items-baseline gap-1 mb-4">
-                                    <span className="text-4xl font-bold text-white">0 DH</span>
+                                    <span className="text-4xl font-bold text-white">0 {pricing.symbol}</span>
                                 </div>
                                 <p className="text-zinc-500 text-sm">{t.pricing.plans.demo.desc}</p>
                             </div>
@@ -206,8 +224,8 @@ export default function PricingPage() {
                                     </div>
                                     <h3 className="text-xl font-bold text-white mb-2">{t.pricing.plans.basic.name}</h3>
                                     <div className="flex items-baseline gap-1 mb-4">
-                                        <span className="text-5xl font-bold text-white">{PLANS.basic.price} DH</span>
-                                        <span className="text-zinc-500 text-sm font-medium">/mois</span>
+                                        <span className="text-5xl font-bold text-white">{pricing.basic} {pricing.symbol}</span>
+                                        <span className="text-zinc-500 text-sm font-medium">{t.common.month}</span>
                                     </div>
                                     <p className="text-rose-200/60 text-sm">{t.pricing.plans.basic.desc}</p>
                                 </div>
@@ -246,11 +264,11 @@ export default function PricingPage() {
                                 </div>
                                 <h3 className="text-xl font-bold text-white mb-2">{t.pricing.plans.pro.name}</h3>
                                 <div className="flex items-baseline gap-1 mb-4">
-                                    <span className="text-5xl font-bold text-white">{PLANS.pro.price} DH</span>
-                                    <span className="text-zinc-500 text-sm font-medium">/mois</span>
+                                    <span className="text-5xl font-bold text-white">{pricing.pro} {pricing.symbol}</span>
+                                    <span className="text-zinc-500 text-sm font-medium">{t.common.month}</span>
                                 </div>
                                 <div className="inline-block px-3 py-1 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-medium">
-                                    + {t.pricing.addon}
+                                    + {currency === 'MAD' ? '20 DH' : currency === 'EUR' ? '2 €' : currency === 'GBP' ? '1.5 £' : '2 $'} / guide supp.
                                 </div>
                             </div>
 

@@ -1,4 +1,4 @@
-export type Language = 'fr' | 'en';
+export type Language = 'fr' | 'en' | 'es' | 'ar';
 
 export const DICTIONARY = {
     fr: {
@@ -591,6 +591,136 @@ export const DICTIONARY = {
                     content: "These terms are governed by Moroccan law. Any dispute relating to their interpretation and/or execution shall be subject to the competent courts of Casablanca."
                 }
             }
+        }
+    },
+    es: {
+        common: {
+            getStarted: "Empezar",
+            login: "Iniciar sesión",
+            signup: "Regístrate",
+            tryFree: "Prueba gratis",
+            popular: "Más popular",
+            month: "/mes",
+            loading: "Cargando...",
+            choose: "Elegir",
+            viewGuide: "Ver guía completa",
+            more: "Ver más",
+            checkin: "Llegada",
+            qrCodeWall: "Escanea para probar",
+            checkout: "Salida",
+            location: "Ubicación",
+            viewOnMap: "Ver en el mapa",
+            wifi: "WiFi",
+        },
+        socialProof: {
+            trustpilot: "4.9/5 por 500+ Anfitriones",
+            usedBy: "Usado por los mejores gestores",
+            autoTranslate: { title: "Auto-Traducido", desc: "Tus guías hablan su idioma." },
+            googleMaps: { title: "Google Maps Integrado", desc: "Maps directamente en la guía." }
+        },
+        hero: {
+            tag: "PARA ANFITRIONES",
+            title: "Nunca repitas el código WiFi.",
+            subtitle: "Digitaliza tu guía de bienvenida. Mayor valoración, menos mensajes.",
+            cta: "Crear mi guía",
+            demo: "Ver ejemplo",
+            noCreditCard: "Sin tarjeta",
+            setupTime: "Configura en 2 min",
+        },
+        features: {
+            title: "Todo lo que necesitas.", subtitle: "Nada más.", description: "Herramientas poderosas.",
+            items: {
+                mobileFirst: { title: "100% Móvil", desc: "Abre instantáneo." },
+                secure: { title: "Códigos Seguros", desc: "Protege acceso WiFi." },
+                map: { title: "Mapa Interactivo", desc: "Recomendaciones un clic." },
+                live: { title: "Cambios en Vivo", desc: "Se actualiza ahora." },
+                translate: { title: "Auto Traducción", desc: "Detecta idioma del huésped." },
+                checklist: { title: "Check-lists", desc: "Instrucciones claras." }
+            }
+        },
+        pricing: {
+            title: "Precios Transparentes",
+            subtitle: "Inicia gratis, escala después.",
+            bestOffer: "Mejor oferta:",
+            addon: "+ Extra",
+            enterprise: { title: "Enterprise?", desc: "Plan a medida.", cta: "Contactar" },
+            plans: {
+                demo: { name: "Descubrir", price: "Gratis", desc: "Pruébalo", button: "Crear guía", features: ['Acceso total', 'Vista móvil', 'Sin publicar'] },
+                basic: { name: "Esencial", desc: "Lanza tu primera", button: "Iniciar", features: ['Guía Digital', 'QR WiFi', 'Mapa', '1 Guía'] },
+                pro: { name: "Crecimiento", desc: "Maximiza ingresos", button: "Mejorar", features: ['Guías ilimitadas', 'Traductor automático', 'Soporte prioritario'] },
+                business: { name: "Agencia", desc: "Para portfolios", button: "Hablar", price: "Por medida", features: ['Ilimitado', 'Dashboard multi', 'Marca blanca'] }
+            },
+            trust: "Pago seguro"
+        },
+        footer: {
+            product: "Producto", support: "Soporte", legal: "Legal", desc: "Maplyo para anfitriones.",
+            links: { features: "Características", pricing: "Precios", testimonials: "Testimonios", roadmap: "Roadmap", help: "Ayuda", contact: "Contacto", privacy: "Privacidad", terms: "Términos", legal: "Aviso Legal" },
+            securePayment: "Pago Seguro", rights: "Derechos reservados."
+        },
+        cta: { title: "¿Listo para impresionar?", subtitle: "Únete a la nueva generación.", button: "Crear mi guía", subtext: "Cancelación flexible" },
+        tipOfTheDay: "Consejo del Día", sunday: "Dom", monday: "Lun", tuesday: "Mar", wednesday: "Mié", thursday: "Jue", friday: "Vie", saturday: "Sáb",
+        lazy: "Relajado", mood: "Motivado", discovery: "Descubrimiento", tasty: "Sabroso", adventure: "Aventura", festive: "Fiesta", outing: "Salida",
+        brunch: "Brunch", explore: "Explorar", museums: "Museos", taste: "Saborear", excursion: "Excursión", nightlife: "Noche", walk: "Paseo",
+        guide: { accessCode: "Códigos", locked: "Protegido por código.", enterCode: "Código de acceso", apartmentDoor: "Puerta", buildingDoor: "Edificio", gate: "Portón", notes: "Notas" },
+        ai: { assistant: "Asistente", online: "En línea", placeholder: "Mensaje...", empty: "Haz una pregunta.", error: "Error.", thinking: "Escribiendo..." },
+        qrCodeWall: {
+            titlePart1: "Comparte", titlePart2: "donde sea", description: "Un scan basta.",
+            items: { wifi: { title: "Wi-Fi", desc: "Pre-llenado" }, perpetual: { title: "Permanente", desc: "Válido siempre" }, remote: { title: "En Vivo", desc: "Actualizado" } },
+            visual: { welcome: "Bienvenido", scan: "Escanéame", detected: "Detectado", notification: { app: "Maplyo", title: "Abrir guía" } }
+        },
+        upsells: "Extras",
+        legalPage: {
+            titlePrivacy: "Privacidad", titleTerms: "Términos", lastUpdated: "Actualizado", effectiveDate: "En vigor",
+            privacy: { intro: "Política.", section1: { title: "Datos", items: ["Nombre"] }, section2: { title: "Fines", intro: "Para:", items: ["Proveer el servicio"] }, section3: { title: "Compartir", content: "No vendemos datos." }, section4: { title: "Seguridad", content: "Seguro." }, section5: { title: "Derechos", content: "Puedes pedir acceder.", contact: "contact@maplyo.com" } },
+            terms: { intro: "Términos.", section1: { title: "Servicio", content: "SaaS" }, section2: { title: "Pagos", items: ["Facturación"] }, section3: { title: "Responsabilidad", intro: "Deberes:", items: ["Veracidad"] }, section4: { title: "IP", content: "Propiedad" }, section5: { title: "Límites", content: "Sin daños indirectos" }, section6: { title: "Ley", content: "Marruecos" } }
+        }
+    },
+    ar: {
+        common: {
+            getStarted: "ابدأ", login: "تسجيل الدخول", signup: "اشتراك", tryFree: "جرب مجاناً", popular: "الأكثر شيوعاً", month: "/شهر", loading: "جاري التحميل...", choose: "اختر", viewGuide: "عرض الدليل", more: "عرض المزيد", checkin: "تسجيل الوصول", qrCodeWall: "امسح للتجربة", checkout: "المغادرة", location: "الموقع", viewOnMap: "عرض على الخريطة", wifi: "واي فاي",
+        },
+        socialProof: {
+            trustpilot: "4.9/5 بواسطة +500", usedBy: "يستخدمه أفضل المديرين", autoTranslate: { title: "مترجم آلياً", desc: "دليلك يتحدث لغتهم." }, googleMaps: { title: "خرائط جوجل مدمجة", desc: "الخرائط في الدليل مباشرة." }
+        },
+        hero: {
+            tag: "للمضيفين", title: "لا تكرر الرمز أبداً.", subtitle: "حول دليلك للرقمية. تجربة خمس نجوم.", cta: "إنشاء دليلي مجاناً", demo: "مشاهدة مثال", noCreditCard: "بدون بطاقة", setupTime: "مُعدّ في دقيقتين",
+        },
+        features: {
+            title: "كل ما تحتاجه.", subtitle: "دون تعقيد.", description: "أدوات قوية.",
+            items: { mobileFirst: { title: "موبايل أولاً", desc: "يُفتح فوراً." }, secure: { title: "رموز آمنة", desc: "أقفال محمية." }, map: { title: "تفاعلي", desc: "خريطة مدمجة." }, live: { title: "تعديل مباشر", desc: "الكل مُدرج." }, translate: { title: "ترجمة آلية", desc: "لغة الزائر." }, checklist: { title: "قوائم", desc: "إرشادات." } }
+        },
+        pricing: {
+            title: "تسعير واضح", subtitle: "ابدأ مجاناً، وقم بالترقية عند الحاجة.", bestOffer: "أفضل عرض:", addon: "+ إضافي",
+            enterprise: { title: "للشركات؟", desc: "حل مخصص.", cta: "اتصل بنا" },
+            plans: {
+                demo: { name: "اكتشاف", price: "مجاني", desc: "تجربة الخدمة", button: "إنشاء دليل", features: ['وصول كامل', 'معاينة الجوال', 'عدم النشر'] },
+                basic: { name: "أساسي", desc: "لإطلاق عقارك الأول.", button: "ابدأ", features: ['دليل رقمي', 'واي فاي فوري', 'خريطة', 'دليل واحد'] },
+                pro: { name: "نمو", desc: "تحسين الدخل.", button: "تحديث", features: ['أدلة لا محدودة', 'ترجمة تلقائية', 'دعم واتساب'] },
+                business: { name: "وكالة", desc: "للمجموعات", button: "تواصل", price: "مخصص", features: ['لا محدود', 'لوحة تحكم', 'علامة بيضاء'] }
+            },
+            trust: "دفع آمن SSL"
+        },
+        footer: {
+            product: "المنتج", support: "الدعم", legal: "قانوني", desc: "مابليو للمضيفين.",
+            links: { features: "الميزات", pricing: "التسعير", testimonials: "شهادات", roadmap: "خارطة طريق", help: "مساعدة", contact: "اتصال", privacy: "الخصوصية", terms: "الشروط", legal: "إشعار" },
+            securePayment: "دفع آمن", rights: "جميع الحقوق محفوظة."
+        },
+        cta: { title: "جاهز للتميز؟", subtitle: "انضم للجيل القادم.", button: "إنشاء دليلي", subtext: "إلغاء في أي وقت" },
+        tipOfTheDay: "نصيحة اليوم", sunday: "الأحد", monday: "الإثنين", tuesday: "الثلاثاء", wednesday: "الأربعاء", thursday: "الخميس", friday: "الجمعة", saturday: "السبت",
+        lazy: "مسترخي", mood: "متحمس", discovery: "اكتشاف", tasty: "لذيذ", adventure: "مغامرة", festive: "احتفالي", outing: "نزهة",
+        brunch: "فطور متأخر", explore: "استكشف", museums: "متاحف", taste: "تذوق", excursion: "رحلة", nightlife: "الحياة الليلية", walk: "تمشية",
+        guide: { accessCode: "رموز الدخول", locked: "هذا القسم محمي برمز.", enterCode: "رمز الدخول", apartmentDoor: "باب الشقة", buildingDoor: "باب العمارة", gate: "البوابة", notes: "ملاحظات" },
+        ai: { assistant: "المساعد", online: "متاح", placeholder: "رسالة...", empty: "اسأل أي شيء.", error: "خطأ في الشبكة.", thinking: "جاري الكتابة..." },
+        qrCodeWall: {
+            titlePart1: "شارك", titlePart2: "دليلك", description: "مجرد مسح للزوار.",
+            items: { wifi: { title: "Wi-Fi", desc: "معبأ مسبقاً" }, perpetual: { title: "وصول دائم", desc: "الرابط صالح" }, remote: { title: "تحديث مباشر", desc: "دائماً محدث" } },
+            visual: { welcome: "مرحباً", scan: "امسحني", detected: "تم الكشف", notification: { app: "Maplyo", title: "افتح الدليل" } }
+        },
+        upsells: "إضافات",
+        legalPage: {
+            titlePrivacy: "سياسة الخصوصية", titleTerms: "شروط الاستخدام", lastUpdated: "آخر تحديث", effectiveDate: "ساري المفعول",
+            privacy: { intro: "سياسة.", section1: { title: "بيانات", items: ["الاسم"] }, section2: { title: "أغراض", intro: "إلى:", items: ["تقديم الخدمة"] }, section3: { title: "مشاركة", content: "لا نبيع بيانات." }, section4: { title: "أمان", content: "نظام آمن." }, section5: { title: "حقوق", content: "تواصل معنا.", contact: "contact@maplyo.com" } },
+            terms: { intro: "شروط.", section1: { title: "خدمة", content: "منصة ويب" }, section2: { title: "دفع", items: ["فواتير"] }, section3: { title: "مسؤولية", intro: "عليك:", items: ["المعلومات"] }, section4: { title: "حقوق ملكية", content: "ملك لمنشئ المحتوى" }, section5: { title: "حدود", content: "غير مسؤول" }, section6: { title: "قانون", content: "المغرب" } }
         }
     }
 }

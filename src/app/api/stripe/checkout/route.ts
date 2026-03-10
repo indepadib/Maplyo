@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
+import { PRICING_BY_CURRENCY, CurrencyCode } from "@/lib/pricing/currencies";
 
 // Initialize Stripe safely (Lazy)
 const getStripe = () => {
@@ -35,26 +36,33 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { plan } = body; // 'basic' | 'pro'
+        const { plan, currency = 'MAD' } = body;
 
-        let priceId = "";
+        const validCurrency = (currency as CurrencyCode) || 'MAD';
+        const pricing = PRICING_BY_CURRENCY[validCurrency] || PRICING_BY_CURRENCY['MAD'];
 
-        if (plan === 'basic') {
-            priceId = process.env.STRIPE_BASIC_PRICE_ID!;
-        } else if (plan === 'pro') {
-            priceId = process.env.STRIPE_PRO_PRICE_ID!;
+        if (plan !== 'basic' && plan !== 'pro') {
+            return NextResponse.json({ error: "Invalid Plan" }, { status: 400 });
         }
 
-        if (!priceId) {
-            return NextResponse.json({ error: "Invalid Plan or Missing Price ID" }, { status: 400 });
-        }
+        const unitAmount = Math.round(pricing[plan] * 100);
 
         const session = await stripe.checkout.sessions.create({
             mode: "subscription",
             payment_method_types: ["card"],
             line_items: [
                 {
-                    price: priceId,
+                    price_data: {
+                        currency: validCurrency.toLowerCase(),
+                        product_data: {
+                            name: `Maplyo ${plan === 'pro' ? 'Pro' : 'Basique'}`,
+                            description: plan === 'pro' ? 'Guides illimités et fonctionnalités premium' : 'L\'essentiel pour démarrer',
+                        },
+                        unit_amount: unitAmount,
+                        recurring: {
+                            interval: 'month',
+                        },
+                    },
                     quantity: 1,
                 },
             ],

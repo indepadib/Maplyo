@@ -6,5 +6,5 @@ $git = "C:\Program Files\Git\cmd\git.exe"
 & $git fetch origin
 & $git reset --mixed origin/main
 & $git add .
-& $git commit -m "fix(types): resolve dictionary TS errors and registry node typings"
+& $git commit -m "feat: SEO, i18n (es/ar), and dynamic pricing"
 & $git push origin main

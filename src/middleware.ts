@@ -11,26 +11,43 @@ export async function middleware(request: NextRequest) {
     // --- LANGUAGE DETECTION ---
     // If user hasn't manually selected a language (cookie), try to detect via Geo or Headers
     const hasLangCookie = request.cookies.get('maplyo-lang');
-    if (!hasLangCookie) {
+    // We also want to detect currency at the same time if not set
+    const hasCurrencyCookie = request.cookies.get('maplyo-currency');
+    
+    if (!hasLangCookie || !hasCurrencyCookie) {
         // Netlify / Vercel provide geo info in request.geo
         // @ts-ignore
         const country = (request.geo?.country || request.headers.get('x-vercel-ip-country') || request.headers.get('x-country') || '').toLowerCase();
 
-        // Simple logic: if FR/BE/CH/MA -> 'fr', else -> 'en'
-        // This is a heuristic.
         let detectedLang = 'en';
-        if (['fr', 'be', 'ch', 'ma', 'sn', 'ci'].includes(country || '')) {
-            detectedLang = 'fr';
-        } else {
+        const c = country || '';
+        
+        const frCountries = ['fr', 'be', 'ch', 'sn', 'ci', 'cm', 'mg'];
+        const esCountries = ['es', 'mx', 'ar', 'co', 'pe', 'cl', 'ec', 'gt', 'cu', 'bo', 'do', 'hn', 'py', 'sv', 'ni', 'cr', 'pa', 'uy', 'gq'];
+        const arCountries = ['ma', 'dz', 'tn', 'eg', 'sa', 'ae', 'qa', 'kw', 'om', 'bh', 'lb', 'jo', 'iq', 'sy', 'ye', 'ly', 'sd'];
+
+        if (frCountries.includes(c)) detectedLang = 'fr';
+        else if (esCountries.includes(c)) detectedLang = 'es';
+        else if (arCountries.includes(c)) detectedLang = 'ar';
+        else {
             // Fallback to Accept-Language header
             const acceptLang = request.headers.get('accept-language')?.toLowerCase() || '';
-            if (acceptLang.includes('fr')) {
-                detectedLang = 'fr';
-            }
+            if (acceptLang.includes('fr')) detectedLang = 'fr';
+            else if (acceptLang.includes('es')) detectedLang = 'es';
+            else if (acceptLang.includes('ar')) detectedLang = 'ar';
         }
 
-        // Set the cookie for future client-side use
-        response.cookies.set('maplyo-lang', detectedLang);
+        if (!hasLangCookie) {
+            response.cookies.set('maplyo-lang', detectedLang);
+        }
+
+        if (!hasCurrencyCookie) {
+            let currency = 'USD';
+            if (c === 'ma') currency = 'MAD';
+            else if (frCountries.includes(c) || ['es', 'it', 'de', 'nl', 'pt', 'gr', 'at', 'fi', 'ie'].includes(c)) currency = 'EUR';
+            else if (c === 'gb' || c === 'uk') currency = 'GBP';
+            response.cookies.set('maplyo-currency', currency);
+        }
     }
 
     const supabase = createServerClient(

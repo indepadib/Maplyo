@@ -62,10 +62,15 @@ export const viewport = {
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+import { cookies } from "next/headers";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get('maplyo-lang')?.value || 'fr';
+  const dir = lang === 'ar' ? 'rtl' : 'ltr';
+
   return (
-    <html lang="fr">
+    <html lang={lang} dir={dir}>
       <body>
        {/* Google tag (gtag.js) */}
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17994871567"></script>
@@ -82,6 +87,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
         )}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              name: "Maplyo",
+              applicationCategory: "BusinessApplication",
+              operatingSystem: "Web",
+              offers: {
+                "@type": "AggregateOffer",
+                priceCurrency: "USD",
+                lowPrice: 0,
+                highPrice: 20
+              },
+              description: "Plateforme de création de livrets d'accueil numériques pour hôtes Airbnb et gestionnaires immobiliers."
+            })
+          }}
+        />
         <LanguageProvider>
           <AuthProvider>{children}</AuthProvider>
         </LanguageProvider>
