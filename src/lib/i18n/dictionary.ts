@@ -134,6 +134,52 @@ export const DICTIONARY = {
             },
             trust: "Garantie Satisfait ou Remboursé (30 jours) • Paiement Sécurisé SSL"
         },
+        testimonials: {
+            title: "Approuvé par les Pros",
+            subtitle: "Rejoignez plus de 500 hôtes qui ont automatisé leur accueil.",
+            items: [
+                {
+                    name: "Jean-Philippe R.",
+                    role: "Superhost Airbnb (Marrakech)",
+                    text: "Mes voyageurs arrêtaient pas de demander le code Wifi ou comment allumer la clim. Avec Maplyo, ils ont tout sur leur téléphone. J'ai gagné facile 2h par semaine.",
+                    result: "-60% de messages",
+                },
+                {
+                    name: "Sofia B.",
+                    role: "Gérante Conciergerie (Casablanca)",
+                    text: "Le game changer pour nous, c'est l'upsell. On propose des services de ménage ou de transport directement dans le guide. Ça a boosté notre chiffre d'affaires.",
+                    result: "+15% revenus",
+                },
+                {
+                    name: "Karim M.",
+                    role: "Propriétaire Riad (Fès)",
+                    text: "Très pro. L'aspect multilingue est bluffant, mes clients américains et espagnols sont ravis d'avoir les infos dans leur langue sans que je fasse rien.",
+                    result: "5★ Avis",
+                }
+            ]
+        },
+        faq: {
+            title: "Questions Fréquentes",
+            subtitle: "Tout ce que vous devez savoir pour démarrer.",
+            questions: [
+                {
+                    q: "Faut-il des compétences techniques ?",
+                    a: "Aucune. C'est aussi simple que de remplir un profil Facebook. Vous ajoutez vos infos, on génère le design."
+                },
+                {
+                    q: "Comment mes voyageurs accèdent au guide ?",
+                    a: "Via un simple QR Code que vous placez dans le logement, ou un lien que vous envoyez par message avant leur arrivée."
+                },
+                {
+                    q: "Puis-je modifier le guide après impression du QR Code ?",
+                    a: "Oui ! C'est la magie du numérique. Mettez à jour vos infos (code wifi, restos...) et le QR Code reste le même."
+                },
+                {
+                    q: "Y a-t-il un engagement ?",
+                    a: "Non, c'est sans engagement. Vous pouvez arrêter quand vous voulez."
+                }
+            ]
+        },
         footer: {
             product: "Produit",
             support: "Support",
@@ -432,6 +478,52 @@ export const DICTIONARY = {
             },
             trust: "30-Day Money Back Guarantee • Secure SSL Payment"
         },
+        testimonials: {
+            title: "Approved by Pros",
+            subtitle: "Join over 500 hosts who automated their welcome.",
+            items: [
+                {
+                    name: "Jean-Philippe R.",
+                    role: "Superhost Airbnb (Marrakech)",
+                    text: "My guests kept asking for the Wifi code or how to turn on the AC. With Maplyo, they have everything on their phone. I easily saved 2 hours a week.",
+                    result: "-60% messages",
+                },
+                {
+                    name: "Sofia B.",
+                    role: "Concierge Manager (Casablanca)",
+                    text: "The game changer for us is the upsell. We offer cleaning or transport services directly in the guide. It boosted our revenue.",
+                    result: "+15% revenue",
+                },
+                {
+                    name: "Karim M.",
+                    role: "Riad Owner (Fes)",
+                    text: "Very professional. The multilingual aspect is stunning, my American and Spanish clients are delighted to have info in their language without me doing anything.",
+                    result: "5★ Reviews",
+                }
+            ]
+        },
+        faq: {
+            title: "Frequently Asked Questions",
+            subtitle: "Everything you need to know to get started.",
+            questions: [
+                {
+                    q: "Do I need technical skills?",
+                    a: "None at all. It's as easy as filling out a social media profile. You add info, we handle the design."
+                },
+                {
+                    q: "How do guests access the guide?",
+                    a: "Via a simple QR Code you place in the rental, or a link you send via message before arrival."
+                },
+                {
+                    q: "Can I update the guide after printing the QR Code?",
+                    a: "Yes! That's the magic. Update your info (wifi, restaurants...) and the QR Code stays exactly the same."
+                },
+                {
+                    q: "Is there a contract?",
+                    a: "No, cancel anytime."
+                }
+            ]
+        },
         footer: {
             product: "Product",
             support: "Support",
@@ -652,6 +744,52 @@ export const DICTIONARY = {
             },
             trust: "Pago seguro"
         },
+        testimonials: {
+            title: "Aprobado por Profesionales",
+            subtitle: "Únase a más de 500 anfitriones que han automatizado su bienvenida.",
+            items: [
+                {
+                    name: "Jean-Philippe R.",
+                    role: "Superhost Airbnb (Marrakech)",
+                    text: "Mis huéspedes no paraban de pedir la clave del Wifi o cómo encender el aire acondicionado. Con Maplyo, lo tienen todo en su teléfono. Ahorré fácilmente 2 horas a la semana.",
+                    result: "-60% mensajes",
+                },
+                {
+                    name: "Sofia B.",
+                    role: "Gerente de Conserjería (Casablanca)",
+                    text: "El cambio de juego para nosotros es la venta adicional. Ofrecemos servicios de limpieza o transporte directamente en la guía. Aumentó nuestros ingresos.",
+                    result: "+15% ingresos",
+                },
+                {
+                    name: "Karim M.",
+                    role: "Propietario de Riad (Fez)",
+                    text: "Muy profesional. El aspecto multilingüe es impresionante, mis clientes americanos y españoles están encantados de tener la información en su idioma sin que yo haga nada.",
+                    result: "5★ Reseñas",
+                }
+            ]
+        },
+        faq: {
+            title: "Preguntas Frecuentes",
+            subtitle: "Todo lo que necesitas saber para empezar.",
+            questions: [
+                {
+                    q: "¿Necesito habilidades técnicas?",
+                    a: "Ninguna en absoluto. Es tan fácil como completar un perfil de red social. Tú añades la info, nosotros nos encargamos del diseño."
+                },
+                {
+                    q: "¿Cómo acceden los huéspedes a la guía?",
+                    a: "A través de un simple código QR que colocas en el alojamiento, o un enlace que envías por mensaje antes de su llegada."
+                },
+                {
+                    q: "¿Puedo actualizar la guía después de imprimir el código QR?",
+                    a: "¡Sí! Esa es la magia. Actualiza tu información (wifi, restaurantes...) y el código QR sigue siendo el mismo."
+                },
+                {
+                    q: "¿Hay algún compromiso o contrato?",
+                    a: "No, cancela cuando quieras."
+                }
+            ]
+        },
         footer: {
             product: "Producto", support: "Soporte", legal: "Legal", desc: "Maplyo para anfitriones.",
             links: { features: "Características", pricing: "Precios", testimonials: "Testimonios", roadmap: "Roadmap", help: "Ayuda", contact: "Contacto", privacy: "Privacidad", terms: "Términos", legal: "Aviso Legal" },
@@ -699,6 +837,52 @@ export const DICTIONARY = {
                 business: { name: "وكالة", desc: "للمجموعات", button: "تواصل", price: "مخصص", features: ['لا محدود', 'لوحة تحكم', 'علامة بيضاء'] }
             },
             trust: "دفع آمن SSL"
+        },
+        testimonials: {
+            title: "معتمد من المحترفين",
+            subtitle: "انضم إلى أكثر من 500 مضيف قاموا بأتمتة استقبالهم.",
+            items: [
+                {
+                    name: "جون فيليب ر.",
+                    role: "مضيف مميز في Airbnb (مراكش)",
+                    text: "كان ضيوفي يسألون باستمرار عن رمز الواي فاي أو كيفية تشغيل مكيف الهواء. مع Maplyo، كل شيء موجود على هواتفهم. لقد وفرت ساعتين في الأسبوع بسهولة.",
+                    result: "-60% من الرسائل"
+                },
+                {
+                    name: "صوفيا ب.",
+                    role: "مديرة شركة كونسيرج (الدار البيضاء)",
+                    text: "نقطة التحول بالنسبة لنا هي الخدمات الإضافية. نحن نقدم خدمات تنظيف أو نقل مباشرة في الدليل. لقد عزز ذلك من إيراداتنا.",
+                    result: "+15% إيرادات"
+                },
+                {
+                    name: "كريم م.",
+                    role: "مالك رياض (فاس)",
+                    text: "محترف جداً. الجانب متعدد اللغات مبهر، عملائي الأمريكيون والمقربون سعداء جداً بالحصول على المعلومات بلغتهم دون أن أفعل أي شيء.",
+                    result: "5★ تقييمات"
+                }
+            ]
+        },
+        faq: {
+            title: "الأسئلة الشائعة",
+            subtitle: "كل ما تحتاج لمعرفته للبدء.",
+            questions: [
+                {
+                    q: "هل أحتاج إلى مهارات تقنية؟",
+                    a: "لا على الإطلاق. الأمر سهل مثل ملء ملف شخصي على وسائل التواصل الاجتماعي. أنت تضيف المعلومات، ونحن نتعامل مع التصميم."
+                },
+                {
+                    q: "كيف يصل الضيوف إلى الدليل؟",
+                    a: "عبر رمز QR بسيط تضعه في مكان الإقامة، أو رابط ترسله في رسالة قبل وصولهم."
+                },
+                {
+                    q: "هل يمكنني تحديث الدليل بعد طباعة رمز الـ QR؟",
+                    a: "نعم! هذا هو السحر. قم بتحديث معلوماتك (الواي فاي، المطاعم...) وسيبقى رمز الـ QR كما هو تماماً."
+                },
+                {
+                    q: "هل هناك أي التزام أو عقد؟",
+                    a: "لا، يمكنك الإلغاء في أي وقت."
+                }
+            ]
         },
         footer: {
             product: "المنتج", support: "الدعم", legal: "قانوني", desc: "مابليو للمضيفين.",

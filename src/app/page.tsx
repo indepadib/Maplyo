@@ -35,6 +35,7 @@ import { GuideShowcase } from "@/components/landing/GuideShowcase";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { QrCodeWall } from "@/components/landing/QrCodeWall";
 import { FAQ } from "@/components/landing/FAQ";
+import { CurrencyCode, PRICING_BY_CURRENCY } from "@/lib/pricing/currencies";
 
 // --- Components ---
 
@@ -72,7 +73,7 @@ const Nav = () => {
           <Link href="#features" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
             {t.footer.links.features}
           </Link>
-          <Link href="#pricing" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
+          <Link href="/pricing" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
             {t.footer.links.pricing}
           </Link>
           {/* Language Switcher */}
@@ -118,7 +119,7 @@ const Nav = () => {
               <Link href="#features" className="text-zinc-300 py-3 border-b border-white/5" onClick={() => setMobileMenuOpen(false)}>
                 {t.footer.links.features}
               </Link>
-              <Link href="#pricing" className="text-zinc-300 py-3 border-b border-white/5" onClick={() => setMobileMenuOpen(false)}>
+              <Link href="/pricing" className="text-zinc-300 py-3 border-b border-white/5" onClick={() => setMobileMenuOpen(false)}>
                 {t.footer.links.pricing}
               </Link>
               <button
@@ -188,6 +189,31 @@ export default function LandingPage() {
     target: containerRef,
     offset: ["start start", "end end"]
   });
+
+  const [currency, setCurrency] = useState<CurrencyCode>('MAD');
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const debugCurrency = params.get('debug_currency') as CurrencyCode | null;
+
+    if (debugCurrency && PRICING_BY_CURRENCY[debugCurrency]) {
+      setCurrency(debugCurrency);
+      return;
+    }
+
+    if (typeof document !== 'undefined') {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; maplyo-currency=`);
+      if (parts.length === 2) {
+        const cookieCurrency = parts.pop()?.split(';').shift() as CurrencyCode;
+        if (cookieCurrency && PRICING_BY_CURRENCY[cookieCurrency]) {
+          setCurrency(cookieCurrency);
+        }
+      }
+    }
+  }, []);
+
+  const pricing = PRICING_BY_CURRENCY[currency] || PRICING_BY_CURRENCY['MAD'];
 
   const yBackground = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
@@ -427,14 +453,14 @@ export default function LandingPage() {
 
             <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
               <PricingCard
-                tier="Basic"
-                price={`49 DH`}
+                tier={t.pricing.plans.basic.name}
+                price={`${pricing.basic} ${pricing.symbol}`}
                 features={t.pricing.plans.basic.features}
                 delay={0}
               />
               <PricingCard
-                tier="Pro"
-                price={`99 DH`}
+                tier={t.pricing.plans.pro.name}
+                price={`${pricing.pro} ${pricing.symbol}`}
                 popular={true}
                 features={t.pricing.plans.pro.features}
                 delay={0.1}
