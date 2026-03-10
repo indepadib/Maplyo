@@ -45,7 +45,8 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Invalid Plan" }, { status: 400 });
         }
 
-        const unitAmount = Math.round(pricing[plan] * 100);
+        const validPlan = plan as 'basic' | 'pro';
+        const unitAmount = Math.round(pricing[validPlan] * 100);
 
         const session = await stripe.checkout.sessions.create({
             mode: "subscription",
