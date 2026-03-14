@@ -41,19 +41,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setSession(session);
             setUser(session?.user ?? null);
             setLoading(false);
-
-            // Simple client-side redirect protection
-            // If signed out and on a protected route, go to login
-            // CRITICAL: Only redirect if loading is false to avoid loop during init
-            if (!session && (pathname?.startsWith("/dashboard") || pathname?.startsWith("/app/guides"))) {
-                // We add a small delay or check for 'loading' being explicitly false
-                // to ensure we're not redirecting while Supabase is still thinking
-                router.push("/login");
-            }
         });
 
         return () => subscription.unsubscribe();
-    }, [pathname, router]);
+    }, []);
+
+    // 3. Handle protected route redirection in a separate effect
+    useEffect(() => {
+        if (loading) return;
+
+        const isProtectedRoute = pathname?.startsWith("/dashboard") || pathname?.startsWith("/app/guides");
+        
+        if (!session && isProtectedRoute) {
+            router.push("/login");
+        }
+    }, [session, loading, pathname, router]);
 
     const signOut = async () => {
         await supabase.auth.signOut();
