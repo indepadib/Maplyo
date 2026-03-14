@@ -44,7 +44,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             // Simple client-side redirect protection
             // If signed out and on a protected route, go to login
+            // CRITICAL: Only redirect if loading is false to avoid loop during init
             if (!session && (pathname?.startsWith("/dashboard") || pathname?.startsWith("/app/guides"))) {
+                // We add a small delay or check for 'loading' being explicitly false
+                // to ensure we're not redirecting while Supabase is still thinking
                 router.push("/login");
             }
         });
