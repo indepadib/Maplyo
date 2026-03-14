@@ -46,14 +46,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return () => subscription.unsubscribe();
     }, []);
 
-    // 3. Handle protected route redirection in a separate effect
+    // 3. Handle protected route redirection in a separate effect with debounce
     useEffect(() => {
         if (loading) return;
 
         const isProtectedRoute = pathname?.startsWith("/dashboard") || pathname?.startsWith("/app/guides");
         
+        // If not signed in and on a protected route, wait a tiny bit to be sure it's not a refresh flicker
         if (!session && isProtectedRoute) {
-            router.push("/login");
+            const timer = setTimeout(() => {
+                router.push("/login");
+            }, 800); // 800ms "grace period" for background sessions to stabilize
+            return () => clearTimeout(timer);
         }
     }, [session, loading, pathname, router]);
 

@@ -64,21 +64,7 @@ export async function middleware(request: NextRequest) {
                     return request.cookies.getAll();
                 },
                 setAll(cookiesToSet) {
-                    cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
-                    
-                    // Preserve existing cookies from the current response if it has been modified (e.g. lang/currency)
-                    const existingCookies = response.cookies.getAll();
-                    
-                    response = NextResponse.next({
-                        request,
-                    });
-
-                    // Re-apply previously set cookies (like language/currency)
-                    existingCookies.forEach(({ name, value }) => {
-                        response.cookies.set(name, value);
-                    });
-
-                    // Apply new Supabase cookies
+                    cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
                     cookiesToSet.forEach(({ name, value, options }) =>
                         response.cookies.set(name, value, options)
                     );
