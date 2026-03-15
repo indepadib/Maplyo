@@ -17,15 +17,20 @@ export default function LoginPage() {
         setLoading(true);
         setError(null);
 
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password,
         });
 
         if (error) {
+            console.error("Login failed:", error.message);
             setError(error.message);
             setLoading(false);
         } else {
+            console.log("Login success, syncing session...");
+            // Trigger a quick session sync to ensure cookies are set before hard redirect
+            await supabase.auth.getSession();
+            console.log("Redirecting to dashboard...");
             window.location.href = "/dashboard";
         }
     };

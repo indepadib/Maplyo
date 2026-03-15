@@ -49,38 +49,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return () => subscription.unsubscribe();
     }, [supabase.auth]);
 
-    // 3. Handle protected route redirection in a separate effect with a longer delay
-    // This acts only as a backup to the server-side middleware redirects
-    useEffect(() => {
-        if (loading) return;
-
-        const isProtectedRoute = pathname?.startsWith("/dashboard") || pathname?.startsWith("/app/guides");
-        
-        if (!session && isProtectedRoute) {
-            console.warn("AuthProvider: No session on protected route. Waiting 3s for stabilization...");
-            const timer = setTimeout(() => {
-                supabase.auth.getSession().then(({ data: { session: currentSession }, error }) => {
-                    if (!currentSession) {
-                        console.error("AuthProvider: Final session check failed. Redirecting to /login.");
-                        // If we are stuck in a weird state where session is missing but we're on a protected route,
-                        // sometimes clearing the local storage and forcing a fresh login is the only way out.
-                        if (error) {
-                            console.error("Auth session error, clearing local state:", error);
-                            supabase.auth.signOut();
-                        }
-                        router.push("/login");
-                    } else {
-                        console.log("AuthProvider: Session recovered after delay.");
-                    }
-                });
-            }, 3000); // 3s delay - conservative to avoid flickers
-            return () => clearTimeout(timer);
-        }
-    }, [session, loading, pathname, router, supabase]);
+    // 3. Handle protected route redirection
+    // Removed the aggressive 3s timer. Relying on middleware for redirection.
+    // This prevents client-side loops during slow hydration.
 
     const signOut = async () => {
-        await supabase.auth.signOut();
-        router.push("/login");
+        // Redirect to our new server-side signout route
+        window.location.href = "/api/auth/signout";
     };
 
     return (

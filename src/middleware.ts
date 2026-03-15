@@ -42,9 +42,18 @@ export async function middleware(request: NextRequest) {
     if (!user && isProtectedRoute) {
         const url = request.nextUrl.clone();
         url.pathname = '/login';
-        // Preserve the original destination
         url.searchParams.set('next', request.nextUrl.pathname);
-        return NextResponse.redirect(url);
+        
+        // IMPORTANT: Create the redirect response BUT copy cookies from our 'response' object
+        // which contains any updated session cookies from supabase.auth.getUser()
+        const redirectResponse = NextResponse.redirect(url);
+        response.cookies.getAll().forEach(cookie => {
+            redirectResponse.cookies.set(cookie.name, cookie.value, {
+                ...cookie,
+                // Ensure options are preserved if possible
+            });
+        });
+        return redirectResponse;
     }
 
     // 3. Optional: Redirect authenticated users away from auth pages
@@ -55,7 +64,12 @@ export async function middleware(request: NextRequest) {
     const isAuthApi = request.nextUrl.pathname.startsWith('/api/auth');
 
     if (user && isAuthPage && !isAuthApi) {
-        return NextResponse.redirect(new URL('/dashboard', request.url));
+        const dashboardUrl = new URL('/dashboard', request.url);
+        const redirectResponse = NextResponse.redirect(dashboardUrl);
+        response.cookies.getAll().forEach(cookie => {
+            redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+        });
+        return redirectResponse;
     }
 
     // 4. Handle Debug Currency Logic
