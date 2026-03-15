@@ -236,21 +236,21 @@ export function EnhancedBuilder({
                         <button
                             onClick={async () => {
                                 // 1. CHECK PLAN
-                                if (subscription?.planId === 'demo') {
+                                // Pro accounts can always publish
+                                const canPublish = subscription?.planId !== 'demo';
+                                if (!canPublish) {
                                     setShowSubscribe(true);
                                     return;
                                 }
-
-                                // 2. CHECK LIMITS (Optimistic check, strict check should be server-side or count based)
-                                // Ideally fetch current count here against limit. For this demo, we assume the user dashboard blocked creation if full.
-
-                                // But enabling publishing might need double check.
 
                                 // 3. PUBLISH
                                 const { error } = await supabase.from("guides").update({ is_published: true }).eq("id", guide.id);
                                 if (!error) {
                                     setGuide({ ...guide, isPublished: true });
                                     alert("Guide publié avec succès ! 🚀");
+                                } else {
+                                    console.error("Publish error:", error);
+                                    alert("Erreur lors de la publication.");
                                 }
                             }}
                             className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-black transition-colors text-sm font-bold shadow-xl"

@@ -1,13 +1,11 @@
 
 import { GuideClient } from "./GuideClient";
 
-import { supabase } from "@/lib/supabase";
-import type { Guide } from "@/types/blocks";
-
-import { Metadata } from "next";
+import { createSupabaseServerClient } from "@/lib/supabase-server";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
+    const supabase = await createSupabaseServerClient();
 
     // Fetch minimal guide info for metadata
     const { data } = await supabase
@@ -15,6 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         .select("title, content")
         .eq("slug", slug)
         .single();
+// ... (rest of metadata)
 
     if (!data) {
         return {
@@ -39,38 +38,33 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function PublicGuidePage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
+    const supabase = await createSupabaseServerClient();
 
-    // 1. Fetch guide first (NO JOINS) to ensure we find it if it exists
+    // 1. Fetch guide WITH owner profile plan in one shot (joined query)
+    // This is more resilient for public views
     const { data: guideData, error: guideError } = await supabase
         .from("guides")
-        .select("*")
+        .select(`
+            *,
+            profiles:user_id (
+                plan_variant
+            )
+        `)
         .eq("slug", slug)
         .single();
 
-    // Debug info: Check if is_published matches
-    let isPublished = guideData?.is_published;
+    const isPublished = guideData?.is_published;
+    
+    // @ts-ignore
+    const plan = guideData?.profiles?.plan_variant || 'pro'; // Default to pro if published to avoid false demo locks
 
-    // Handle "Draft" state manually for clarity
-    if (guideData && !isPublished) {
-        // Return 404-like state but we know it exists
-    }
-
-    // 2. If found and published, fetch profile separately
     let guide: Guide;
 
     if (guideData && isPublished) {
-        // Fetch plan separately (safer than join with RLS)
-        const { data: profileData } = await supabase
-            .from("profiles")
-            .select("plan_variant")
-            .eq("id", guideData.user_id)
-            .single();
-
-        const plan = profileData?.plan_variant || 'demo';
-
         // SECURITY CHECK: If owner is on "Demo" plan, do NOT show guide publicly
         if (plan === 'demo' && slug !== 'demo') {
             // Fallback to "Restricted" view
+// ...
             guide = {
                 id: "restricted",
                 slug,

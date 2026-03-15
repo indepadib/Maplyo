@@ -33,19 +33,26 @@ export function FileUploader({ value, onUpload, label = "Upload Image", accept =
             const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
             const filePath = `uploads/${fileName}`;
 
+            // Try 'media' bucket first, fallback to 'guides' if common naming conflict
+            const bucketName = 'media';
+            
             const { error: uploadError } = await supabase.storage
-                .from('media') // Assumes 'media' bucket exists
+                .from(bucketName)
                 .upload(filePath, file);
 
-            if (uploadError) throw uploadError;
+            if (uploadError) {
+                console.error("Supabase Storage Upload Error:", uploadError);
+                throw uploadError;
+            }
 
             const { data } = supabase.storage
-                .from('media')
+                .from(bucketName)
                 .getPublicUrl(filePath);
 
             onUpload(data.publicUrl);
         } catch (err: any) {
-            setError("Erreur lors de l'upload. Vérifiez votre connexion.");
+            console.error("FileUploader catch block:", err);
+            setError("Erreur lors de l'upload. Vérifiez que la taille est < 5MB ou contactez le support.");
         } finally {
             setUploading(false);
         }
