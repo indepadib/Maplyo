@@ -47,17 +47,17 @@ export async function middleware(request: NextRequest) {
                            request.nextUrl.pathname.startsWith('/app/guides');
     
     if (!user && isProtectedRoute) {
-        console.log("Middleware: No user on protected route, redirecting to login");
+        console.warn(`Middleware: Denied access to ${request.nextUrl.pathname}. Redirecting to /login.`);
         const url = request.nextUrl.clone();
         url.pathname = '/login';
         url.searchParams.set('next', request.nextUrl.pathname);
         
-        // IMPORTANT: Use the modified 'response' which has current cookies
         const redirectResponse = NextResponse.redirect(url);
+        // Copy cookies from our active response to the redirect
         response.cookies.getAll().forEach(cookie => {
             redirectResponse.cookies.set(cookie.name, cookie.value, {
                 ...cookie,
-                path: '/', // Force root path to avoid sub-route isolation
+                path: '/',
             });
         });
         return redirectResponse;
@@ -70,7 +70,7 @@ export async function middleware(request: NextRequest) {
     const isAuthApi = request.nextUrl.pathname.startsWith('/api/auth');
 
     if (user && isAuthPage && !isAuthApi) {
-        console.log("Middleware: Authenticated user on auth page, redirecting to dashboard");
+        console.log("Middleware: User already authenticated, bypassing auth page.");
         const dashboardUrl = new URL('/dashboard', request.url);
         const redirectResponse = NextResponse.redirect(dashboardUrl);
         response.cookies.getAll().forEach(cookie => {

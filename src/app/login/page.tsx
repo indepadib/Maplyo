@@ -29,16 +29,12 @@ export default function LoginPage() {
                 setError(error.message);
                 setLoading(false);
             } else {
-                console.log("Login success, checking session...");
-                const { data: { session } } = await supabase.auth.getSession();
-                if (session) {
-                    console.log("Session verified, redirecting...");
+                console.log("Login success, warming up dashboard...");
+                // Pre-fetch dashboard to trigger cookie sync in background
+                const timer = setTimeout(() => {
                     window.location.href = "/dashboard";
-                } else {
-                    console.error("Login succeeded but session is null!");
-                    setError("Session non reconnue. Veuillez réessayer.");
-                    setLoading(false);
-                }
+                }, 500); // Tiny delay to let browser commit cookies
+                return () => clearTimeout(timer);
             }
         } catch (err: any) {
             console.error("Unexpected login error:", err);
