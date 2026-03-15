@@ -175,26 +175,38 @@ function DashboardContent() {
 
     const forceRefresh = async () => {
         setLoading(true);
-        // Clear caches potentially
-        const sub = await getUserSubscription(user?.id || '', supabase);
-        setSubscription(sub);
-        
-        // Reload guides
-        const { data } = await supabase
-            .from('guides')
-            .select('id, title, slug, theme_id, updated_at, content')
-            .eq('user_id', user?.id)
-            .order('updated_at', { ascending: false });
-        
-        if (data) {
-            setGuides(data.map((g: any) => ({
-                id: g.id,
-                title: g.title,
-                slug: g.slug,
-                themeId: g.theme_id || "minimal-white",
-                updatedAt: new Date(g.updated_at).getTime(),
-                blockCount: g.content?.blocks?.length || 0
-            })));
+        try {
+            // Confirm we have a session
+            const { data: { session: freshSession } } = await supabase.auth.getSession();
+            const sid = freshSession?.user?.id || user?.id;
+
+            if (!sid) {
+                console.error("Refresh failed: No user ID");
+                setLoading(false);
+                return;
+            }
+
+            const sub = await getUserSubscription(sid, supabase);
+            setSubscription(sub);
+            
+            const { data } = await supabase
+                .from('guides')
+                .select('id, title, slug, theme_id, updated_at, content')
+                .eq('user_id', sid)
+                .order('updated_at', { ascending: false });
+            
+            if (data) {
+                setGuides(data.map((g: any) => ({
+                    id: g.id,
+                    title: g.title,
+                    slug: g.slug,
+                    themeId: g.theme_id || "minimal-white",
+                    updatedAt: new Date(g.updated_at).getTime(),
+                    blockCount: g.content?.blocks?.length || 0
+                })));
+            }
+        } catch (e) {
+            console.error("Force refresh error:", e);
         }
         setLoading(false);
     };
@@ -375,6 +387,8 @@ function DashboardContent() {
                             <h3 className="text-2xl font-bold mb-3 text-white">Aucun guide pour le moment</h3>
                             <p className="text-zinc-500 mb-8 max-w-md mx-auto text-lg leading-relaxed">
                                 Créez votre premier guide pour offrir une expérience exceptionnelle à vos voyageurs.
+                                <br />
+                                <span className="text-[10px] opacity-20 block mt-4 select-all">ID Diagnostic: {user?.id}</span>
                             </p>
                             <div className="flex justify-center gap-4">
                                 <button

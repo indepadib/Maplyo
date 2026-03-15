@@ -50,7 +50,11 @@ export async function middleware(request: NextRequest) {
     // 3. Optional: Redirect authenticated users away from auth pages
     const isAuthPage = request.nextUrl.pathname.startsWith('/login') || 
                       request.nextUrl.pathname.startsWith('/signup');
-    if (user && isAuthPage) {
+    
+    // DO NOT REDIRECT IF WE ARE IN AN AUTH API ROUTE
+    const isAuthApi = request.nextUrl.pathname.startsWith('/api/auth');
+
+    if (user && isAuthPage && !isAuthApi) {
         return NextResponse.redirect(new URL('/dashboard', request.url));
     }
 
