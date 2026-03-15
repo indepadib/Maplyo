@@ -123,12 +123,34 @@ export default function LoginPage() {
                 </div>
 
                 {/* Footer */}
-                <p className="text-center mt-8 text-zinc-500 text-sm">
-                    Pas encore de compte ?{" "}
-                    <Link href="/signup" className="text-white font-medium hover:text-rose-300 transition-colors">
-                        Créer un compte gratuitement
-                    </Link>
-                </p>
+                <div className="mt-8 space-y-4 text-center">
+                    <p className="text-zinc-500 text-sm">
+                        Pas encore de compte ?{" "}
+                        <Link href="/signup" className="text-white font-medium hover:text-rose-300 transition-colors">
+                            Créer un compte gratuitement
+                        </Link>
+                    </p>
+                    
+                    <button
+                        onClick={async () => {
+                             if (confirm("Cela va réinitialiser complètement votre connexion. Continuer ?")) {
+                                 await supabase.auth.signOut();
+                                 localStorage.clear();
+                                 sessionStorage.clear();
+                                 // Delete all cookies
+                                 document.cookie.split(";").forEach((c) => {
+                                     document.cookie = c
+                                         .replace(/^ +/, "")
+                                         .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                                 });
+                                 window.location.reload();
+                             }
+                        }}
+                        className="text-xs text-zinc-600 hover:text-zinc-400 underline underline-offset-4 transition-colors tracking-wide uppercase font-semibold"
+                    >
+                        Problème de connexion ? Réinitialiser
+                    </button>
+                </div>
             </motion.div>
         </div>
     );
