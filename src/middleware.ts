@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { getCurrencyByCountry, PRICING_BY_CURRENCY, CurrencyCode } from "@/lib/pricing/currencies";
 
-export async function middleware(request: NextRequest) {
+export async function updateSession(request: NextRequest) {
     let response = NextResponse.next({
         request: {
             headers: request.headers,
@@ -25,52 +25,47 @@ export async function middleware(request: NextRequest) {
                         request,
                     });
                     cookiesToSet.forEach(({ name, value, options }) =>
-                        response.cookies.set(name, value, options)
+                        response.cookies.set(name, value, {
+                            ...options,
+                            path: '/', // CRITICAL: Force root path site-wide
+                        })
                     );
                 },
             },
         }
     );
 
-    // 1. Check for user session early
-    // Use a safe catch-all to prevent middleware crash
-    let user = null;
-    try {
-        const { data } = await supabase.auth.getUser();
-        user = data.user;
-    } catch (e) {
-        console.error("Middleware: Auth check failed", e);
-    }
+    // Check auth status
+    const { data: { user } } = await supabase.auth.getUser();
 
-    // 2. Server-side redirect for protected routes
+    // 1. Protected routes check
     const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') || 
                            request.nextUrl.pathname.startsWith('/app/guides');
     
     if (!user && isProtectedRoute) {
-        console.warn(`Middleware: Denied access to ${request.nextUrl.pathname}. Redirecting to /login.`);
+        console.warn(`[Middleware] Unauthorized access to ${request.nextUrl.pathname}. Redirecting to /login`);
         const url = request.nextUrl.clone();
         url.pathname = '/login';
         url.searchParams.set('next', request.nextUrl.pathname);
         
         const redirectResponse = NextResponse.redirect(url);
-        // Copy cookies from our active response to the redirect
+        // CRITICAL: Must copy updated response cookies to the redirect
         response.cookies.getAll().forEach(cookie => {
             redirectResponse.cookies.set(cookie.name, cookie.value, {
                 ...cookie,
-                path: '/',
+                path: '/', // Ensure redirect cookies also stick to root
             });
         });
         return redirectResponse;
     }
 
-    // 3. Optional: Redirect authenticated users away from auth pages
+    // 2. Auth pages check (prevent logged in users from seeing login)
     const isAuthPage = request.nextUrl.pathname.startsWith('/login') || 
                       request.nextUrl.pathname.startsWith('/signup');
-    
     const isAuthApi = request.nextUrl.pathname.startsWith('/api/auth');
 
     if (user && isAuthPage && !isAuthApi) {
-        console.log("Middleware: User already authenticated, bypassing auth page.");
+        console.log(`[Middleware] Active session for ${user.email}. Bypassing login page.`);
         const dashboardUrl = new URL('/dashboard', request.url);
         const redirectResponse = NextResponse.redirect(dashboardUrl);
         response.cookies.getAll().forEach(cookie => {
@@ -82,7 +77,7 @@ export async function middleware(request: NextRequest) {
         return redirectResponse;
     }
 
-    // 4. Handle Debug Currency Logic
+    // Handle Debug Currency Logic
     const debugCurrency = request.nextUrl.searchParams.get('debug_currency') as CurrencyCode | null;
     if (debugCurrency && PRICING_BY_CURRENCY[debugCurrency]) {
         response.cookies.set('maplyo-currency', debugCurrency);

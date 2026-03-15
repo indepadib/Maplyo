@@ -28,26 +28,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         console.log("AuthProvider: Initializing...");
-        // 1. Get initial session
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            console.log("AuthProvider: Initial session check", session ? "Session found" : "No session");
-            setSession(session);
-            setUser(session?.user ?? null);
+        const getInitialSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                setUser(session.user);
+                setSession(session); // Keep session state updated as well
+            }
             setLoading(false);
-        });
+        };
 
-        // 2. Listen for changes
-        const {
-            data: { subscription },
-        } = supabase.auth.onAuthStateChange((event, session) => {
-            console.log(`AuthProvider: Auth Event [${event}]`, session ? "Session present" : "No session");
-            setSession(session);
+        getInitialSession();
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
+            setSession(session); // Keep session state updated as well
             setLoading(false);
         });
 
         return () => subscription.unsubscribe();
-    }, [supabase.auth]);
+    }, []);
 
     // 3. Handle protected route redirection
     // Removed the aggressive 3s timer. Relying on middleware for redirection.

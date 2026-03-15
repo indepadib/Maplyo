@@ -18,8 +18,21 @@ export default function LoginPage() {
         setError(null);
 
         try {
-            console.log("Attempting login for:", email);
-            const { data, error } = await supabase.auth.signInWithPassword({
+            // HYGIENE: Clear any existing sub-path cookies before login
+            // This prevents "Duplicate Cookies" where one exists at /dashboard and one at /
+            if (typeof document !== 'undefined') {
+                const cookiesToClear = ['sb-access-token', 'sb-refresh-token'];
+                const paths = ['/', '/dashboard', '/dashboard/settings', '/app'];
+                
+                cookiesToClear.forEach(name => {
+                    paths.forEach(path => {
+                        document.cookie = `${name}=; Path=${path}; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+                    });
+                });
+            }
+
+            console.log("Attempting login...");
+            const { error } = await supabase.auth.signInWithPassword({
                 email,
                 password,
             });
@@ -33,7 +46,7 @@ export default function LoginPage() {
                 // Pre-fetch dashboard to trigger cookie sync in background
                 const timer = setTimeout(() => {
                     window.location.href = "/dashboard";
-                }, 500); // Tiny delay to let browser commit cookies
+                }, 800); // 800ms is safer for cookie commitment
                 return () => clearTimeout(timer);
             }
         } catch (err: any) {
