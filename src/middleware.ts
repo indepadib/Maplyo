@@ -76,7 +76,7 @@ export async function middleware(request: NextRequest) {
             const esCountries = ['es', 'mx', 'ar', 'co', 'pe', 'cl', 'ec', 'gt', 'cu', 'bo', 'do', 'hn', 'py', 'sv', 'ni', 'cr', 'pa', 'uy', 'gq'];
             const arCountries = ['ma', 'dz', 'tn', 'eg', 'sa', 'ae', 'qa', 'kw', 'om', 'bh', 'lb', 'jo', 'iq', 'sy', 'ye', 'ly', 'sd'];
 
-            if (frCountries.includes(c)) detectedLang = 'fr';
+            if (frCountries.includes(c) || c === 'ma') detectedLang = 'fr';
             else if (esCountries.includes(c)) detectedLang = 'es';
             else if (arCountries.includes(c)) detectedLang = 'ar';
             else {

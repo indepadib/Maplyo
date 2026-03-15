@@ -53,20 +53,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         const isProtectedRoute = pathname?.startsWith("/dashboard") || pathname?.startsWith("/app/guides");
         
-        // Use a longer delay (2s) to allow middleware and tokens to synchronize fully
-        // This prevents the flickering loop
         if (!session && isProtectedRoute) {
             const timer = setTimeout(() => {
-                // Double check session before acting
-                supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+                supabase.auth.getSession().then(({ data: { session: currentSession }, error }) => {
                     if (!currentSession) {
+                        // If we are stuck in a weird state where session is missing but we're on a protected route,
+                        // sometimes clearing the local storage and forcing a fresh login is the only way out.
+                        if (error) {
+                            console.error("Auth session error, clearing local state:", error);
+                            supabase.auth.signOut();
+                        }
                         router.push("/login");
                     }
                 });
-            }, 2000); 
+            }, 3000); // 3s delay - conservative to avoid flickers
             return () => clearTimeout(timer);
         }
-    }, [session, loading, pathname, router]);
+    }, [session, loading, pathname, router, supabase]);
 
     const signOut = async () => {
         await supabase.auth.signOut();

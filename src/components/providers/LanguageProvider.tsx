@@ -25,15 +25,23 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         setMounted(true);
     }, []);
 
+    // Sync DIR and Cookie when language changes
+    useEffect(() => {
+        if (!mounted) return;
+        
+        // Update document direction
+        const dir = lang === 'ar' ? 'rtl' : 'ltr';
+        document.documentElement.dir = dir;
+        document.documentElement.lang = lang;
+
+        // Sync cookie for middleware
+        document.cookie = `maplyo-lang=${lang}; path=/; max-age=31536000; SameSite=Lax`;
+    }, [lang, mounted]);
+
     const setLang = (newLang: Language) => {
         setLangState(newLang);
         localStorage.setItem('maplyo-lang', newLang);
     };
-
-    // Prevent hydration mismatch by rendering children only after mount (or handle carefully)
-    // For this simple implementation, we'll return children but t content might flip. 
-    // Ideally, we'd wait for mount to show correct language, but that flashes.
-    // We'll trust default 'fr' for server render matching.
 
     const value = {
         lang,
@@ -43,7 +51,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
     return (
         <LanguageContext.Provider value={value}>
-            {children}
+            <div dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+                {children}
+            </div>
         </LanguageContext.Provider>
     );
 }
