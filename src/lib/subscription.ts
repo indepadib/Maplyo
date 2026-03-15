@@ -7,10 +7,9 @@ interface UserAddons {
     extra_guides?: number;
 }
 
-// Initialize Supabase Client (Client-Side / Shared)
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder";
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Use current project vars
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
 // Helper check
 import { SupabaseClient } from "@supabase/supabase-js";
@@ -18,8 +17,9 @@ import { SupabaseClient } from "@supabase/supabase-js";
 export async function getUserSubscription(userId: string, supabaseClient?: SupabaseClient): Promise<UserSubscription> {
     if (!userId) return { userId: 'anon', planId: 'demo', status: 'active', currentPeriodEnd: 0 };
 
-    // Use provided client or fallback (fallback is likely anon)
-    const client = supabaseClient || supabase;
+    // Use provided client. If none, we can only return demo mode.
+    const client = supabaseClient;
+    if (!client) return { userId: userId || 'anon', planId: 'demo', status: 'active', currentPeriodEnd: 0 };
 
     const { data } = await client
         .from('profiles')

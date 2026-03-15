@@ -17,21 +17,33 @@ export default function LoginPage() {
         setLoading(true);
         setError(null);
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
+        try {
+            console.log("Attempting login for:", email);
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
 
-        if (error) {
-            console.error("Login failed:", error.message);
-            setError(error.message);
+            if (error) {
+                console.error("Login failed:", error.message);
+                setError(error.message);
+                setLoading(false);
+            } else {
+                console.log("Login success, checking session...");
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    console.log("Session verified, redirecting...");
+                    window.location.href = "/dashboard";
+                } else {
+                    console.error("Login succeeded but session is null!");
+                    setError("Session non reconnue. Veuillez réessayer.");
+                    setLoading(false);
+                }
+            }
+        } catch (err: any) {
+            console.error("Unexpected login error:", err);
+            setError("Une erreur inattendue est survenue.");
             setLoading(false);
-        } else {
-            console.log("Login success, syncing session...");
-            // Trigger a quick session sync to ensure cookies are set before hard redirect
-            await supabase.auth.getSession();
-            console.log("Redirecting to dashboard...");
-            window.location.href = "/dashboard";
         }
     };
 
