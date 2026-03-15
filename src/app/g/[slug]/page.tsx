@@ -1,7 +1,7 @@
-
-import { GuideClient } from "./GuideClient";
-
 import { createSupabaseServerClient } from "@/lib/supabase-server";
+import type { Metadata } from "next";
+import type { Guide } from "@/types/blocks";
+import { GuideClient } from "./GuideClient";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
