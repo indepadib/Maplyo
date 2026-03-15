@@ -129,36 +129,75 @@ function DashboardContent() {
             router.replace('/dashboard'); // Clean URL
         }
 
+        let retryCount = 0;
+        const maxRetries = 2;
+
         const load = async () => {
-            // 1. Load Guides
-            const { data, error } = await supabase
-                .from('guides')
-                .select('id, title, slug, theme_id, updated_at, content')
-                .eq('user_id', user.id)
-                .order('updated_at', { ascending: false });
+            try {
+                // 1. Load Guides
+                const { data, error } = await supabase
+                    .from('guides')
+                    .select('id, title, slug, theme_id, updated_at, content')
+                    .eq('user_id', user.id)
+                    .order('updated_at', { ascending: false });
 
-            if (error) {
-                console.error("Error loading guides:", error);
-            } else if (data) {
-                const items: GuideSummary[] = data.map((g: any) => ({
-                    id: g.id,
-                    title: g.title,
-                    slug: g.slug,
-                    themeId: g.theme_id || "minimal-white",
-                    updatedAt: new Date(g.updated_at).getTime(),
-                    blockCount: g.content?.blocks?.length || 0
-                }));
-                setGuides(items);
+                if (error) {
+                    console.error("Error loading guides (Attempt " + (retryCount+1) + "):", error);
+                    if (retryCount < maxRetries) {
+                        retryCount++;
+                        setTimeout(load, 500 * Math.pow(2, retryCount)); // Exponential backoff
+                        return;
+                    }
+                } else if (data) {
+                    const items: GuideSummary[] = data.map((g: any) => ({
+                        id: g.id,
+                        title: g.title,
+                        slug: g.slug,
+                        themeId: g.theme_id || "minimal-white",
+                        updatedAt: new Date(g.updated_at).getTime(),
+                        blockCount: g.content?.blocks?.length || 0
+                    }));
+                    setGuides(items);
+                }
+
+                // 2. Load Subscription
+                const sub = await getUserSubscription(user.id, supabase);
+                setSubscription(sub);
+
+                setLoading(false);
+            } catch (e) {
+                console.error("Dashboard massive load error:", e);
+                setLoading(false);
             }
-
-            // 2. Load Subscription
-            const sub = await getUserSubscription(user.id, supabase);
-            setSubscription(sub);
-
-            setLoading(false);
         };
         load();
     }, [user, searchParams, router]);
+
+    const forceRefresh = async () => {
+        setLoading(true);
+        // Clear caches potentially
+        const sub = await getUserSubscription(user?.id || '', supabase);
+        setSubscription(sub);
+        
+        // Reload guides
+        const { data } = await supabase
+            .from('guides')
+            .select('id, title, slug, theme_id, updated_at, content')
+            .eq('user_id', user?.id)
+            .order('updated_at', { ascending: false });
+        
+        if (data) {
+            setGuides(data.map((g: any) => ({
+                id: g.id,
+                title: g.title,
+                slug: g.slug,
+                themeId: g.theme_id || "minimal-white",
+                updatedAt: new Date(g.updated_at).getTime(),
+                blockCount: g.content?.blocks?.length || 0
+            })));
+        }
+        setLoading(false);
+    };
 
     const filteredGuides = [...guides].sort((a, b) => {
         if (sortBy === "name") return a.title.localeCompare(b.title);
@@ -277,6 +316,13 @@ function DashboardContent() {
                             title="Se déconnecter"
                         >
                             <LogOut className="w-4 h-4 ml-0.5" />
+                        </button>
+                        <button
+                            onClick={forceRefresh}
+                            className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-white/10 hover:text-rose-400 transition-all hover:scale-105"
+                            title="Actualiser mes droits"
+                        >
+                            <Sparkles className="w-4 h-4" />
                         </button>
                         <Link
                             href="/dashboard/settings"
