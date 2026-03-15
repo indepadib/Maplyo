@@ -33,24 +33,31 @@ export async function middleware(request: NextRequest) {
     );
 
     // 1. Check for user session early
-    const { data: { user } } = await supabase.auth.getUser();
+    // Use a safe catch-all to prevent middleware crash
+    let user = null;
+    try {
+        const { data } = await supabase.auth.getUser();
+        user = data.user;
+    } catch (e) {
+        console.error("Middleware: Auth check failed", e);
+    }
 
     // 2. Server-side redirect for protected routes
     const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') || 
                            request.nextUrl.pathname.startsWith('/app/guides');
     
     if (!user && isProtectedRoute) {
+        console.log("Middleware: No user on protected route, redirecting to login");
         const url = request.nextUrl.clone();
         url.pathname = '/login';
         url.searchParams.set('next', request.nextUrl.pathname);
         
-        // IMPORTANT: Create the redirect response BUT copy cookies from our 'response' object
-        // which contains any updated session cookies from supabase.auth.getUser()
+        // IMPORTANT: Use the modified 'response' which has current cookies
         const redirectResponse = NextResponse.redirect(url);
         response.cookies.getAll().forEach(cookie => {
             redirectResponse.cookies.set(cookie.name, cookie.value, {
                 ...cookie,
-                // Ensure options are preserved if possible
+                path: '/', // Force root path to avoid sub-route isolation
             });
         });
         return redirectResponse;
@@ -60,14 +67,17 @@ export async function middleware(request: NextRequest) {
     const isAuthPage = request.nextUrl.pathname.startsWith('/login') || 
                       request.nextUrl.pathname.startsWith('/signup');
     
-    // DO NOT REDIRECT IF WE ARE IN AN AUTH API ROUTE
     const isAuthApi = request.nextUrl.pathname.startsWith('/api/auth');
 
     if (user && isAuthPage && !isAuthApi) {
+        console.log("Middleware: Authenticated user on auth page, redirecting to dashboard");
         const dashboardUrl = new URL('/dashboard', request.url);
         const redirectResponse = NextResponse.redirect(dashboardUrl);
         response.cookies.getAll().forEach(cookie => {
-            redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+            redirectResponse.cookies.set(cookie.name, cookie.value, {
+                ...cookie,
+                path: '/',
+            });
         });
         return redirectResponse;
     }

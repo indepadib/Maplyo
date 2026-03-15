@@ -18,18 +18,32 @@ export default function SettingsPage() {
     const [fullName, setFullName] = useState("");
 
     useEffect(() => {
-        if (!user) return;
+        if (!user) {
+            console.log("SettingsPage: No user from AuthProvider yet. Checking session directly...");
+            supabase.auth.getSession().then(({ data: { session } }) => {
+                if (session) {
+                    console.log("SettingsPage: Session recovered directly from Supabase.");
+                } else {
+                    console.warn("SettingsPage: No session found on settings page.");
+                }
+            });
+            return;
+        }
         const load = async () => {
-            // Load Sub
-            const sub = await getUserSubscription(user.id, supabase);
-            setSubscription(sub);
+             try {
+                // Load Sub
+                const sub = await getUserSubscription(user.id, supabase);
+                setSubscription(sub);
 
-            // Load Profile
-            // For now, we simulate profile data if table not fully ready
-            const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-            if (data) {
-                setAvatarUrl(data.avatar_url || "");
-                setFullName(data.full_name || "");
+                // Load Profile
+                const { data, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+                if (error) console.error("Settings: Profile load error", error);
+                if (data) {
+                    setAvatarUrl(data.avatar_url || "");
+                    setFullName(data.full_name || "");
+                }
+            } catch (e) {
+                console.error("Settings load catch", e);
             }
         };
         load();
