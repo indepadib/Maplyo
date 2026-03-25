@@ -62,39 +62,39 @@ export default async function PublicGuidePage({
 
     const supabase = await createSupabaseServerClient();
 
-    // 1. Fetch guide WITH owner profile plan in one shot (joined query)
-    let mainQuery = supabase
-        .from("guides")
-        .select(`
-            *,
-            profiles:user_id (
-                id,
-                plan_variant,
-                subscription_status
-            )
-        `);
-
+    // 1. Fetch guide first (without join to avoid schema cache issues)
     const slugLower = slugify(slug);
+    let query = supabase.from("guides").select("*");
+
     if (slug.length === 36 && /^[0-9a-f-]+$/i.test(slug)) {
-        mainQuery = mainQuery.or(`id.eq.${slug},slug.eq.${slug},slug.eq.${slugLower}`);
+        query = query.or(`id.eq.${slug},slug.eq.${slug},slug.eq.${slugLower}`);
     } else {
-        mainQuery = mainQuery.or(`slug.eq.${slug},slug.eq.${slugLower}`);
+        query = query.or(`slug.eq.${slug},slug.eq.${slugLower}`);
     }
 
-    let { data: guideData, error: guideError } = await mainQuery.single();
+    let { data: guideData, error: guideError } = await query.single();
 
-    // 2.5 SUPER-RESILIENT REVERSE LOOKUP (Search by Title matching slug)
+    // 2. SUPER-RESILIENT REVERSE LOOKUP (Search by Title matching slug)
     if (!guideData && !guideError) {
-        const { data: allGuides } = await supabase.from("guides").select("*, profiles:user_id(id, plan_variant, subscription_status)");
+        const { data: allGuides } = await supabase.from("guides").select("*");
         guideData = allGuides?.find(g => slugify(g.title || '') === slugLower) || null;
+    }
+
+    // 3. Fetch Profile separately (Avoid join errors)
+    let profile = null;
+    if (guideData?.user_id) {
+        const { data: pData } = await supabase
+            .from('profiles')
+            .select('plan_variant, subscription_status')
+            .eq('id', guideData.user_id)
+            .single();
+        profile = pData;
     }
 
     // Check if current visitor is the owner
     const { data: { user: currentUser } } = await supabase.auth.getUser();
     const isOwner = currentUser && currentUser.id === guideData?.user_id;
 
-    // @ts-ignore
-    const profile = guideData?.profiles;
     const plan = profile?.plan_variant || 'pro'; 
     const status = profile?.subscription_status || 'active';
 
