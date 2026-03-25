@@ -5,8 +5,6 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Plus, Edit2, Trash2, ExternalLink, Moon, Sun, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { GuideClient } from "./GuideClient";
-export const revalidate = 0; // Disable caching for this page
 import { guideThemes } from "@/types/themes";
 import { Modal } from "@/components/ui/Modal";
 import type { Guide, BlockType } from "@/types/blocks";
