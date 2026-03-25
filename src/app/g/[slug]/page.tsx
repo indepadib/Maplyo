@@ -5,17 +5,25 @@ import { GuideClient } from "./GuideClient";
 import { slugify } from "@/lib/utils/slugify";
 
 export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
     const supabase = await createSupabaseServerClient();
 
     // Fetch minimal guide info for metadata
-    const { data } = await supabase
+    let metadataQuery = supabase
         .from("guides")
-        .select("title, content")
-        .eq("slug", slugify(slug))
-        .single();
+        .select("title, content");
+
+    // Try both raw and slugified matches
+    if (slug.length === 36 && /^[0-9a-f-]+$/i.test(slug)) {
+        metadataQuery = metadataQuery.or(`id.eq.${slug},slug.eq.${slug}`);
+    } else {
+        metadataQuery = metadataQuery.or(`slug.eq.${slug},slug.eq.${slugify(slug)}`);
+    }
+
+    const { data } = await metadataQuery.single();
 // ... (rest of metadata)
 
     if (!data) {
@@ -45,7 +53,7 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
 
     // 1. Fetch guide WITH owner profile plan in one shot (joined query)
     // This is more resilient for public views
-    const { data: guideData, error: guideError } = await supabase
+    let mainQuery = supabase
         .from("guides")
         .select(`
             *,
@@ -53,9 +61,15 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
                 plan_variant,
                 subscription_status
             )
-        `)
-        .eq("slug", slugify(slug))
-        .single();
+        `);
+
+    if (slug.length === 36 && /^[0-9a-f-]+$/i.test(slug)) {
+        mainQuery = mainQuery.or(`id.eq.${slug},slug.eq.${slug}`);
+    } else {
+        mainQuery = mainQuery.or(`slug.eq.${slug},slug.eq.${slugify(slug)}`);
+    }
+
+    const { data: guideData, error: guideError } = await mainQuery.single();
 
     const isPublished = guideData?.is_published;
     
