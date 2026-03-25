@@ -2,6 +2,7 @@ import { createSupabaseServerClient } from "@/lib/supabase-server";
 import type { Metadata } from "next";
 import type { Guide } from "@/types/blocks";
 import { GuideClient } from "./GuideClient";
+import { slugify } from "@/lib/utils/slugify";
 
 export const revalidate = 0;
 
@@ -13,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { data } = await supabase
         .from("guides")
         .select("title, content")
-        .eq("slug", slug)
+        .eq("slug", slugify(slug))
         .single();
 // ... (rest of metadata)
 
@@ -53,7 +54,7 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
                 subscription_status
             )
         `)
-        .eq("slug", slug)
+        .eq("slug", slugify(slug))
         .single();
 
     const isPublished = guideData?.is_published;

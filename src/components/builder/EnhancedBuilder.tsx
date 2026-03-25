@@ -12,6 +12,7 @@ import { Settings, ChevronRight, Trash2, ExternalLink, ChevronLeft, Plus, Lock, 
 import { canUseFeature } from "@/lib/subscription";
 import { UserSubscription } from "@/types/subscription";
 import { Guide, BlockType } from "@/types/blocks"; // Value import for Guide and BlockType
+import { slugify } from "@/lib/utils/slugify";
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 const STORAGE_KEY = "eguidehq_demo_guide_v1";
@@ -217,7 +218,7 @@ export function EnhancedBuilder({
                         </div>
                     ) : (guide.isPublished ? (
                         <div className="flex items-center gap-2">
-                            <a href={`/g/${guide.slug}`} target="_blank" className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-bold shadow-green-200 shadow-lg">
+                            <a href={`/g/${slugify(guide.slug)}`} target="_blank" className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-bold shadow-green-200 shadow-lg">
                                 <ExternalLink size={16} /> En Ligne
                             </a>
                             <button
@@ -239,7 +240,7 @@ export function EnhancedBuilder({
                                 // 1. CHECK PLAN
                                 // Pro/Basic accounts can publish if active
                                 const canPublish = subscription?.planId !== 'demo' && 
-                                                 (subscription?.status === 'active' || subscription?.status === 'trialing');
+                                                 (subscription?.status === 'active' || subscription?.status === 'trialing' || subscription?.status === 'free');
                                 if (!canPublish) {
                                     setShowSubscribe(true);
                                     return;
