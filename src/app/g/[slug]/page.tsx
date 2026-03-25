@@ -1,3 +1,4 @@
+import React from "react";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 import type { Metadata } from "next";
 import type { Guide } from "@/types/blocks";
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     let { data } = await query.single();
 
     if (!data) {
-        const { data: all } = await supabase.from("guides").select("title, slug, id");
+        const { data: all } = await supabase.from("guides").select("title, slug, id, content");
         data = all?.find(g => slugify(g.title || '') === slugLower) || null;
     }
 
