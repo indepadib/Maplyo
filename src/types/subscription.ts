@@ -71,7 +71,7 @@ export const PLANS: Record<PlanId, SubscriptionPlan> = {
 export interface UserSubscription {
     userId: string;
     planId: string;
-    status: 'active' | 'canceled' | 'past_due' | 'trialing'; // Added trialing
+    status: 'active' | 'canceled' | 'past_due' | 'trialing' | 'free' | 'unpaid' | 'incomplete'; 
     currentPeriodEnd: number;
     addons?: {
         themes?: boolean;
