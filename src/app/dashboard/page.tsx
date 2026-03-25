@@ -245,6 +245,7 @@ function DashboardContent() {
             slug: Math.random().toString(36).substr(2, 9),
             theme_id: "minimal-white",
             user_id: user.id, // Assign ownership
+            is_published: true, // Auto-publish by default
             content: {
                 blocks: [
                     {
@@ -266,8 +267,7 @@ function DashboardContent() {
                         visibility: { mode: "always" },
                         data: { networkName: "MonWifi", password: "password123" }
                     }
-                ],
-                is_published: true // Auto-publish by default
+                ]
             }
         };
 
