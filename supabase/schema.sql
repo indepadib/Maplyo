@@ -40,7 +40,17 @@ alter table public.guides enable row level security;
 create policy "Users can view own guides" on guides for select using (auth.uid() = user_id);
 create policy "Users can update own guides" on guides for update using (auth.uid() = user_id);
 create policy "Users can delete own guides" on guides for delete using (auth.uid() = user_id);
-create policy "Public can view published guides" on guides for select using (is_published is not false);
+-- Rule: Public can view if (published) OR (Owner is Pro/Basic)
+create policy "Public can view published or paid guides" on guides for select 
+using (
+  is_published is not false 
+  OR 
+  exists (
+    select 1 from profiles 
+    where profiles.id = guides.user_id 
+    and profiles.plan_variant != 'demo'
+  )
+);
 
 -- Trigger to handle new user signup
 create or replace function public.handle_new_user() 

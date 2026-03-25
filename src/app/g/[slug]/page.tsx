@@ -84,18 +84,17 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
     const plan = profile?.plan_variant || 'pro'; 
     const status = profile?.subscription_status || 'active';
 
-    // Access Logic:
-    // 1. Owner can always see.
-    // 2. Public can only see if:
-    //    a. is_published is true (or null for legacy guides if owner is pro)
-    //    b. Owner plan is NOT 'demo'
-    //    c. Owner subscription status is 'active', 'trialing', or 'free'
+    // Access Logic (Simple & Automatic):
+    // A guide is visible if:
+    // 1. Visitor is the Owner
+    // 2. OR Guide is published (is_published !== false)
+    // 3. OR Owner has a paid plan (plan !== 'demo')
     
     const isSubscriptionValid = plan !== 'demo' && (status === 'active' || status === 'trialing' || status === 'free');
-    
-    // Treat NULL is_published as TRUE if subscription is valid (auto-repair assumption)
     const guideIsPublished = guideData?.is_published !== false; 
-    const isPublicAllowed = guideIsPublished && (isSubscriptionValid || slug === 'demo');
+    
+    // THE "OR" LOGIC:
+    const isPublicAllowed = guideIsPublished || isSubscriptionValid || slug === 'demo';
     let guide: Guide;
 
     if (guideData && (isOwner || isPublicAllowed)) {
