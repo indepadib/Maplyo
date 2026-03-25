@@ -58,7 +58,6 @@ export default async function PublicGuidePage({
 }) {
     const { slug } = await params;
     const sParams = await searchParams;
-    const isDebug = sParams.debug === '1';
 
     const supabase = await createSupabaseServerClient();
 
@@ -72,10 +71,10 @@ export default async function PublicGuidePage({
         query = query.or(`slug.eq.${slug},slug.eq.${slugLower}`);
     }
 
-    let { data: guideData, error: guideError } = await query.single();
+    let { data: guideData } = await query.single();
 
     // 2. SUPER-RESILIENT REVERSE LOOKUP (Search by Title matching slug)
-    if (!guideData && !guideError) {
+    if (!guideData) {
         const { data: allGuides } = await supabase.from("guides").select("*");
         guideData = allGuides?.find(g => slugify(g.title || '') === slugLower) || null;
     }
@@ -155,25 +154,6 @@ export default async function PublicGuidePage({
 
     return (
         <main className="min-h-screen bg-white">
-            {isDebug && (
-                <div className="fixed bottom-4 right-4 z-50 p-4 bg-black/90 text-green-400 text-[10px] font-mono rounded-xl border border-green-900/50 max-w-xs shadow-2xl backdrop-blur-md">
-                    <p className="font-bold border-b border-green-900/50 mb-1 pb-1">DEBUG INFO</p>
-                    <p>Slug: {slug}</p>
-                    <p>Found: {guideData ? "YES" : "NO"}</p>
-                    {guideError && <p className="text-red-400">Error: {guideError.message}</p>}
-                    {guideData && (
-                        <>
-                            <p>GuideID: {guideData.id.slice(0,8)}...</p>
-                            <p>IsPublished: {String(guideData.is_published)}</p>
-                            <p>OwnerID: {guideData.user_id?.slice(0,8)}...</p>
-                            <p>Plan: {plan}</p>
-                            <p>Status: {status}</p>
-                            <p>IsOwner: {String(isOwner)}</p>
-                            <p>PublicAllowed: {String(isPublicAllowed)}</p>
-                        </>
-                    )}
-                </div>
-            )}
             <GuideClient guide={guide} />
         </main>
     );
