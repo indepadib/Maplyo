@@ -10,21 +10,24 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
     const supabase = await createSupabaseServerClient();
+    const slugLower = slugify(slug);
 
-    // Fetch minimal guide info for metadata
-    let metadataQuery = supabase
+    let query = supabase
         .from("guides")
-        .select("title, content");
+        .select("title, content, slug, id");
 
-    // Try both raw and slugified matches
     if (slug.length === 36 && /^[0-9a-f-]+$/i.test(slug)) {
-        metadataQuery = metadataQuery.or(`id.eq.${slug},slug.eq.${slug}`);
+        query = query.or(`id.eq.${slug},slug.eq.${slug},slug.eq.${slugLower}`);
     } else {
-        metadataQuery = metadataQuery.or(`slug.eq.${slug},slug.eq.${slugify(slug)}`);
+        query = query.or(`slug.eq.${slug},slug.eq.${slugLower}`);
     }
 
-    const { data } = await metadataQuery.single();
-// ... (rest of metadata)
+    let { data } = await query.single();
+
+    if (!data) {
+        const { data: all } = await supabase.from("guides").select("title, slug, id");
+        data = all?.find(g => slugify(g.title || '') === slugLower) || null;
+    }
 
     if (!data) {
         return {
@@ -32,8 +35,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         };
     }
 
-    // Try to find a cover image in the blocks, otherwise use default
-    // This is a simplification; in a real app check specific block types
     const title = data.title || "Votre Guide Numérique";
 
     return {
@@ -42,17 +43,25 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         openGraph: {
             title: title,
             description: "Accédez à toutes les informations de votre séjour.",
-            images: ['/api/og?title=' + encodeURIComponent(title)], // Optional: placeholder for dynamic OG image generation later
+            images: ['/api/og?title=' + encodeURIComponent(title)],
         }
     };
 }
 
-export default async function PublicGuidePage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function PublicGuidePage({ 
+    params, 
+    searchParams 
+}: { 
+    params: Promise<{ slug: string }>,
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
     const { slug } = await params;
+    const sParams = await searchParams;
+    const isDebug = sParams.debug === '1';
+
     const supabase = await createSupabaseServerClient();
 
     // 1. Fetch guide WITH owner profile plan in one shot (joined query)
-    // This is more resilient for public views
     let mainQuery = supabase
         .from("guides")
         .select(`
@@ -64,44 +73,38 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
             )
         `);
 
+    const slugLower = slugify(slug);
     if (slug.length === 36 && /^[0-9a-f-]+$/i.test(slug)) {
-        mainQuery = mainQuery.or(`id.eq.${slug},slug.eq.${slug}`);
+        mainQuery = mainQuery.or(`id.eq.${slug},slug.eq.${slug},slug.eq.${slugLower}`);
     } else {
-        mainQuery = mainQuery.or(`slug.eq.${slug},slug.eq.${slugify(slug)}`);
+        mainQuery = mainQuery.or(`slug.eq.${slug},slug.eq.${slugLower}`);
     }
 
-    const { data: guideData, error: guideError } = await mainQuery.single();
+    let { data: guideData, error: guideError } = await mainQuery.single();
 
-    const isPublished = guideData?.is_published;
-    
+    // 2.5 SUPER-RESILIENT REVERSE LOOKUP (Search by Title matching slug)
+    if (!guideData && !guideError) {
+        const { data: allGuides } = await supabase.from("guides").select("*, profiles:user_id(id, plan_variant, subscription_status)");
+        guideData = allGuides?.find(g => slugify(g.title || '') === slugLower) || null;
+    }
+
     // Check if current visitor is the owner
-    const { data: { user } } = await supabase.auth.getUser();
-    const isOwner = user && user.id === guideData?.user_id;
+    const { data: { user: currentUser } } = await supabase.auth.getUser();
+    const isOwner = currentUser && currentUser.id === guideData?.user_id;
 
     // @ts-ignore
     const profile = guideData?.profiles;
-    // Default to 'pro' if no profile found (err on side of access for public)
     const plan = profile?.plan_variant || 'pro'; 
     const status = profile?.subscription_status || 'active';
 
-    // Access Logic (Simple & Automatic):
-    // A guide is visible if:
-    // 1. Visitor is the Owner
-    // 2. OR Guide is published (is_published !== false)
-    // 3. OR Owner has a paid plan (plan !== 'demo')
-    
     const isSubscriptionValid = plan !== 'demo' && (status === 'active' || status === 'trialing' || status === 'free');
     const guideIsPublished = guideData?.is_published !== false; 
-    
-    // THE "OR" LOGIC:
     const isPublicAllowed = guideIsPublished || isSubscriptionValid || slug === 'demo';
+
     let guide: Guide;
 
     if (guideData && (isOwner || isPublicAllowed)) {
-        // SECURITY CHECK: If not owner and public access is restricted but somehow bypassed RLS or reached this point
         if (!isOwner && !isPublicAllowed) {
-            // Fallback to "Restricted" view
-// ...
             guide = {
                 id: "restricted",
                 slug,
@@ -120,7 +123,6 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
                 ]
             };
         } else {
-            // Success: Full Guide
             guide = {
                 id: guideData.id,
                 slug: guideData.slug,
@@ -131,7 +133,6 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
             };
         }
     } else {
-        // Fallback for "demo" or not found -> Show a 404 block or generic Welcome
         guide = {
             id: "not-found",
             slug,
@@ -151,9 +152,27 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
         };
     }
 
-
     return (
         <main className="min-h-screen bg-white">
+            {isDebug && (
+                <div className="fixed bottom-4 right-4 z-50 p-4 bg-black/90 text-green-400 text-[10px] font-mono rounded-xl border border-green-900/50 max-w-xs shadow-2xl backdrop-blur-md">
+                    <p className="font-bold border-b border-green-900/50 mb-1 pb-1">DEBUG INFO</p>
+                    <p>Slug: {slug}</p>
+                    <p>Found: {guideData ? "YES" : "NO"}</p>
+                    {guideError && <p className="text-red-400">Error: {guideError.message}</p>}
+                    {guideData && (
+                        <>
+                            <p>GuideID: {guideData.id.slice(0,8)}...</p>
+                            <p>IsPublished: {String(guideData.is_published)}</p>
+                            <p>OwnerID: {guideData.user_id?.slice(0,8)}...</p>
+                            <p>Plan: {plan}</p>
+                            <p>Status: {status}</p>
+                            <p>IsOwner: {String(isOwner)}</p>
+                            <p>PublicAllowed: {String(isPublicAllowed)}</p>
+                        </>
+                    )}
+                </div>
+            )}
             <GuideClient guide={guide} />
         </main>
     );
