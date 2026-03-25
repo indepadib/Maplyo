@@ -28,7 +28,7 @@ create table public.guides (
   slug text unique not null,
   title text not null,
   content jsonb default '{}'::jsonb, -- Stores blocks and theme config
-  is_published boolean default false,
+  is_published boolean default true,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
@@ -40,7 +40,7 @@ alter table public.guides enable row level security;
 create policy "Users can view own guides" on guides for select using (auth.uid() = user_id);
 create policy "Users can update own guides" on guides for update using (auth.uid() = user_id);
 create policy "Users can delete own guides" on guides for delete using (auth.uid() = user_id);
-create policy "Public can view published guides" on guides for select using (is_published = true);
+create policy "Public can view published guides" on guides for select using (is_published is not false);
 
 -- Trigger to handle new user signup
 create or replace function public.handle_new_user() 

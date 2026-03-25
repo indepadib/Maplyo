@@ -22,6 +22,7 @@ type GuideSummary = {
     themeId: string;
     updatedAt: number;
     blockCount: number;
+    is_published: boolean;
 };
 
 export default function DashboardPage() {
@@ -138,9 +139,22 @@ function DashboardContent() {
                 // 1. Load Guides
                 const { data, error } = await supabase
                     .from('guides')
-                    .select('id, title, slug, theme_id, updated_at, content')
+                    .select('id, title, slug, theme_id, updated_at, content, is_published')
                     .eq('user_id', user.id)
                     .order('updated_at', { ascending: false });
+
+                // SELF-HEALING: If any guide has is_published = NULL, it's likely a legacy guide
+                // We should fix them automatically so RLS doesn't block them
+                const legacyGuides = data?.filter((g: any) => g.is_published === null) || [];
+                if (legacyGuides.length > 0) {
+                    console.log("Repairing legacy guides visibility...");
+                    await Promise.all(legacyGuides.map(g => 
+                        supabase.from('guides')
+                            .update({ is_published: true })
+                            .eq('id', g.id)
+                    ));
+                    // Re-fetch or update local state
+                }
 
                 if (error) {
                     console.error("Error loading guides (Attempt " + (retryCount+1) + "):", error);
@@ -156,7 +170,8 @@ function DashboardContent() {
                         slug: g.slug,
                         themeId: g.theme_id || "minimal-white",
                         updatedAt: new Date(g.updated_at).getTime(),
-                        blockCount: g.content?.blocks?.length || 0
+                        blockCount: g.content?.blocks?.length || 0,
+                        is_published: g.is_published ?? false
                     }));
                     setGuides(items);
                 }
@@ -192,7 +207,7 @@ function DashboardContent() {
             
             const { data } = await supabase
                 .from('guides')
-                .select('id, title, slug, theme_id, updated_at, content')
+                .select('id, title, slug, theme_id, updated_at, content, is_published')
                 .eq('user_id', sid)
                 .order('updated_at', { ascending: false });
             
@@ -203,7 +218,8 @@ function DashboardContent() {
                     slug: g.slug,
                     themeId: g.theme_id || "minimal-white",
                     updatedAt: new Date(g.updated_at).getTime(),
-                    blockCount: g.content?.blocks?.length || 0
+                    blockCount: g.content?.blocks?.length || 0,
+                    is_published: g.is_published ?? false
                 })));
             }
         } catch (e) {
@@ -461,10 +477,12 @@ function DashboardContent() {
                                             <div className="flex-1 mb-6">
                                                 <div className="flex items-center justify-between mb-2">
                                                     <div className="flex items-center gap-2">
-                                                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse box-shadow-green shadow-[0_0_10px_rgba(34,197,94,0.5)]"></span>
-                                                        <span className="text-xs font-medium text-zinc-500 uppercase tracking-wide">En ligne</span>
+                                                        <span className={`w-2 h-2 rounded-full ${guide.is_published ? 'bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]' : 'bg-amber-500'}`}></span>
+                                                        <span className="text-xs font-medium text-zinc-500 uppercase tracking-wide">
+                                                            {guide.is_published ? 'En ligne' : 'Brouillon'}
+                                                        </span>
                                                     </div>
-                                                    <p className="text-xs font-medium text-zinc-600">
+ streams                                                    <p className="text-xs font-medium text-zinc-600">
                                                         {new Date(guide.updatedAt).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long' })}
                                                     </p>
                                                 </div>
