@@ -13,6 +13,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 import { getUserSubscription, checkLimit } from "@/lib/subscription";
 import { UserSubscription } from "@/types/subscription";
+import { slugify } from "@/lib/utils/slugify";
 
 type GuideSummary = {
     id: string;
@@ -95,7 +96,7 @@ function DashboardContent() {
                     .from("guides")
                     .insert([{
                         title: data.guide.title,
-                        slug: data.guide.slug + "-" + Math.floor(Math.random() * 1000),
+                        slug: slugify(data.guide.title) + "-" + Math.floor(Math.random() * 1000),
                         theme_id: data.guide.theme.themeId,
                         user_id: user.id,
                         content: { blocks: data.guide.blocks },
@@ -242,7 +243,7 @@ function DashboardContent() {
 
         const newGuideData = {
             title: newGuideTitle || "Mon Nouveau Guide",
-            slug: Math.random().toString(36).substr(2, 9),
+            slug: slugify(newGuideTitle || "Mon Nouveau Guide") + "-" + Math.random().toString(36).substr(2, 5),
             theme_id: "minimal-white",
             user_id: user.id, // Assign ownership
             is_published: true, // Auto-publish by default

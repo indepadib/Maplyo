@@ -47,7 +47,8 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
         .select(`
             *,
             profiles:user_id (
-                plan_variant
+                plan_variant,
+                subscription_status
             )
         `)
         .eq("slug", slug)
@@ -55,14 +56,29 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
 
     const isPublished = guideData?.is_published;
     
-    // @ts-ignore
-    const plan = guideData?.profiles?.plan_variant || 'pro'; // Default to pro if published to avoid false demo locks
+    // Check if current visitor is the owner
+    const { data: { user } } = await supabase.auth.getUser();
+    const isOwner = user && user.id === guideData?.user_id;
 
+    // @ts-ignore
+    const profile = guideData?.profiles;
+    const plan = profile?.plan_variant || 'pro'; 
+    const status = profile?.subscription_status || 'free';
+
+    // Access Logic:
+    // 1. Owner can always see.
+    // 2. Public can only see if:
+    //    a. is_published is true
+    //    b. Owner plan is NOT 'demo' (unless slug is specifically 'demo')
+    //    c. Owner subscription status is 'active' or 'trialing'
+    
+    const isSubscriptionValid = plan !== 'demo' && (status === 'active' || status === 'trialing');
+    const isPublicAllowed = isPublished && (isSubscriptionValid || slug === 'demo');
     let guide: Guide;
 
-    if (guideData && isPublished) {
-        // SECURITY CHECK: If owner is on "Demo" plan, do NOT show guide publicly
-        if (plan === 'demo' && slug !== 'demo') {
+    if (guideData && (isOwner || isPublicAllowed)) {
+        // SECURITY CHECK: If not owner and public access is restricted but somehow bypassed RLS or reached this point
+        if (!isOwner && !isPublicAllowed) {
             // Fallback to "Restricted" view
 // ...
             guide = {

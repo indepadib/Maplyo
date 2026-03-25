@@ -105,6 +105,7 @@ export function EnhancedBuilder({
                     title: next.title,
                     theme_id: next.theme.themeId,
                     content: { blocks: next.blocks },
+                    is_published: next.isPublished,
                     updated_at: new Date().toISOString()
                 })
                 .eq("id", next.id);
@@ -236,8 +237,9 @@ export function EnhancedBuilder({
                         <button
                             onClick={async () => {
                                 // 1. CHECK PLAN
-                                // Pro accounts can always publish
-                                const canPublish = subscription?.planId !== 'demo';
+                                // Pro/Basic accounts can publish if active
+                                const canPublish = subscription?.planId !== 'demo' && 
+                                                 (subscription?.status === 'active' || subscription?.status === 'trialing');
                                 if (!canPublish) {
                                     setShowSubscribe(true);
                                     return;
