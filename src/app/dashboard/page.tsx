@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Plus, Edit2, Trash2, ExternalLink, Moon, Sun, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { GuideClient } from "./GuideClient";
+export const revalidate = 0; // Disable caching for this page
 import { guideThemes } from "@/types/themes";
 import { Modal } from "@/components/ui/Modal";
 import type { Guide, BlockType } from "@/types/blocks";
@@ -243,7 +245,7 @@ function DashboardContent() {
 
         const newGuideData = {
             title: newGuideTitle || "Mon Nouveau Guide",
-            slug: slugify(newGuideTitle || "Mon Nouveau Guide") + "-" + Math.random().toString(36).substr(2, 5),
+            slug: slugify(newGuideTitle || "Mon Nouveau Guide"), // Cleaner slugs for manual guides
             theme_id: "minimal-white",
             user_id: user.id, // Assign ownership
             is_published: true, // Auto-publish by default

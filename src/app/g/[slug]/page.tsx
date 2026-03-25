@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import type { Guide } from "@/types/blocks";
 import { GuideClient } from "./GuideClient";
 
+export const revalidate = 0;
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
     const supabase = await createSupabaseServerClient();
@@ -72,7 +74,7 @@ export default async function PublicGuidePage({ params }: { params: Promise<{ sl
     //    b. Owner plan is NOT 'demo' (unless slug is specifically 'demo')
     //    c. Owner subscription status is 'active' or 'trialing'
     
-    const isSubscriptionValid = plan !== 'demo' && (status === 'active' || status === 'trialing');
+    const isSubscriptionValid = plan !== 'demo' && (status === 'active' || status === 'trialing' || status === 'free');
     const isPublicAllowed = isPublished && (isSubscriptionValid || slug === 'demo');
     let guide: Guide;
 
