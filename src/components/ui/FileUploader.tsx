@@ -52,7 +52,8 @@ export function FileUploader({ value, onUpload, label = "Upload Image", accept =
             onUpload(data.publicUrl);
         } catch (err: any) {
             console.error("FileUploader catch block:", err);
-            setError("Erreur lors de l'upload. Vérifiez que la taille est < 5MB ou contactez le support.");
+            const msg = err.message || "Erreur lors de l'upload.";
+            setError(`${msg} (Vérifiez la taille < ${maxSize}MB ou le format)`);
         } finally {
             setUploading(false);
         }
