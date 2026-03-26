@@ -6,6 +6,7 @@ create table public.profiles (
   id uuid references auth.users not null primary key,
   email text,
   full_name text,
+  avatar_url text,
   subscription_status text default 'free', -- 'free', 'active', 'past_due'
   plan_variant text default 'demo',        -- 'demo', 'basic', 'pro'
   stripe_customer_id text,
@@ -19,6 +20,7 @@ alter table public.profiles enable row level security;
 -- Policies for Profiles
 create policy "Users can view own profile" on profiles for select using (auth.uid() = id);
 create policy "Public can view profiles" on profiles for select using (true);
+create policy "Users can insert own profile" on profiles for insert with check (auth.uid() = id);
 create policy "Users can update own profile" on profiles for update using (auth.uid() = id);
 
 -- GUIDES
