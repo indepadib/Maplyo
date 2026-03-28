@@ -68,6 +68,8 @@ function DashboardContent() {
         amenities: []
     });
     const [isGenerating, setIsGenerating] = useState(false);
+    const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
+    const [isAddonSuccessOpen, setIsAddonSuccessOpen] = useState(false);
 
     const handleAiGenerate = async () => {
         setIsGenerating(true);
@@ -87,7 +89,7 @@ function DashboardContent() {
             const data = await res.json();
 
             if (res.status === 403 && data.isLimitReached) {
-                alert("Limite atteinte ! Passez à la version Pro pour créer plus de guides.");
+                setIsLimitModalOpen(true);
                 return;
             }
 
@@ -129,6 +131,11 @@ function DashboardContent() {
         if (searchParams.get('success')) {
             setIsProModalOpen(true);
             router.replace('/dashboard'); // Clean URL
+        }
+
+        if (searchParams.get('success_addon')) {
+            setIsAddonSuccessOpen(true);
+            router.replace('/dashboard');
         }
 
         let retryCount = 0;
@@ -251,18 +258,17 @@ function DashboardContent() {
         // CHECK LIMITS
         const canCreate = checkLimit(subscription, 'guides', guides.length);
         if (!canCreate) {
-            // Redirect to Pricing
-            setIsCreateModalOpen(false); // Close modal
-            window.location.href = '/pricing';
+            setIsCreateModalOpen(false); 
+            setIsLimitModalOpen(true);
             return;
         }
 
         const newGuideData = {
             title: newGuideTitle || "Mon Nouveau Guide",
-            slug: slugify(newGuideTitle || "Mon Nouveau Guide"), // Cleaner slugs for manual guides
+            slug: `${slugify(newGuideTitle || "Mon Nouveau Guide")}-${Math.floor(Math.random() * 10000)}`, // Ensure uniqueness
             theme_id: "minimal-white",
-            user_id: user.id, // Assign ownership
-            is_published: true, // Auto-publish by default
+            user_id: user.id,
+            is_published: true,
             content: {
                 blocks: [
                     {
@@ -296,10 +302,32 @@ function DashboardContent() {
 
         if (error) {
             console.error("Error creating guide:", error);
-            alert("Erreur lors de la création.");
+            alert(`Erreur lors de la création : ${error.message || "Problème de base de données"}`);
         } else if (data) {
             window.location.href = `/app/guides/${data.id}/builder`;
         }
+    };
+
+    const handleBuyAddon = async () => {
+        setLoading(true);
+        try {
+            const { data: { session } } = await supabase.auth.getSession();
+            const res = await fetch('/api/stripe/addon-checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session?.access_token}`
+                },
+                body: JSON.stringify({ currency: 'MAD' }) // Default to MAD for now, could detect
+            });
+            const data = await res.json();
+            if (data.url) {
+                window.location.href = data.url;
+            }
+        } catch (e) {
+            console.error(e);
+        }
+        setLoading(false);
     };
 
     return (
@@ -626,43 +654,62 @@ function DashboardContent() {
                 </form>
             </Modal>
 
-            {/* Welcome Pro Modal */}
+            {/* Limit Modal */}
             <Modal
-                isOpen={isProModalOpen}
-                onClose={() => setIsProModalOpen(false)}
-                title="Félicitations ! 🚀"
-                icon="🎉"
+                isOpen={isLimitModalOpen}
+                onClose={() => setIsLimitModalOpen(false)}
+                title="Limite de guides atteinte 🏠"
+                icon="⚠️"
             >
                 <div className="text-center py-6">
-                    <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-green-200">
-                        <Sparkles className="w-10 h-10 animate-pulse" />
-                    </div>
-
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Bienvenue dans Maplyo Pro</h3>
                     <p className="text-gray-500 mb-8 leading-relaxed">
-                        Votre abonnement est actif ! Vous avez désormais accès à :
+                        Vous avez atteint la limite de guides autorisés par votre abonnement actuel.
                     </p>
 
-                    <div className="bg-gray-50 rounded-2xl p-6 text-left space-y-4 border border-gray-100 mb-8">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-blue-100 text-blue-600 rounded-lg"><Settings size={18} /></div>
-                            <span className="font-medium text-gray-700">Guides illimités & Sans pub</span>
+                    <div className="grid grid-cols-1 gap-4">
+                        <button
+                            onClick={() => window.location.href = '/pricing'}
+                            className="w-full py-4 rounded-xl bg-gradient-to-r from-rose-600 to-purple-600 text-white font-bold text-lg hover:shadow-lg transition-all"
+                        >
+                            🚀 Passer à l'illimité (Pro)
+                        </button>
+                        
+                        <div className="relative py-2">
+                            <div className="absolute inset-x-0 top-1/2 h-px bg-gray-100" />
+                            <span className="relative z-10 bg-white px-3 text-xs font-bold text-gray-400 uppercase tracking-widest">Ou</span>
                         </div>
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-purple-100 text-purple-600 rounded-lg"><Sparkles size={18} /></div>
-                            <span className="font-medium text-gray-700">Thèmes Premium & IA</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-orange-100 text-orange-600 rounded-lg"><CheckCircle2 size={18} /></div>
-                            <span className="font-medium text-gray-700">Publication Instantanée</span>
-                        </div>
-                    </div>
 
+                        <button
+                            onClick={handleBuyAddon}
+                            className="w-full py-4 rounded-xl bg-white border-2 border-gray-100 text-gray-900 font-bold text-lg hover:border-rose-500 transition-all"
+                            disabled={loading}
+                        >
+                            {loading ? "Chargement..." : "➕ Rajouter juste 1 guide (20 DH)"}
+                        </button>
+                    </div>
+                </div>
+            </Modal>
+
+            {/* Addon Success Modal */}
+            <Modal
+                isOpen={isAddonSuccessOpen}
+                onClose={() => setIsAddonSuccessOpen(false)}
+                title="Guide ajouté ! ✨"
+                icon="🎟️"
+            >
+                <div className="text-center py-6">
+                    <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <CheckCircle2 className="w-10 h-10" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">C'est prêt !</h3>
+                    <p className="text-gray-500 mb-8">
+                        Votre limite a été augmentée de 1 guide. Vous pouvez désormais créer votre nouveau guide dès maintenant.
+                    </p>
                     <button
-                        onClick={() => setIsProModalOpen(false)}
-                        className="w-full py-4 rounded-xl bg-gray-900 text-white font-bold text-lg hover:bg-black transition-all shadow-xl"
+                        onClick={() => setIsAddonSuccessOpen(false)}
+                        className="w-full py-4 rounded-xl bg-gray-900 text-white font-bold text-lg hover:bg-black transition-all"
                     >
-                        C'est parti !
+                        Super, merci !
                     </button>
                 </div>
             </Modal>

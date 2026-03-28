@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import { useState, useRef, useMemo, useEffect } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import { blockRegistry } from "@/components/blocks/registry";
 import type { Guide, BlockType } from "@/types/blocks";
 import { guideThemes } from "@/types/themes";
@@ -119,6 +119,162 @@ const DICTIONARY = {
         nightlife: "Nightlife in",
         walk: "Walk around",
         items: "items",
+    },
+    ar: {
+        searchPlaceholder: "البحث في الدليل...",
+        wifi: "واي فاي",
+        access: "رموز الدخول",
+        checkin: "تسجيل الوصول",
+        checkout: "تسجيل المغادرة",
+        location: "الموقع",
+        rules: "قواعد المنزل",
+        contact: "اتصل بنا",
+        amenities: "المرافق",
+        places: "أماكن قريبة",
+        events: "فعاليات",
+        documents: "مستندات",
+        upsells: "خدمات إضافية",
+        embed: "محتوى مدمج",
+        welcome: "أهلاً بك",
+        trash: "النفايات",
+        parking: "المواقف",
+        breakfast: "الإفطار",
+        transport: "المواصلات",
+        days: "أيام",
+        hours: "ساعات",
+        minutes: "دقائق",
+        network: "الشبكة",
+        password: "كلمة المرور",
+        copy: "نسخ",
+        copied: "تم النسخ!",
+        getDirections: "الحصول على الاتجاهات",
+        openMaps: "فتح الخرائط",
+        call: "اتصال",
+        message: "رسالة",
+        empty: "لا توجد نتائج مطابقة لبحثك",
+        seeAll: "عرض الكل",
+        less: "عرض أقل",
+        scanQr: "امسح للتنزيل",
+        share: "مشاركة",
+        download: "تحميل",
+        tipOfTheDay: "نصيحة اليوم"
+    },
+    es: {
+        searchPlaceholder: "Buscar en la guía...",
+        wifi: "Wi-Fi",
+        access: "Códigos de acceso",
+        checkin: "Llegada",
+        checkout: "Salida",
+        location: "Ubicación",
+        rules: "Reglas de la casa",
+        contact: "Contacto",
+        amenities: "Servicios",
+        places: "Lugares cercanos",
+        events: "Eventos",
+        documents: "Documentos",
+        upsells: "Servicios adicionales",
+        embed: "Contenido",
+        welcome: "Bienvenido",
+        trash: "Basura",
+        parking: "Aparcamiento",
+        breakfast: "Desayuno",
+        transport: "Transporte",
+        days: "días",
+        hours: "horas",
+        minutes: "minutos",
+        network: "Red",
+        password: "Contraseña",
+        copy: "Copiar",
+        copied: "¡Copiado!",
+        getDirections: "Cómo llegar",
+        openMaps: "Abrir Mapas",
+        call: "Llamar",
+        message: "Mensaje",
+        empty: "No hay resultados para tu búsqueda",
+        seeAll: "Ver todo",
+        less: "Ver menos",
+        scanQr: "Escanear para descargar",
+        share: "Compartir",
+        download: "Descargar",
+        tipOfTheDay: "Consejo del día"
+    },
+    it: {
+        searchPlaceholder: "Cerca nella guida...",
+        wifi: "Wi-Fi",
+        access: "Codici d'accesso",
+        checkin: "Arrivo",
+        checkout: "Partenza",
+        location: "Posizione",
+        rules: "Regole della casa",
+        contact: "Contatto",
+        amenities: "Servizi",
+        places: "Luoghi vicini",
+        events: "Eventi",
+        documents: "Documenti",
+        upsells: "Servizi extra",
+        embed: "Contenuto",
+        welcome: "Benvenuto",
+        trash: "Rifiuti",
+        parking: "Parcheggio",
+        breakfast: "Colazione",
+        transport: "Trasporto",
+        days: "giorni",
+        hours: "ore",
+        minutes: "minuti",
+        network: "Rete",
+        password: "Password",
+        copy: "Copia",
+        copied: "Copiato!",
+        getDirections: "Ottieni indicazioni",
+        openMaps: "Apri Mappe",
+        call: "Chiama",
+        message: "Messaggio",
+        empty: "Nessun risultato trovato",
+        seeAll: "Vedi tutto",
+        less: "Vedi meno",
+        scanQr: "Scansiona per scaricare",
+        share: "Condividi",
+        download: "Scarica",
+        tipOfTheDay: "Consiglio del giorno"
+    },
+    de: {
+        searchPlaceholder: "In der Anleitung suchen...",
+        wifi: "WLAN",
+        access: "Zugangscodes",
+        checkin: "Ankunft",
+        checkout: "Abreise",
+        location: "Standort",
+        rules: "Hausregeln",
+        contact: "Kontakt",
+        amenities: "Ausstattung",
+        places: "In der Nähe",
+        events: "Veranstaltungen",
+        documents: "Dokumente",
+        upsells: "Zusatzservices",
+        embed: "Inhalt",
+        welcome: "Willkommen",
+        trash: "Müll",
+        parking: "Parken",
+        breakfast: "Frühstück",
+        transport: "Transport",
+        days: "Tage",
+        hours: "Stunden",
+        minutes: "Minuten",
+        network: "Netzwerk",
+        password: "Passwort",
+        copy: "Kopieren",
+        copied: "Kopiert!",
+        getDirections: "Route berechnen",
+        openMaps: "Karten öffnen",
+        call: "Anrufen",
+        message: "Nachricht",
+        empty: "Keine Ergebnisse gefunden",
+        seeAll: "Alle ansehen",
+        less: "Weniger anzeigen",
+        scanQr: "Zum Herunterladen scannen",
+        share: "Teilen",
+        download: "Herunterladen",
+        tipOfTheDay: "Tipp des Tages"
     }
 };
 
@@ -554,7 +710,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
     // If Desktop: val="h-[85vh]"
     // If Mobile: val="h-[50vh]"
 
-    const heroHeightBase = "h-[50vh]";
+    const heroHeightBase = "h-[70vh]";
     const heroHeightDesktop = "h-[85vh] -mb-32";
     const heroHeightClass = isResponsive
         ? `${heroHeightBase} md:h-[85vh] md:-mb-32`
@@ -664,27 +820,27 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                         ) : (
                             <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black" />
                         )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
 
-                        {/* Top Bar with Search & Lang */}
-                        <div className="absolute top-0 left-0 right-0 p-4 z-50 flex flex-col gap-4">
-                            <div className="flex justify-between items-start gap-4">
-                                <div className="bg-black/30 backdrop-blur-xl rounded-full p-1.5 flex items-center border border-white/20 w-full shadow-lg">
-                                    <Search className="w-4 h-4 text-white/70 ml-3" />
+                        {/* Top Bar with Search & Lang - Floating Glassmorphism Style */}
+                        <div className="absolute top-0 left-0 right-0 p-5 z-50 flex flex-col gap-4">
+                            <div className="flex justify-between items-center gap-4 max-w-xl mx-auto w-full">
+                                <div className="bg-white/10 backdrop-blur-2xl rounded-2xl p-1.5 flex items-center border border-white/20 w-full shadow-2xl ring-1 ring-white/10">
+                                    <Search className="w-4 h-4 text-white/50 ml-3" />
                                     <input
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                         placeholder={t.searchPlaceholder}
-                                        className="bg-transparent border-none outline-none text-white text-sm px-2 py-1 w-full placeholder:text-white/50"
+                                        className="bg-transparent border-none outline-none text-white text-sm px-2 py-2 w-full placeholder:text-white/40 font-medium"
                                     />
                                 </div>
 
                                 <button
                                     onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
-                                    className="bg-black/30 backdrop-blur-xl rounded-full px-3 py-2.5 flex items-center gap-2 border border-white/20 text-white text-xs font-bold uppercase hover:bg-black/40 transition-colors shadow-lg"
+                                    className="bg-white/10 backdrop-blur-2xl rounded-2xl px-4 py-3 flex items-center gap-2 border border-white/20 text-white text-xs font-black uppercase hover:bg-white/20 transition-all shadow-2xl ring-1 ring-white/10 active:scale-95"
                                 >
                                     <Globe className="w-3.5 h-3.5" />
-                                    {lang}
+                                    <span className="hidden xs:inline">{lang}</span>
                                 </button>
                             </div>
 
@@ -700,13 +856,13 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                             </AnimatePresence>
                         </div>
 
-                        <div className={`absolute left-0 right-0 px-6 max-w-7xl mx-auto z-20 ${isResponsive ? 'bottom-40 md:bottom-48 md:px-12 text-center md:text-left' : (forceDesktop ? 'bottom-48 px-12 text-left' : 'bottom-32 text-center')}`}>
+                        <div className={`absolute left-0 right-0 px-8 max-w-7xl mx-auto z-20 ${isResponsive ? 'bottom-20 md:bottom-48 md:px-12 text-center md:text-left' : (forceDesktop ? 'bottom-48 px-12 text-left' : 'bottom-32 text-center')}`}>
                             <motion.div
                                 initial={{ y: 30, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ duration: 0.8 }}
                             >
-                                <h1 className={`font-black mb-3 text-white tracking-tight leading-[1.1] drop-shadow-2xl text-3xl ${isResponsive ? 'md:text-8xl md:mb-4' : (forceDesktop ? 'text-8xl mb-4' : '')}`}>
+                                <h1 className={`font-black mb-4 text-white tracking-tight leading-[1.05] drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] ${isResponsive ? 'text-4xl md:text-8xl md:mb-6' : (forceDesktop ? 'text-8xl mb-6' : 'text-3xl')}`}>
                                     <TranslatedText text={(heroBlock?.data as any)?.title || guide.title} lang={lang} />
                                 </h1>
                             </motion.div>
@@ -716,21 +872,21 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                     initial={{ y: 30, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.2, duration: 0.8 }}
-                                    className={`flex flex-col gap-4 items-center ${isResponsive ? 'md:items-start' : (forceDesktop ? 'items-start' : '')}`}
+                                    className={`flex flex-col gap-6 items-center ${isResponsive ? 'md:items-start' : (forceDesktop ? 'items-start' : '')}`}
                                 >
-                                    <p className={`text-white/90 max-w-xl font-medium leading-relaxed drop-shadow-md text-base md:text-xl`}>
+                                    <p className={`text-white/95 max-w-xl font-bold leading-relaxed drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] ${isResponsive ? 'text-lg md:text-2xl' : (forceDesktop ? 'text-2xl' : 'text-base')}`}>
                                         <TranslatedText text={(heroBlock.data as any).subtitle} lang={lang} />
                                     </p>
 
                                     {/* City & Badges */}
-                                    <div className={`flex flex-wrap items-center gap-3 mt-4 ${isResponsive ? 'justify-center md:justify-start' : (forceDesktop ? 'justify-start' : 'justify-center')}`}>
-                                        <div className="flex items-center gap-2 px-4 py-1.5 bg-white text-black rounded-full text-sm font-bold shadow-lg transform hover:scale-105 transition-transform">
-                                            <MapPin className="w-4 h-4 text-rose-500 fill-rose-500" />
+                                    <div className={`flex flex-wrap items-center gap-3 mt-2 ${isResponsive ? 'justify-center md:justify-start' : (forceDesktop ? 'justify-start' : 'justify-center')}`}>
+                                        <div className="flex items-center gap-2 px-5 py-2 bg-rose-600 text-white rounded-2xl text-sm font-black shadow-xl transform hover:scale-105 transition-all ring-4 ring-white/10">
+                                            <MapPin className="w-4 h-4 fill-white" />
                                             {city}
                                         </div>
                                         {/* Display Badges from Hero Data if available */}
                                         {(heroBlock.data as any).badges?.map((badge: string, i: number) => (
-                                            <span key={i} className="px-3 py-1.5 bg-black/40 backdrop-blur-md border border-white/20 rounded-full text-white text-xs font-bold uppercase tracking-wider shadow-sm">
+                                            <span key={i} className="px-4 py-2 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl text-white text-[10px] font-black uppercase tracking-widest shadow-2xl">
                                                 <TranslatedText text={badge} lang={lang} />
                                             </span>
                                         ))}
@@ -788,28 +944,20 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                 const Icon = MinimalIcons[b.type] || MinimalIcons.hero;
 
                                 // APPLE STYLE SIZING LOGIC
-                                // ------------------------
-
-                                // Default: Square (1x1)
                                 let colSpan = "col-span-1";
-                                let aspect = "aspect-square"; // Enforce Square
+                                let aspect = "aspect-square";
 
-                                // "Rich" Blocks: Rectangle (2x1)
                                 const isRichBlock = ["location", "places", "events", "upsells", "marketing_hero", "documents"].includes(b.type);
 
                                 if (isRichBlock) {
-                                    colSpan = "col-span-2"; // Full width on mobile (2 cols), Half width on Desktop (2 of 4)
-                                    aspect = "aspect-[2/1]"; // Enforce Rect
+                                    colSpan = "col-span-2";
+                                    aspect = "aspect-[2/1]";
                                 }
 
-                                // Special Case: Location on Desktop can be huge
                                 const allowDesktopLayout = isResponsive || forceDesktop;
                                 if (b.type === "location" && allowDesktopLayout) {
                                     colSpan = isResponsive ? "md:col-span-2 md:row-span-2" : "col-span-2 row-span-2";
                                     aspect = "aspect-square";
-                                } else if (isRichBlock) {
-                                    colSpan = "col-span-2";
-                                    aspect = "aspect-[2/1]";
                                 }
 
                                 const cardProps = {
@@ -819,17 +967,13 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                     lang: lang
                                 };
 
-                                const wrapperClass = `${colSpan} ${aspect} relative group`;
-
-
-                                // COMPONENT SELECTION
+                                const wrapperClass = `${colSpan} ${aspect} relative group overflow-hidden rounded-3xl backdrop-blur-xl bg-white/70 border border-white/40 shadow-sm transition-all duration-300 hover:shadow-lg`;
 
                                 if (isRichBlock) {
                                     if (b.type === "location") return <div key={b.id} className={wrapperClass}><LocationCard {...cardProps} /></div>;
                                     if (b.type === "upsells") return <div key={b.id} className={wrapperClass}><UpsellsCard {...cardProps} /></div>;
 
                                     const displayTitle = b.title || ((t as any)[b.type] || def.label);
-
                                     return <div key={b.id} className={wrapperClass}><ListCard title={displayTitle} icon={Icon} items={(b.data as any).items || []} {...cardProps} /></div>;
                                 }
 
@@ -837,13 +981,12 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                     return <div key={b.id} className={wrapperClass}><TimeCard type={b.type} {...cardProps} /></div>;
                                 }
 
-                                // Mini Cards (Square)
                                 if (["contact", "rules", "amenities", "faq"].includes(b.type)) {
                                     let colorClass = "bg-gray-100 text-gray-600";
                                     let startTitle = b.title || ((t as any)[b.type] || def.label);
                                     let count = undefined;
 
-                                    if (b.type === "contact") { colorClass = "bg-green-100 text-green-600"; }
+                                    if (b.type === "contact") colorClass = "bg-green-100 text-green-600";
                                     if (b.type === "rules") { colorClass = "bg-rose-100 text-rose-600"; count = (b.data as any).items?.length; }
                                     if (b.type === "amenities") { colorClass = "bg-blue-100 text-blue-600"; count = (b.data as any).items?.length; }
                                     if (b.type === "faq") { colorClass = "bg-purple-100 text-purple-600"; count = (b.data as any).items?.length; }
@@ -860,10 +1003,9 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                                 lang={lang}
                                             />
                                         </div>
-                                    )
+                                    );
                                 }
 
-                                // Fallback
                                 return (
                                     <div key={b.id} className={wrapperClass}>
                                         <StandardCard icon={Icon} title={b.title || def.label} {...cardProps} />

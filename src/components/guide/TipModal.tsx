@@ -33,10 +33,10 @@ export function TipModal({ isOpen, onClose, lang, tip }: TipModalProps) {
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.9, opacity: 0 }}
-                    className="relative w-full max-w-sm bg-white rounded-3xl overflow-hidden shadow-2xl z-10"
+                    className="relative w-full max-w-[340px] md:max-w-sm bg-white rounded-[2rem] overflow-hidden shadow-2xl z-10 m-2"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <div className="relative h-48 w-full overflow-hidden">
+                    <div className="relative h-28 md:h-48 w-full overflow-hidden">
                         {tip.imageUrl ? (
                             <Image
                                 src={tip.imageUrl}
@@ -46,21 +46,21 @@ export function TipModal({ isOpen, onClose, lang, tip }: TipModalProps) {
                             />
                         ) : (
                             <div className={`w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center`}>
-                                <div className="text-white opacity-20 text-6xl font-black">{tip.city?.slice(0, 2).toUpperCase() || "MA"}</div>
+                                <div className="text-white opacity-20 text-5xl font-black">{tip.city?.slice(0, 2).toUpperCase() || "MA"}</div>
                             </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                         <button
                             onClick={onClose}
-                            className="absolute top-4 right-4 p-2 bg-black/20 backdrop-blur-md rounded-full text-white hover:bg-black/40 transition-colors"
+                            className="absolute top-3 right-3 p-1.5 bg-black/20 backdrop-blur-md rounded-full text-white hover:bg-black/40 transition-colors"
                         >
-                            <X className="w-5 h-5" />
+                            <X className="w-4 h-4" />
                         </button>
                     </div>
 
-                    <div className="p-6">
-                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{tip.title}</h3>
-                        <p className="text-gray-600 mb-6">{tip.text}</p>
+                    <div className="p-4 md:p-6 text-center md:text-left">
+                        <h3 className="text-lg md:text-2xl font-bold text-gray-900 mb-1 leading-tight">{tip.title}</h3>
+                        <p className="text-xs md:text-base text-gray-600 mb-4 md:mb-6">{tip.text}</p>
 
                         {(tip.location || tip.mapUrl) && (
                             <a

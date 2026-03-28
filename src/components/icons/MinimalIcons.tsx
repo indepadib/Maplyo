@@ -34,13 +34,13 @@ export const MinimalIcons: Record<BlockType, React.FC<IconProps>> = {
         </svg>
     ),
     upsells: ({ className, color = "currentColor" }) => (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5">
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2">
             <path d="M12 21a9 9 0 1 0-9-9c0 4.97 4.02 9 9 9Z" />
             <path d="M9 12l2 2 4-4" />
         </svg>
     ),
     trash: ({ className, color = "currentColor" }) => (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5">
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2">
             <path d="M3 6h18" />
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
             <path d="M10 11v6" />
@@ -48,20 +48,20 @@ export const MinimalIcons: Record<BlockType, React.FC<IconProps>> = {
         </svg>
     ),
     parking: ({ className, color = "currentColor" }) => (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5">
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2">
             <rect x="2" y="2" width="20" height="20" rx="4" />
             <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
         </svg>
     ),
     breakfast: ({ className, color = "currentColor" }) => (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5">
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2">
             <path d="M8 8V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v4" />
             <path d="M16 8h-8a4 4 0 0 0-4 4v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a4 4 0 0 0-4-4Z" />
             <path d="M10 14h4" />
         </svg>
     ),
     transport: ({ className, color = "currentColor" }) => (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5">
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2">
             <rect x="3" y="6" width="18" height="12" rx="2" />
             <path d="M16 18v2" />
             <path d="M8 18v2" />
