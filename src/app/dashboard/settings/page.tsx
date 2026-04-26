@@ -8,8 +8,10 @@ import { supabase } from "@/lib/supabase";
 import { FileUploader } from "@/components/ui/FileUploader";
 import { getUserSubscription } from "@/lib/subscription";
 import { Modal } from "@/components/ui/Modal";
+import { useTranslation } from "@/components/providers/LanguageProvider";
 
 export default function SettingsPage() {
+    const { t } = useTranslation();
     const { user } = useAuth();
     const [activeTab, setActiveTab] = useState<"profile" | "plan" | "shop">("profile");
     const [loading, setLoading] = useState(false);
@@ -72,10 +74,10 @@ export default function SettingsPage() {
                 updated_at: new Date().toISOString(),
             });
             if (error) throw error;
-            showModal("Succès", <div className="text-center p-4">Votre profil a été mis à jour avec succès ! 🎉</div>, "✅");
+            showModal(t.settings.success, <div className="text-center p-4">Votre profil a été mis à jour avec succès ! 🎉</div>, "✅");
         } catch (e) {
             console.error(e);
-            showModal("Erreur", <div className="text-center p-4 text-red-600">Une erreur est survenue lors de la mise à jour.</div>, "⚠️");
+            showModal(t.settings.error, <div className="text-center p-4 text-red-600">Une erreur est survenue lors de la mise à jour.</div>, "⚠️");
         } finally {
             setLoading(false);
         }
@@ -89,7 +91,7 @@ export default function SettingsPage() {
                     <Link href="/dashboard" className="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
                         <ChevronLeft className="w-6 h-6" />
                     </Link>
-                    <h1 className="text-3xl font-bold">Paramètres & Compte</h1>
+                    <h1 className="text-3xl font-bold">{t.settings.title}</h1>
                 </div>
 
                 <div className="grid md:grid-cols-[240px_1fr] gap-8">
@@ -101,7 +103,7 @@ export default function SettingsPage() {
                                 }`}
                         >
                             <User size={18} />
-                            Profil
+                            {t.settings.tabProfile}
                         </button>
                         <button
                             onClick={() => setActiveTab("plan")}
@@ -109,7 +111,7 @@ export default function SettingsPage() {
                                 }`}
                         >
                             <CreditCard size={18} />
-                            Abonnement
+                            {t.settings.tabPlan}
                         </button>
                         <button
                             onClick={() => setActiveTab("shop")}
@@ -117,7 +119,7 @@ export default function SettingsPage() {
                                 }`}
                         >
                             <ShoppingBag size={18} />
-                            Boutique (Upsells)
+                            {t.settings.tabShop}
                         </button>
                     </div>
 
@@ -125,7 +127,7 @@ export default function SettingsPage() {
                     <div className="bg-slate-900/50 backdrop-blur-sm border border-white/5 rounded-3xl p-8">
                         {activeTab === "profile" && (
                             <div className="space-y-6">
-                                <h2 className="text-xl font-bold mb-4">Informations Personnelles</h2>
+                                <h2 className="text-xl font-bold mb-4">{t.settings.personalInfo}</h2>
 
                                 <div className="flex items-center gap-6">
                                     <div className="w-24 h-24 rounded-full bg-slate-800 border-2 border-dashed border-white/20 flex items-center justify-center overflow-hidden relative group">
@@ -145,7 +147,7 @@ export default function SettingsPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold mb-2">Nom Complet</label>
+                                    <label className="block text-sm font-bold mb-2">{t.settings.fullName}</label>
                                     <input
                                         value={fullName}
                                         onChange={(e) => setFullName(e.target.value)}
@@ -155,7 +157,7 @@ export default function SettingsPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold mb-2">Email</label>
+                                    <label className="block text-sm font-bold mb-2">{t.settings.email}</label>
                                     <input
                                         value={user?.email}
                                         disabled
@@ -166,72 +168,68 @@ export default function SettingsPage() {
                                 <button
                                     onClick={updateProfile}
                                     disabled={loading}
-                                    className="bg-white text-black px-6 py-3 rounded-xl font-bold hover:bg-zinc-200 transition-colors disabled:opacity-50"
+                                    className="w-full py-4 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl shadow-lg shadow-rose-600/20 transition-all flex items-center justify-center gap-2"
                                 >
-                                    {loading ? "Enregistrement..." : "Sauvegarder"}
+                                    <Check className="w-5 h-5" />
+                                    {loading ? t.common.loading : t.settings.saveProfile}
                                 </button>
                             </div>
                         )}
 
                         {activeTab === "plan" && (
                             <div className="space-y-6">
-                                <h2 className="text-xl font-bold mb-4">Mon Abonnement</h2>
-
-                                <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 relative overflow-hidden">
-                                    <div className="relative z-10">
-                                        <div className="flex justify-between items-start">
-                                            <div>
-                                                <div className="text-sm text-zinc-400 mb-1">Plan Actuel</div>
-                                                <div className="text-3xl font-black text-rose-400 mb-4 uppercase tracking-wider">
-                                                    {subscription?.planId === "pro" ? "PRO" : subscription?.planId === "basic" ? "BASIQUE" : "DÉMO"}
-                                                </div>
+                                <h2 className="text-xl font-bold mb-4">{t.settings.yourPlan}</h2>
+                                <div className="bg-slate-950 p-6 rounded-2xl border border-white/10">
+                                    <div className="flex justify-between items-start mb-6">
+                                        <div>
+                                            <p className="text-sm text-zinc-400 mb-1">{t.settings.currentPlan}</p>
+                                            <div className="text-3xl font-black text-rose-400 mb-4 uppercase tracking-wider">
+                                                {subscription?.planId === "pro" ? "PRO" : subscription?.planId === "basic" ? "BASIQUE" : "DÉMO"}
                                             </div>
-                                            {subscription?.status === 'active' && (
-                                                <div className="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full border border-green-500/20">
-                                                    ACTIF
-                                                </div>
-                                            )}
                                         </div>
-
-                                        <div className="flex flex-col gap-2 text-sm text-zinc-300">
-                                            <div className="flex items-center gap-2">
-                                                <span className={`w-1.5 h-1.5 rounded-full ${subscription?.planId === "demo" ? "bg-yellow-400" : "bg-green-400"}`} />
-                                                {subscription?.planId === "pro" ? "Guides illimités" : subscription?.planId === "basic" ? "1 Guide inclus" : "1 Guide (Brouillon)"}
+                                        {subscription?.status === 'active' && (
+                                            <div className="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full border border-green-500/20">
+                                                {t.settings.active}
                                             </div>
-
-                                            {/* Addons Display */}
-                                            {subscription?.addons?.themes && (
-                                                <div className="flex items-center gap-2">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-                                                    Pack Thèmes Débloqué
-                                                </div>
-                                            )}
-                                            {subscription?.addons?.extra_guides > 0 && (
-                                                <div className="flex items-center gap-2">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-                                                    +{subscription.addons.extra_guides} Guide(s) Supplémentaire(s)
-                                                </div>
-                                            )}
-                                        </div>
+                                        )}
                                     </div>
-                                    <div className="absolute right-0 top-0 p-8 opacity-10">
-                                        <CreditCard size={100} />
+
+                                    <div className="flex flex-col gap-2 text-sm text-zinc-300">
+                                        <div className="flex items-center gap-2">
+                                            <span className={`w-1.5 h-1.5 rounded-full ${subscription?.planId === "demo" ? "bg-yellow-400" : "bg-green-400"}`} />
+                                            {subscription?.planId === "pro" ? t.settings.unlimitedGuides : subscription?.planId === "basic" ? t.settings.oneGuideIncluded : t.settings.oneGuideDraft}
+                                        </div>
+
+                                        {subscription?.addons?.themes && (
+                                            <div className="flex items-center gap-2">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                                                {t.settings.themesUnlocked}
+                                            </div>
+                                        )}
+                                        {subscription?.addons?.extra_guides > 0 && (
+                                            <div className="flex items-center gap-2">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                                                +{subscription.addons.extra_guides} {t.settings.extraGuides}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
-                                <div className="flex gap-4">
+                                <div className="flex flex-col gap-4">
                                     {subscription?.planId !== "pro" ? (
-                                        <Link href="/pricing" className="bg-rose-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-rose-700 transition-colors">
-                                            Passer Pro
+                                        <Link href="/pricing" className="bg-rose-600 text-white text-center py-3 rounded-xl font-bold hover:bg-rose-700 transition-colors">
+                                            {t.settings.upgradeToPro}
                                         </Link>
                                     ) : (
-                                        <button disabled className="bg-zinc-800 text-zinc-500 px-6 py-3 rounded-xl font-bold cursor-not-allowed">
-                                            Vous êtes Pro
+                                        <button disabled className="bg-zinc-800 text-zinc-500 py-3 rounded-xl font-bold cursor-not-allowed">
+                                            {t.settings.youArePro}
                                         </button>
                                     )}
 
-                                    <button
-                                        onClick={async () => {
+                                    <a
+                                        href="#"
+                                        onClick={async (e) => {
+                                            e.preventDefault();
                                             if (!user) return;
                                             setLoading(true);
                                             try {
@@ -241,15 +239,17 @@ export default function SettingsPage() {
                                                 });
                                                 const data = await res.json();
                                                 if (data.url) window.location.href = data.url;
-                                                else showModal("Info", <p className="text-center p-4">Pas de compte de facturation trouvé.</p>, "ℹ️");
-                                            } catch (e) { console.error(e); }
+                                                else showModal(t.settings.info, <p className="text-center p-4">{t.settings.noBillingAccount}</p>, "ℹ️");
+                                            } catch (e) { 
+                                                console.error(e);
+                                                showModal(t.settings.error, <p className="text-center text-red-500 p-4">{t.settings.serverError}</p>, "⚠️");
+                                            }
                                             setLoading(false);
                                         }}
-                                        disabled={loading}
-                                        className="text-zinc-400 hover:text-white px-4 font-medium"
+                                        className="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-medium rounded-xl transition-all text-center"
                                     >
-                                        {loading ? "Chargement..." : "Gérer la facturation (Stripe)"}
-                                    </button>
+                                        {t.settings.manageSubscription}
+                                    </a>
                                 </div>
                             </div>
                         )}
@@ -257,89 +257,87 @@ export default function SettingsPage() {
                         {activeTab === "shop" && (
                             <div className="space-y-8">
                                 <div className="flex items-center justify-between">
-                                    <h2 className="text-xl font-bold">Boutique & Extras</h2>
+                                    <h2 className="text-xl font-bold">{t.settings.shop}</h2>
                                     <div className="flex items-center gap-2 text-xs text-zinc-400 bg-white/5 px-3 py-1 rounded-full">
                                         <ShieldCheck className="w-4 h-4 text-green-400" />
-                                        Paiement Sécurisé Stripe
+                                        {t.settings.securePayment}
                                     </div>
                                 </div>
 
                                 <div className="grid lg:grid-cols-2 gap-6">
-                                    {/* Physical QR Code Product */}
                                     <div className="relative group p-1 rounded-3xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 hover:border-rose-500/50 transition-all hover:shadow-2xl hover:shadow-rose-500/10">
                                         <div className="absolute top-4 right-4 bg-rose-500 text-white text-[10px] font-bold px-2 py-1 rounded-full animate-pulse">
-                                            BEST SELLER
+                                            {t.settings.bestSeller}
                                         </div>
                                         <div className="bg-slate-900 rounded-[22px] p-6 h-full flex flex-col">
                                             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg shadow-rose-500/20 group-hover:scale-110 transition-transform duration-300">
                                                 <Package className="w-8 h-8 text-white" />
                                             </div>
 
-                                            <h3 className="font-bold text-xl mb-2 text-white">QR Code sur Toile</h3>
+                                            <h3 className="font-bold text-xl mb-2 text-white">{t.settings.qrCanvas}</h3>
                                             <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
-                                                Offrez une expérience premium dès l'arrivée. Recevez un QR code unique imprimé sur une toile de qualité musée (20x20cm), prêt à être accroché.
+                                                {t.settings.qrCanvasDesc}
                                             </p>
 
                                             <ul className="space-y-2 mb-8 flex-1">
                                                 <li className="flex items-center gap-2 text-sm text-zinc-300">
                                                     <Check className="w-4 h-4 text-rose-500" />
-                                                    Impression Haute Définition
+                                                    {t.settings.hdPrint}
                                                 </li>
                                                 <li className="flex items-center gap-2 text-sm text-zinc-300">
                                                     <Check className="w-4 h-4 text-rose-500" />
-                                                    Cadre en bois inclus
+                                                    {t.settings.frameIncluded}
                                                 </li>
                                                 <li className="flex items-center gap-2 text-sm text-zinc-300">
                                                     <Check className="w-4 h-4 text-rose-500" />
-                                                    Livraison Suivie (Monde)
+                                                    {t.settings.trackedShipping}
                                                 </li>
                                             </ul>
 
                                             <div className="flex items-center justify-between pt-4 border-t border-white/5">
                                                 <div className="flex flex-col">
                                                     <span className="text-2xl font-bold text-white">200 DH</span>
-                                                    <span className="text-[10px] text-zinc-500">TTC + Livraison</span>
+                                                    <span className="text-[10px] text-zinc-500">{t.settings.shippingTtc}</span>
                                                 </div>
                                                 <button className="bg-white text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-zinc-200 transition-colors shadow-lg active:scale-95">
-                                                    Commander
+                                                    {t.settings.order}
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Extra Guides Add-on */}
                                     <div className="relative group p-1 rounded-3xl bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-white/10 hover:border-blue-500/50 transition-all hover:shadow-2xl hover:shadow-blue-500/10">
                                         <div className="absolute top-4 right-4 bg-blue-500 text-white text-[10px] font-bold px-2 py-1 rounded-full">
-                                            REQUIS: PRO
+                                            {t.settings.requiredPro}
                                         </div>
                                         <div className="bg-slate-900 rounded-[22px] p-6 h-full flex flex-col">
                                             <div className="w-16 h-16 rounded-2xl bg-blue-500/20 flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300">
                                                 <Settings className="w-8 h-8 text-blue-400" />
                                             </div>
 
-                                            <h3 className="font-bold text-xl mb-2 text-white">Guide Supplémentaire</h3>
+                                            <h3 className="font-bold text-xl mb-2 text-white">{t.settings.extraGuide}</h3>
                                             <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
-                                                Besoin de plus de 2 guides ? Ajoutez un emplacement supplémentaire à votre abonnement Pro.
+                                                {t.settings.extraGuideDesc}
                                             </p>
 
                                             <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
                                                 <div className="flex flex-col">
                                                     <span className="text-2xl font-bold text-white">20 DH</span>
-                                                    <span className="text-[10px] text-zinc-500">/mois par guide</span>
+                                                    <span className="text-[10px] text-zinc-500">{t.settings.perMonth}</span>
                                                 </div>
                                                 <button
                                                     onClick={async () => {
                                                         if (subscription?.planId !== 'pro') {
-                                                            showModal("Réservé aux Pros", <p className="text-center p-4">Vous devez avoir le plan Pro pour ajouter des guides.</p>, "🚫");
+                                                            showModal(t.settings.proReserved, <p className="text-center p-4">{t.settings.onlyProCanAdd}</p>, "🚫");
                                                             return;
                                                         }
 
                                                         showModal(
-                                                            "Ajouter un Guide",
+                                                            t.settings.addGuide,
                                                             <div className="text-center p-4">
-                                                                <p className="mb-6">Ajouter 1 guide supplémentaire pour 20 DH/mois ?</p>
+                                                                <p className="mb-6">{t.settings.confirmAddGuide}</p>
                                                                 <div className="flex justify-center gap-4">
-                                                                    <button onClick={closeModal} className="px-4 py-2 rounded-xl bg-gray-100 font-bold hover:bg-gray-200">Annuler</button>
+                                                                    <button onClick={closeModal} className="px-4 py-2 rounded-xl bg-gray-100 font-bold hover:bg-gray-200">{t.settings.cancel}</button>
                                                                     <button onClick={async () => {
                                                                         closeModal();
                                                                         setLoading(true);
@@ -350,17 +348,17 @@ export default function SettingsPage() {
                                                                             });
                                                                             const data = await res.json();
                                                                             if (data.success) {
-                                                                                showModal("Guide Ajouté ! 📚", <p className="text-center p-4">Votre limite a été augmentée avec succès.</p>, "✅");
+                                                                                showModal(t.settings.guideAdded, <p className="text-center p-4">{t.settings.limitIncreased}</p>, "✅");
                                                                                 setTimeout(() => window.location.reload(), 2000);
                                                                             } else {
-                                                                                showModal("Erreur", <p className="text-center text-red-500 p-4">{data.error}</p>, "⚠️");
+                                                                                showModal(t.settings.error, <p className="text-center text-red-500 p-4">{data.error}</p>, "⚠️");
                                                                             }
                                                                         } catch (e) {
                                                                             console.error(e);
-                                                                            showModal("Erreur", <p className="text-center text-red-500 p-4">Erreur serveur.</p>, "⚠️");
+                                                                            showModal(t.settings.error, <p className="text-center text-red-500 p-4">{t.settings.serverError}</p>, "⚠️");
                                                                         }
                                                                         setLoading(false);
-                                                                    }} className="px-4 py-2 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700">Confirmer</button>
+                                                                    }} className="px-4 py-2 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700">{t.settings.confirm}</button>
                                                                 </div>
                                                             </div>,
                                                             "➕"
@@ -369,7 +367,6 @@ export default function SettingsPage() {
                                                     disabled={loading || subscription?.planId !== 'pro'}
                                                     className="bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 >
-                                                    {loading ? "..." : "Ajouter (+1)"}
                                                 </button>
                                             </div>
                                         </div>

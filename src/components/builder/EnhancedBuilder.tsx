@@ -13,6 +13,8 @@ import { canUseFeature } from "@/lib/subscription";
 import { UserSubscription } from "@/types/subscription";
 import { Guide, BlockType } from "@/types/blocks"; // Value import for Guide and BlockType
 import { slugify } from "@/lib/utils/slugify";
+import { useTranslation } from "@/components/providers/LanguageProvider";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 const STORAGE_KEY = "eguidehq_demo_guide_v1";
@@ -57,6 +59,7 @@ export function EnhancedBuilder({
     const planId = subscription?.planId || 'demo';
     // @ts-ignore
     const unlockedThemes = subscription ? canUseFeature(subscription, 'themes') : false;
+    const { t } = useTranslation();
 
     // --- STATE ---
     const [guide, setGuide] = useState<Guide>(() => {
@@ -161,6 +164,11 @@ export function EnhancedBuilder({
 
     // --- UI HELPERS ---
     const categories = ["Essentiels", "Voyage", "Business"];
+    const catLabels: Record<string, string> = {
+        "Essentiels": t.builder.catEssentials,
+        "Voyage": t.builder.catTravel,
+        "Business": t.builder.catBusiness
+    };
     const isMobile = useMediaQuery("(max-width: 768px)");
 
     return (
@@ -172,11 +180,11 @@ export function EnhancedBuilder({
                 <div className="flex items-center gap-4">
                     {/* Back Button Behavior */}
                     {isGuest ? (
-                        <a href="/" className="p-2 -ml-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" title="Retour à l'accueil">
+                        <a href="/" className="p-2 -ml-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" title={t.builder.backHome}>
                             <ChevronLeft size={20} />
                         </a>
                     ) : (
-                        <a href="/dashboard" className="p-2 -ml-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" title="Retour au Dashboard">
+                        <a href="/dashboard" className="p-2 -ml-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" title={t.builder.backDashboard}>
                             <ChevronLeft size={20} />
                         </a>
                     )}
@@ -186,17 +194,22 @@ export function EnhancedBuilder({
                         </div>
                         <div>
                             <h1 className="font-bold text-sm text-gray-900">{guide.title}</h1>
-                            <p className="text-xs text-gray-500">Mode Éditeur</p>
+                            <p className="text-xs text-gray-500">{t.builder.editorMode}</p>
                         </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
                     <Button variant="secondary" onClick={() => setShowThemes(true)} className="gap-2 text-sm bg-gray-100 hover:bg-gray-200 border-0 text-gray-700">
-                        <Palette className="w-4 h-4" /> Thème
+                        <Palette className="w-4 h-4" /> {t.builder.themeLabel}
                     </Button>
                     <a href={`/app/guides/${guide.id}/print`} className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-gray-100 hover:bg-gray-200 rounded-md transition-colors text-gray-700 no-underline">
-                        <QrCode className="w-4 h-4" /> QR
+                        <QrCode className="w-4 h-4" /> {t.builder.qrLabel}
                     </a>
+                    
+                    <div className="h-6 w-px bg-gray-200 mx-1 hidden sm:block" />
+                    <div className="hidden sm:block">
+                        <LanguageSwitcher variant="light" compact />
+                    </div>
 
                     <div className="h-6 w-px bg-gray-200 mx-2" />
 
@@ -204,7 +217,7 @@ export function EnhancedBuilder({
                     {isGuest ? (
                         <div className="flex items-center gap-2">
                             <a href="/signup" className="flex items-center gap-2 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors text-sm font-bold shadow-lg shadow-rose-200">
-                                🚀 Créer mon compte
+                                🚀 {t.builder.createAccount}
                             </a>
                         </div>
                     ) : isDemoMode ? (
@@ -213,23 +226,23 @@ export function EnhancedBuilder({
                                 onClick={() => onSave?.(guide)}
                                 className="flex items-center gap-2 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors text-sm font-bold shadow-lg shadow-rose-200"
                             >
-                                💾 Sauvegarder (Créer compte)
+                                💾 {t.builder.saveCreateAccount}
                             </button>
                         </div>
                     ) : (guide.isPublished ? (
                         <div className="flex items-center gap-2">
                             <a href={`/g/${slugify(guide.slug)}`} target="_blank" className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-bold shadow-green-200 shadow-lg">
-                                <ExternalLink size={16} /> En Ligne
+                                <ExternalLink size={16} /> {t.builder.online}
                             </a>
                             <button
                                 onClick={async () => {
-                                    if (confirm("Voulez-vous vraiment retirer ce guide du public ?")) {
+                                    if (confirm(t.builder.confirmUnpublish)) {
                                         await supabase.from("guides").update({ is_published: false }).eq("id", guide.id);
                                         setGuide({ ...guide, isPublished: false });
                                     }
                                 }}
                                 className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg"
-                                title="Dépublier"
+                                title={t.builder.unpublish}
                             >
                                 <Lock size={16} />
                             </button>
@@ -250,15 +263,15 @@ export function EnhancedBuilder({
                                 const { error } = await supabase.from("guides").update({ is_published: true }).eq("id", guide.id);
                                 if (!error) {
                                     setGuide({ ...guide, isPublished: true });
-                                    alert("Guide publié avec succès ! 🚀");
+                                    alert(t.builder.publishSuccess);
                                 } else {
                                     console.error("Publish error:", error);
-                                    alert("Erreur lors de la publication.");
+                                    alert(t.builder.publishError);
                                 }
                             }}
                             className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-black transition-colors text-sm font-bold shadow-xl"
                         >
-                            🚀 Publier
+                            🚀 {t.builder.publish}
                         </button>
                     ))}
                 </div>
@@ -268,11 +281,11 @@ export function EnhancedBuilder({
                 {/* 1. LEFT COLUMN: LIBRARY */}
                 <aside className="w-80 bg-white border-r border-gray-200 flex-col z-10 overflow-y-auto hidden lg:flex">
                     <div className="p-6">
-                        <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-6">Bibliothèque</h2>
+                        <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-6">{t.builder.library}</h2>
                         <div className="space-y-8">
                             {categories.map(cat => (
                                 <div key={cat}>
-                                    <h3 className="text-sm font-bold text-gray-900 mb-4">{cat}</h3>
+                                    <h3 className="text-sm font-bold text-gray-900 mb-4">{catLabels[cat]}</h3>
                                     <div className="grid grid-cols-2 gap-3">
                                         {blockLibrary.filter(b => b.category === cat).map(b => {
                                             const Icon = MinimalIcons[b.type as BlockType];
@@ -302,21 +315,20 @@ export function EnhancedBuilder({
                         <div className="lg:hidden p-4 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-xl mb-6 text-sm flex items-start gap-3">
                             <span className="text-xl">💻</span>
                             <div>
-                                <p className="font-bold">Mode Consultation</p>
-                                <p className="opacity-90 mt-1">L'éditeur complet est optimisé pour ordinateur.</p>
+                                <p className="font-bold">{t.builder.mobileMode}</p>
                             </div>
                         </div>
 
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-2xl font-bold text-gray-900">Structure du guide</h2>
+                            <h2 className="text-2xl font-bold text-gray-900">{t.builder.guideStructure}</h2>
                             <span className="text-sm text-gray-500">{guide.blocks.length} blocs</span>
                         </div>
 
                         {guide.blocks.length === 0 ? (
                             <div className="border-2 border-dashed border-gray-300 rounded-3xl p-12 text-center h-96 flex flex-col items-center justify-center bg-white/50">
                                 <span className="text-6xl mb-4 opacity-30">✨</span>
-                                <h3 className="text-xl font-bold text-gray-900 mb-2">Ton guide est vide</h3>
-                                <p className="text-gray-500 mb-6">Sélectionne un bloc à gauche pour commencer.</p>
+                                <h3 className="text-xl font-bold text-gray-900 mb-2">{t.builder.emptyGuide}</h3>
+                                <p className="text-gray-500 mb-6">{t.builder.selectBlock}</p>
                             </div>
                         ) : (
                             <div className="space-y-3">
@@ -448,17 +460,17 @@ export function EnhancedBuilder({
                                         </div>
                                         <div>
                                             <h3 className="font-bold text-gray-900">{editingDef.label}</h3>
-                                            <p className="text-xs text-blue-600 font-medium">Édition en cours</p>
+                                            <p className="text-xs text-blue-600 font-medium">{t.builder.editing}</p>
                                         </div>
                                     </div>
                                     <button onClick={() => setEditingId(null)} className="text-xs font-bold text-gray-400 hover:text-gray-900 uppercase tracking-wider">
-                                        Fermer
+                                        {t.builder.close}
                                     </button>
                                 </div>
                                 <div className="flex-1 overflow-y-auto p-6 space-y-6">
                                     {/* Common: Title */}
                                     <div>
-                                        <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Titre du bloc</label>
+                                        <label className="block text-xs font-bold text-gray-500 uppercase mb-2">{t.builder.blockTitle}</label>
                                         <input
                                             className="w-full h-10 rounded-lg border border-gray-200 px-3 text-sm font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                                             value={editing.title ?? ""}
@@ -490,8 +502,8 @@ export function EnhancedBuilder({
                         ) : (
                             <div className="flex-1 flex flex-col items-center justify-center text-gray-400 p-8 text-center">
                                 <Settings size={48} className="mb-4 opacity-20" />
-                                <p className="font-medium">Sélectionne un bloc pour le modifier</p>
-                                <p className="text-sm mt-2 opacity-60">Les paramètres apparaîtront ici</p>
+                                <p className="font-medium">{t.builder.selectBlockEdit}</p>
+                                <p className="text-sm mt-2 opacity-60">{t.builder.paramsAppearHere}</p>
                             </div>
                         )}
                     </div>
@@ -501,13 +513,13 @@ export function EnhancedBuilder({
             <Modal
                 isOpen={showThemes}
                 onClose={() => setShowThemes(false)}
-                title="Design & Thème"
+                title={t.builder.designTheme}
                 icon="🎨"
             >
                 {!unlockedThemes && (
                     <div className="mb-4 p-3 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100 rounded-xl flex items-center gap-3 text-amber-800 text-xs font-medium">
                         <span className="p-1.5 bg-amber-100 rounded-lg">👑</span>
-                        Passer en PRO pour débloquer tous les thèmes premium.
+                        {t.builder.proThemesDesc}
                     </div>
                 )}
                 <div className="grid grid-cols-2 gap-4">
@@ -549,7 +561,7 @@ export function EnhancedBuilder({
                                                 target="_blank"
                                                 className="bg-white text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-lg hover:scale-105 transition-transform flex items-center gap-1 no-underline"
                                             >
-                                                <Plus size={12} /> Débloquer
+                                                <Plus size={12} /> {t.builder.unlock}
                                             </a>
                                         </div>
                                     )}
@@ -568,13 +580,12 @@ export function EnhancedBuilder({
             <Modal
                 isOpen={showSubscribe}
                 onClose={() => setShowSubscribe(false)}
-                title="Débloquez la publication"
+                title={t.builder.unlockPublish}
                 icon="🚀"
             >
                 <div className="text-center p-4">
                     <p className="text-gray-600 mb-6">
-                        La publication de guides est réservée aux membres Pro.
-                        Abonnez-vous pour partager vos guides avec vos invités !
+                        {t.builder.publishProDesc}
                     </p>
                     <a href="/pricing" className="inline-flex w-full justify-center px-6 py-3 bg-gradient-to-r from-rose-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:opacity-90 transition-opacity">
                         Voir les offres

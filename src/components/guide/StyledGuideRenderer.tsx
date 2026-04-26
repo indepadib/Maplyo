@@ -13,6 +13,7 @@ import { Wifi, Key, X, ExternalLink, Search, Globe, ChevronRight, CheckCircle2, 
 import { GuideChatbot } from "./GuideChatbot";
 import { TipModal } from "./TipModal";
 import { TranslatedText } from "@/components/ui/TranslatedText";
+import { useTranslation } from "@/components/providers/LanguageProvider";
 
 // --- TRANSLATIONS ---
 const DICTIONARY = {
@@ -275,8 +276,130 @@ const DICTIONARY = {
         share: "Teilen",
         download: "Herunterladen",
         tipOfTheDay: "Tipp des Tages"
+    },
+    nl: {
+        searchPlaceholder: "Zoeken in de gids...",
+        wifi: "Wi-Fi",
+        access: "Toegangscodes",
+        checkin: "Aankomst",
+        checkout: "Vertrek",
+        location: "Locatie",
+        rules: "Huisregels",
+        contact: "Contact",
+        amenities: "Voorzieningen",
+        places: "In de buurt",
+        events: "Evenementen",
+        documents: "Documenten",
+        upsells: "Extra diensten",
+        embed: "Inhoud",
+        welcome: "Welkom",
+        trash: "Afval",
+        parking: "Parkeren",
+        breakfast: "Ontbijt",
+        transport: "Vervoer",
+        days: "dagen",
+        hours: "uren",
+        minutes: "minuten",
+        network: "Netwerk",
+        password: "Wachtwoord",
+        copy: "Kopiëren",
+        copied: "Gekopieerd!",
+        getDirections: "Routebeschrijving",
+        openMaps: "Open Kaarten",
+        call: "Bellen",
+        message: "Bericht",
+        empty: "Geen resultaten gevonden",
+        seeAll: "Alles bekijken",
+        less: "Minder weergeven",
+        scanQr: "Scan om te downloaden",
+        share: "Delen",
+        download: "Downloaden",
+        tipOfTheDay: "Tip van de dag",
+        sunday: "Zondag",
+        monday: "Maandag",
+        tuesday: "Dinsdag",
+        wednesday: "Woensdag",
+        thursday: "Donderdag",
+        friday: "Vrijdag",
+        saturday: "Zaterdag",
+        lazy: "Ontspanning",
+        mood: "Stemming",
+        discovery: "Ontdekking",
+        tasty: "Lekker",
+        adventure: "Avontuur",
+        festive: "Feestelijk",
+        outing: "Uitje",
+        brunch: "Brunch in",
+        explore: "Verken het centrum van",
+        museums: "Bezoek musea in",
+        taste: "Proef de specialiteiten van",
+        excursion: "Ga op excursie",
+        nightlife: "Uitgaan in",
+        walk: "Wandelen in",
+        items: "items"
+    },
+    zh: {
+        searchPlaceholder: "搜索指南...",
+        wifi: "无线网络",
+        access: "访问密码",
+        checkin: "入住",
+        checkout: "退房",
+        location: "位置",
+        rules: "房屋守则",
+        contact: "联系方式",
+        amenities: "设施",
+        places: "附近地点",
+        events: "活动",
+        documents: "文件",
+        upsells: "额外服务",
+        embed: "内容",
+        welcome: "欢迎",
+        trash: "垃圾",
+        parking: "停车",
+        breakfast: "早餐",
+        transport: "交通",
+        days: "天",
+        hours: "小时",
+        minutes: "分钟",
+        network: "网络",
+        password: "密码",
+        copy: "复制",
+        copied: "已复制！",
+        getDirections: "获取路线",
+        openMaps: "打开地图",
+        call: "呼叫",
+        message: "消息",
+        empty: "未找到结果",
+        seeAll: "查看全部",
+        less: "收起",
+        scanQr: "扫码下载",
+        share: "分享",
+        download: "下载",
+        tipOfTheDay: "今日小贴士",
+        sunday: "星期日",
+        monday: "星期一",
+        tuesday: "星期二",
+        wednesday: "星期三",
+        thursday: "星期四",
+        friday: "星期五",
+        saturday: "星期六",
+        lazy: "慵懒",
+        mood: "心情",
+        discovery: "探索",
+        tasty: "美食",
+        adventure: "冒险",
+        festive: "节庆",
+        outing: "郊游",
+        brunch: "早午餐",
+        explore: "探索市中心",
+        museums: "参观博物馆",
+        taste: "品尝特产",
+        excursion: "去郊游",
+        nightlife: "夜生活",
+        walk: "散步",
+        items: "项目"
     }
-};
+} as Record<string, any>;
 
 // --- SMART SEARCH KEYWORDS ---
 const SEARCH_KEYWORDS: Record<string, string[]> = {
@@ -342,7 +465,7 @@ function BottomSheet({ isOpen, onClose, children, title }: { isOpen: boolean; on
 
 // --- DAILY RECOMMENDATION WIDGET (NOTIFICATION STYLE) ---
 
-function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr' | 'en'; onClose: () => void }) {
+function DailyRecommendation({ city, lang, onClose }: { city: string; lang: string; onClose: () => void }) {
     const [tip, setTip] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -439,7 +562,7 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: 'fr'
 
 // --- SPECIALIZED CARDS ---
 
-function WifiCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+function WifiCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: string }) {
     const t = DICTIONARY[lang];
 
     // Safety check
@@ -630,7 +753,7 @@ function ListCard({ title, icon: Icon, items, theme, onClick, className, lang }:
     )
 }
 
-function UpsellsCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+function UpsellsCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: string }) {
     const t = DICTIONARY[lang];
     return (
         <motion.button
@@ -695,7 +818,7 @@ function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, o
 export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forceDesktop = false }: { guide: Guide; unlocked: boolean; forceMobile?: boolean; forceDesktop?: boolean }) {
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const [lang, setLang] = useState<'fr' | 'en'>('fr');
+    const { language: lang, setLanguage: setLang } = useTranslation();
     // Notification state
     const [showTip, setShowTip] = useState(true);
 
@@ -745,10 +868,8 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
     const accessBlock = guide.blocks.find(b => b.type === "access_codes");
     const locationBlock = guide.blocks.find(b => b.type === "location");
 
-    // Extract city from location for Smart Recommendations
-    const city = (locationBlock && (locationBlock.data as any).address
-        ? (locationBlock.data as any).address.split(',').slice(-1)[0].trim()
-        : "") || "Destination";
+    // Extract full address for Smart Recommendations
+    const city = (locationBlock && (locationBlock.data as any).address) || "Destination";
 
     // Intelligent Filter logic
     const gridBlocks = useMemo(() => {

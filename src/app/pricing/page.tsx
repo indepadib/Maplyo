@@ -354,27 +354,14 @@ export default function PricingPage() {
                     {/* FAQ Section */}
                     <div className="max-w-3xl mx-auto mb-32">
                         <div className="text-center mb-12">
-                            <h2 className="text-3xl font-bold text-white mb-4">Questions Fréquentes</h2>
-                            <p className="text-zinc-400">Nous sommes transparents. Voici les réponses.</p>
+                            <h2 className="text-3xl font-bold text-white mb-4">{t.pricingPage.faqSection.title}</h2>
+                            <p className="text-zinc-400">{t.pricingPage.faqSection.subtitle}</p>
                         </div>
 
                         <div className="space-y-2">
-                            <FaqItem
-                                question="Puis-je changer de plan à tout moment ?"
-                                answer="Oui, absolument. Vous pouvez passer du plan Basic au plan Pro (ou inversement) depuis votre dashboard. Le changement est immédiat et le prorata est calculé automatiquement."
-                            />
-                            <FaqItem
-                                question="Y a-t-il un engagement ?"
-                                answer="Non, aucune période d'engagement. Nos abonnements sont mensuels et vous pouvez annuler à tout moment en un clic. Pas de frais cachés."
-                            />
-                            <FaqItem
-                                question="Comment fonctionne le paiement ?"
-                                answer="Nous utilisons Stripe, le leader mondial du paiement en ligne sécurisé. Vos coordonnées bancaires ne sont jamais stockées sur nos serveurs. Vous recevez une facture par email chaque mois."
-                            />
-                            <FaqItem
-                                question="Le support est-il inclus ?"
-                                answer="Oui ! Le support par email est inclus dans tous les plans payants. Le plan Pro bénéficie d'une ligne prioritaire et d'un contact WhatsApp pour une assistance ultra-rapide."
-                            />
+                            {t.pricingPage.faqSection.items.map((item: { q: string; a: string }, i: number) => (
+                                <FaqItem key={i} question={item.q} answer={item.a} />
+                            ))}
                         </div>
                     </div>
 

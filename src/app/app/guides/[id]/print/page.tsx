@@ -3,7 +3,8 @@
 import { useEffect, useState, use } from "react";
 import { supabase } from "@/lib/supabase";
 import { PrintLayout } from "@/components/guide/PrintLayout";
-import { Printer, ArrowLeft } from "lucide-react";
+import { Printer, ArrowLeft, Download } from "lucide-react";
+import html2canvas from "html2canvas";
 import Link from "next/link";
 import { Guide } from "@/types/blocks";
 
@@ -51,6 +52,34 @@ export default function PrintPage({ params }: { params: Promise<{ id: string }> 
         window.print();
     };
 
+    const handleDownloadPng = async () => {
+        const element = document.getElementById('print-container');
+        if (!element) return;
+        
+        try {
+            // Temporarily hide elements not meant for print (though we are capturing the element itself)
+            // The container itself doesn't have 'print:hidden' elements usually, 
+            // but we ensure we are capturing it cleanly.
+            const canvas = await html2canvas(element, {
+                scale: 2, // High resolution
+                useCORS: true, // Allow cross-origin images
+                backgroundColor: null, // Transparent background
+                logging: false,
+                // html2canvas doesn't support all CSS properties perfectly, 
+                // but Maplyo's PrintLayout uses inline styles specifically for this reason
+            });
+            
+            const dataUrl = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = `maplyo-qr-${guide.slug || 'guide'}.png`;
+            link.href = dataUrl;
+            link.click();
+        } catch (error) {
+            console.error("Failed to generate PNG", error);
+            alert("Erreur lors de la génération de l'image.");
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gray-100 print:bg-white text-black p-8 print:p-0 font-sans">
             {/* Toolbar - Hidden when printing */}
@@ -63,17 +92,26 @@ export default function PrintPage({ params }: { params: Promise<{ id: string }> 
                     Retour à l'éditeur
                 </Link>
 
-                <button
-                    onClick={handlePrint}
-                    className="flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-black transition-all shadow-lg active:scale-95"
-                >
-                    <Printer size={20} />
-                    Imprimer / Enregistrer en PDF
-                </button>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={handleDownloadPng}
+                        className="flex items-center gap-2 bg-rose-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-rose-700 transition-all shadow-lg active:scale-95"
+                    >
+                        <Download size={20} />
+                        Télécharger (PNG)
+                    </button>
+                    <button
+                        onClick={handlePrint}
+                        className="flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-black transition-all shadow-lg active:scale-95"
+                    >
+                        <Printer size={20} />
+                        Imprimer PDF
+                    </button>
+                </div>
             </div>
 
             {/* A4 Preview Container */}
-            <div className="print:w-full print:h-full relative">
+            <div className="print:w-full print:h-full relative" id="print-container">
                 <div className={`transition-all duration-500 ${guide?.id === 'demo' ? 'blur-xl select-none pointer-events-none opacity-50' : ''}`}>
                     <PrintLayout guide={guide} />
                 </div>

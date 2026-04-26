@@ -1,6 +1,6 @@
 import { useContentTranslation } from "@/hooks/useContentTranslation";
 
-export function TranslatedText({ text, lang, className }: { text: string, lang: 'fr' | 'en', className?: string }) {
+export function TranslatedText({ text, lang, className }: { text: string, lang: string, className?: string }) {
     const { translatedText, loading } = useContentTranslation(text, lang);
 
     return (

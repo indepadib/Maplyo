@@ -15,6 +15,7 @@ import { getUserSubscription, checkLimit } from "@/lib/subscription";
 import { UserSubscription } from "@/types/subscription";
 import { slugify } from "@/lib/utils/slugify";
 import { useTranslation } from "@/components/providers/LanguageProvider";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 
 type GuideSummary = {
     id: string;
@@ -363,6 +364,7 @@ function DashboardContent() {
                             </select>
                         </div>
                         <div className="h-6 w-px bg-white/10 hidden md:block" />
+                        <LanguageSwitcher variant="glass" compact />
                         <button
                             onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
                             className="p-2.5 text-zinc-400 hover:bg-white/5 rounded-xl transition-all hover:text-white"

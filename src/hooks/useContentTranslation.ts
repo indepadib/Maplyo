@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 // Simple in-memory cache to avoid re-fetching same translations in one session
 const translationCache: Record<string, string> = {};
 
-export function useContentTranslation(text: string, targetLang: 'fr' | 'en') {
+export function useContentTranslation(text: string, targetLang: string) {
     const [translatedText, setTranslatedText] = useState<string>(text);
     const [loading, setLoading] = useState(false);
 
