@@ -469,7 +469,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
         ? `${paddingBase} md:p-10`
         : (forceDesktop ? paddingDesktop : paddingBase);
 
-    const { t } = useTranslation();
+
 
     const { scrollY } = useScroll();
     const heroY = useTransform(scrollY, [0, 500], [0, 200]);
