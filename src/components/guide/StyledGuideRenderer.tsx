@@ -407,6 +407,8 @@ function UpsellsCard({ data, onClick, theme, className, lang }: { data: any; onC
 // --- SUB-CARDS (Rules, FAQ, Amenities, Contact) ---
 // Simplified square versions to match "Apple" grid
 function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, onClick, className, lang }: any) {
+    const { t } = useTranslation();
+
     return (
         <motion.button
             whileTap={{ scale: 0.95 }}
