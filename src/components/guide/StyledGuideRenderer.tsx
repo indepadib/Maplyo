@@ -14,6 +14,7 @@ import { GuideChatbot } from "./GuideChatbot";
 import { TipModal } from "./TipModal";
 import { TranslatedText } from "@/components/ui/TranslatedText";
 import { useTranslation } from "@/components/providers/LanguageProvider";
+import { Language } from "@/lib/i18n/dictionary";
 
 // --- TRANSLATIONS ---
 const DICTIONARY = {
@@ -465,7 +466,7 @@ function BottomSheet({ isOpen, onClose, children, title }: { isOpen: boolean; on
 
 // --- DAILY RECOMMENDATION WIDGET (NOTIFICATION STYLE) ---
 
-function DailyRecommendation({ city, lang, onClose }: { city: string; lang: string; onClose: () => void }) {
+function DailyRecommendation({ city, lang, onClose }: { city: string; lang: Language; onClose: () => void }) {
     const [tip, setTip] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -562,7 +563,7 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: stri
 
 // --- SPECIALIZED CARDS ---
 
-function WifiCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: string }) {
+function WifiCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: Language }) {
     const t = DICTIONARY[lang];
 
     // Safety check
@@ -603,7 +604,7 @@ function WifiCard({ data, onClick, theme, className, lang }: { data: any; onClic
     );
 }
 
-function AccessCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+function AccessCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: Language }) {
     const t = DICTIONARY[lang];
     return (
         <motion.button
@@ -628,7 +629,7 @@ function AccessCard({ data, onClick, theme, className, lang }: { data: any; onCl
     );
 }
 
-function StandardCard({ icon: Icon, title, onClick, theme, className, lang }: { icon: any; title: string; onClick: () => void; theme: any; className?: string, lang: 'fr' | 'en' }) {
+function StandardCard({ icon: Icon, title, onClick, theme, className, lang }: { icon: any; title: string; onClick: () => void; theme: any; className?: string, lang: Language }) {
     return (
         <motion.button
             whileTap={{ scale: 0.95 }}
@@ -650,7 +651,7 @@ function StandardCard({ icon: Icon, title, onClick, theme, className, lang }: { 
 }
 
 
-function TimeCard({ type, data, onClick, theme, className, lang }: { type: string; data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+function TimeCard({ type, data, onClick, theme, className, lang }: { type: string; data: any; onClick: () => void; theme: any; className?: string; lang: Language }) {
     const t = DICTIONARY[lang];
     const isCheckIn = type === "checkin";
     const label = isCheckIn ? t.checkin : t.checkout;
@@ -680,7 +681,7 @@ function TimeCard({ type, data, onClick, theme, className, lang }: { type: strin
     );
 }
 
-function LocationCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: 'fr' | 'en' }) {
+function LocationCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: Language }) {
     const t = DICTIONARY[lang];
     const mapLink = data.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.address || "")}`;
 
@@ -717,7 +718,7 @@ function LocationCard({ data, onClick, theme, className, lang }: { data: any; on
     )
 }
 
-function ListCard({ title, icon: Icon, items, theme, onClick, className, lang }: { title: string; icon: any; items: any[]; theme: any; onClick: () => void; className?: string, lang: 'fr' | 'en' }) {
+function ListCard({ title, icon: Icon, items, theme, onClick, className, lang }: { title: string; icon: any; items: any[]; theme: any; onClick: () => void; className?: string, lang: Language }) {
     const count = items.length;
 
     return (
@@ -753,7 +754,7 @@ function ListCard({ title, icon: Icon, items, theme, onClick, className, lang }:
     )
 }
 
-function UpsellsCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: string }) {
+function UpsellsCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: Language }) {
     const t = DICTIONARY[lang];
     return (
         <motion.button
