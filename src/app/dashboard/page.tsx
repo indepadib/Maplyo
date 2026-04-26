@@ -359,8 +359,8 @@ function DashboardContent() {
                                 onChange={(e) => setSortBy(e.target.value as any)}
                                 className="bg-transparent border-none text-sm font-medium px-3 py-1.5 cursor-pointer outline-none focus:ring-0 text-zinc-400 hover:text-white"
                             >
-                                <option value="recent">Récents</option>
-                                <option value="name">Nom</option>
+                                <option value="recent">{t.dashboard.sortRecent}</option>
+                                <option value="name">{t.dashboard.sortName}</option>
                             </select>
                         </div>
                         <div className="h-6 w-px bg-white/10 hidden md:block" />
@@ -374,7 +374,7 @@ function DashboardContent() {
                         <button
                             onClick={signOut}
                             className="w-10 h-10 rounded-full bg-gradient-to-br from-zinc-800 to-zinc-700 border border-white/10 shadow-sm flex items-center justify-center font-bold text-zinc-400 text-sm hover:ring-2 hover:ring-offset-2 hover:ring-rose-500/50 transition-all hover:text-white"
-                            title="Se déconnecter"
+                            title={t.dashboard.logout}
                         >
                             <LogOut className="w-4 h-4 ml-0.5" />
                         </button>
@@ -388,7 +388,7 @@ function DashboardContent() {
                         <Link
                             href="/dashboard/settings"
                             className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-white/10 hover:text-white transition-all hover:scale-105"
-                            title="Paramètres"
+                            title={t.settings.title}
                         >
                             <Settings className="w-4 h-4" />
                         </Link>
@@ -408,7 +408,7 @@ function DashboardContent() {
                             className="flex items-center gap-2 bg-gradient-to-r from-rose-600 to-purple-600 text-white px-6 py-3.5 rounded-2xl font-bold hover:shadow-lg hover:shadow-rose-600/30 transition-all active:scale-95 group border border-white/10"
                         >
                             <Sparkles className="w-5 h-5 group-hover:animate-pulse" />
-                            <span className="hidden sm:inline">Magic Create (AI)</span>
+                            <span className="hidden sm:inline">{t.dashboard.aiModal.title}</span>
                         </button>
                         <button
                             onClick={() => {
@@ -418,7 +418,7 @@ function DashboardContent() {
                             className="flex items-center gap-2 bg-white text-slate-950 px-6 py-3.5 rounded-2xl font-bold hover:bg-zinc-200 transition-all shadow-xl shadow-white/5 active:scale-95 group"
                         >
                             <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
-                            <span className="hidden sm:inline">Nouveau Guide</span>
+                            <span className="hidden sm:inline">{t.dashboard.newGuide}</span>
                         </button>
                     </div>
                 </div>
@@ -444,7 +444,7 @@ function DashboardContent() {
                                     onClick={() => setIsAiModalOpen(true)}
                                     className="bg-rose-500/10 text-rose-400 border border-rose-500/20 px-8 py-4 rounded-2xl font-bold hover:bg-rose-500/20 transition-all"
                                 >
-                                    ✨ Essayer l'IA
+                                    {t.dashboard.tryAi}
                                 </button>
                                 <button
                                     onClick={() => {
@@ -479,14 +479,14 @@ function DashboardContent() {
 
                                             <div className="absolute top-4 right-4 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
                                                 {subscription?.planId !== 'demo' ? (
-                                                    <Link href={`/g/${guide.slug}`} target="_blank" className="p-3 bg-black/40 backdrop-blur-md border border-white/20 rounded-xl text-white hover:bg-white hover:text-black transition-colors shadow-lg" title="Voir le guide public">
+                                                    <Link href={`/g/${guide.slug}`} target="_blank" className="p-3 bg-black/40 backdrop-blur-md border border-white/20 rounded-xl text-white hover:bg-white hover:text-black transition-colors shadow-lg" title={t.dashboard.viewPublic}>
                                                         <ExternalLink size={18} />
                                                     </Link>
                                                 ) : (
                                                     <button
                                                         onClick={() => setIsProModalOpen(true)}
                                                         className="p-3 bg-rose-500/80 backdrop-blur-md border border-rose-400/20 rounded-xl text-white hover:bg-rose-500 transition-colors shadow-lg"
-                                                        title="Passer Pro pour partager"
+                                                        title={t.dashboard.passProToShare}
                                                     >
                                                         <span className="text-xs font-bold">PRO</span>
                                                     </button>
@@ -496,7 +496,7 @@ function DashboardContent() {
                                             <div className="absolute bottom-4 left-5 right-5">
                                                 <div className="flex items-center gap-2 mb-2">
                                                     <span className="text-[10px] font-bold px-2 py-1 rounded-lg bg-white/10 backdrop-blur-md border border-white/10 text-zinc-300 uppercase tracking-wider">
-                                                        {guide.blockCount} blocs
+                                                        {guide.blockCount} {t.builder.blocks}
                                                     </span>
                                                 </div>
                                                 <h3 className="text-2xl font-bold text-white mb-0 leading-tight drop-shadow-md">
@@ -511,7 +511,7 @@ function DashboardContent() {
                                                     <div className="flex items-center gap-2">
                                                         <span className={`w-2 h-2 rounded-full ${guide.is_published ? 'bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]' : 'bg-amber-500'}`}></span>
                                                         <span className="text-xs font-medium text-zinc-500 uppercase tracking-wide">
-                                                            {guide.is_published ? 'En ligne' : 'Brouillon'}
+                                                            {guide.is_published ? t.dashboard.published : t.dashboard.draft}
                                                         </span>
                                                     </div>
  streams                                                    <p className="text-xs font-medium text-zinc-600">
@@ -527,12 +527,12 @@ function DashboardContent() {
                                             <div className="flex gap-3 pt-2">
                                                 <Link href={`/app/guides/${guide.id}/builder`} className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-white text-slate-950 font-bold hover:bg-zinc-200 transition-colors shadow-lg">
                                                     <Edit2 size={18} />
-                                                    Éditer
+                                                    {t.dashboard.edit}
                                                 </Link>
                                                 <button
                                                     onClick={() => deleteGuide(guide.id)}
                                                     className="p-3.5 rounded-xl border border-white/10 text-zinc-500 hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-400 transition-colors"
-                                                    title="Supprimer"
+                                                    title={t.dashboard.delete}
                                                 >
                                                     <Trash2 size={20} />
                                                 </button>

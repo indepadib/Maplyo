@@ -19,7 +19,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         // Load saved language or default to 'fr'
         const savedCodes = localStorage.getItem('maplyo-lang');
-        if (savedCodes && (savedCodes === 'fr' || savedCodes === 'en' || savedCodes === 'es' || savedCodes === 'ar')) {
+        const validLanguages: Language[] = ['fr', 'en', 'es', 'ar', 'nl', 'zh'];
+        if (savedCodes && validLanguages.includes(savedCodes as Language)) {
             setLangState(savedCodes as Language);
         }
         setMounted(true);

@@ -1,14 +1,16 @@
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
 import { ExternalLink, Copy, Phone, MessageCircle, Mail } from "lucide-react";
+import { useTranslation } from "@/components/providers/LanguageProvider";
 
 // --- CHECK-IN / CHECK-OUT ---
 export function CheckinTraveler({ data, title }: { data: any; title?: string }) {
+    const { t } = useTranslation();
     const time = data.time || "15:00";
     return (
         <div className="space-y-6">
             <div className="flex flex-col items-center justify-center p-8 bg-gray-50 rounded-[32px] border border-gray-100">
                 <div className="text-6xl font-black text-gray-900 tracking-tighter mb-2">{time}</div>
-                <div className="text-sm font-bold text-gray-400 uppercase tracking-widest">{title || "Arrivée"}</div>
+                <div className="text-sm font-bold text-gray-400 uppercase tracking-widest">{title || t.guideBlocks.checkIn.title}</div>
             </div>
 
             {data.instruction && (
@@ -43,7 +45,8 @@ export function CheckinTraveler({ data, title }: { data: any; title?: string }) 
 
 // --- LOCATION ---
 export function LocationTraveler({ data }: { data: any }) {
-    const address = data.address || "Adresse non renseignée";
+    const { t } = useTranslation();
+    const address = data.address || t.guideBlocks.location.notSet;
     const mapUrl = data.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
     const embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
@@ -73,7 +76,7 @@ export function LocationTraveler({ data }: { data: any }) {
             </div>
 
             <div className="bg-gray-50 p-6 rounded-[24px] border border-gray-100">
-                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Adresse</h3>
+                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{t.guideBlocks.location.address}</h3>
                 <p className="text-lg font-medium text-gray-900 leading-relaxed mb-4">{address}</p>
 
                 <a
@@ -83,14 +86,14 @@ export function LocationTraveler({ data }: { data: any }) {
                     className="flex items-center justify-center w-full py-3 px-4 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-black transition-colors mb-2"
                 >
                     <ExternalLink className="w-4 h-4 mr-2" />
-                    Ouvrir dans Google Maps
+                    {t.guideBlocks.location.openInMaps}
                 </a>
                 <button
                     onClick={() => navigator.clipboard.writeText(address)}
                     className="flex items-center justify-center w-full py-3 px-4 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold text-sm hover:bg-gray-50 transition-colors"
                 >
                     <Copy className="w-4 h-4 mr-2" />
-                    Copier l'adresse
+                    {t.guideBlocks.location.copyAddress}
                 </button>
             </div>
         </div>
@@ -99,14 +102,15 @@ export function LocationTraveler({ data }: { data: any }) {
 
 // --- CONTACT ---
 export function ContactTraveler({ data }: { data: any }) {
+    const { t } = useTranslation();
     return (
         <div className="space-y-6">
             <div className="flex flex-col items-center">
                 <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 mb-4 shadow-xl flex items-center justify-center text-4xl font-bold text-white">
                     {(data.name || "H").charAt(0)}
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900">{data.name || "Hôte"}</h2>
-                <p className="text-gray-500 font-medium">Votre hôte</p>
+                <h2 className="text-2xl font-bold text-gray-900">{data.name || t.guideBlocks.contact.host}</h2>
+                <p className="text-gray-500 font-medium">{t.guideBlocks.contact.yourHost}</p>
             </div>
 
             <div className="grid gap-3">
@@ -116,7 +120,7 @@ export function ContactTraveler({ data }: { data: any }) {
                             <Phone className="w-5 h-5" />
                         </div>
                         <div className="text-left">
-                            <div className="text-xs font-bold text-gray-400 uppercase">Téléphone</div>
+                            <div className="text-xs font-bold text-gray-400 uppercase">{t.guideBlocks.contact.phone}</div>
                             <div className="font-bold text-gray-900">{data.phone}</div>
                         </div>
                     </a>
@@ -129,7 +133,7 @@ export function ContactTraveler({ data }: { data: any }) {
                         </div>
                         <div className="text-left">
                             <div className="text-xs font-bold text-gray-400 uppercase">WhatsApp</div>
-                            <div className="font-bold text-gray-900">Ouvrir la conversation</div>
+                            <div className="font-bold text-gray-900">{t.guideBlocks.contact.openConversation}</div>
                         </div>
                     </a>
                 )}
@@ -152,12 +156,13 @@ export function ContactTraveler({ data }: { data: any }) {
 
 // --- RULES ---
 export function RulesTraveler({ data }: { data: any }) {
+    const { t } = useTranslation();
     const rules = Array.isArray(data.items) ? data.items : [];
 
     if (rules.length === 0) {
         return (
             <div className="text-center p-8 text-gray-400">
-                <p>Aucune règle spécifiée</p>
+                <p>{t.guideBlocks.rules.noRules}</p>
             </div>
         );
     }
@@ -180,12 +185,13 @@ export function RulesTraveler({ data }: { data: any }) {
 
 // --- AMENITIES ---
 export function AmenitiesTraveler({ data }: { data: any }) {
+    const { t } = useTranslation();
     const items = Array.isArray(data.items) ? data.items : [];
 
     if (items.length === 0) {
         return (
             <div className="text-center p-8 text-gray-400">
-                <p>Aucun équipement spécifié</p>
+                <p>{t.guideBlocks.amenities.noAmenities}</p>
             </div>
         );
     }
@@ -208,12 +214,13 @@ export function AmenitiesTraveler({ data }: { data: any }) {
 
 // --- FAQ ---
 export function FaqTraveler({ data }: { data: any }) {
+    const { t } = useTranslation();
     const items = Array.isArray(data.items) ? data.items : [];
 
     if (items.length === 0) {
         return (
             <div className="text-center p-8 text-gray-400">
-                <p>Aucune question FAQ</p>
+                <p>{t.guideBlocks.faq.noFaq}</p>
             </div>
         );
     }
@@ -224,10 +231,10 @@ export function FaqTraveler({ data }: { data: any }) {
                 <div key={i} className="bg-gray-50 rounded-2xl border border-gray-100 p-5">
                     <div className="font-bold text-gray-900 mb-2 flex gap-3">
                         <span className="text-blue-500">Q.</span>
-                        {item.question || "Question"}
+                        {item.question || t.guideBlocks.faq.question}
                     </div>
                     <div className="text-gray-600 pl-6 border-l-2 border-blue-100 italic">
-                        {item.answer || "Réponse"}
+                        {item.answer || t.guideBlocks.faq.answer}
                     </div>
                 </div>
             ))}
@@ -237,11 +244,12 @@ export function FaqTraveler({ data }: { data: any }) {
 
 // --- TRASH ---
 export function TrashTraveler({ data }: { data: any }) {
+    const { t } = useTranslation();
     return (
         <div className="space-y-6">
             <div className="bg-gray-50 p-6 rounded-[24px] border border-gray-100 flex flex-col gap-4">
                 <div>
-                    <h3 className="font-bold text-gray-900 text-lg">Gestion des Déchets</h3>
+                    <h3 className="font-bold text-gray-900 text-lg">{t.guideBlocks.trash.title}</h3>
                     {data.location && <p className="text-gray-500 text-sm">{data.location}</p>}
                 </div>
             </div>
@@ -255,13 +263,13 @@ export function TrashTraveler({ data }: { data: any }) {
             <div className="grid grid-cols-2 gap-3 mt-2">
                 {data.trashDay && (
                     <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm text-center">
-                        <div className="text-[10px] font-bold uppercase text-gray-400 mb-1">Ordures</div>
+                        <div className="text-[10px] font-bold uppercase text-gray-400 mb-1">{t.guideBlocks.trash.items}</div>
                         <div className="font-bold text-gray-900">{data.trashDay}</div>
                     </div>
                 )}
                 {data.recyclingDay && (
                     <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm text-center">
-                        <div className="text-[10px] font-bold uppercase text-yellow-500 mb-1">Recyclage</div>
+                        <div className="text-[10px] font-bold uppercase text-yellow-500 mb-1">{t.guideBlocks.trash.recycling}</div>
                         <div className="font-bold text-gray-900">{data.recyclingDay}</div>
                     </div>
                 )}
@@ -281,6 +289,7 @@ export function TrashTraveler({ data }: { data: any }) {
 
 // --- PARKING ---
 export function ParkingTraveler({ data }: { data: any }) {
+    const { t } = useTranslation();
     const mapUrl = data.mapUrl || (data.location ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.location)}` : null);
 
     return (
@@ -312,7 +321,7 @@ export function ParkingTraveler({ data }: { data: any }) {
                     className="flex items-center justify-center w-full py-3 px-4 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-black transition-colors"
                 >
                     <ExternalLink className="w-4 h-4 mr-2" />
-                    Voir sur la carte
+                    {t.guideBlocks.location.viewOnMap}
                 </a>
             )}
         </div>
@@ -321,6 +330,7 @@ export function ParkingTraveler({ data }: { data: any }) {
 
 // --- BREAKFAST ---
 export function BreakfastTraveler({ data }: { data: any }) {
+    const { t } = useTranslation();
     return (
         <div className="space-y-6">
             <div className="flex flex-col items-center justify-center p-8 bg-amber-50 rounded-[32px] border border-amber-100 relative overflow-hidden">
@@ -332,13 +342,13 @@ export function BreakfastTraveler({ data }: { data: any }) {
                     </div>
                 )}
                 <div className="text-sm font-bold text-amber-400 uppercase tracking-widest relative z-10">
-                    {data.location || "Petit Déjeuner"}
+                    {data.location || t.guideBlocks.breakfast.title}
                 </div>
             </div>
 
             {data.menu && (
                 <div className="bg-white p-6 rounded-[24px] border border-gray-100 shadow-sm">
-                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Au Menu</h3>
+                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">{t.guideBlocks.breakfast.menu}</h3>
                     <p className="text-gray-700 italic leading-relaxed">
                         "{data.menu}"
                     </p>
@@ -350,6 +360,7 @@ export function BreakfastTraveler({ data }: { data: any }) {
 
 // --- TRANSPORT ---
 export function TransportTraveler({ data }: { data: any }) {
+    const { t } = useTranslation();
     const options = Array.isArray(data.options) ? data.options : [];
 
     const getIcon = (type: string) => {
@@ -362,7 +373,7 @@ export function TransportTraveler({ data }: { data: any }) {
         }
     };
 
-    if (options.length === 0) return <div className="text-center text-gray-400 py-8">Aucune info transport</div>;
+    if (options.length === 0) return <div className="text-center text-gray-400 py-8">{t.guideBlocks.transport.noInfo}</div>;
 
     return (
         <div className="space-y-3">
@@ -376,7 +387,7 @@ export function TransportTraveler({ data }: { data: any }) {
                             <h3 className="font-bold text-gray-900">{opt.name}</h3>
                             {opt.phone && (
                                 <a href={`tel:${opt.phone}`} className="text-xs font-bold bg-green-100 text-green-700 px-2 py-1 rounded-lg hover:bg-green-200">
-                                    Appeler
+                                    {t.guideBlocks.transport.call}
                                 </a>
                             )}
                         </div>

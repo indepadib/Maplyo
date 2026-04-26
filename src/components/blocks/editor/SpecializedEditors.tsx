@@ -1,6 +1,6 @@
-
 // --- SHARED UI HELPERS ---
 import { FileUploader } from "@/components/ui/FileUploader";
+import { useTranslation } from "@/components/providers/LanguageProvider";
 
 function InputField({ label, value, onChange, placeholder, type = "text" }: any) {
     return (
@@ -33,28 +33,29 @@ function TextAreaField({ label, value, onChange, placeholder }: any) {
 
 // --- CHECK-IN / CHECK-OUT ---
 export function CheckinEditor({ data, onChange }: { data: any; onChange: (d: any) => void }) {
+    const { t } = useTranslation();
     return (
         <div>
             <InputField
-                label="Heure"
+                label={t.editor.common.time}
                 value={data.time}
                 onChange={(v: string) => onChange({ ...data, time: v })}
-                placeholder="ex: 15:00"
+                placeholder={t.editor.checkin.timePlaceholder}
             />
             <TextAreaField
-                label="Instructions"
+                label={t.editor.common.instructions}
                 value={data.instruction}
                 onChange={(v: string) => onChange({ ...data, instruction: v })}
-                placeholder="Instructions d'accès..."
+                placeholder={t.editor.checkin.instrPlaceholder}
             />
             <FileUploader
-                label="Vidéo (MP4) ou URL YouTube"
+                label={t.editor.common.videoUrl}
                 value={data.videoUrl}
                 onUpload={(url) => onChange({ ...data, videoUrl: url })}
                 accept="video/*"
             />
             <FileUploader
-                label="Plan d'accès / Photo"
+                label={`${t.editor.common.location} / Photo`}
                 value={data.images?.[0]}
                 onUpload={(url) => onChange({ ...data, images: url ? [url] : [] })}
             />
@@ -64,19 +65,20 @@ export function CheckinEditor({ data, onChange }: { data: any; onChange: (d: any
 
 // --- LOCATION ---
 export function LocationEditor({ data, onChange }: { data: any; onChange: (d: any) => void }) {
+    const { t } = useTranslation();
     return (
         <div>
             <InputField
-                label="Adresse complète"
+                label={t.editor.common.address}
                 value={data.address}
                 onChange={(v: string) => onChange({ ...data, address: v })}
-                placeholder="123 Rue Exemple, Paris"
+                placeholder={t.editor.common.placeholderAddress}
             />
             <InputField
-                label="Lien Google Maps (Optionnel)"
+                label={t.editor.common.mapUrl}
                 value={data.googleMapsUrl}
                 onChange={(v: string) => onChange({ ...data, googleMapsUrl: v })}
-                placeholder="https://goo.gl/maps/..."
+                placeholder={t.editor.common.placeholderMap}
             />
         </div>
     );
@@ -84,31 +86,32 @@ export function LocationEditor({ data, onChange }: { data: any; onChange: (d: an
 
 // --- CONTACT ---
 export function ContactEditor({ data, onChange }: { data: any; onChange: (d: any) => void }) {
+    const { t } = useTranslation();
     return (
         <div>
             <InputField
-                label="Nom affiché"
+                label={t.editor.contact.nameLabel}
                 value={data.name}
                 onChange={(v: string) => onChange({ ...data, name: v })}
-                placeholder="Votre Nom"
+                placeholder={t.editor.contact.namePlaceholder}
             />
             <InputField
-                label="Téléphone"
+                label={t.editor.common.phone}
                 value={data.phone}
                 onChange={(v: string) => onChange({ ...data, phone: v })}
-                placeholder="+33 6 00 00 00 00"
+                placeholder={t.editor.common.placeholderPhone}
             />
             <InputField
-                label="WhatsApp (Numéro international)"
+                label={t.editor.common.whatsapp}
                 value={data.whatsapp}
                 onChange={(v: string) => onChange({ ...data, whatsapp: v })}
-                placeholder="33600000000"
+                placeholder={t.editor.common.placeholderWhatsapp}
             />
             <InputField
-                label="Email"
+                label={t.editor.common.email}
                 value={data.email}
                 onChange={(v: string) => onChange({ ...data, email: v })}
-                placeholder="contact@example.com"
+                placeholder={t.editor.common.placeholderEmail}
             />
         </div>
     );
@@ -116,6 +119,7 @@ export function ContactEditor({ data, onChange }: { data: any; onChange: (d: any
 
 // --- RULES ---
 export function RulesEditor({ data, onChange }: { data: any; onChange: (d: any) => void }) {
+    const { t } = useTranslation();
     const items = Array.isArray(data.items) ? data.items : [];
 
     const updateItem = (index: number, val: string) => {
@@ -140,10 +144,10 @@ export function RulesEditor({ data, onChange }: { data: any; onChange: (d: any) 
                     <div key={i} className="flex gap-2">
                         <div className="flex-1">
                             <InputField
-                                label={`Règle #${i + 1}`}
+                                label={`${t.editor.rules.title} #${i + 1}`}
                                 value={item.text || item} // Support legacy string array if any
                                 onChange={(v: string) => updateItem(i, v)}
-                                placeholder="ex: Pas de bruit après 22h"
+                                placeholder={t.editor.rules.placeholder}
                             />
                         </div>
                         <button
@@ -160,7 +164,7 @@ export function RulesEditor({ data, onChange }: { data: any; onChange: (d: any) 
                 onClick={addItem}
                 className="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 font-bold hover:border-gray-400 hover:text-gray-600 transition-all flex items-center justify-center gap-2"
             >
-                <span>➕</span> Ajouter une règle
+                <span>➕</span> {t.editor.rules.add}
             </button>
         </div>
     );
@@ -168,6 +172,7 @@ export function RulesEditor({ data, onChange }: { data: any; onChange: (d: any) 
 
 // --- AMENITIES ---
 export function AmenitiesEditor({ data, onChange }: { data: any; onChange: (d: any) => void }) {
+    const { t } = useTranslation();
     const items = Array.isArray(data.items) ? data.items : [];
 
     const updateItem = (index: number, val: string) => {
@@ -192,10 +197,10 @@ export function AmenitiesEditor({ data, onChange }: { data: any; onChange: (d: a
                     <div key={i} className="flex gap-2">
                         <div className="flex-1">
                             <InputField
-                                label={`Équipement #${i + 1}`}
+                                label={`${t.editor.amenities.title} #${i + 1}`}
                                 value={item.text || item}
                                 onChange={(v: string) => updateItem(i, v)}
-                                placeholder="ex: Machine à café"
+                                placeholder={t.editor.amenities.placeholder}
                             />
                         </div>
                         <button
@@ -212,7 +217,7 @@ export function AmenitiesEditor({ data, onChange }: { data: any; onChange: (d: a
                 onClick={addItem}
                 className="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 font-bold hover:border-gray-400 hover:text-gray-600 transition-all flex items-center justify-center gap-2"
             >
-                <span>➕</span> Ajouter un équipement
+                <span>➕</span> {t.editor.amenities.add}
             </button>
         </div>
     );
@@ -220,6 +225,7 @@ export function AmenitiesEditor({ data, onChange }: { data: any; onChange: (d: a
 
 // --- FAQ ---
 export function FaqEditor({ data, onChange }: { data: any; onChange: (d: any) => void }) {
+    const { t } = useTranslation();
     const items = Array.isArray(data.items) ? data.items : [];
 
     const updateItem = (index: number, key: string, val: string) => {
@@ -250,21 +256,21 @@ export function FaqEditor({ data, onChange }: { data: any; onChange: (d: any) =>
                         </button>
 
                         <div className="mb-3 pr-8">
-                            <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Question</label>
+                            <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">{t.editor.faq.question}</label>
                             <input
                                 className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-bold text-gray-900 outline-none focus:border-blue-500"
                                 value={item.question || ""}
                                 onChange={(e) => updateItem(i, "question", e.target.value)}
-                                placeholder="ex: Y a-t-il le wifi ?"
+                                placeholder={t.editor.faq.qPlaceholder}
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Réponse</label>
+                            <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">{t.editor.faq.answer}</label>
                             <textarea
                                 className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 outline-none focus:border-blue-500 resize-none h-20"
                                 value={item.answer || ""}
                                 onChange={(e) => updateItem(i, "answer", e.target.value)}
-                                placeholder="Oui, le code est..."
+                                placeholder={t.editor.faq.aPlaceholder}
                             />
                         </div>
                     </div>
@@ -275,7 +281,7 @@ export function FaqEditor({ data, onChange }: { data: any; onChange: (d: any) =>
                 onClick={addItem}
                 className="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 font-bold hover:border-gray-400 hover:text-gray-600 transition-all flex items-center justify-center gap-2"
             >
-                <span>➕</span> Ajouter une question
+                <span>➕</span> {t.editor.faq.add}
             </button>
         </div>
     );
@@ -283,42 +289,43 @@ export function FaqEditor({ data, onChange }: { data: any; onChange: (d: any) =>
 
 // --- TRASH ---
 export function TrashEditor({ data, onChange }: { data: any; onChange: (d: any) => void }) {
+    const { t } = useTranslation();
     return (
         <div>
             <TextAreaField
-                label="Instructions"
+                label={t.editor.common.instructions}
                 value={data.instructions}
                 onChange={(v: string) => onChange({ ...data, instructions: v })}
-                placeholder="Ex: Le tri est obligatoire..."
+                placeholder={t.editor.trash.instrPlaceholder || "Ex: Le tri est obligatoire..."}
             />
             <div className="grid grid-cols-2 gap-4">
                 <InputField
-                    label="Jour des Poubelles (Ordures)"
+                    label={t.editor.trash.dayTrash}
                     value={data.trashDay}
                     onChange={(v: string) => onChange({ ...data, trashDay: v })}
-                    placeholder="ex: Lundi soir"
+                    placeholder={t.editor.trash.dayTrashPlaceholder || "ex: Lundi soir"}
                 />
                 <InputField
-                    label="Jour du Recyclage (Jaune)"
+                    label={t.editor.trash.dayRecycling}
                     value={data.recyclingDay}
                     onChange={(v: string) => onChange({ ...data, recyclingDay: v })}
-                    placeholder="ex: Jeudi matin"
+                    placeholder={t.editor.trash.dayRecyclingPlaceholder || "ex: Jeudi matin"}
                 />
             </div>
             <InputField
-                label="Emplacement des bacs"
+                label={t.editor.trash.location}
                 value={data.location}
                 onChange={(v: string) => onChange({ ...data, location: v })}
-                placeholder="ex: Dans le garage, au fond à droite"
+                placeholder={t.editor.trash.locPlaceholder || "ex: Dans le garage, au fond à droite"}
             />
             <InputField
-                label="Lien Google Maps (Local)"
+                label={t.editor.common.mapUrl}
                 value={data.mapUrl}
                 onChange={(v: string) => onChange({ ...data, mapUrl: v })}
                 placeholder="https://maps.google.com/..."
             />
             <FileUploader
-                label="Photo du local"
+                label={t.editor.trash.photoLocal}
                 value={data.imageUrl}
                 onUpload={(url) => onChange({ ...data, imageUrl: url })}
             />
@@ -328,36 +335,37 @@ export function TrashEditor({ data, onChange }: { data: any; onChange: (d: any) 
 
 // --- PARKING ---
 export function ParkingEditor({ data, onChange }: { data: any; onChange: (d: any) => void }) {
+    const { t } = useTranslation();
     return (
         <div>
             <TextAreaField
-                label="Instructions"
+                label={t.editor.common.instructions}
                 value={data.instructions}
                 onChange={(v: string) => onChange({ ...data, instructions: v })}
-                placeholder="Ex: Garez-vous sur la place N°42 only."
+                placeholder={t.editor.parking.instrPlaceholder || "Ex: Garez-vous sur la place N°42 only."}
             />
             <InputField
-                label="Emplacement / Adresse"
+                label={`${t.editor.common.location} / ${t.editor.common.address}`}
                 value={data.location}
                 onChange={(v: string) => onChange({ ...data, location: v })}
-                placeholder="ex: Parking Indigo, 2 rue de la Paix"
+                placeholder={t.editor.parking.locPlaceholder || "ex: Parking Indigo, 2 rue de la Paix"}
             />
             <div className="grid grid-cols-2 gap-4">
                 <InputField
-                    label="Coût"
+                    label={t.editor.common.cost}
                     value={data.cost}
                     onChange={(v: string) => onChange({ ...data, cost: v })}
-                    placeholder="ex: Gratuit / 2€ par heure"
+                    placeholder={t.editor.parking.costPlaceholder}
                 />
                 <InputField
-                    label="Lien Google Maps"
+                    label={t.editor.common.mapUrl}
                     value={data.mapUrl}
                     onChange={(v: string) => onChange({ ...data, mapUrl: v })}
-                    placeholder="https://maps.google.com/..."
+                    placeholder={t.editor.common.placeholderMap}
                 />
             </div>
             <FileUploader
-                label="Photo du parking"
+                label={t.editor.parking.photo}
                 value={data.imageUrl}
                 onUpload={(url) => onChange({ ...data, imageUrl: url })}
             />
@@ -367,25 +375,26 @@ export function ParkingEditor({ data, onChange }: { data: any; onChange: (d: any
 
 // --- BREAKFAST ---
 export function BreakfastEditor({ data, onChange }: { data: any; onChange: (d: any) => void }) {
+    const { t } = useTranslation();
     return (
         <div>
             <InputField
-                label="Horaires"
+                label={t.editor.common.hours}
                 value={data.time}
                 onChange={(v: string) => onChange({ ...data, time: v })}
-                placeholder="ex: 07:00 - 10:30"
+                placeholder={t.editor.breakfast.hoursPlaceholder || "ex: 07:00 - 10:30"}
             />
             <InputField
-                label="Lieu"
+                label={t.editor.common.location}
                 value={data.location}
                 onChange={(v: string) => onChange({ ...data, location: v })}
-                placeholder="ex: Salle à manger, RDC"
+                placeholder={t.editor.breakfast.locPlaceholder || "ex: Salle à manger, RDC"}
             />
             <TextAreaField
-                label="Au Menu / Détails"
+                label={t.editor.breakfast.menu}
                 value={data.menu}
                 onChange={(v: string) => onChange({ ...data, menu: v })}
-                placeholder="Buffet continental, produits locaux..."
+                placeholder={t.editor.breakfast.menuPlaceholder}
             />
         </div>
     );
@@ -393,6 +402,7 @@ export function BreakfastEditor({ data, onChange }: { data: any; onChange: (d: a
 
 // --- TRANSPORT ---
 export function TransportEditor({ data, onChange }: { data: any; onChange: (d: any) => void }) {
+    const { t } = useTranslation();
     const options = Array.isArray(data.options) ? data.options : [];
 
     const updateOption = (index: number, key: string, val: string) => {
@@ -430,37 +440,37 @@ export function TransportEditor({ data, onChange }: { data: any; onChange: (d: a
                                     value={item.type || "other"}
                                     onChange={(e) => updateOption(i, "type", e.target.value)}
                                 >
-                                    <option value="bus">Bus</option>
-                                    <option value="train">Train / Métro</option>
-                                    <option value="taxi">Taxi / VTC</option>
-                                    <option value="bike">Vélo</option>
-                                    <option value="other">Autre</option>
+                                    <option value="bus">{t.editor.transport.bus}</option>
+                                    <option value="train">{t.editor.transport.train}</option>
+                                    <option value="taxi">{t.editor.transport.taxi}</option>
+                                    <option value="bike">{t.editor.transport.bike}</option>
+                                    <option value="other">{t.editor.common.other}</option>
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Nom</label>
+                                <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">{t.editor.common.title}</label>
                                 <input
                                     className="w-full h-10 bg-white border border-gray-300 rounded-lg px-3 text-sm font-bold text-gray-900 outline-none focus:border-blue-500"
                                     value={item.name || ""}
                                     onChange={(e) => updateOption(i, "name", e.target.value)}
-                                    placeholder="ex: Ligne 4"
+                                    placeholder={t.editor.transport.linePlaceholder || "ex: Ligne 4"}
                                 />
                             </div>
                         </div>
 
                         <div className="mb-3">
-                            <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Description / Arrêt</label>
+                            <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">{t.editor.transport.stop}</label>
                             <input
                                 className="w-full h-10 bg-white border border-gray-300 rounded-lg px-3 text-sm text-gray-700 outline-none focus:border-blue-500"
                                 value={item.description || ""}
                                 onChange={(e) => updateOption(i, "description", e.target.value)}
-                                placeholder="ex: Arrêt 'Hôtel de Ville' à 5min"
+                                placeholder={t.editor.transport.stopPlaceholder || "ex: Arrêt 'Hôtel de Ville' à 5min"}
                             />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Lien / Site (Opt)</label>
+                                <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Link (Opt)</label>
                                 <input
                                     className="w-full h-10 bg-white border border-gray-300 rounded-lg px-3 text-sm text-gray-700 outline-none focus:border-blue-500"
                                     value={item.url || ""}
@@ -469,7 +479,7 @@ export function TransportEditor({ data, onChange }: { data: any; onChange: (d: a
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Téléphone (Opt)</label>
+                                <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">{t.editor.common.phone} (Opt)</label>
                                 <input
                                     className="w-full h-10 bg-white border border-gray-300 rounded-lg px-3 text-sm text-gray-700 outline-none focus:border-blue-500"
                                     value={item.phone || ""}
@@ -486,7 +496,7 @@ export function TransportEditor({ data, onChange }: { data: any; onChange: (d: a
                 onClick={addOption}
                 className="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 font-bold hover:border-gray-400 hover:text-gray-600 transition-all flex items-center justify-center gap-2"
             >
-                <span>➕</span> Ajouter un transport
+                <span>➕</span> {t.editor.transport.add}
             </button>
         </div>
     );

@@ -3,13 +3,12 @@ import { useMemo, useState, useEffect } from "react";
 import { blockLibrary, blockRegistry } from "@/components/blocks/registry";
 import { Button } from "@/components/ui/Button";
 import type { Guide, BlockType } from "@/types/blocks";
-import { GuideRenderer } from "@/components/guide/GuideRenderer";
 import { StyledGuideRenderer } from "@/components/guide/StyledGuideRenderer";
 import { guideThemes } from "@/types/themes";
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
 import { useReactToPrint } from "react-to-print";
-import { PrintableGuide } from "@/components/guide/PrintableGuide";
 import { useRef } from "react";
+import { useTranslation } from "@/components/providers/LanguageProvider";
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 const STORAGE_KEY = "eguidehq_demo_guide_v1";
@@ -19,6 +18,8 @@ export function DragDropBuilder({ initialGuide }: { initialGuide: Guide }) {
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [draggedId, setDraggedId] = useState<string | null>(null);
     const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+    const [activeCategory, setActiveCategory] = useState<string>("Essentiels");
+    const { t } = useTranslation();
 
     // Dériver le thème actuel depuis le guide
     // @ts-ignore - guide.theme might be undefined in old saved data
@@ -34,7 +35,6 @@ export function DragDropBuilder({ initialGuide }: { initialGuide: Guide }) {
     const selected = useMemo(() => guide.blocks.find((b) => b.id === selectedId) ?? null, [guide, selectedId]);
     const selectedDef = selected ? blockRegistry[selected.type] : null;
 
-    // Charger depuis localStorage après montage
     // Charger depuis localStorage après montage
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -141,7 +141,7 @@ export function DragDropBuilder({ initialGuide }: { initialGuide: Guide }) {
 
                                 {/* Dropdown Menu */}
                                 <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 p-4 hidden group-hover:block hover:block z-50 animate-in fade-in slide-in-from-top-2">
-                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Choisir un thème</div>
+                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">{t.builder.chooseTheme}</div>
                                     <div className="grid grid-cols-2 gap-2">
                                         {guideThemes.map(t => (
                                             <button
@@ -179,12 +179,10 @@ export function DragDropBuilder({ initialGuide }: { initialGuide: Guide }) {
                                 }}
                                 className="text-sm h-9"
                             >
-                                Réinitialiser
+                                {t.builder.reset}
                             </Button>
-                            <a href="/g/demo" target="_blank">
-                                <Button className="h-9 bg-gray-900 text-white hover:bg-black shadow-lg">
-                                    Voir le guide ↗
-                                </Button>
+                            <a href={`/g/${guide?.id}`} target="_blank" className="px-3 py-1.5 bg-blue-600/20 text-blue-400 rounded-lg hover:bg-blue-600/30 transition-colors text-xs flex items-center gap-2 border border-blue-600/30">
+                                {t.builder.viewGuide}
                             </a>
                             <Button
                                 variant="secondary"
@@ -204,18 +202,32 @@ export function DragDropBuilder({ initialGuide }: { initialGuide: Guide }) {
                     {/* Left Sidebar - Block Library */}
                     <div className="space-y-6">
                         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                            <div className="p-4 border-b border-gray-100 bg-gray-50/50">
-                                <h2 className="font-bold text-gray-900 text-sm uppercase tracking-wide">
-                                    Ajouter un bloc
-                                </h2>
+                            <div className="p-3 bg-gray-50/50 flex gap-1">
+                                {[
+                                    { id: "Essentielles", label: t.builder.catEssentials },
+                                    { id: "Voyage", label: t.builder.catTravel },
+                                    { id: "Business", label: t.builder.catBusiness }
+                                ].map((cat) => (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => setActiveCategory(cat.id)}
+                                        className={`flex-1 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all ${activeCategory === cat.id
+                                                ? "bg-blue-600 text-white shadow-sm"
+                                                : "text-gray-400 hover:bg-gray-200"
+                                            }`}
+                                    >
+                                        {cat.label}
+                                    </button>
+                                ))}
                             </div>
 
-                            <div className="p-3 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto custom-scrollbar">
-                                {["Essentiels", "Voyage", "Business"].map((cat) => (
-                                    <div key={cat}>
-                                        <div className="mb-3 px-2 text-xs font-bold text-gray-400 uppercase tracking-wider">{cat}</div>
-                                        <div className="space-y-1">
-                                            {blockLibrary.filter((b) => b.category === (cat as any)).map((b) => {
+                            <div className="p-3 space-y-6 max-h-[calc(100vh-280px)] overflow-y-auto custom-scrollbar">
+                                <div>
+                                    <div className="mb-3 px-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                        {activeCategory === "Essentielles" ? t.builder.catEssentials : activeCategory === "Voyage" ? t.builder.catTravel : t.builder.catBusiness}
+                                    </div>
+                                    <div className="space-y-1">
+                                        {blockLibrary.filter((b) => b.category === (activeCategory as any)).map((b) => {
                                                 const Icon = MinimalIcons[b.type as BlockType] || MinimalIcons.hero;
                                                 return (
                                                     <button
@@ -237,9 +249,8 @@ export function DragDropBuilder({ initialGuide }: { initialGuide: Guide }) {
                                                     </button>
                                                 );
                                             })}
-                                        </div>
                                     </div>
-                                ))}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -250,18 +261,18 @@ export function DragDropBuilder({ initialGuide }: { initialGuide: Guide }) {
                             <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                                 <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                    <span className="text-sm font-medium text-gray-600">Structure du guide</span>
+                                    <span className="text-sm font-medium text-gray-600">{t.builder.guideStructure}</span>
                                 </div>
-                                <span className="text-xs font-medium text-gray-400">{blockCount} blocs</span>
+                                <span className="text-xs font-medium text-gray-400">{blockCount} {t.builder.blocks}</span>
                             </div>
 
                             <div className="p-6 flex-1 bg-gray-50/30">
                                 {blockCount === 0 ? (
                                     <div className="h-full flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-gray-200 rounded-xl">
                                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-3xl">✨</div>
-                                        <h3 className="text-lg font-bold text-gray-900 mb-2">Commencez ici</h3>
+                                        <h3 className="text-lg font-bold text-gray-900 mb-2">{t.builder.startHere}</h3>
                                         <p className="text-gray-500 text-sm max-w-xs">
-                                            Sélectionnez des blocs dans le menu de gauche pour construire votre guide.
+                                            {t.builder.selectBlocks}
                                         </p>
                                     </div>
                                 ) : (
@@ -337,20 +348,18 @@ export function DragDropBuilder({ initialGuide }: { initialGuide: Guide }) {
 
                     {/* Right Sidebar - Settings & Preview */}
                     <div className="space-y-6">
-                        {/* Live Preview Mini */}
                         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
                             <div className="p-3 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
-                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Aperçu mobile</span>
+                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{t.builder.mobilePreview}</span>
                                 <span className="w-2 h-2 rounded-full bg-green-500" />
                             </div>
                             <div className="relative h-[600px] bg-gray-200 overflow-hidden flex justify-center pt-4">
                                 <div
                                     className="w-[375px] h-[812px] bg-white shadow-2xl origin-top scale-[0.7]"
                                     style={{
-                                        pointerEvents: "none" // Optional: disable interaction if we just want visual preview, enabling it might be weird with scale
+                                        pointerEvents: "none"
                                     }}
                                 >
-                                    {/* Enable pointer events on the renderer if we want interaction, but simplified for now */}
                                     <div style={{ pointerEvents: "auto", height: "100%", overflowY: "auto" }} className="custom-scrollbar">
                                         <StyledGuideRenderer guide={guide} unlocked={true} forceMobile={true} />
                                     </div>
@@ -361,24 +370,24 @@ export function DragDropBuilder({ initialGuide }: { initialGuide: Guide }) {
                         {/* Block Settings */}
                         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
                             <div className="p-4 border-b border-gray-100 bg-gray-50/50 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                Propriétés du bloc
+                                {t.builder.blockProperties}
                             </div>
 
                             <div className="p-5 max-h-[calc(100vh-600px)] overflow-y-auto custom-scrollbar">
                                 {selected && selectedDef ? (
                                     <div className="space-y-6">
                                         <div>
-                                            <label className="block mb-2 text-xs font-bold text-gray-700 uppercase tracking-wide">Titre</label>
+                                            <label className="block mb-2 text-xs font-bold text-gray-700 uppercase tracking-wide">{t.editor.common.title}</label>
                                             <input
                                                 className="w-full h-10 rounded-lg border border-gray-300 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium"
                                                 value={selected.title ?? ""}
                                                 onChange={(e) => persist({ ...guide, blocks: guide.blocks.map((b) => b.id === selected.id ? { ...b, title: e.target.value } : b) })}
-                                                placeholder="Titre du bloc..."
+                                                placeholder={t.editor.common.placeholder}
                                             />
                                         </div>
 
                                         <div className="border-t border-gray-100 pt-6">
-                                            <label className="block mb-4 text-xs font-bold text-gray-700 uppercase tracking-wide">Contenu</label>
+                                            <label className="block mb-4 text-xs font-bold text-gray-700 uppercase tracking-wide">{t.builder.editing}</label>
                                             <selectedDef.Editor
                                                 title={selected.title}
                                                 data={selected.data}
@@ -390,17 +399,14 @@ export function DragDropBuilder({ initialGuide }: { initialGuide: Guide }) {
                                     </div>
                                 ) : (
                                     <div className="text-center py-10 opacity-50">
-                                        <p className="text-sm text-gray-500">Sélectionne un bloc <br />pour le modifier</p>
+                                        <h4 className="text-sm font-bold text-gray-900 mb-1">{t.builder.selectToEdit}</h4>
+                                        <p className="text-xs text-gray-500">{t.builder.paramsHere}</p>
                                     </div>
                                 )}
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {/* Hidden Printable Component */}
-            <div style={{ display: "none" }}>
-                <PrintableGuide ref={printRef} guide={guide} />
             </div>
         </div>
     );

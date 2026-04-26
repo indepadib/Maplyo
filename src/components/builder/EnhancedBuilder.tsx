@@ -123,7 +123,7 @@ export function EnhancedBuilder({
         const newBlock = {
             id: uid(),
             type,
-            title: def.label,
+            title: t.editor.labels[def.label as keyof typeof t.editor.labels] || def.label,
             visibility: def.isSensitive ? { mode: "with_code" as const, unlockCode: "0000" } : { mode: "always" as const },
             data: def.defaultData,
         };
@@ -163,12 +163,7 @@ export function EnhancedBuilder({
     }
 
     // --- UI HELPERS ---
-    const categories = ["Essentiels", "Voyage", "Business"];
-    const catLabels: Record<string, string> = {
-        "Essentiels": t.builder.catEssentials,
-        "Voyage": t.builder.catTravel,
-        "Business": t.builder.catBusiness
-    };
+    const categories = ["catEssentials", "catTravel", "catBusiness"] as const;
     const isMobile = useMediaQuery("(max-width: 768px)");
 
     return (
@@ -206,10 +201,8 @@ export function EnhancedBuilder({
                         <QrCode className="w-4 h-4" /> {t.builder.qrLabel}
                     </a>
                     
-                    <div className="h-6 w-px bg-gray-200 mx-1 hidden sm:block" />
-                    <div className="hidden sm:block">
-                        <LanguageSwitcher variant="light" compact />
-                    </div>
+                    <div className="h-6 w-px bg-gray-200 mx-1" />
+                    <LanguageSwitcher variant="light" compact />
 
                     <div className="h-6 w-px bg-gray-200 mx-2" />
 
@@ -285,10 +278,11 @@ export function EnhancedBuilder({
                         <div className="space-y-8">
                             {categories.map(cat => (
                                 <div key={cat}>
-                                    <h3 className="text-sm font-bold text-gray-900 mb-4">{catLabels[cat]}</h3>
+                                    <h3 className="text-sm font-bold text-gray-900 mb-4">{t.builder[cat]}</h3>
                                     <div className="grid grid-cols-2 gap-3">
                                         {blockLibrary.filter(b => b.category === cat).map(b => {
                                             const Icon = MinimalIcons[b.type as BlockType];
+                                            const label = t.editor.labels[b.label as keyof typeof t.editor.labels] || b.label;
                                             return (
                                                 <button
                                                     key={b.type}
@@ -298,7 +292,7 @@ export function EnhancedBuilder({
                                                     <div className="w-8 h-8 text-gray-400 group-hover:text-blue-600 transition-colors">
                                                         {Icon ? <Icon className="w-8 h-8" color="currentColor" /> : <span className="text-xl">?</span>}
                                                     </div>
-                                                    <span className="text-xs font-medium text-gray-600 group-hover:text-blue-700">{b.label}</span>
+                                                    <span className="text-xs font-medium text-gray-600 group-hover:text-blue-700">{label}</span>
                                                 </button>
                                             );
                                         })}
@@ -321,7 +315,7 @@ export function EnhancedBuilder({
 
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-2xl font-bold text-gray-900">{t.builder.guideStructure}</h2>
-                            <span className="text-sm text-gray-500">{guide.blocks.length} blocs</span>
+                            <span className="text-sm text-gray-500">{guide.blocks.length} {t.builder.blocks}</span>
                         </div>
 
                         {guide.blocks.length === 0 ? (
@@ -459,7 +453,7 @@ export function EnhancedBuilder({
                                             })()}
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-gray-900">{editingDef.label}</h3>
+                                            <h3 className="font-bold text-gray-900">{t.editor.labels[editing.type as keyof typeof t.editor.labels] || editingDef.label}</h3>
                                             <p className="text-xs text-blue-600 font-medium">{t.builder.editing}</p>
                                         </div>
                                     </div>
@@ -502,8 +496,8 @@ export function EnhancedBuilder({
                         ) : (
                             <div className="flex-1 flex flex-col items-center justify-center text-gray-400 p-8 text-center">
                                 <Settings size={48} className="mb-4 opacity-20" />
-                                <p className="font-medium">{t.builder.selectBlockEdit}</p>
-                                <p className="text-sm mt-2 opacity-60">{t.builder.paramsAppearHere}</p>
+                                <p className="font-medium">{t.builder.selectBlock}</p>
+                                <p className="text-sm mt-2 opacity-60">{t.builder.paramsHere}</p>
                             </div>
                         )}
                     </div>
@@ -519,7 +513,7 @@ export function EnhancedBuilder({
                 {!unlockedThemes && (
                     <div className="mb-4 p-3 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100 rounded-xl flex items-center gap-3 text-amber-800 text-xs font-medium">
                         <span className="p-1.5 bg-amber-100 rounded-lg">👑</span>
-                        {t.builder.proThemesDesc}
+                        {t.builder.upgradePro}
                     </div>
                 )}
                 <div className="grid grid-cols-2 gap-4">
@@ -567,8 +561,12 @@ export function EnhancedBuilder({
                                     )}
                                 </div>
                                 <div className="p-4 bg-white">
-                                    <h3 className="font-bold text-gray-900">{theme.name}</h3>
-                                    <p className="text-xs text-gray-500">{theme.description}</p>
+                                    <h3 className="font-bold text-gray-900">
+                                        {(t.builder.themes?.[theme.id as keyof typeof t.builder.themes] as any)?.name || theme.name}
+                                    </h3>
+                                    <p className="text-xs text-gray-500">
+                                        {(t.builder.themes?.[theme.id as keyof typeof t.builder.themes] as any)?.desc || theme.description}
+                                    </p>
                                 </div>
                             </button>
                         )
@@ -585,10 +583,10 @@ export function EnhancedBuilder({
             >
                 <div className="text-center p-4">
                     <p className="text-gray-600 mb-6">
-                        {t.builder.publishProDesc}
+                        {t.builder.publishDesc}
                     </p>
                     <a href="/pricing" className="inline-flex w-full justify-center px-6 py-3 bg-gradient-to-r from-rose-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:opacity-90 transition-opacity">
-                        Voir les offres
+                        {t.builder.seeOffers}
                     </a>
                 </div>
             </Modal>

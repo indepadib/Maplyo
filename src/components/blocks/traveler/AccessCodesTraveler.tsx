@@ -58,7 +58,7 @@ export function AccessCodesTraveler({
                 onKeyDown={(e) => e.key === 'Enter' && handleUnlock()}
               />
               <Button onClick={handleUnlock} size="sm" variant={error ? "secondary" : "primary"}>
-                {error ? <XIcon className="w-4 h-4" /> : "OK"}
+                {error ? <XIcon className="w-4 h-4" /> : t.guide.confirm}
               </Button>
             </div>
           </div>

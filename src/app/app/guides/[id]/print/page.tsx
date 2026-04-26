@@ -61,10 +61,12 @@ export default function PrintPage({ params }: { params: Promise<{ id: string }> 
             // The container itself doesn't have 'print:hidden' elements usually, 
             // but we ensure we are capturing it cleanly.
             const canvas = await html2canvas(element, {
-                scale: 2, // High resolution
-                useCORS: true, // Allow cross-origin images
-                backgroundColor: null, // Transparent background
+                scale: 3, // Even higher resolution
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: "#ffffff", // Solid background to avoid transparency issues
                 logging: false,
+                letterRendering: true,
                 // html2canvas doesn't support all CSS properties perfectly, 
                 // but Maplyo's PrintLayout uses inline styles specifically for this reason
             });

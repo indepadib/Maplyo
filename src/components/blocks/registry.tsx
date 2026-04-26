@@ -40,7 +40,7 @@ export type BlockRenderContext = { mode: "traveler" | "builder"; unlocked: boole
 export type BlockDefinition = {
   type: BlockType;
   label: string;
-  category: "Essentiels" | "Voyage" | "Business";
+  category: "catEssentials" | "catTravel" | "catBusiness";
   schema?: unknown;
   defaultData: unknown;
   isSensitive?: boolean;
@@ -49,40 +49,40 @@ export type BlockDefinition = {
 };
 
 export const blockRegistry: Record<BlockType, BlockDefinition> = {
-  hero: { type: "hero", label: "Hero", category: "Essentiels", schema: HeroBlockDataSchema, defaultData: { title: "Bienvenue", subtitle: "Ton guide voyageur", coverImageUrl: "", badges: [] }, Traveler: HeroTraveler, Editor: HeroEditor },
-  wifi: { type: "wifi", label: "Wi‑Fi", category: "Essentiels", schema: WifiBlockDataSchema, defaultData: { networkName: "", password: "", notes: "" }, Traveler: WifiTraveler, Editor: WifiEditor },
-  access_codes: { type: "access_codes", label: "Codes d’accès", category: "Essentiels", schema: AccessCodesBlockDataSchema, defaultData: { apartmentDoorCode: "", buildingDoorCode: "", gateCode: "", notes: "" }, isSensitive: true, Traveler: AccessCodesTraveler, Editor: AccessCodesEditor },
+  hero: { type: "hero", label: "hero", category: "catEssentials", schema: HeroBlockDataSchema, defaultData: { title: "Bienvenue", subtitle: "Ton guide voyageur", coverImageUrl: "", badges: [] }, Traveler: HeroTraveler, Editor: HeroEditor },
+  wifi: { type: "wifi", label: "wifi", category: "catEssentials", schema: WifiBlockDataSchema, defaultData: { networkName: "", password: "", notes: "" }, Traveler: WifiTraveler, Editor: WifiEditor },
+  access_codes: { type: "access_codes", label: "access_codes", category: "catEssentials", schema: AccessCodesBlockDataSchema, defaultData: { apartmentDoorCode: "", buildingDoorCode: "", gateCode: "", notes: "" }, isSensitive: true, Traveler: AccessCodesTraveler, Editor: AccessCodesEditor },
 
-  checkin: { type: "checkin", label: "Arrivée", category: "Voyage", schema: CheckinBlockDataSchema, defaultData: { time: "15:00", instruction: "" }, Traveler: CheckinTraveler, Editor: CheckinEditor },
-  checkout: { type: "checkout", label: "Départ", category: "Voyage", schema: CheckinBlockDataSchema, defaultData: { time: "11:00", instruction: "" }, Traveler: CheckinTraveler, Editor: CheckinEditor },
-  location: { type: "location", label: "Localisation", category: "Voyage", schema: LocationBlockDataSchema, defaultData: { address: "", googleMapsUrl: "" }, Traveler: LocationTraveler, Editor: LocationEditor },
-  contact: { type: "contact", label: "Contact", category: "Essentiels", schema: ContactBlockDataSchema, defaultData: { name: "", phone: "", whatsapp: "", email: "" }, Traveler: ContactTraveler, Editor: ContactEditor },
+  checkin: { type: "checkin", label: "checkin", category: "catTravel", schema: CheckinBlockDataSchema, defaultData: { time: "15:00", instruction: "" }, Traveler: CheckinTraveler, Editor: CheckinEditor },
+  checkout: { type: "checkout", label: "checkout", category: "catTravel", schema: CheckinBlockDataSchema, defaultData: { time: "11:00", instruction: "" }, Traveler: CheckinTraveler, Editor: CheckinEditor },
+  location: { type: "location", label: "location", category: "catTravel", schema: LocationBlockDataSchema, defaultData: { address: "", googleMapsUrl: "" }, Traveler: LocationTraveler, Editor: LocationEditor },
+  contact: { type: "contact", label: "contact", category: "catEssentials", schema: ContactBlockDataSchema, defaultData: { name: "", phone: "", whatsapp: "", email: "" }, Traveler: ContactTraveler, Editor: ContactEditor },
 
-  rules: { type: "rules", label: "Règles", category: "Voyage", schema: RulesBlockDataSchema, defaultData: { items: [{ text: "Ne pas fumer" }, { text: "Pas de fêtes" }] }, Traveler: RulesTraveler, Editor: RulesEditor },
+  rules: { type: "rules", label: "rules", category: "catTravel", schema: RulesBlockDataSchema, defaultData: { items: [{ text: "Ne pas fumer" }, { text: "Pas de fêtes" }] }, Traveler: RulesTraveler, Editor: RulesEditor },
 
   // NEW BLOCKS
-  trash: { type: "trash", label: "Déchets & Tri", category: "Essentiels", schema: TrashBlockDataSchema, defaultData: { instructions: "", trashDay: "", recyclingDay: "", location: "" }, Traveler: TrashTraveler, Editor: TrashEditor },
-  parking: { type: "parking", label: "Parking", category: "Voyage", schema: ParkingBlockDataSchema, defaultData: { instructions: "", location: "", cost: "", mapUrl: "" }, Traveler: ParkingTraveler, Editor: ParkingEditor },
-  breakfast: { type: "breakfast", label: "Petit Déjeuner", category: "Voyage", schema: BreakfastBlockDataSchema, defaultData: { time: "", location: "", menu: "" }, Traveler: BreakfastTraveler, Editor: BreakfastEditor },
-  transport: { type: "transport", label: "Transports", category: "Voyage", schema: TransportBlockDataSchema, defaultData: { options: [] }, Traveler: TransportTraveler, Editor: TransportEditor },
+  trash: { type: "trash", label: "trash", category: "catEssentials", schema: TrashBlockDataSchema, defaultData: { instructions: "", trashDay: "", recyclingDay: "", location: "" }, Traveler: TrashTraveler, Editor: TrashEditor },
+  parking: { type: "parking", label: "parking", category: "catTravel", schema: ParkingBlockDataSchema, defaultData: { instructions: "", location: "", cost: "", mapUrl: "" }, Traveler: ParkingTraveler, Editor: ParkingEditor },
+  breakfast: { type: "breakfast", label: "breakfast", category: "catTravel", schema: BreakfastBlockDataSchema, defaultData: { time: "", location: "", menu: "" }, Traveler: BreakfastTraveler, Editor: BreakfastEditor },
+  transport: { type: "transport", label: "transport", category: "catTravel", schema: TransportBlockDataSchema, defaultData: { options: [] }, Traveler: TransportTraveler, Editor: TransportEditor },
 
-  welcome: { type: "welcome", label: "Bienvenue", category: "Essentiels", schema: WelcomeBlockDataSchema, defaultData: { title: "Bienvenue !", content: "Ravis de vous accueillir.", imageUrl: "" }, Traveler: WelcomeTraveler, Editor: WelcomeEditor },
+  welcome: { type: "welcome", label: "welcome", category: "catEssentials", schema: WelcomeBlockDataSchema, defaultData: { title: "Bienvenue !", content: "Ravis de vous accueillir.", imageUrl: "" }, Traveler: WelcomeTraveler, Editor: WelcomeEditor },
 
-  amenities: { type: "amenities", label: "Équipements", category: "Voyage", schema: AmenitiesBlockDataSchema, defaultData: { items: [{ text: "Wi-Fi" }, { text: "Machine à café" }] }, Traveler: AmenitiesTraveler, Editor: AmenitiesEditor },
-  faq: { type: "faq", label: "FAQ", category: "Voyage", schema: FaqBlockDataSchema, defaultData: { items: [{ question: "Y a-t-il le wifi ?", answer: "Oui, voir le bloc WiFi." }] }, Traveler: FaqTraveler, Editor: FaqEditor },
+  amenities: { type: "amenities", label: "amenities", category: "catTravel", schema: AmenitiesBlockDataSchema, defaultData: { items: [{ text: "Wi-Fi" }, { text: "Machine à café" }] }, Traveler: AmenitiesTraveler, Editor: AmenitiesEditor },
+  faq: { type: "faq", label: "faq", category: "catTravel", schema: FaqBlockDataSchema, defaultData: { items: [{ question: "Y a-t-il le wifi ?", answer: "Oui, voir le bloc WiFi." }] }, Traveler: FaqTraveler, Editor: FaqEditor },
 
-  places: { type: "places", label: "Lieux recommandés", category: "Voyage", schema: PlacesBlockDataSchema, defaultData: { items: [{ name: "Boulangerie Délicieuse", description: "Les meilleurs croissants." }] }, Traveler: PlacesTraveler, Editor: PlacesEditor },
-  events: { type: "events", label: "Événements", category: "Voyage", schema: EventsBlockDataSchema, defaultData: { items: [{ title: "Fête de la ville", month: "JUI", day: 14 }] }, Traveler: EventsTraveler, Editor: EventsEditor },
-  documents: { type: "documents", label: "Documents", category: "Business", schema: DocumentsBlockDataSchema, defaultData: { items: [{ title: "Manuel de la maison", url: "#" }] }, Traveler: DocumentsTraveler, Editor: DocumentsEditor },
-  upsells: { type: "upsells", label: "Upsells & extras", category: "Business", schema: UpsellsBlockDataSchema, defaultData: { items: [{ title: "Départ tardif", price: "30€", description: "Profitez de votre dernière matinée." }] }, Traveler: UpsellsTraveler, Editor: UpsellsEditor },
-  embed: { type: "embed", label: "Intégration Web", category: "Business", schema: EmbedBlockDataSchema, defaultData: { url: "" }, Traveler: EmbedTraveler, Editor: EmbedEditor },
+  places: { type: "places", label: "places", category: "catTravel", schema: PlacesBlockDataSchema, defaultData: { items: [{ name: "Boulangerie Délicieuse", description: "Les meilleurs croissants." }] }, Traveler: PlacesTraveler, Editor: PlacesEditor },
+  events: { type: "events", label: "events", category: "catTravel", schema: EventsBlockDataSchema, defaultData: { items: [{ title: "Fête de la ville", month: "JUI", day: 14 }] }, Traveler: EventsTraveler, Editor: EventsEditor },
+  documents: { type: "documents", label: "documents", category: "catBusiness", schema: DocumentsBlockDataSchema, defaultData: { items: [{ title: "Manuel de la maison", url: "#" }] }, Traveler: DocumentsTraveler, Editor: DocumentsEditor },
+  upsells: { type: "upsells", label: "upsells", category: "catBusiness", schema: UpsellsBlockDataSchema, defaultData: { items: [{ title: "Départ tardif", price: "30€", description: "Profitez de votre dernière matinée." }] }, Traveler: UpsellsTraveler, Editor: UpsellsEditor },
+  embed: { type: "embed", label: "embed", category: "catBusiness", schema: EmbedBlockDataSchema, defaultData: { url: "" }, Traveler: EmbedTraveler, Editor: EmbedEditor },
 };
 
 function stub(type: BlockType, label: string): BlockDefinition {
   return {
     type,
     label,
-    category: "Voyage",
+    category: "catTravel",
     defaultData: {},
     Traveler: ({ title }) => (
       <div className="rounded-2xl border border-dashed border-zinc-300 bg-white p-5">

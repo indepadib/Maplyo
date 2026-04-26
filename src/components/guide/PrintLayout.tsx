@@ -1,6 +1,6 @@
 import { Guide } from "@/types/blocks";
 import { guideThemes } from "@/types/themes";
-import { QRCodeSVG } from "qrcode.react";
+import { QRCodeCanvas } from "qrcode.react";
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
 
 interface PrintLayoutProps {
@@ -58,7 +58,7 @@ export function PrintLayout({ guide }: PrintLayoutProps) {
                 {wifiQrData && (
                     <div className="flex flex-col items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-700">
                         <div className="p-3 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/40 relative group">
-                            <QRCodeSVG
+                            <QRCodeCanvas
                                 value={wifiQrData}
                                 size={120} // Smaller, icon-like
                                 level={"M"}
@@ -77,7 +77,7 @@ export function PrintLayout({ guide }: PrintLayoutProps) {
                 <div className="relative group transform hover:scale-105 transition-transform duration-500">
                     <div className="absolute -inset-4 bg-white/20 rounded-[3rem] blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
                     <div className="relative p-8 bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/50">
-                        <QRCodeSVG
+                        <QRCodeCanvas
                             value={guideUrl}
                             size={300}
                             level={"Q"}

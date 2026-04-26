@@ -11,42 +11,39 @@ import { useTranslation } from "@/components/providers/LanguageProvider";
 export function GuideShowcase() {
     const { t, lang } = useTranslation();
 
-    // Local translation helper for demo content
-    const tr = (fr: string, en: string) => lang === 'fr' ? fr : en;
-
     const examples = [
         {
             title: "City Loft Paris",
-            type: tr("Appartement", "Apartment"),
+            type: t.showcase.example1.type,
             image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",
-            stats: [tr("Code WiFi", "WiFi Code"), tr("Métro", "Subway"), tr("Cafés", "Coffee")],
+            stats: [t.showcase.example1.stat1, t.showcase.example1.stat2, t.showcase.example1.stat3],
             color: "from-rose-500 to-rose-600",
             review: {
-                text: tr("Merci pour le guide, l'arrivée était super simple !", "Thanks for the guide, check-in was super easy!"),
+                text: t.showcase.example1.review,
                 author: "Sarah",
                 rating: "+5★"
             }
         },
         {
             title: "Villa Atlas",
-            type: tr("Maison de Vacances", "Vacation Home"),
+            type: t.showcase.example2.type,
             image: "https://plus.unsplash.com/premium_photo-1661964014750-963a28aeddea?q=80&w=2669&auto=format&fit=crop", // Fixed image
-            stats: [tr("Piscine", "Pool"), tr("Chef à dom.", "Private Chef"), tr("Excursions", "Tours")],
+            stats: [t.showcase.example2.stat1, t.showcase.example2.stat2, t.showcase.example2.stat3],
             color: "from-emerald-500 to-teal-600",
             review: {
-                text: tr("On a adoré les recos de restos !", "We loved the restaurant recs!"),
+                text: t.showcase.example2.review,
                 author: "Marc & Julie",
                 rating: "+15%"
             }
         },
         {
             title: "Riad Al Jazira",
-            type: tr("Maison d'Hôtes", "Guesthouse"),
+            type: t.showcase.example3.type,
             image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80",
-            stats: [tr("Hammam", "Hammam"), tr("Thé", "Tea"), tr("Souks", "Souks")],
+            stats: [t.showcase.example3.stat1, t.showcase.example3.stat2, t.showcase.example3.stat3],
             color: "from-amber-500 to-orange-600",
             review: {
-                text: tr("Le QR code WiFi a sauvé notre arrivée.", "The WiFi QR code saved our arrival."),
+                text: t.showcase.example3.review,
                 author: "Thomas",
                 rating: "Top !"
             }
@@ -62,17 +59,17 @@ export function GuideShowcase() {
                         whileInView={{ opacity: 1 }}
                         className="text-rose-500 font-bold uppercase tracking-widest text-sm"
                     >
-                        {tr("Exemples Concrets", "Real Examples")}
+                        {t.showcase.tag}
                     </motion.span>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-3xl md:text-5xl font-bold text-white mt-4 mb-6"
                     >
-                        {tr("Adapté à chaque propriété", "Tailored to every property")}
+                        {t.showcase.title}
                     </motion.h2>
                     <p className="text-zinc-400 max-w-2xl mx-auto">
-                        {tr("Que vous gériez un studio ou un hôtel, Maplyo s'adapte à votre style.", "Whether you manage a studio or a hotel, Maplyo adapts to your style.")}
+                        {t.showcase.description}
                     </p>
                 </div>
 
@@ -119,7 +116,7 @@ export function GuideShowcase() {
                                             <Star size={16} fill="currentColor" />
                                         </div>
                                         <div>
-                                            <p className="text-xs text-gray-500 font-medium">{tr("Message de", "Message from")} {ex.review.author}</p>
+                                            <p className="text-xs text-gray-500 font-medium">{t.showcase.messageFrom} {ex.review.author}</p>
                                             <p className="text-sm font-bold text-gray-900">"{ex.review.text}"</p>
                                         </div>
                                     </div>
@@ -137,7 +134,7 @@ export function GuideShowcase() {
 
                                 <div className="mt-8 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="/demo" className="text-white flex items-center gap-2 text-sm font-bold hover:text-rose-400 transition-colors">
-                                        {tr("Voir le guide complet", "View full guide")} <ExternalLink size={16} />
+                                        {t.showcase.viewFull} <ExternalLink size={16} />
                                     </a>
                                 </div>
                             </div>

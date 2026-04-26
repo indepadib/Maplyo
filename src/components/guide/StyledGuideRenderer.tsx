@@ -12,395 +12,12 @@ import { QRCodeSVG } from "qrcode.react";
 import { Wifi, Key, X, ExternalLink, Search, Globe, ChevronRight, CheckCircle2, MapPin, Sun, Moon, Coffee, Utensils, Music, Camera } from "lucide-react";
 import { GuideChatbot } from "./GuideChatbot";
 import { TipModal } from "./TipModal";
-import { TranslatedText } from "@/components/ui/TranslatedText";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { Language } from "@/lib/i18n/dictionary";
 
 // --- TRANSLATIONS ---
-const DICTIONARY = {
-    fr: {
-        searchPlaceholder: "Rechercher une info, un code...",
-        wifi: "Wi-Fi",
-        access: "Codes d'accès",
-        checkin: "Arrivée",
-        checkout: "Départ",
-        location: "Localisation",
-        rules: "Règles",
-        contact: "Contact",
-        amenities: "Équipements",
-        places: "Lieux",
-        events: "Événements",
-        documents: "Documents",
-        upsells: "Extras",
-        viewMap: "Voir la carte",
-        empty: "Aucun résultat trouvé",
-        secureAccess: "Accès sécurisé",
-        network: "Réseau",
-        password: "Mot de passe",
-        trash: "Déchets",
-        parking: "Parking",
-        breakfast: "Petit Déjeuner",
-        transport: "Transports",
-        welcome: "Bienvenue",
-        faq: "FAQ",
-        embed: "Lien",
-        // Days
-        sunday: "Dimanche",
-        monday: "Lundi",
-        tuesday: "Mardi",
-        wednesday: "Mercredi",
-        thursday: "Jeudi",
-        friday: "Vendredi",
-        saturday: "Samedi",
-        // Daily Tips Defaults
-        lazy: "Détente",
-        mood: "Motivé",
-        discovery: "Découverte",
-        tasty: "Gourmand",
-        adventure: "Aventure",
-        festive: "Festif",
-        outing: "Sortie",
-        brunch: "Un brunch à",
-        explore: "Explorez le centre de",
-        museums: "Visitez les musées de",
-        taste: "Goutez aux spécialités de",
-        excursion: "Partez en excursion à",
-        nightlife: "Sortez le soir à",
-        walk: "Baladez-vous à",
-        items: "éléments",
-        tipOfTheDay: "Conseil du Jour",
-    },
-    en: {
-        searchPlaceholder: "Search info, codes...",
-        wifi: "Wi-Fi",
-        access: "Access Codes",
-        checkin: "Check-in",
-        checkout: "Check-out",
-        location: "Location",
-        rules: "Rules",
-        contact: "Contact",
-        amenities: "Amenities",
-        places: "Places",
-        events: "Events",
-        documents: "Documents",
-        upsells: "Extras",
-        viewMap: "View Map",
-        empty: "No results found",
-        secureAccess: "Secure Access",
-        network: "Network",
-        password: "Password",
-        trash: "Trash & Recycling",
-        parking: "Parking",
-        breakfast: "Breakfast",
-        transport: "Transport",
-        welcome: "Welcome",
-        faq: "FAQ",
-        embed: "Link",
-        tipOfTheDay: "Daily Tip",
-        // Days
-        sunday: "Sunday",
-        monday: "Monday",
-        tuesday: "Tuesday",
-        wednesday: "Wednesday",
-        thursday: "Thursday",
-        friday: "Friday",
-        saturday: "Saturday",
-        // Daily Tips Defaults
-        lazy: "Lazy",
-        mood: "Mood",
-        discovery: "Discovery",
-        tasty: "Tasty",
-        adventure: "Adventure",
-        festive: "Festive",
-        outing: "Outing",
-        brunch: "Brunch in",
-        explore: "Explore center of",
-        museums: "Visit museums in",
-        taste: "Taste specialties of",
-        excursion: "Go on an excursion",
-        nightlife: "Nightlife in",
-        walk: "Walk around",
-        items: "items",
-    },
-    ar: {
-        searchPlaceholder: "البحث في الدليل...",
-        wifi: "واي فاي",
-        access: "رموز الدخول",
-        checkin: "تسجيل الوصول",
-        checkout: "تسجيل المغادرة",
-        location: "الموقع",
-        rules: "قواعد المنزل",
-        contact: "اتصل بنا",
-        amenities: "المرافق",
-        places: "أماكن قريبة",
-        events: "فعاليات",
-        documents: "مستندات",
-        upsells: "خدمات إضافية",
-        embed: "محتوى مدمج",
-        welcome: "أهلاً بك",
-        trash: "النفايات",
-        parking: "المواقف",
-        breakfast: "الإفطار",
-        transport: "المواصلات",
-        days: "أيام",
-        hours: "ساعات",
-        minutes: "دقائق",
-        network: "الشبكة",
-        password: "كلمة المرور",
-        copy: "نسخ",
-        copied: "تم النسخ!",
-        getDirections: "الحصول على الاتجاهات",
-        openMaps: "فتح الخرائط",
-        call: "اتصال",
-        message: "رسالة",
-        empty: "لا توجد نتائج مطابقة لبحثك",
-        seeAll: "عرض الكل",
-        less: "عرض أقل",
-        scanQr: "امسح للتنزيل",
-        share: "مشاركة",
-        download: "تحميل",
-        tipOfTheDay: "نصيحة اليوم"
-    },
-    es: {
-        searchPlaceholder: "Buscar en la guía...",
-        wifi: "Wi-Fi",
-        access: "Códigos de acceso",
-        checkin: "Llegada",
-        checkout: "Salida",
-        location: "Ubicación",
-        rules: "Reglas de la casa",
-        contact: "Contacto",
-        amenities: "Servicios",
-        places: "Lugares cercanos",
-        events: "Eventos",
-        documents: "Documentos",
-        upsells: "Servicios adicionales",
-        embed: "Contenido",
-        welcome: "Bienvenido",
-        trash: "Basura",
-        parking: "Aparcamiento",
-        breakfast: "Desayuno",
-        transport: "Transporte",
-        days: "días",
-        hours: "horas",
-        minutes: "minutos",
-        network: "Red",
-        password: "Contraseña",
-        copy: "Copiar",
-        copied: "¡Copiado!",
-        getDirections: "Cómo llegar",
-        openMaps: "Abrir Mapas",
-        call: "Llamar",
-        message: "Mensaje",
-        empty: "No hay resultados para tu búsqueda",
-        seeAll: "Ver todo",
-        less: "Ver menos",
-        scanQr: "Escanear para descargar",
-        share: "Compartir",
-        download: "Descargar",
-        tipOfTheDay: "Consejo del día"
-    },
-    it: {
-        searchPlaceholder: "Cerca nella guida...",
-        wifi: "Wi-Fi",
-        access: "Codici d'accesso",
-        checkin: "Arrivo",
-        checkout: "Partenza",
-        location: "Posizione",
-        rules: "Regole della casa",
-        contact: "Contatto",
-        amenities: "Servizi",
-        places: "Luoghi vicini",
-        events: "Eventi",
-        documents: "Documenti",
-        upsells: "Servizi extra",
-        embed: "Contenuto",
-        welcome: "Benvenuto",
-        trash: "Rifiuti",
-        parking: "Parcheggio",
-        breakfast: "Colazione",
-        transport: "Trasporto",
-        days: "giorni",
-        hours: "ore",
-        minutes: "minuti",
-        network: "Rete",
-        password: "Password",
-        copy: "Copia",
-        copied: "Copiato!",
-        getDirections: "Ottieni indicazioni",
-        openMaps: "Apri Mappe",
-        call: "Chiama",
-        message: "Messaggio",
-        empty: "Nessun risultato trovato",
-        seeAll: "Vedi tutto",
-        less: "Vedi meno",
-        scanQr: "Scansiona per scaricare",
-        share: "Condividi",
-        download: "Scarica",
-        tipOfTheDay: "Consiglio del giorno"
-    },
-    de: {
-        searchPlaceholder: "In der Anleitung suchen...",
-        wifi: "WLAN",
-        access: "Zugangscodes",
-        checkin: "Ankunft",
-        checkout: "Abreise",
-        location: "Standort",
-        rules: "Hausregeln",
-        contact: "Kontakt",
-        amenities: "Ausstattung",
-        places: "In der Nähe",
-        events: "Veranstaltungen",
-        documents: "Dokumente",
-        upsells: "Zusatzservices",
-        embed: "Inhalt",
-        welcome: "Willkommen",
-        trash: "Müll",
-        parking: "Parken",
-        breakfast: "Frühstück",
-        transport: "Transport",
-        days: "Tage",
-        hours: "Stunden",
-        minutes: "Minuten",
-        network: "Netzwerk",
-        password: "Passwort",
-        copy: "Kopieren",
-        copied: "Kopiert!",
-        getDirections: "Route berechnen",
-        openMaps: "Karten öffnen",
-        call: "Anrufen",
-        message: "Nachricht",
-        empty: "Keine Ergebnisse gefunden",
-        seeAll: "Alle ansehen",
-        less: "Weniger anzeigen",
-        scanQr: "Zum Herunterladen scannen",
-        share: "Teilen",
-        download: "Herunterladen",
-        tipOfTheDay: "Tipp des Tages"
-    },
-    nl: {
-        searchPlaceholder: "Zoeken in de gids...",
-        wifi: "Wi-Fi",
-        access: "Toegangscodes",
-        checkin: "Aankomst",
-        checkout: "Vertrek",
-        location: "Locatie",
-        rules: "Huisregels",
-        contact: "Contact",
-        amenities: "Voorzieningen",
-        places: "In de buurt",
-        events: "Evenementen",
-        documents: "Documenten",
-        upsells: "Extra diensten",
-        embed: "Inhoud",
-        welcome: "Welkom",
-        trash: "Afval",
-        parking: "Parkeren",
-        breakfast: "Ontbijt",
-        transport: "Vervoer",
-        days: "dagen",
-        hours: "uren",
-        minutes: "minuten",
-        network: "Netwerk",
-        password: "Wachtwoord",
-        copy: "Kopiëren",
-        copied: "Gekopieerd!",
-        getDirections: "Routebeschrijving",
-        openMaps: "Open Kaarten",
-        call: "Bellen",
-        message: "Bericht",
-        empty: "Geen resultaten gevonden",
-        seeAll: "Alles bekijken",
-        less: "Minder weergeven",
-        scanQr: "Scan om te downloaden",
-        share: "Delen",
-        download: "Downloaden",
-        tipOfTheDay: "Tip van de dag",
-        sunday: "Zondag",
-        monday: "Maandag",
-        tuesday: "Dinsdag",
-        wednesday: "Woensdag",
-        thursday: "Donderdag",
-        friday: "Vrijdag",
-        saturday: "Zaterdag",
-        lazy: "Ontspanning",
-        mood: "Stemming",
-        discovery: "Ontdekking",
-        tasty: "Lekker",
-        adventure: "Avontuur",
-        festive: "Feestelijk",
-        outing: "Uitje",
-        brunch: "Brunch in",
-        explore: "Verken het centrum van",
-        museums: "Bezoek musea in",
-        taste: "Proef de specialiteiten van",
-        excursion: "Ga op excursie",
-        nightlife: "Uitgaan in",
-        walk: "Wandelen in",
-        items: "items"
-    },
-    zh: {
-        searchPlaceholder: "搜索指南...",
-        wifi: "无线网络",
-        access: "访问密码",
-        checkin: "入住",
-        checkout: "退房",
-        location: "位置",
-        rules: "房屋守则",
-        contact: "联系方式",
-        amenities: "设施",
-        places: "附近地点",
-        events: "活动",
-        documents: "文件",
-        upsells: "额外服务",
-        embed: "内容",
-        welcome: "欢迎",
-        trash: "垃圾",
-        parking: "停车",
-        breakfast: "早餐",
-        transport: "交通",
-        days: "天",
-        hours: "小时",
-        minutes: "分钟",
-        network: "网络",
-        password: "密码",
-        copy: "复制",
-        copied: "已复制！",
-        getDirections: "获取路线",
-        openMaps: "打开地图",
-        call: "呼叫",
-        message: "消息",
-        empty: "未找到结果",
-        seeAll: "查看全部",
-        less: "收起",
-        scanQr: "扫码下载",
-        share: "分享",
-        download: "下载",
-        tipOfTheDay: "今日小贴士",
-        sunday: "星期日",
-        monday: "星期一",
-        tuesday: "星期二",
-        wednesday: "星期三",
-        thursday: "星期四",
-        friday: "星期五",
-        saturday: "星期六",
-        lazy: "慵懒",
-        mood: "心情",
-        discovery: "探索",
-        tasty: "美食",
-        adventure: "冒险",
-        festive: "节庆",
-        outing: "郊游",
-        brunch: "早午餐",
-        explore: "探索市中心",
-        museums: "参观博物馆",
-        taste: "品尝特产",
-        excursion: "去郊游",
-        nightlife: "夜生活",
-        walk: "散步",
-        items: "项目"
-    }
-} as Record<string, any>;
+
+
 
 // --- SMART SEARCH KEYWORDS ---
 const SEARCH_KEYWORDS: Record<string, string[]> = {
@@ -497,18 +114,18 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: Lang
         fetchTip();
     }, [city, lang]);
 
-    const t = DICTIONARY[lang];
+    const { t } = useTranslation();
 
     // FALLBACK PLANS (If AI fails or loading)
     const day = new Date().getDay();
     const PLANS = [
-        { day: 0, icon: Coffee, title: `${t.sunday} ${t.lazy}`, text: `${t.brunch} ${city || ""} ?` },
-        { day: 1, icon: Sun, title: `${t.monday} ${t.mood}`, text: `${t.explore} ${city || ""}.` },
-        { day: 2, icon: Camera, title: `${t.tuesday} ${t.discovery}`, text: `${t.museums} ${city || ""}.` },
-        { day: 3, icon: Utensils, title: `${t.wednesday} ${t.tasty}`, text: `${t.taste} ${city || ""} !` },
-        { day: 4, icon: MapPin, title: `${t.thursday} ${t.adventure}`, text: `${t.excursion}` },
-        { day: 5, icon: Music, title: `${t.friday} ${t.festive}`, text: `${t.nightlife} ${city || ""} !` },
-        { day: 6, icon: Sun, title: `${t.saturday} ${t.outing}`, text: `${t.walk} ${city || ""}.` },
+        { day: 0, icon: Coffee, title: `${t.renderer.sunday} ${t.renderer.lazy}`, text: `${t.renderer.brunch} ${city || ""} ?` },
+        { day: 1, icon: Sun, title: `${t.renderer.monday} ${t.renderer.mood}`, text: `${t.renderer.explore} ${city || ""}.` },
+        { day: 2, icon: Camera, title: `${t.renderer.tuesday} ${t.renderer.discovery}`, text: `${t.renderer.museums} ${city || ""}.` },
+        { day: 3, icon: Utensils, title: `${t.renderer.wednesday} ${t.renderer.tasty}`, text: `${t.renderer.taste} ${city || ""} !` },
+        { day: 4, icon: MapPin, title: `${t.renderer.thursday} ${t.renderer.adventure}`, text: `${t.renderer.excursion}` },
+        { day: 5, icon: Music, title: `${t.renderer.friday} ${t.renderer.festive}`, text: `${t.renderer.nightlife} ${city || ""} !` },
+        { day: 6, icon: Sun, title: `${t.renderer.saturday} ${t.renderer.outing}`, text: `${t.renderer.walk} ${city || ""}.` },
     ];
 
     const fallback = PLANS[day];
@@ -541,7 +158,7 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: Lang
                 </div>
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">{t.tipOfTheDay}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">{t.renderer.tipOfTheDay}</span>
                         <span className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
                     </div>
                     <div className="font-bold text-sm line-clamp-2 leading-tight">{title} : <span className="font-normal opacity-90">{text}</span></div>
@@ -564,7 +181,7 @@ function DailyRecommendation({ city, lang, onClose }: { city: string; lang: Lang
 // --- SPECIALIZED CARDS ---
 
 function WifiCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: Language }) {
-    const t = DICTIONARY[lang];
+    const { t } = useTranslation();
 
     // Safety check
     if (!data || !data.networkName) return null;
@@ -605,7 +222,7 @@ function WifiCard({ data, onClick, theme, className, lang }: { data: any; onClic
 }
 
 function AccessCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: Language }) {
-    const t = DICTIONARY[lang];
+    const { t } = useTranslation();
     return (
         <motion.button
             whileTap={{ scale: 0.98 }}
@@ -622,8 +239,8 @@ function AccessCard({ data, onClick, theme, className, lang }: { data: any; onCl
             </div>
 
             <div>
-                <div className="font-bold text-lg leading-none mb-1">{t.access}</div>
-                <div className="text-xs opacity-60 font-medium">{t.secureAccess}</div>
+                <div className="font-bold text-lg leading-none mb-1">{t.renderer.access}</div>
+                <div className="text-xs opacity-60 font-medium">{t.renderer.secureAccess}</div>
             </div>
         </motion.button>
     );
@@ -652,9 +269,9 @@ function StandardCard({ icon: Icon, title, onClick, theme, className, lang }: { 
 
 
 function TimeCard({ type, data, onClick, theme, className, lang }: { type: string; data: any; onClick: () => void; theme: any; className?: string; lang: Language }) {
-    const t = DICTIONARY[lang];
+    const { t } = useTranslation();
     const isCheckIn = type === "checkin";
-    const label = isCheckIn ? t.checkin : t.checkout;
+    const label = isCheckIn ? t.renderer.checkin : t.renderer.checkout;
     const time = data.time || (isCheckIn ? "15:00" : "11:00");
     const Icon = MinimalIcons[type as BlockType] || MinimalIcons.hero;
 
@@ -682,7 +299,7 @@ function TimeCard({ type, data, onClick, theme, className, lang }: { type: strin
 }
 
 function LocationCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: Language }) {
-    const t = DICTIONARY[lang];
+    const { t } = useTranslation();
     const mapLink = data.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.address || "")}`;
 
     return (
@@ -708,10 +325,10 @@ function LocationCard({ data, onClick, theme, className, lang }: { data: any; on
 
             <div className="absolute bottom-4 left-4 right-4 text-white z-10">
                 <div className="text-lg font-bold leading-tight mb-1 line-clamp-2">
-                    {data.address ? data.address.split(',')[0] : t.location}
+                    {data.address ? data.address.split(',')[0] : t.renderer.location}
                 </div>
                 <div className="text-xs font-medium opacity-80 uppercase tracking-wider flex items-center gap-1">
-                    {t.viewMap} <ExternalLink className="w-3 h-3" />
+                    {t.renderer.viewMap} <ExternalLink className="w-3 h-3" />
                 </div>
             </div>
         </motion.a>
@@ -755,7 +372,7 @@ function ListCard({ title, icon: Icon, items, theme, onClick, className, lang }:
 }
 
 function UpsellsCard({ data, onClick, theme, className, lang }: { data: any; onClick: () => void; theme: any; className?: string; lang: Language }) {
-    const t = DICTIONARY[lang];
+    const { t } = useTranslation();
     return (
         <motion.button
             whileTap={{ scale: 0.98 }}
@@ -772,12 +389,12 @@ function UpsellsCard({ data, onClick, theme, className, lang }: { data: any; onC
                     <MinimalIcons.upsells className="w-6 h-6" />
                 </div>
                 <div className="font-bold text-[10px] text-white bg-green-500 px-2 py-1 rounded-lg shadow-sm">
-                    {lang === 'fr' ? 'Boutique' : 'Shop'}
+                    {t.renderer.upsells}
                 </div>
             </div>
 
             <div className="relative z-10">
-                <div className="font-bold text-lg mb-1">{t.upsells}</div>
+                <div className="font-bold text-lg mb-1">{t.renderer.upsells}</div>
                 <div className="font-medium text-sm opacity-70">
                     <TranslatedText text="Découvrez nos services exclusifs" lang={lang} />
                 </div>
@@ -804,7 +421,7 @@ function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, o
 
             <div className="relative z-10 mt-1 w-full">
                 {count !== undefined && (
-                    <div className="text-[9px] font-bold opacity-50 uppercase tracking-wider mb-0.5">{count} items</div>
+                    <div className="text-[9px] font-bold opacity-50 uppercase tracking-wider mb-0.5">{count} {t.renderer.items}</div>
                 )}
                 <div className="font-bold text-sm leading-tight break-words w-full">
                     <TranslatedText text={title} lang={lang} />
@@ -819,7 +436,7 @@ function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, o
 export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forceDesktop = false }: { guide: Guide; unlocked: boolean; forceMobile?: boolean; forceDesktop?: boolean }) {
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const { lang, setLang } = useTranslation();
+    const { t } = useTranslation();
     // Notification state
     const [showTip, setShowTip] = useState(true);
 
@@ -852,7 +469,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
         ? `${paddingBase} md:p-10`
         : (forceDesktop ? paddingDesktop : paddingBase);
 
-    const t = DICTIONARY[lang];
+    const { t } = useTranslation();
 
     const { scrollY } = useScroll();
     const heroY = useTransform(scrollY, [0, 500], [0, 200]);
@@ -952,18 +569,14 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                     <input
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        placeholder={t.searchPlaceholder}
+                                        placeholder={t.renderer.searchPlaceholder}
                                         className="bg-transparent border-none outline-none text-white text-sm px-2 py-2 w-full placeholder:text-white/40 font-medium"
                                     />
                                 </div>
 
-                                <button
-                                    onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
-                                    className="bg-white/10 backdrop-blur-2xl rounded-2xl px-4 py-3 flex items-center gap-2 border border-white/20 text-white text-xs font-black uppercase hover:bg-white/20 transition-all shadow-2xl ring-1 ring-white/10 active:scale-95"
-                                >
-                                    <Globe className="w-3.5 h-3.5" />
-                                    <span className="hidden xs:inline">{lang}</span>
-                                </button>
+                                <div className="z-[60]">
+                                    <LanguageSwitcher variant="light" compact />
+                                </div>
                             </div>
 
                             {/* TIP ALERT - Floating Notification Style */}
@@ -1140,7 +753,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                         {gridBlocks.length === 0 && !wifiBlock && !accessBlock && (
                             <div className="py-20 text-center text-white/50">
                                 <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                                <p className="text-lg font-medium">{t.empty}</p>
+                                <p className="text-lg font-medium">{t.renderer.empty}</p>
                             </div>
                         )}
 

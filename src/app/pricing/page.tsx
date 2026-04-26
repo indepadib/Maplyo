@@ -303,8 +303,8 @@ export default function PricingPage() {
                     {/* Comparison Table */}
                     <div className="mb-32">
                         <div className="text-center mb-16">
-                            <h2 className="text-3xl font-bold text-white mb-4">Comparatif Détaillé</h2>
-                            <p className="text-zinc-400">Tout ce dont vous avez besoin pour réussir.</p>
+                            <h2 className="text-3xl font-bold text-white mb-4">{t.pricingPage.compare.title}</h2>
+                            <p className="text-zinc-400">{t.pricingPage.compare.subtitle}</p>
                         </div>
 
                         <div className="overflow-x-auto">
