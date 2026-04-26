@@ -1,1985 +1,4884 @@
 export type Language = 'fr' | 'en' | 'es' | 'ar' | 'nl' | 'zh';
 
-
 export const DICTIONARY = {
-    fr: {
-        common: {
-            getStarted: "Commencer",
-            login: "Connexion",
-            signup: "S'inscrire",
-            tryFree: "Essayer Gratuitement",
-            popular: "Le plus populaire",
-            month: "/mois",
-            loading: "Chargement...",
-            choose: "Choisir",
-            viewGuide: "Voir le guide complet",
-            more: "Voir plus",
-            checkin: "Arrivée",
-            qrCodeWall: "Scannez pour tester",
-            checkout: "Départ",
-            location: "Localisation",
-            viewOnMap: "Voir sur la carte",
-            wifi: "WiFi",
+    "fr": {
+        "common": {
+            "getStarted": "Commencer",
+            "login": "Connexion",
+            "signup": "S'inscrire",
+            "tryFree": "Essayer Gratuitement",
+            "popular": "Le plus populaire",
+            "month": "/mois",
+            "loading": "Chargement...",
+            "choose": "Choisir",
+            "viewGuide": "Voir le guide complet",
+            "more": "Voir plus",
+            "checkin": "Arrivée",
+            "qrCodeWall": "Scannez pour tester",
+            "checkout": "Départ",
+            "location": "Localisation",
+            "viewOnMap": "Voir sur la carte",
+            "wifi": "WiFi",
+            "other": "Autre"
         },
-        socialProof: {
-            trustpilot: "4.9/5 par 500+ Hôtes",
-            usedBy: "Utilisé par les meilleures conciergeries",
-            autoTranslate: {
-                title: "Auto-Traduit",
-                desc: "Vos guides parlent la langue de vos invités."
+        "renderer": {
+            "welcome": "Bienvenue",
+            "wifi": "WiFi",
+            "access": "Codes d'accès",
+            "location": "Localisation",
+            "contact": "Contact",
+            "amenities": "Équipements",
+            "places": "À proximité",
+            "rules": "Règlement",
+            "tipOfTheDay": "Conseil du jour",
+            "sunday": "Dimanche",
+            "monday": "Lundi",
+            "tuesday": "Mardi",
+            "wednesday": "Mercredi",
+            "thursday": "Jeudi",
+            "friday": "Vendredi",
+            "saturday": "Samedi",
+            "lazy": "Détente",
+            "mood": "Motivé",
+            "discovery": "Découverte",
+            "tasty": "Gourmand",
+            "adventure": "Aventure",
+            "festive": "Festif",
+            "outing": "Sortie",
+            "brunch": "Un brunch à",
+            "explore": "Explorez",
+            "museums": "Visitez",
+            "taste": "Goûtez",
+            "excursion": "Une excursion",
+            "nightlife": "Vie nocturne",
+            "walk": "Une balade",
+            "secureAccess": "Accès Sécurisé",
+            "checkin": "Arrivée",
+            "checkout": "Départ",
+            "viewMap": "Voir sur la carte",
+            "upsells": "Extras",
+            "items": "éléments",
+            "empty": "Rien à afficher",
+            "searchPlaceholder": "Rechercher...",
+            "secureAccessDesc": "Entrez le code fourni par votre hôte."
+        },
+        "socialProof": {
+            "trustpilot": "4.9/5 par 500+ Hôtes",
+            "usedBy": "Utilisé par les meilleures conciergeries",
+            "autoTranslate": {
+                "title": "Auto-Traduit",
+                "desc": "Vos guides parlent la langue de vos invités."
             },
-            googleMaps: {
-                title: "Google Maps Intégré",
-                desc: "Google Maps directement dans le guide."
+            "googleMaps": {
+                "title": "Google Maps Intégré",
+                "desc": "Google Maps directement dans le guide."
             }
         },
-        hero: {
-            tag: "POUR LES HÔTES ET CONCIERGERIES",
-            title: "Ne répétez plus jamais le code WiFi.",
-            subtitle: "Digitalisez votre livret d'accueil. Offrez une expérience 5 étoiles, réduisez les messages de 50%, et augmentez vos avis positifs.",
-            cta: "Créer mon guide gratuit",
-            demo: "Voir un exemple",
-            noCreditCard: "Pas de carte requise",
-            setupTime: "Configuré en 2 min",
+        "hero": {
+            "tag": "POUR LES HÔTES ET CONCIERGERIES",
+            "title": "Ne répétez plus jamais le code WiFi.",
+            "subtitle": "Digitalisez votre livret d'accueil. Offrez une expérience 5 étoiles, réduisez les messages de 50%, et augmentez vos avis positifs.",
+            "cta": "Créer mon guide gratuit",
+            "demo": "Voir un exemple",
+            "noCreditCard": "Pas de carte requise",
+            "setupTime": "Configuré en 2 min",
+            "badge": "Livret d'accueil digital #1",
+            "title1": "Pour vos invités,",
+            "title2": "une expérience 5 étoiles.",
+            "users": "Approuvé par 500+ hôtes"
         },
-        features: {
-            title: "Tout ce dont vous avez besoin.",
-            subtitle: "Rien de superflu.",
-            description: "Des outils puissants pour automatiser votre accueil et rassurer vos voyageurs, sans la complexité technique.",
-            items: {
-                mobileFirst: {
-                    title: "100% Mobile First",
-                    desc: "Pas d'application à télécharger. Vos guides s'ouvrent instantanément dans n'importe quel navigateur mobile."
+        "features": {
+            "title": "Tout ce dont vous avez besoin.",
+            "subtitle": "Rien de superflu.",
+            "description": "Des outils puissants pour automatiser votre accueil.",
+            "badge": "Fonctionnalités",
+            "items": {
+                "mobileFirst": {
+                    "title": "100% Mobile First",
+                    "desc": "Pas d'application à télécharger."
                 },
-                secure: {
-                    title: "Codes Sécurisés",
-                    desc: "Protégez l'accès au WiFi et aux boîtes à clés. Déverrouillage par email ou code unique."
+                "secure": {
+                    "title": "Codes Sécurisés",
+                    "desc": "WiFi et boîtes à clés protégés."
                 },
-                map: {
-                    title: "Carte Interactive",
-                    desc: "Intégrez vos restaurants, bars et activités préférés avec itinéraires Google Maps en un clic."
+                "map": {
+                    "title": "Carte Interactive",
+                    "desc": "Intégrez vos lieux favoris."
                 },
-                live: {
-                    title: "Modifications Live",
-                    desc: "Changez le code WiFi ou une recommandation, c'est mis à jour instantanément sur tous les téléphones."
+                "live": {
+                    "title": "Modifications Live",
+                    "desc": "Mise à jour instantanée."
                 },
-                translate: {
-                    title: "Traduction Auto",
-                    desc: "Détecte automatiquement la langue du téléphone du visiteur et traduit votre guide."
+                "translate": {
+                    "title": "Traduction Auto",
+                    "desc": "Détecte la langue du visiteur."
                 },
-                checklist: {
-                    title: "Check-lists",
-                    desc: "Instructions claires pour l'arrivée et le départ. Réduisez les questions répétitives de 80%."
+                "checklist": {
+                    "title": "Check-lists",
+                    "desc": "Instructions claires arrivée/départ."
                 }
             }
         },
-        pricing: {
-            title: "Tarification Transparente",
-            subtitle: "Commencez gratuitement. Évoluez quand vous voulez.",
-            bestOffer: "La meilleure offre du monde :",
-            addon: "+20 DH / guide supplémentaire",
-            enterprise: {
-                title: "Besoin d'une solution Enterprise ?",
-                desc: "Pour les gestionnaires de plus de 50 propriétés, nous proposons des tarifs dégressifs et une intégration PMS.",
-                cta: "Contacter l'équipe commerciale"
+        "pricing": {
+            "title": "Tarification Transparente",
+            "subtitle": "Commencez gratuitement. Évoluez quand vous voulez.",
+            "bestOffer": "La meilleure offre du monde :",
+            "addon": "+20 DH / guide supplémentaire",
+            "trust": "Garantie 30 jours",
+            "enterprise": {
+                "title": "Solution Enterprise",
+                "desc": "Pour les pros (50+ biens).",
+                "cta": "Contacter"
             },
-            plans: {
-                demo: {
-                    name: "Découverte",
-                    price: "Gratuit",
-                    desc: "Testez la puissance de Maplyo sans carte bancaire.",
-                    button: "Créer un guide (Gratuit)",
-                    features: [
-                        'Accès complet au Créateur',
-                        'Prévisualisation Mobile',
-                        'Sans publication'
+            "plans": {
+                "demo": {
+                    "name": "Découverte",
+                    "price": "Gratuit",
+                    "desc": "Testez sans carte.",
+                    "button": "Essayer",
+                    "features": [
+                        "Accès Créateur",
+                        "Aperçu Mobile"
                     ]
                 },
-                basic: {
-                    name: "Essentiel", // Was Basic
-                    desc: "Pour lancer votre première propriété.",
-                    button: "Démarrer",
-                    features: [
-                        'Livret Digital Complet',
-                        'QR Code WiFi Instantané',
-                        'Carte Interactive (Google Maps)',
-                        'Thèmes Gratuits (Pack Premium +15 DH)',
-                        '1 Guide Unique'
+                "basic": {
+                    "name": "Essentiel",
+                    "desc": "Pour 1 propriété.",
+                    "button": "Démarrer",
+                    "features": [
+                        "Livret Digital",
+                        "WiFi QR",
+                        "1 Guide"
                     ]
                 },
-                pro: {
-                    name: "Croissance", // Was Pro
-                    desc: "Pour maximiser vos revenus & avis.",
-                    button: "Passer en Croissance",
-                    features: [
-                        'Guides Illimités (+20 DH/supp.)',
-                        'Thèmes Premium INCLUS',
-                        'Traduction Automatique (IA)',
-                        'Assistant Voyageur 24/7 (IA)',
-                        'Support Prioritaire WhatsApp'
+                "pro": {
+                    "name": "Croissance",
+                    "desc": "Pour les pros.",
+                    "button": "Passer Pro",
+                    "features": [
+                        "Guides Illimités",
+                        "Traduction IA",
+                        "Support WhatsApp"
                     ]
                 },
-                business: {
-                    name: "Agence",
-                    desc: "Pour les portfolios de 10+ biens.",
-                    button: "Parler à un Expert",
-                    price: "Sur mesure",
-                    features: [
-                        'Guides Illimités',
-                        'Tableau de Bord Multi-Propriétés',
-                        'Marque Blanche (Sans logo Maplyo)',
-                        'Intégration PMS & Channel Mgr',
-                        'Facturation Centralisée'
+                "business": {
+                    "name": "Agence",
+                    "desc": "Pour les portfolios.",
+                    "button": "Talk to Expert",
+                    "price": "Sur mesure",
+                    "features": [
+                        "Marque Blanche",
+                        "Multi-Propriétés"
                     ]
                 }
-            },
-            trust: "Garantie Satisfait ou Remboursé (30 jours) • Paiement Sécurisé SSL"
+            }
         },
-        testimonials: {
-            title: "Approuvé par les Pros",
-            subtitle: "Rejoignez plus de 500 hôtes qui ont automatisé leur accueil.",
-            items: [
+        "testimonials": {
+            "title": "Approuvé par les Pros",
+            "subtitle": "Rejoignez 500+ hôtes.",
+            "items": [
                 {
-                    name: "Jean-Philippe R.",
-                    role: "Superhost Airbnb (Marrakech)",
-                    text: "Mes voyageurs arrêtaient pas de demander le code Wifi ou comment allumer la clim. Avec Maplyo, ils ont tout sur leur téléphone. J'ai gagné facile 2h par semaine.",
-                    result: "-60% de messages",
-                },
-                {
-                    name: "Sofia B.",
-                    role: "Gérante Conciergerie (Casablanca)",
-                    text: "Le game changer pour nous, c'est l'upsell. On propose des services de ménage ou de transport directement dans le guide. Ça a boosté notre chiffre d'affaires.",
-                    result: "+15% revenus",
-                },
-                {
-                    name: "Karim M.",
-                    role: "Propriétaire Riad (Fès)",
-                    text: "Très pro. L'aspect multilingue est bluffant, mes clients américains et espagnols sont ravis d'avoir les infos dans leur langue sans que je fasse rien.",
-                    result: "5★ Avis",
+                    "name": "Jean R.",
+                    "role": "Superhost",
+                    "text": "Gain de temps énorme.",
+                    "result": "-60% messages"
                 }
             ]
         },
-        faq: {
-            title: "Questions Fréquentes",
-            subtitle: "Tout ce que vous devez savoir pour démarrer.",
-            questions: [
+        "faq": {
+            "title": "Questions Fréquentes",
+            "subtitle": "Tout savoir.",
+            "questions": [
                 {
-                    q: "Faut-il des compétences techniques ?",
-                    a: "Aucune. C'est aussi simple que de remplir un profil Facebook. Vous ajoutez vos infos, on génère le design."
-                },
-                {
-                    q: "Comment mes voyageurs accèdent au guide ?",
-                    a: "Via un simple QR Code que vous placez dans le logement, ou un lien que vous envoyez par message avant leur arrivée."
-                },
-                {
-                    q: "Puis-je modifier le guide après impression du QR Code ?",
-                    a: "Oui ! C'est la magie du numérique. Mettez à jour vos infos (code wifi, restos...) et le QR Code reste le même."
-                },
-                {
-                    q: "Y a-t-il un engagement ?",
-                    a: "Non, c'est sans engagement. Vous pouvez arrêter quand vous voulez."
+                    "q": "Gratuit ?",
+                    "a": "Oui, plan découverte dispo."
                 }
             ]
         },
-        footer: {
-            product: "Produit",
-            support: "Support",
-            legal: "Légal",
-            desc: "Maplyo aide les hôtes et les conciergeries à offrir une expérience 5 étoiles grâce à des guides digitaux intelligents.",
-            links: {
-                features: "Fonctionnalités",
-                pricing: "Tarifs",
-                testimonials: "Témoignages",
-                roadmap: "Roadmap",
-                help: "Aide",
-                contact: "Contact",
-                privacy: "Confidentialité",
-                terms: "Conditions",
-                legal: "Mentions légales"
+        "footer": {
+            "product": "Produit",
+            "support": "Support",
+            "legal": "Légal",
+            "desc": "Maplyo aide les hôtes.",
+            "links": {
+                "features": "Fonctions",
+                "pricing": "Tarifs",
+                "testimonials": "Avis",
+                "roadmap": "Roadmap",
+                "help": "Aide",
+                "contact": "Contact",
+                "privacy": "Confidentialité",
+                "terms": "Conditions",
+                "legal": "Mentions"
             },
-            securePayment: "Paiement Sécurisé",
-            rights: "Tous droits réservés."
+            "securePayment": "Paiement Sécurisé",
+            "rights": "Tous droits réservés."
         },
-        cta: {
-            title: "Prêt à impressionner ?",
-            subtitle: "Rejoignez la nouvelle génération d'hôtes qui offrent une expérience exceptionnelle.",
-            button: "Créer mon premier guide",
-            subtext: "Aucune carte de crédit requise • Annulable à tout moment"
+        "cta": {
+            "title": "Prêt à impressionner ?",
+            "subtitle": "Créez votre guide aujourd'hui.",
+            "button": "Créer mon guide",
+            "subtext": "Sans carte."
         },
-        // Daily Tips
-        tipOfTheDay: "Conseil du Jour",
-        sunday: "Dimanche",
-        monday: "Lundi",
-        tuesday: "Mardi",
-        wednesday: "Mercredi",
-        thursday: "Jeudi",
-        friday: "Vendredi",
-        saturday: "Samedi",
-        lazy: "Détente",
-        mood: "Motivé",
-        discovery: "Découverte",
-        tasty: "Gourmand",
-        adventure: "Aventure",
-        festive: "Festif",
-        outing: "Sortie",
-        brunch: "Un brunch à",
-        explore: "Explorez le centre de",
-        museums: "Visitez les musées de",
-        taste: "Goutez aux spécialités de",
-        excursion: "Partez en excursion.",
-        nightlife: "La vie nocturne de",
-        walk: "Baladez-vous à",
-        guide: {
-            accessCode: "Codes d'accès",
-            locked: "Ce bloc est protégé par un code.",
-            enterCode: "Code d'accès",
-            apartmentDoor: "Porte logement :",
-            buildingDoor: "Porte immeuble :",
-            gate: "Portail :",
-            notes: "Notes"
+        "guide": {
+            "accessCode": "Codes d'accès",
+            "locked": "Protégé par code.",
+            "enterCode": "Code d'accès",
+            "confirm": "Valider",
+            "apartmentDoor": "Porte :",
+            "buildingDoor": "Immeuble :",
+            "gate": "Portail :",
+            "notes": "Notes"
         },
-        ai: {
-            assistant: "Assistant Guide",
-            online: "IA en ligne",
-            placeholder: "Message...",
-            empty: "Posez une question sur ce guide.",
-            error: "Désolé, je ne parviens pas à répondre pour le moment.",
-            thinking: "Rédaction..."
-        },
-        qrCodeWall: {
-            titlePart1: "Partagez votre guide",
-            titlePart2: "partout",
-            description: "Un simple scan suffit pour vos voyageurs.",
-            items: {
-                wifi: { title: "Connexion Wi-Fi", desc: "Le code est pré-complété" },
-                perpetual: { title: "Accès Permanent", desc: "Le lien reste valide" },
-                remote: { title: "Mises à jour en direct", desc: "Toujours à jour" }
+        "guideBlocks": {
+            "checkIn": {
+                "title": "Arrivée"
             },
-            visual: {
-                welcome: "Bienvenue",
-                scan: "Scannez-moi",
-                detected: "Code QR Détecté",
-                notification: {
-                    app: "Maplyo",
-                    title: "Ouvrir le guide"
+            "location": {
+                "notSet": "Non défini",
+                "address": "Adresse",
+                "openInMaps": "Ouvrir",
+                "copyAddress": "Copier",
+                "viewOnMap": "Voir sur la carte"
+            },
+            "contact": {
+                "host": "Hôte",
+                "yourHost": "Votre Hôte",
+                "phone": "Tel",
+                "openConversation": "Ouvrir"
+            },
+            "rules": {
+                "noRules": "Pas de règles"
+            },
+            "amenities": {
+                "noAmenities": "Pas d'équipements"
+            },
+            "faq": {
+                "noFaq": "Pas de FAQ",
+                "question": "Question",
+                "answer": "Réponse"
+            },
+            "trash": {
+                "title": "Bacs",
+                "items": "Ordures",
+                "recycling": "Recyclage"
+            },
+            "breakfast": {
+                "title": "Petit Déjeuner",
+                "menu": "Menu"
+            },
+            "transport": {
+                "noInfo": "Pas d'infos",
+                "call": "Appeler"
+            }
+        },
+        "editor": {
+            "common": {
+                "title": "Titre",
+                "description": "Description",
+                "uploadImage": "Image",
+                "tags": "Tags",
+                "placeholderTags": "Wifi, Piscine...",
+                "time": "Heure",
+                "instructions": "Instructions",
+                "videoUrl": "Vidéo",
+                "location": "Lieu",
+                "address": "Adresse",
+                "placeholderAddress": "Rue...",
+                "mapUrl": "Maps",
+                "placeholderMap": "Lien Maps",
+                "phone": "Tel",
+                "placeholderPhone": "+33...",
+                "whatsapp": "WhatsApp",
+                "placeholderWhatsapp": "Numéro",
+                "email": "Email",
+                "placeholderEmail": "...",
+                "price": "Prix",
+                "placeholderPrice": "150 DH",
+                "placeholderReserve": "Réserver",
+                "cost": "Coût",
+                "placeholderWelcome": "Bienvenue...",
+                "linkUrl": "Lien",
+                "priceCheap": "Eco",
+                "priceModerate": "Moyen",
+                "priceExpensive": "Premium",
+                "day": "Jour",
+                "placeholderMonth": "JAN",
+                "placeholderDay": "15",
+                "placeholderTime": "19:00",
+                "other": "Autre",
+                "hours": "Heures",
+                "month": "Mois",
+                "placeholder": "..."
+            },
+            "labels": {
+                "hero": "Accueil",
+                "wifi": "WiFi",
+                "access_codes": "Codes",
+                "location": "Localisation",
+                "contact": "Contact",
+                "amenities": "Équipements",
+                "places": "Lieux",
+                "rules": "Règlement",
+                "faq": "FAQ",
+                "trash": "Bacs",
+                "parking": "Parking",
+                "breakfast": "Petit Déj",
+                "transport": "Transport",
+                "checkin": "Arrivée",
+                "checkout": "Départ",
+                "documents": "Documents",
+                "events": "Événements",
+                "upsells": "Extras",
+                "embed": "Iframe",
+                "ai_assistant": "IA"
+            },
+            "access_codes": {
+                "security": "Sécurité",
+                "mode": "Affichage",
+                "alwaysVisible": "Toujours visible",
+                "unlockByCode": "Par code",
+                "unlockCode": "Code",
+                "unlockCodeDesc": "Requis.",
+                "aptCode": "Porte",
+                "buildingCode": "Immeuble",
+                "gateCode": "Portail",
+                "notes": "Notes"
+            },
+            "wifi": {
+                "networkName": "Nom WiFi",
+                "password": "Mot de passe",
+                "notes": "Notes"
+            },
+            "documents": {
+                "name": "Nom",
+                "url": "Lien",
+                "add": "Ajouter"
+            },
+            "places": {
+                "aiButton": "IA",
+                "name": "Nom",
+                "add": "Ajouter"
+            },
+            "events": {
+                "aiButton": "IA",
+                "add": "Ajouter"
+            },
+            "upsells": {
+                "buttonText": "Bouton",
+                "buttonLink": "Lien",
+                "add": "Ajouter"
+            },
+            "embed": {
+                "url": "Iframe",
+                "warning": "Attention"
+            },
+            "checkin": {
+                "timePlaceholder": "15:00",
+                "instrPlaceholder": "Procédure..."
+            },
+            "contact": {
+                "nameLabel": "Nom",
+                "namePlaceholder": "Concierge"
+            },
+            "rules": {
+                "title": "Règle",
+                "placeholder": "...",
+                "add": "Ajouter"
+            },
+            "amenities": {
+                "title": "Équipement",
+                "placeholder": "...",
+                "add": "Ajouter"
+            },
+            "faq": {
+                "question": "Q",
+                "qPlaceholder": "...",
+                "answer": "R",
+                "aPlaceholder": "...",
+                "add": "Ajouter"
+            },
+            "trash": {
+                "instrPlaceholder": "Tri...",
+                "dayTrash": "Ordures",
+                "dayTrashPlaceholder": "Lundi",
+                "dayRecycling": "Recyclage",
+                "dayRecyclingPlaceholder": "Jeudi",
+                "location": "Bacs",
+                "locPlaceholder": "Garage",
+                "photoLocal": "Photo"
+            },
+            "parking": {
+                "instrPlaceholder": "N°42",
+                "locPlaceholder": "Rue...",
+                "costPlaceholder": "Gratuit",
+                "photo": "Photo"
+            },
+            "breakfast": {
+                "hoursPlaceholder": "07:00 - 10:30",
+                "locPlaceholder": "Salle à manger",
+                "menu": "Menu",
+                "menuPlaceholder": "Café, thé..."
+            },
+            "transport": {
+                "bus": "Bus",
+                "train": "Train",
+                "taxi": "Taxi",
+                "bike": "Vélo",
+                "linePlaceholder": "Ligne 4",
+                "stop": "Arrêt",
+                "stopPlaceholder": "Arrêt...",
+                "add": "Ajouter"
+            }
+        },
+        "dashboard": {
+            "title": "Mes Guides",
+            "subtitle": "Gérez vos biens.",
+            "newGuide": "Nouveau Guide",
+            "logout": "Déconnexion",
+            "viewPublic": "Page publique",
+            "passProToShare": "Passer Pro",
+            "delete": "Supprimer",
+            "emptyTitle": "Aucun guide",
+            "emptyDesc": "Créez votre premier guide.",
+            "tryAi": "✨ IA",
+            "createManual": "Manuel",
+            "published": "En ligne",
+            "draft": "Brouillon",
+            "edit": "Modifier",
+            "sortRecent": "Récent",
+            "sortName": "Nom",
+            "confirmDelete": "Supprimer ?",
+            "deleteError": "Erreur",
+            "aiModal": {
+                "title": "Magie ✨",
+                "city": "Ville",
+                "cityPlaceholder": "Marrakech",
+                "type": "Type",
+                "typeAirbnb": "Airbnb",
+                "typeHotel": "Hôtel",
+                "typeGuesthouse": "Maison",
+                "audience": "Public",
+                "audienceFamilies": "Familles",
+                "audienceCouples": "Parejas",
+                "audienceRemote": "Pros",
+                "audienceGroups": "Groupes",
+                "generate": "Générer",
+                "generating": "IA...",
+                "generatingDesc": "Calcul..."
+            },
+            "createModal": {
+                "title": "Nouveau Guide",
+                "nameLabel": "Nom",
+                "namePlaceholder": "Nom...",
+                "cancel": "Annuler",
+                "create": "Créer"
+            },
+            "limitModal": {
+                "title": "Limite",
+                "desc": "Limite atteinte.",
+                "upgrade": "Passer Pro",
+                "or": "Ou",
+                "addon": "Ajouter 1",
+                "loading": "..."
+            },
+            "addonSuccessModal": {
+                "title": "Succès",
+                "heading": "Prêt !",
+                "desc": "Limite augmentée.",
+                "cta": "Merci"
+            }
+        },
+        "settings": {
+            "title": "Réglages",
+            "tabProfile": "Profil",
+            "tabPlan": "Plan",
+            "tabShop": "Boutique",
+            "personalInfo": "Infos",
+            "fullName": "Nom",
+            "email": "Email",
+            "saveProfile": "Sauver",
+            "yourPlan": "Votre Plan",
+            "currentPlan": "Plan actuel",
+            "active": "Actif",
+            "unlimitedGuides": "Illimité",
+            "oneGuideIncluded": "1 guide",
+            "oneGuideDraft": "1 brouillon",
+            "themesUnlocked": "Thèmes OK",
+            "extraGuides": "Extras",
+            "upgradeToPro": "Passer Pro",
+            "youArePro": "Vous êtes Pro",
+            "info": "Info",
+            "noBillingAccount": "Pas de compte",
+            "serverError": "Erreur",
+            "manageSubscription": "Gérer",
+            "shop": "Boutique",
+            "securePayment": "Sécurisé",
+            "bestSeller": "Top",
+            "qrCanvas": "Tableau QR",
+            "qrCanvasDesc": "Tableau...",
+            "hdPrint": "HD",
+            "frameIncluded": "Cadre",
+            "trackedShipping": "Suivi",
+            "shippingTtc": "Livraison OK",
+            "order": "Commander",
+            "requiredPro": "Pro Requis",
+            "extraGuide": "Extra",
+            "extraGuideDesc": "Ajouter guide.",
+            "perMonth": "/mois",
+            "proReserved": "Pro",
+            "onlyProCanAdd": "Pro requis",
+            "addGuide": "Ajouter",
+            "confirmAddGuide": "Ajouter (20 DH/m) ?",
+            "cancel": "Non",
+            "confirm": "Oui",
+            "guideAdded": "OK",
+            "limitIncreased": "OK",
+            "error": "Erreur",
+            "success": "OK"
+        },
+        "ai": {
+            "assistant": "IA",
+            "online": "IA OK",
+            "placeholder": "Message...",
+            "empty": "Question ?",
+            "error": "Erreur",
+            "thinking": "..."
+        },
+        "qrCodeWall": {
+            "titlePart1": "Partagez",
+            "titlePart2": "partout",
+            "description": "Scannez.",
+            "items": {
+                "wifi": {
+                    "title": "WiFi",
+                    "desc": "Connecté"
+                },
+                "perpetual": {
+                    "title": "Permanent",
+                    "desc": "Lien valide"
+                },
+                "remote": {
+                    "title": "Live",
+                    "desc": "Direct"
+                }
+            },
+            "visual": {
+                "welcome": "Bienvenue",
+                "scan": "Scannez",
+                "detected": "Trouvé",
+                "notification": {
+                    "app": "Maplyo",
+                    "title": "Ouvrir"
                 }
             }
         },
-        upsells: "Extras",
-        legalPage: {
-            titlePrivacy: "Politique de Confidentialité",
-            titleTerms: "Conditions Générales d'Utilisation (CGU)",
-            lastUpdated: "Dernière mise à jour :",
-            effectiveDate: "En vigueur au :",
-            privacy: {
-                intro: "La présente politique de confidentialité décrit comment Maplyo ('nous', 'notre') collecte, utilise et protège vos données personnelles, conformément à la loi marocaine n° 09-08 relative à la protection des personnes physiques à l'égard du traitement des données à caractère personnel.",
-                section1: {
-                    title: "1. Collecte des Données",
-                    items: [
-                        "Données d'identification : Nom, prénom, adresse email.",
-                        "Données de transaction : Historique de paiements (traités de manière sécurisée par Stripe, nous ne stockons pas vos données bancaires complètes).",
-                        "Données d'utilisation : Informations sur la création et la consultation des guides numériques."
+        "upsells": "Extras",
+        "legalPage": {
+            "titlePrivacy": "Privacité",
+            "titleTerms": "Termes",
+            "lastUpdated": "MAJ :",
+            "effectiveDate": "Date :",
+            "privacy": {
+                "intro": "...",
+                "section1": {
+                    "title": "1",
+                    "items": [
+                        "1"
                     ]
                 },
-                section2: {
-                    title: "2. Finalités du Traitement",
-                    intro: "Vos données sont collectées pour :",
-                    items: [
-                        "Fournir et gérer le service de guide numérique.",
-                        "Gérer votre abonnement et la facturation.",
-                        "Vous communiquer les mises à jour importantes du service.",
-                        "Améliorer nos fonctionnalités grâce à des statistiques anonymisées."
+                "section2": {
+                    "title": "2",
+                    "intro": "2",
+                    "items": [
+                        "2"
                     ]
                 },
-                section3: {
-                    title: "3. Partage des Données",
-                    content: "Nous ne vendons jamais vos données. Elles peuvent être partagées uniquement avec nos prestataires techniques essentiels (ex: Stripe pour les paiements, Supabase pour l'hébergement, Resend pour les emails) qui sont tenus à une stricte confidentialité."
+                "section3": {
+                    "title": "3",
+                    "content": "3"
                 },
-                section4: {
-                    title: "4. Sécurité",
-                    content: "Nous mettons en œuvre des mesures de sécurité techniques (chiffrement SSL, protocoles sécurisés) pour protéger vos données contre tout accès non autorisé."
+                "section4": {
+                    "title": "4",
+                    "content": "4"
                 },
-                section5: {
-                    title: "5. Vos Droits",
-                    content: "Conformément à la loi 09-08, vous disposez d'un droit d'accès, de rectification et d'opposition concernant vos données.",
-                    contact: "Pour exercer ce droit, contactez-nous à : contact@maplyo.com"
+                "section5": {
+                    "title": "5",
+                    "content": "5",
+                    "contact": "..."
                 }
             },
-            terms: {
-                intro: "Bienvenue sur Maplyo. En accédant à notre plateforme ou en utilisant nos services, vous acceptez d'être lié par les présentes Conditions Générales d'Utilisation.",
-                section1: {
-                    title: "1. Description du Service",
-                    content: "Maplyo est une plateforme SaaS (Software as a Service) permettant aux hôtes et gestionnaires immobiliers de créer, héberger et partager des livrets d'accueil numériques pour leurs voyageurs."
+            "terms": {
+                "intro": "...",
+                "section1": {
+                    "title": "1",
+                    "content": "1"
                 },
-                section2: {
-                    title: "2. Abonnements et Paiements",
-                    items: [
-                        "Facturation : Les services sont facturés mensuellement ou annuellement, d'avance.",
-                        "Annulation : Vous pouvez annuler votre abonnement à tout moment via votre tableau de bord. L'accès aux fonctionnalités Premium reste actif jusqu'à la fin de la période facturée.",
-                        "Remboursement : Nous offrons une garantie 'Satisfait ou Remboursé' de 30 jours pour tout nouvel abonnement."
+                "section2": {
+                    "title": "2",
+                    "items": [
+                        "2"
                     ]
                 },
-                section3: {
-                    title: "3. Responsabilités de l'Utilisateur",
-                    intro: "Vous vous engagez à :",
-                    items: [
-                        "Fournir des informations exactes lors de votre inscription.",
-                        "Ne pas publier de contenu illicite, diffamatoire ou contraire aux bonnes mœurs dans vos guides.",
-                        "Être seul responsable des informations (codes wifi, adresses) partagées avec vos voyageurs."
+                "section3": {
+                    "title": "3",
+                    "intro": "3",
+                    "items": [
+                        "3"
                     ]
                 },
-                section4: {
-                    title: "4. Propriété Intellectuelle",
-                    content: "Maplyo reste propriétaire de la plateforme, du code, et de la marque. Vous restez propriétaire du contenu (textes, photos) que vous ajoutez dans vos guides."
+                "section4": {
+                    "title": "4",
+                    "content": "4"
                 },
-                section5: {
-                    title: "5. Limitation de Responsabilité",
-                    content: "Maplyo ne saurait être tenu responsable des dommages indirects, pertes de revenus ou problèmes survenus suite à l'utilisation d'informations contenues dans les guides créés par les utilisateurs."
+                "section5": {
+                    "title": "5",
+                    "content": "5"
                 },
-                section6: {
-                    title: "6. Droit Applicable",
-                    content: "Ces conditions sont régies par le droit marocain. Tout litige relatif à leur interprétation et/ou à leur exécution relève des tribunaux compétents de Casablanca."
+                "section6": {
+                    "title": "6",
+                    "content": "6"
                 }
             }
         },
-        auth: {
-            login: {
-                title: "Bon retour 👋",
-                subtitle: "Connectez-vous pour gérer vos guides",
-                email: "Email",
-                password: "Mot de passe",
-                forgot: "Oublié ?",
-                submit: "Se connecter",
-                noAccount: "Pas encore de compte ?",
-                createFree: "Créer un compte gratuitement",
-                resetLink: "Problème de connexion ? Réinitialiser",
-                error: "Une erreur inattendue est survenue."
+        "pricingPage": {
+            "hero": {
+                "badge": "Top",
+                "title1": "Pro,",
+                "title2": "pas cher.",
+                "subtitle": "..."
             },
-            signup: {
-                title: "Rejoignez Maplyo",
-                subtitle: "Créez des guides d'exception en quelques minutes.",
-                firstName: "Prénom",
-                lastName: "Nom",
-                businessEmail: "Email professionnel",
-                businessName: "Nom de l'établissement",
-                phone: "Téléphone",
-                passwordLabel: "Mot de passe",
-                passwordHint: "Minimum 6 caractères",
-                submit: "Commencer gratuitement",
-                hasAccount: "Déjà un compte ?",
-                signIn: "Se connecter",
-                successTitle: "Compte créé !",
-                successMsg: "Un email de confirmation vient d'être envoyé à",
-                successDesc: "Veuillez cliquer sur le lien pour activer votre compte.",
-                backToLogin: "Retour à la connexion"
-            }
-        },
-        dashboard: {
-            title: "Mes Guides",
-            subtitle: "Gérez vos expériences voyageurs.",
-            newGuide: "Nouveau Guide",
-            logout: "Déconnexion",
-            viewPublic: "Voir page publique",
-            passProToShare: "Passez Pro pour partager",
-            delete: "Supprimer",
-            emptyTitle: "Aucun guide pour le moment",
-            emptyDesc: "Créez votre premier guide pour offrir une expérience exceptionnelle à vos voyageurs.",
-            tryAi: "✨ Essayer l'IA",
-            createManual: "Créer manuellement",
-            published: "En ligne",
-            draft: "Brouillon",
-            edit: "Éditer",
-            sortRecent: "Récents",
-            sortName: "Nom",
-            confirmDelete: "Êtes-vous sûr de vouloir supprimer ce guide ? Ce sera définitif.",
-            deleteError: "Erreur lors de la suppression.",
-            aiModal: {
-                title: "Création Magique ✨",
-                city: "Ville ou Lieu",
-                cityPlaceholder: "Ex: Marrakech, Quartier Guéliz",
-                type: "Type",
-                typeAirbnb: "Airbnb / Appartement",
-                typeHotel: "Hôtel / Riad",
-                typeGuesthouse: "Maison d'hôtes",
-                audience: "Voyageurs",
-                audienceFamilies: "Familles",
-                audienceCouples: "Couples",
-                audienceRemote: "Télétravailleurs",
-                audienceGroups: "Groupes",
-                generate: "Générer mon guide",
-                generating: "L'IA rédige votre guide...",
-                generatingDesc: "Création des recommandations pour"
+            "popular": "Top",
+            "header": {
+                "login": "Dentrée",
+                "signup": "S'inscrire"
             },
-            createModal: {
-                title: "Nouveau Voyage",
-                nameLabel: "Nom du guide",
-                namePlaceholder: "Ex: Riad des Lumières",
-                cancel: "Annuler",
-                create: "Créer le guide"
-            },
-            limitModal: {
-                title: "Limite de guides atteinte 🏠",
-                desc: "Vous avez atteint la limite de guides autorisés par votre abonnement actuel.",
-                upgrade: "🚀 Passer à l'illimité (Pro)",
-                or: "Ou",
-                addon: "➕ Rajouter juste 1 guide",
-                loading: "Chargement..."
-            },
-            addonSuccessModal: {
-                title: "Guide ajouté ! ✨",
-                heading: "C'est prêt !",
-                desc: "Votre limite a été augmentée de 1 guide. Vous pouvez désormais créer votre nouveau guide dès maintenant.",
-                cta: "Super, merci !"
-            },
-            proModal: {
-                heading: "Vous êtes Pro !",
-                desc: "Votre abonnement Pro est actif. Profitez de guides illimités et de toutes les fonctionnalités premium.",
-                cta: "Commencer à créer"
-            }
-        },
-        pricingPage: {
-            hero: {
-                badge: "Investissez dans l'excellence",
-                title1: "Un guide pro,",
-                title2: "au prix d'un café.",
-                subtitle: "Augmentez vos revenus directs, réduisez les questions répétitives et offrez une expérience 5 étoiles. Rentabilisé dès la première réservation."
-            },
-            popular: "Populaire",
-            header: { login: "Connexion", signup: "S'inscrire" },
-            compare: {
-                title: "Comparatif Détaillé",
-                subtitle: "Tout ce dont vous avez besoin pour réussir.",
-                features: {
-                    unlimited: "Guides Illimités",
-                    maps: "Intégration Google Maps",
-                    translation: "Traduction IA (toutes langues)",
-                    domain: "Nom de domaine personnalisé",
-                    support: "Support Prioritaire",
-                    whiteLabel: "Marque Blanche (No Branding)",
-                    analytics: "Analytiques Avancées"
+            "compare": {
+                "title": "Comp",
+                "subtitle": "...",
+                "features": {
+                    "unlimited": "Illimité",
+                    "maps": "Maps",
+                    "translation": "IA",
+                    "domain": "Domaine",
+                    "support": "Support",
+                    "whiteLabel": "Marque",
+                    "analytics": "Analytiques"
                 },
-                values: { oneLang: "1 langue", unlimited: "Illimité", emailSupport: "Email", whatsappSupport: "WhatsApp 24/7" }
+                "values": {
+                    "oneLang": "1 langue",
+                    "unlimited": "Illimité",
+                    "emailSupport": "Email",
+                    "whatsappSupport": "WhatsApp"
+                }
             },
-            faqSection: {
-                title: "Questions Fréquentes",
-                subtitle: "Nous sommes transparents. Voici les réponses.",
-                items: [
-                    { q: "Puis-je changer de plan à tout moment ?", a: "Oui, absolument. Vous pouvez passer du plan Basic au plan Pro depuis votre dashboard. Le changement est immédiat et le prorata est calculé automatiquement." },
-                    { q: "Y a-t-il un engagement ?", a: "Non, aucune période d'engagement. Nos abonnements sont mensuels et vous pouvez annuler à tout moment en un clic. Pas de frais cachés." },
-                    { q: "Comment fonctionne le paiement ?", a: "Nous utilisons Stripe, le leader mondial du paiement en ligne sécurisé. Vos coordonnées bancaires ne sont jamais stockées sur nos serveurs." },
-                    { q: "Le support est-il inclus ?", a: "Oui ! Le support par email est inclus dans tous les plans payants. Le plan Pro bénéficie d'une ligne prioritaire et d'un contact WhatsApp pour une assistance ultra-rapide." }
+            "faqSection": {
+                "title": "FAQ",
+                "subtitle": "...",
+                "items": [
+                    {
+                        "q": "Q",
+                        "a": "A"
+                    }
                 ]
             },
-            trust: "Ils nous font confiance",
-            addonLabel: "/ guide supp."
+            "trust": "Garantie"
         },
-        guideLock: {
-            title: "Accès sécurisé",
-            desc: "Veuillez déverrouiller ce guide pour accéder aux codes d'accès et informations sensibles.",
-            demoCode: "Code de démonstration"
+        "builder": {
+            "blocks": "blocs",
+            "chooseTheme": "Choisir Thème",
+            "reset": "Reset",
+            "viewGuide": "Voir Guide",
+            "catEssentials": "Essentiels",
+            "catTravel": "Voyage",
+            "catBusiness": "Business",
+            "guideStructure": "Structure",
+            "startHere": "Commencez ici",
+            "selectBlocks": "Sélectionnez des blocs",
+            "mobilePreview": "Aperçu Mobile",
+            "blockProperties": "Propriétés",
+            "editing": "Modification",
+            "selectToEdit": "Sélectionnez un bloc",
+            "paramsHere": "Réglages ici",
+            "backHome": "Retour",
+            "backDashboard": "Dashboard",
+            "editorMode": "Mode Édition",
+            "themeLabel": "Thème",
+            "qrLabel": "QR",
+            "createAccount": "Créer Compte",
+            "saveCreateAccount": "Sauver",
+            "online": "En ligne",
+            "confirmUnpublish": "Dépublier ?",
+            "unpublish": "Dépublier",
+            "publishSuccess": "Publié !",
+            "publishError": "Erreur",
+            "publish": "Publier",
+            "library": "Bibliothèque",
+            "mobileMode": "Mode Mobile",
+            "emptyGuide": "Vide",
+            "selectBlock": "Bloc ?",
+            "close": "Fermer",
+            "blockTitle": "Titre Bloc",
+            "designTheme": "Thèmes Design",
+            "upgradePro": "Passer Pro",
+            "unlock": "Débloquer",
+            "unlockPublish": "Publiez !",
+            "publishDesc": "Passez Pro.",
+            "seeOffers": "Offres",
+            "themes": {
+                "minimal-white": {
+                    "name": "Minimal",
+                    "desc": "Blanc"
+                },
+                "soft-gray": {
+                    "name": "Gris",
+                    "desc": "Doux"
+                },
+                "ocean": {
+                    "name": "Océan",
+                    "desc": "Bleu"
+                },
+                "nature": {
+                    "name": "Nature",
+                    "desc": "Vert"
+                },
+                "sunset": {
+                    "name": "Sunset",
+                    "desc": "Orange"
+                }
+            }
         },
-        settings: {
-            title: "Paramètres",
-            tabProfile: "Profil",
-            tabPlan: "Abonnement",
-            tabShop: "Boutique",
-            personalInfo: "Informations personnelles",
-            fullName: "Nom complet",
-            email: "Email",
-            saveProfile: "Enregistrer le profil",
-            yourPlan: "Votre abonnement",
-            currentPlan: "Plan actuel",
-            active: "Actif",
-            unlimitedGuides: "Guides illimités",
-            oneGuideIncluded: "1 guide inclus",
-            oneGuideDraft: "1 guide (brouillon)",
-            themesUnlocked: "Thèmes débloqués",
-            extraGuides: "guides supplémentaires",
-            upgradeToPro: "Passer au plan Pro",
-            youArePro: "Vous êtes Pro",
-            info: "Information",
-            noBillingAccount: "Aucun compte de facturation trouvé.",
-            serverError: "Erreur serveur.",
-            manageSubscription: "Gérer l'abonnement",
-            shop: "Boutique (Add-ons)",
-            securePayment: "Paiement sécurisé",
-            bestSeller: "Best Seller",
-            qrCanvas: "Tableau QR Code",
-            qrCanvasDesc: "Un superbe tableau avec votre QR Code pour votre logement.",
-            hdPrint: "Impression HD",
-            frameIncluded: "Cadre inclus",
-            trackedShipping: "Livraison suivie",
-            shippingTtc: "Livraison incluse",
-            order: "Commander",
-            requiredPro: "Requis Pro",
-            extraGuide: "Guide Supplémentaire",
-            extraGuideDesc: "Ajoutez un guide supplémentaire à votre abonnement.",
-            perMonth: "par mois",
-            proReserved: "Réservé aux membres Pro",
-            onlyProCanAdd: "Seuls les membres Pro peuvent ajouter des guides supplémentaires.",
-            addGuide: "Ajouter un guide",
-            confirmAddGuide: "Voulez-vous ajouter un guide supplémentaire pour 20 DH/mois ?",
-            cancel: "Annuler",
-            confirm: "Confirmer",
-            guideAdded: "Guide ajouté !",
-            limitIncreased: "Votre limite a été augmentée.",
-            error: "Erreur",
-            success: "Succès"
+        "showcase": {
+            "tag": "Exemples",
+            "title": "Showcase",
+            "description": "Voir.",
+            "messageFrom": "De",
+            "viewFull": "Voir",
+            "example1": {
+                "type": "Loft",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Génial"
+            },
+            "example2": {
+                "type": "Villa",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Top"
+            },
+            "example3": {
+                "type": "Riad",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Super"
+            }
         },
-        ai: {
-            assistant: "Assistant IA",
-            online: "En ligne",
-            empty: "Posez-moi vos questions sur le séjour !",
-            thinking: "Réflexion...",
-            placeholder: "Posez une question...",
-            error: "Désolé, une erreur est survenue."
+        "guideLock": {
+            "title": "Accès Sécurisé",
+            "desc": "Dévérouillez pour voir les codes.",
+            "demoCode": "Code Démo"
         },
-        builder: {
-            blocks: "blocs"
+        "auth": {
+            "login": {
+                "title": "Connexion",
+                "subtitle": "Bienvenue",
+                "email": "Email",
+                "password": "Mot de passe",
+                "forgot": "Oublié ?",
+                "error": "Erreur",
+                "submit": "Se connecter",
+                "noAccount": "Pas de compte ?",
+                "createFree": "Créer",
+                "resetLink": "Reset"
+            },
+            "signup": {
+                "title": "Inscription",
+                "subtitle": "Gratuit",
+                "successTitle": "Succès",
+                "successMsg": "Vérifiez vos emails",
+                "successDesc": "Lien envoyé",
+                "backToLogin": "Retour",
+                "firstName": "Prénom",
+                "lastName": "Nom",
+                "businessEmail": "Email pro",
+                "businessName": "Entreprise",
+                "phone": "Tel",
+                "passwordLabel": "Pass",
+                "passwordHint": "6+ cars",
+                "submit": "S'inscrire",
+                "hasAccount": "Déjà inscrit ?",
+                "signIn": "Se connecter"
+            }
         }
     },
-
-
-
-    en: {
-        common: {
-            getStarted: "Get Started",
-            login: "Login",
-            signup: "Sign up",
-            tryFree: "Try for Free",
-            popular: "Most Popular",
-            month: "/month",
-            loading: "Loading...",
-            choose: "Choose",
-            viewGuide: "View full guide",
-            more: "See more",
-            checkin: "Check-in",
-            qrCodeWall: "Scan to test",
-            checkout: "Check-out",
-            location: "Location",
-            viewOnMap: "View on map",
-            wifi: "WiFi",
+    "en": {
+        "common": {
+            "getStarted": "Commencer",
+            "login": "Connexion",
+            "signup": "S'inscrire",
+            "tryFree": "Essayer Gratuitement",
+            "popular": "Le plus populaire",
+            "month": "/mois",
+            "loading": "Chargement...",
+            "choose": "Choisir",
+            "viewGuide": "Voir le guide complet",
+            "more": "Voir plus",
+            "checkin": "Arrivée",
+            "qrCodeWall": "Scannez pour tester",
+            "checkout": "Départ",
+            "location": "Localisation",
+            "viewOnMap": "Voir sur la carte",
+            "wifi": "WiFi",
+            "other": "Autre"
         },
-        socialProof: {
-            trustpilot: "4.9/5 by 500+ Hosts",
-            usedBy: "Used by top property managers",
-            autoTranslate: {
-                title: "Auto-Translated",
-                desc: "Your guides speak your guests' language."
+        "renderer": {
+            "welcome": "Bienvenue",
+            "wifi": "WiFi",
+            "access": "Codes d'accès",
+            "location": "Localisation",
+            "contact": "Contact",
+            "amenities": "Équipements",
+            "places": "À proximité",
+            "rules": "Règlement",
+            "tipOfTheDay": "Conseil du jour",
+            "sunday": "Dimanche",
+            "monday": "Lundi",
+            "tuesday": "Mardi",
+            "wednesday": "Mercredi",
+            "thursday": "Jeudi",
+            "friday": "Vendredi",
+            "saturday": "Samedi",
+            "lazy": "Détente",
+            "mood": "Motivé",
+            "discovery": "Découverte",
+            "tasty": "Gourmand",
+            "adventure": "Aventure",
+            "festive": "Festif",
+            "outing": "Sortie",
+            "brunch": "Un brunch à",
+            "explore": "Explorez",
+            "museums": "Visitez",
+            "taste": "Goûtez",
+            "excursion": "Une excursion",
+            "nightlife": "Vie nocturne",
+            "walk": "Une balade",
+            "secureAccess": "Accès Sécurisé",
+            "checkin": "Arrivée",
+            "checkout": "Départ",
+            "viewMap": "Voir sur la carte",
+            "upsells": "Extras",
+            "items": "éléments",
+            "empty": "Rien à afficher",
+            "searchPlaceholder": "Rechercher...",
+            "secureAccessDesc": "Entrez le code fourni par votre hôte."
+        },
+        "socialProof": {
+            "trustpilot": "4.9/5 par 500+ Hôtes",
+            "usedBy": "Utilisé par les meilleures conciergeries",
+            "autoTranslate": {
+                "title": "Auto-Traduit",
+                "desc": "Vos guides parlent la langue de vos invités."
             },
-            googleMaps: {
-                title: "Integrated Google Maps",
-                desc: "Google Maps directly inside the guide."
+            "googleMaps": {
+                "title": "Google Maps Intégré",
+                "desc": "Google Maps directement dans le guide."
             }
         },
-        hero: {
-            tag: "FOR HOSTS & PROPERTY MANAGERS",
-            title: "Never repeat the WiFi code again.",
-            subtitle: "Digitalize your welcome book. Offer a 5-star experience, reduce messages by 50%, and boost your positive reviews.",
-            cta: "Create my free guide",
-            demo: "See an example",
-            noCreditCard: "No credit card required",
-            setupTime: "Set up in 2 min",
+        "hero": {
+            "tag": "POUR LES HÔTES ET CONCIERGERIES",
+            "title": "Ne répétez plus jamais le code WiFi.",
+            "subtitle": "Digitalisez votre livret d'accueil. Offrez une expérience 5 étoiles, réduisez les messages de 50%, et augmentez vos avis positifs.",
+            "cta": "Créer mon guide gratuit",
+            "demo": "Voir un exemple",
+            "noCreditCard": "Pas de carte requise",
+            "setupTime": "Configuré en 2 min",
+            "badge": "Livret d'accueil digital #1",
+            "title1": "Pour vos invités,",
+            "title2": "une expérience 5 étoiles.",
+            "users": "Approuvé par 500+ hôtes"
         },
-        features: {
-            title: "Everything you need.",
-            subtitle: "Nothing you don't.",
-            description: "Powerful tools to automate your guest welcome and reassure your travelers, without technical complexity.",
-            items: {
-                mobileFirst: {
-                    title: "100% Mobile First",
-                    desc: "No app to download. Your guides open instantly in any mobile browser."
+        "features": {
+            "title": "Tout ce dont vous avez besoin.",
+            "subtitle": "Rien de superflu.",
+            "description": "Des outils puissants pour automatiser votre accueil.",
+            "badge": "Fonctionnalités",
+            "items": {
+                "mobileFirst": {
+                    "title": "100% Mobile First",
+                    "desc": "Pas d'application à télécharger."
                 },
-                secure: {
-                    title: "Secure Codes",
-                    desc: "Protect access to WiFi and key boxes. Unlock via email or unique code."
+                "secure": {
+                    "title": "Codes Sécurisés",
+                    "desc": "WiFi et boîtes à clés protégés."
                 },
-                map: {
-                    title: "Interactive Map",
-                    desc: "Embed your favorite restaurants, bars, and activities with one-click Google Maps directions."
+                "map": {
+                    "title": "Carte Interactive",
+                    "desc": "Intégrez vos lieux favoris."
                 },
-                live: {
-                    title: "Live Updates",
-                    desc: "Change a WiFi code or a recommendation, it updates instantly on all phones."
+                "live": {
+                    "title": "Modifications Live",
+                    "desc": "Mise à jour instantanée."
                 },
-                translate: {
-                    title: "Auto-Translation",
-                    desc: "Automatically detects guest's phone language and translates your guide."
+                "translate": {
+                    "title": "Traduction Auto",
+                    "desc": "Détecte la langue du visiteur."
                 },
-                checklist: {
-                    title: "Checklists",
-                    desc: "Clear check-in and check-out instructions. Reduce repetitive questions by 80%."
+                "checklist": {
+                    "title": "Check-lists",
+                    "desc": "Instructions claires arrivée/départ."
                 }
             }
         },
-        pricing: {
-            title: "Transparent Pricing",
-            subtitle: "Start for free. Scale when you want.",
-            bestOffer: "The best offer in the world:",
-            addon: "+20 DH / additional guide",
-            enterprise: {
-                title: "Need an Enterprise solution?",
-                desc: "For managers with 50+ properties, we offer volume discounts and PMS integration.",
-                cta: "Contact Sales Team"
+        "pricing": {
+            "title": "Tarification Transparente",
+            "subtitle": "Commencez gratuitement. Évoluez quand vous voulez.",
+            "bestOffer": "La meilleure offre du monde :",
+            "addon": "+20 DH / guide supplémentaire",
+            "trust": "Garantie 30 jours",
+            "enterprise": {
+                "title": "Solution Enterprise",
+                "desc": "Pour les pros (50+ biens).",
+                "cta": "Contacter"
             },
-            plans: {
-                demo: {
-                    name: "Discovery",
-                    price: "Free",
-                    desc: "Test the power of Maplyo without a credit card.",
-                    button: "Create a guide (Free)",
-                    features: [
-                        'Full access to Creator',
-                        'Mobile Preview',
-                        'No publishing'
+            "plans": {
+                "demo": {
+                    "name": "Découverte",
+                    "price": "Gratuit",
+                    "desc": "Testez sans carte.",
+                    "button": "Essayer",
+                    "features": [
+                        "Accès Créateur",
+                        "Aperçu Mobile"
                     ]
                 },
-                basic: {
-                    name: "Essential",
-                    desc: "To launch your first property.",
-                    button: "Start Now",
-                    features: [
-                        'Complete Digital Guidebook',
-                        'Instant WiFi QR Code',
-                        'Interactive Map (Google Maps)',
-                        'Free Themes (Premium Pack +15 DH)',
-                        '1 Unique Guide'
+                "basic": {
+                    "name": "Essentiel",
+                    "desc": "Pour 1 propriété.",
+                    "button": "Démarrer",
+                    "features": [
+                        "Livret Digital",
+                        "WiFi QR",
+                        "1 Guide"
                     ]
                 },
-                pro: {
-                    name: "Growth",
-                    desc: "To maximize your revenue & reviews.",
-                    button: "Upgrade to Growth",
-                    features: [
-                        'Unlimited Guides (+20 DH/ea.)',
-                        'INCLUDED Premium Themes',
-                        'Automatic Translation (AI)',
-                        '24/7 Guest Assistant (AI)',
-                        'Priority WhatsApp Support'
+                "pro": {
+                    "name": "Croissance",
+                    "desc": "Pour les pros.",
+                    "button": "Passer Pro",
+                    "features": [
+                        "Guides Illimités",
+                        "Traduction IA",
+                        "Support WhatsApp"
                     ]
                 },
-                business: {
-                    name: "Agency",
-                    desc: "For portfolios of 10+ properties.",
-                    button: "Talk to an Expert",
-                    price: "Custom",
-                    features: [
-                        'Unlimited Guides',
-                        'Multi-Property Dashboard',
-                        'White Label (No Maplyo logo)',
-                        'PMS & Channel Mgr Integration',
-                        'Centralized Billing'
+                "business": {
+                    "name": "Agence",
+                    "desc": "Pour les portfolios.",
+                    "button": "Talk to Expert",
+                    "price": "Sur mesure",
+                    "features": [
+                        "Marque Blanche",
+                        "Multi-Propriétés"
                     ]
                 }
-            },
-            trust: "30-Day Money Back Guarantee • Secure SSL Payment"
+            }
         },
-        testimonials: {
-            title: "Approved by Pros",
-            subtitle: "Join over 500 hosts who automated their welcome.",
-            items: [
+        "testimonials": {
+            "title": "Approuvé par les Pros",
+            "subtitle": "Rejoignez 500+ hôtes.",
+            "items": [
                 {
-                    name: "Jean-Philippe R.",
-                    role: "Superhost Airbnb (Marrakech)",
-                    text: "My guests kept asking for the Wifi code or how to turn on the AC. With Maplyo, they have everything on their phone. I easily saved 2 hours a week.",
-                    result: "-60% messages",
-                },
-                {
-                    name: "Sofia B.",
-                    role: "Concierge Manager (Casablanca)",
-                    text: "The game changer for us is the upsell. We offer cleaning or transport services directly in the guide. It boosted our revenue.",
-                    result: "+15% revenue",
-                },
-                {
-                    name: "Karim M.",
-                    role: "Riad Owner (Fes)",
-                    text: "Very professional. The multilingual aspect is stunning, my American and Spanish clients are delighted to have info in their language without me doing anything.",
-                    result: "5★ Reviews",
+                    "name": "Jean R.",
+                    "role": "Superhost",
+                    "text": "Gain de temps énorme.",
+                    "result": "-60% messages"
                 }
             ]
         },
-        faq: {
-            title: "Frequently Asked Questions",
-            subtitle: "Everything you need to know to get started.",
-            questions: [
+        "faq": {
+            "title": "Questions Fréquentes",
+            "subtitle": "Tout savoir.",
+            "questions": [
                 {
-                    q: "Do I need technical skills?",
-                    a: "None at all. It's as easy as filling out a social media profile. You add info, we handle the design."
-                },
-                {
-                    q: "How do guests access the guide?",
-                    a: "Via a simple QR Code you place in the rental, or a link you send via message before arrival."
-                },
-                {
-                    q: "Can I update the guide after printing the QR Code?",
-                    a: "Yes! That's the magic. Update your info (wifi, restaurants...) and the QR Code stays exactly the same."
-                },
-                {
-                    q: "Is there a contract?",
-                    a: "No, cancel anytime."
+                    "q": "Gratuit ?",
+                    "a": "Oui, plan découverte dispo."
                 }
             ]
         },
-        footer: {
-            product: "Product",
-            support: "Support",
-            legal: "Legal",
-            desc: "Maplyo helps hosts and property managers offer a 5-star experience with smart digital guides.",
-            links: {
-                features: "Features",
-                pricing: "Pricing",
-                testimonials: "Testimonials",
-                roadmap: "Roadmap",
-                help: "Help",
-                contact: "Contact",
-                privacy: "Privacy",
-                terms: "Terms",
-                legal: "Legal Notice"
+        "footer": {
+            "product": "Produit",
+            "support": "Support",
+            "legal": "Légal",
+            "desc": "Maplyo aide les hôtes.",
+            "links": {
+                "features": "Fonctions",
+                "pricing": "Tarifs",
+                "testimonials": "Avis",
+                "roadmap": "Roadmap",
+                "help": "Aide",
+                "contact": "Contact",
+                "privacy": "Confidentialité",
+                "terms": "Conditions",
+                "legal": "Mentions"
             },
-            securePayment: "Secure Payment",
-            rights: "All rights reserved."
+            "securePayment": "Paiement Sécurisé",
+            "rights": "Tous droits réservés."
         },
-        cta: {
-            title: "Ready to impress?",
-            subtitle: "Join the new generation of hosts offering an exceptional experience.",
-            button: "Create my first guide",
-            subtext: "No credit card required • Cancel anytime"
+        "cta": {
+            "title": "Prêt à impressionner ?",
+            "subtitle": "Créez votre guide aujourd'hui.",
+            "button": "Créer mon guide",
+            "subtext": "Sans carte."
         },
-        tipOfTheDay: "Tip of the Day",
-        sunday: "Sunday",
-        monday: "Monday",
-        tuesday: "Tuesday",
-        wednesday: "Wednesday",
-        thursday: "Thursday",
-        friday: "Friday",
-        saturday: "Saturday",
-        lazy: "Relax",
-        mood: "Motivated",
-        discovery: "Discovery",
-        tasty: "Tasty",
-        adventure: "Adventure",
-        festive: "Festive",
-        outing: "Outing",
-        brunch: "A brunch at",
-        explore: "Explore the center of",
-        museums: "Visit the museums of",
-        taste: "Taste the specialties of",
-        excursion: "Go on an excursion.",
-        nightlife: "Nightlife in",
-        walk: "Take a walk in",
-        guide: {
-            accessCode: "Access Codes",
-            locked: "This block is protected by a code.",
-            enterCode: "Access code",
-            apartmentDoor: "Apartment door:",
-            buildingDoor: "Building door:",
-            gate: "Gate:",
-            notes: "Notes"
+        "guide": {
+            "accessCode": "Codes d'accès",
+            "locked": "Protégé par code.",
+            "enterCode": "Code d'accès",
+            "confirm": "Valider",
+            "apartmentDoor": "Porte :",
+            "buildingDoor": "Immeuble :",
+            "gate": "Portail :",
+            "notes": "Notes"
         },
-        ai: {
-            assistant: "Guide Assistant",
-            online: "AI online",
-            placeholder: "Message...",
-            empty: "Ask a question about this guide.",
-            error: "Sorry, I can't answer right now.",
-            thinking: "Drafting..."
-        },
-        qrCodeWall: {
-            titlePart1: "Share your guide",
-            titlePart2: "everywhere",
-            description: "A simple scan is all it takes for your guests.",
-            items: {
-                wifi: { title: "Wi-Fi Connection", desc: "Password pre-filled" },
-                perpetual: { title: "Permanent Access", desc: "The link remains valid" },
-                remote: { title: "Live Updates", desc: "Always up to date" }
+        "guideBlocks": {
+            "checkIn": {
+                "title": "Arrivée"
             },
-            visual: {
-                welcome: "Welcome",
-                scan: "Scan me",
-                detected: "QR Code Detected",
-                notification: {
-                    app: "Maplyo",
-                    title: "Open guide"
+            "location": {
+                "notSet": "Non défini",
+                "address": "Adresse",
+                "openInMaps": "Ouvrir",
+                "copyAddress": "Copier",
+                "viewOnMap": "Voir sur la carte"
+            },
+            "contact": {
+                "host": "Hôte",
+                "yourHost": "Votre Hôte",
+                "phone": "Tel",
+                "openConversation": "Ouvrir"
+            },
+            "rules": {
+                "noRules": "Pas de règles"
+            },
+            "amenities": {
+                "noAmenities": "Pas d'équipements"
+            },
+            "faq": {
+                "noFaq": "Pas de FAQ",
+                "question": "Question",
+                "answer": "Réponse"
+            },
+            "trash": {
+                "title": "Bacs",
+                "items": "Ordures",
+                "recycling": "Recyclage"
+            },
+            "breakfast": {
+                "title": "Petit Déjeuner",
+                "menu": "Menu"
+            },
+            "transport": {
+                "noInfo": "Pas d'infos",
+                "call": "Appeler"
+            }
+        },
+        "editor": {
+            "common": {
+                "title": "Titre",
+                "description": "Description",
+                "uploadImage": "Image",
+                "tags": "Tags",
+                "placeholderTags": "Wifi, Piscine...",
+                "time": "Heure",
+                "instructions": "Instructions",
+                "videoUrl": "Vidéo",
+                "location": "Lieu",
+                "address": "Adresse",
+                "placeholderAddress": "Rue...",
+                "mapUrl": "Maps",
+                "placeholderMap": "Lien Maps",
+                "phone": "Tel",
+                "placeholderPhone": "+33...",
+                "whatsapp": "WhatsApp",
+                "placeholderWhatsapp": "Numéro",
+                "email": "Email",
+                "placeholderEmail": "...",
+                "price": "Prix",
+                "placeholderPrice": "150 DH",
+                "placeholderReserve": "Réserver",
+                "cost": "Coût",
+                "placeholderWelcome": "Bienvenue...",
+                "linkUrl": "Lien",
+                "priceCheap": "Eco",
+                "priceModerate": "Moyen",
+                "priceExpensive": "Premium",
+                "day": "Jour",
+                "placeholderMonth": "JAN",
+                "placeholderDay": "15",
+                "placeholderTime": "19:00",
+                "other": "Autre",
+                "hours": "Heures",
+                "month": "Mois",
+                "placeholder": "..."
+            },
+            "labels": {
+                "hero": "Accueil",
+                "wifi": "WiFi",
+                "access_codes": "Codes",
+                "location": "Localisation",
+                "contact": "Contact",
+                "amenities": "Équipements",
+                "places": "Lieux",
+                "rules": "Règlement",
+                "faq": "FAQ",
+                "trash": "Bacs",
+                "parking": "Parking",
+                "breakfast": "Petit Déj",
+                "transport": "Transport",
+                "checkin": "Arrivée",
+                "checkout": "Départ",
+                "documents": "Documents",
+                "events": "Événements",
+                "upsells": "Extras",
+                "embed": "Iframe",
+                "ai_assistant": "IA"
+            },
+            "access_codes": {
+                "security": "Sécurité",
+                "mode": "Affichage",
+                "alwaysVisible": "Toujours visible",
+                "unlockByCode": "Par code",
+                "unlockCode": "Code",
+                "unlockCodeDesc": "Requis.",
+                "aptCode": "Porte",
+                "buildingCode": "Immeuble",
+                "gateCode": "Portail",
+                "notes": "Notes"
+            },
+            "wifi": {
+                "networkName": "Nom WiFi",
+                "password": "Mot de passe",
+                "notes": "Notes"
+            },
+            "documents": {
+                "name": "Nom",
+                "url": "Lien",
+                "add": "Ajouter"
+            },
+            "places": {
+                "aiButton": "IA",
+                "name": "Nom",
+                "add": "Ajouter"
+            },
+            "events": {
+                "aiButton": "IA",
+                "add": "Ajouter"
+            },
+            "upsells": {
+                "buttonText": "Bouton",
+                "buttonLink": "Lien",
+                "add": "Ajouter"
+            },
+            "embed": {
+                "url": "Iframe",
+                "warning": "Attention"
+            },
+            "checkin": {
+                "timePlaceholder": "15:00",
+                "instrPlaceholder": "Procédure..."
+            },
+            "contact": {
+                "nameLabel": "Nom",
+                "namePlaceholder": "Concierge"
+            },
+            "rules": {
+                "title": "Règle",
+                "placeholder": "...",
+                "add": "Ajouter"
+            },
+            "amenities": {
+                "title": "Équipement",
+                "placeholder": "...",
+                "add": "Ajouter"
+            },
+            "faq": {
+                "question": "Q",
+                "qPlaceholder": "...",
+                "answer": "R",
+                "aPlaceholder": "...",
+                "add": "Ajouter"
+            },
+            "trash": {
+                "instrPlaceholder": "Tri...",
+                "dayTrash": "Ordures",
+                "dayTrashPlaceholder": "Lundi",
+                "dayRecycling": "Recyclage",
+                "dayRecyclingPlaceholder": "Jeudi",
+                "location": "Bacs",
+                "locPlaceholder": "Garage",
+                "photoLocal": "Photo"
+            },
+            "parking": {
+                "instrPlaceholder": "N°42",
+                "locPlaceholder": "Rue...",
+                "costPlaceholder": "Gratuit",
+                "photo": "Photo"
+            },
+            "breakfast": {
+                "hoursPlaceholder": "07:00 - 10:30",
+                "locPlaceholder": "Salle à manger",
+                "menu": "Menu",
+                "menuPlaceholder": "Café, thé..."
+            },
+            "transport": {
+                "bus": "Bus",
+                "train": "Train",
+                "taxi": "Taxi",
+                "bike": "Vélo",
+                "linePlaceholder": "Ligne 4",
+                "stop": "Arrêt",
+                "stopPlaceholder": "Arrêt...",
+                "add": "Ajouter"
+            }
+        },
+        "dashboard": {
+            "title": "Mes Guides",
+            "subtitle": "Gérez vos biens.",
+            "newGuide": "Nouveau Guide",
+            "logout": "Déconnexion",
+            "viewPublic": "Page publique",
+            "passProToShare": "Passer Pro",
+            "delete": "Supprimer",
+            "emptyTitle": "Aucun guide",
+            "emptyDesc": "Créez votre premier guide.",
+            "tryAi": "✨ IA",
+            "createManual": "Manuel",
+            "published": "En ligne",
+            "draft": "Brouillon",
+            "edit": "Modifier",
+            "sortRecent": "Récent",
+            "sortName": "Nom",
+            "confirmDelete": "Supprimer ?",
+            "deleteError": "Erreur",
+            "aiModal": {
+                "title": "Magie ✨",
+                "city": "Ville",
+                "cityPlaceholder": "Marrakech",
+                "type": "Type",
+                "typeAirbnb": "Airbnb",
+                "typeHotel": "Hôtel",
+                "typeGuesthouse": "Maison",
+                "audience": "Public",
+                "audienceFamilies": "Familles",
+                "audienceCouples": "Parejas",
+                "audienceRemote": "Pros",
+                "audienceGroups": "Groupes",
+                "generate": "Générer",
+                "generating": "IA...",
+                "generatingDesc": "Calcul..."
+            },
+            "createModal": {
+                "title": "Nouveau Guide",
+                "nameLabel": "Nom",
+                "namePlaceholder": "Nom...",
+                "cancel": "Annuler",
+                "create": "Créer"
+            },
+            "limitModal": {
+                "title": "Limite",
+                "desc": "Limite atteinte.",
+                "upgrade": "Passer Pro",
+                "or": "Ou",
+                "addon": "Ajouter 1",
+                "loading": "..."
+            },
+            "addonSuccessModal": {
+                "title": "Succès",
+                "heading": "Prêt !",
+                "desc": "Limite augmentée.",
+                "cta": "Merci"
+            }
+        },
+        "settings": {
+            "title": "Réglages",
+            "tabProfile": "Profil",
+            "tabPlan": "Plan",
+            "tabShop": "Boutique",
+            "personalInfo": "Infos",
+            "fullName": "Nom",
+            "email": "Email",
+            "saveProfile": "Sauver",
+            "yourPlan": "Votre Plan",
+            "currentPlan": "Plan actuel",
+            "active": "Actif",
+            "unlimitedGuides": "Illimité",
+            "oneGuideIncluded": "1 guide",
+            "oneGuideDraft": "1 brouillon",
+            "themesUnlocked": "Thèmes OK",
+            "extraGuides": "Extras",
+            "upgradeToPro": "Passer Pro",
+            "youArePro": "Vous êtes Pro",
+            "info": "Info",
+            "noBillingAccount": "Pas de compte",
+            "serverError": "Erreur",
+            "manageSubscription": "Gérer",
+            "shop": "Boutique",
+            "securePayment": "Sécurisé",
+            "bestSeller": "Top",
+            "qrCanvas": "Tableau QR",
+            "qrCanvasDesc": "Tableau...",
+            "hdPrint": "HD",
+            "frameIncluded": "Cadre",
+            "trackedShipping": "Suivi",
+            "shippingTtc": "Livraison OK",
+            "order": "Commander",
+            "requiredPro": "Pro Requis",
+            "extraGuide": "Extra",
+            "extraGuideDesc": "Ajouter guide.",
+            "perMonth": "/mois",
+            "proReserved": "Pro",
+            "onlyProCanAdd": "Pro requis",
+            "addGuide": "Ajouter",
+            "confirmAddGuide": "Ajouter (20 DH/m) ?",
+            "cancel": "Non",
+            "confirm": "Oui",
+            "guideAdded": "OK",
+            "limitIncreased": "OK",
+            "error": "Erreur",
+            "success": "OK"
+        },
+        "ai": {
+            "assistant": "IA",
+            "online": "IA OK",
+            "placeholder": "Message...",
+            "empty": "Question ?",
+            "error": "Erreur",
+            "thinking": "..."
+        },
+        "qrCodeWall": {
+            "titlePart1": "Partagez",
+            "titlePart2": "partout",
+            "description": "Scannez.",
+            "items": {
+                "wifi": {
+                    "title": "WiFi",
+                    "desc": "Connecté"
+                },
+                "perpetual": {
+                    "title": "Permanent",
+                    "desc": "Lien valide"
+                },
+                "remote": {
+                    "title": "Live",
+                    "desc": "Direct"
+                }
+            },
+            "visual": {
+                "welcome": "Bienvenue",
+                "scan": "Scannez",
+                "detected": "Trouvé",
+                "notification": {
+                    "app": "Maplyo",
+                    "title": "Ouvrir"
                 }
             }
         },
-        upsells: "Extras",
-        legalPage: {
-            titlePrivacy: "Privacy Policy",
-            titleTerms: "Terms of Use",
-            lastUpdated: "Last updated:",
-            effectiveDate: "Effective as of:",
-            privacy: {
-                intro: "This privacy policy describes how Maplyo ('we', 'us', 'our') collects, uses, and protects your personal data, in accordance with Moroccan Law No. 09-08 regarding the protection of individuals with respect to the processing of personal data.",
-                section1: {
-                    title: "1. Data Collection",
-                    items: [
-                        "Identification data: Last name, first name, email address.",
-                        "Transaction data: Payment history (processed securely by Stripe, we do not store your full bank details).",
-                        "Usage data: Information on the creation and consultation of digital guides."
+        "upsells": "Extras",
+        "legalPage": {
+            "titlePrivacy": "Privacité",
+            "titleTerms": "Termes",
+            "lastUpdated": "MAJ :",
+            "effectiveDate": "Date :",
+            "privacy": {
+                "intro": "...",
+                "section1": {
+                    "title": "1",
+                    "items": [
+                        "1"
                     ]
                 },
-                section2: {
-                    title: "2. Purpose of Processing",
-                    intro: "Your data is collected to:",
-                    items: [
-                        "Provide and manage the digital guide service.",
-                        "Manage your subscription and billing.",
-                        "Communicate important service updates.",
-                        "Improve our features through anonymized statistics."
+                "section2": {
+                    "title": "2",
+                    "intro": "2",
+                    "items": [
+                        "2"
                     ]
                 },
-                section3: {
-                    title: "3. Data Sharing",
-                    content: "We never sell your data. It may be shared only with our essential technical providers (e.g., Stripe for payments, Supabase for hosting, Resend for emails) who are bound by strict confidentiality."
+                "section3": {
+                    "title": "3",
+                    "content": "3"
                 },
-                section4: {
-                    title: "4. Security",
-                    content: "We implement technical security measures (SSL encryption, secure protocols) to protect your data from unauthorized access."
+                "section4": {
+                    "title": "4",
+                    "content": "4"
                 },
-                section5: {
-                    title: "5. Your Rights",
-                    content: "In accordance with Law 09-08, you have the right to access, rectify, and oppose your data.",
-                    contact: "To exercise this right, contact us at: contact@maplyo.com"
+                "section5": {
+                    "title": "5",
+                    "content": "5",
+                    "contact": "..."
                 }
             },
-            terms: {
-                intro: "Welcome to Maplyo. By accessing our platform or using our services, you agree to be bound by these Terms of Use.",
-                section1: {
-                    title: "1. Description of Service",
-                    content: "Maplyo is a SaaS (Software as a Service) platform allowing hosts and property managers to create, host, and share digital welcome books with their guests."
+            "terms": {
+                "intro": "...",
+                "section1": {
+                    "title": "1",
+                    "content": "1"
                 },
-                section2: {
-                    title: "2. Subscriptions and Payments",
-                    items: [
-                        "Billing: Services are billed monthly or annually, in advance.",
-                        "Cancellation: You can cancel your subscription at any time via your dashboard. Access to Premium features remains active until the end of the billed period.",
-                        "Refund: We offer a 30-day 'Money Back Guarantee' for all new subscriptions."
+                "section2": {
+                    "title": "2",
+                    "items": [
+                        "2"
                     ]
                 },
-                section3: {
-                    title: "3. User Responsibilities",
-                    intro: "You agree to:",
-                    items: [
-                        "Provide accurate information during registration.",
-                        "Not publish illegal, defamatory, or immoral content in your guides.",
-                        "Be solely responsible for the information (WiFi codes, addresses) shared with your guests."
+                "section3": {
+                    "title": "3",
+                    "intro": "3",
+                    "items": [
+                        "3"
                     ]
                 },
-                section4: {
-                    title: "4. Intellectual Property",
-                    content: "Maplyo remains the owner of the platform, the code, and the brand. You remain the owner of the content (texts, photos) you add to your guides."
+                "section4": {
+                    "title": "4",
+                    "content": "4"
                 },
-                section5: {
-                    title: "5. Limitation of Liability",
-                    content: "Maplyo shall not be held liable for indirect damages, loss of revenue, or issues arising from the use of information contained in guides created by users."
+                "section5": {
+                    "title": "5",
+                    "content": "5"
                 },
-                section6: {
-                    title: "6. Governing Law",
-                    content: "These terms are governed by Moroccan law. Any dispute relating to their interpretation and/or execution shall be subject to the competent courts of Casablanca."
+                "section6": {
+                    "title": "6",
+                    "content": "6"
                 }
             }
         },
-        auth: {
-            login: {
-                title: "Welcome back 👋",
-                subtitle: "Sign in to manage your guides",
-                email: "Email",
-                password: "Password",
-                forgot: "Forgot?",
-                submit: "Sign In",
-                noAccount: "No account yet?",
-                createFree: "Create a free account",
-                resetLink: "Login issue? Reset",
-                error: "An unexpected error occurred."
+        "pricingPage": {
+            "hero": {
+                "badge": "Top",
+                "title1": "Pro,",
+                "title2": "pas cher.",
+                "subtitle": "..."
             },
-            signup: {
-                title: "Join Maplyo",
-                subtitle: "Create exceptional guides in minutes.",
-                firstName: "First Name",
-                lastName: "Last Name",
-                businessEmail: "Business Email",
-                businessName: "Business Name",
-                phone: "Phone",
-                passwordLabel: "Password",
-                passwordHint: "Minimum 6 characters",
-                submit: "Start for free",
-                hasAccount: "Already have an account?",
-                signIn: "Sign in",
-                successTitle: "Account created!",
-                successMsg: "A confirmation email was sent to",
-                successDesc: "Please click the link to activate your account.",
-                backToLogin: "Back to login"
-            }
-        },
-        dashboard: {
-            title: "My Guides",
-            subtitle: "Manage your guest experiences.",
-            newGuide: "New Guide",
-            logout: "Log out",
-            viewPublic: "View public page",
-            passProToShare: "Upgrade to Pro to share",
-            delete: "Delete",
-            emptyTitle: "No guides yet",
-            emptyDesc: "Create your first guide to offer an exceptional experience to your guests.",
-            tryAi: "✨ Try AI",
-            createManual: "Create manually",
-            published: "Online",
-            draft: "Draft",
-            edit: "Edit",
-            sortRecent: "Recent",
-            sortName: "Name",
-            confirmDelete: "Are you sure you want to delete this guide? This is permanent.",
-            deleteError: "Error during deletion.",
-            aiModal: {
-                title: "Magic Create ✨",
-                city: "City or Place",
-                cityPlaceholder: "Ex: Marrakech, Guéliz",
-                type: "Type",
-                typeAirbnb: "Airbnb / Apartment",
-                typeHotel: "Hotel / Riad",
-                typeGuesthouse: "Guest House",
-                audience: "Guests",
-                audienceFamilies: "Families",
-                audienceCouples: "Couples",
-                audienceRemote: "Remote Workers",
-                audienceGroups: "Groups",
-                generate: "Generate my guide",
-                generating: "AI is writing your guide...",
-                generatingDesc: "Creating recommendations for"
+            "popular": "Top",
+            "header": {
+                "login": "Dentrée",
+                "signup": "S'inscrire"
             },
-            createModal: {
-                title: "New Guide",
-                nameLabel: "Guide name",
-                namePlaceholder: "Ex: Riad des Lumières",
-                cancel: "Cancel",
-                create: "Create guide"
-            },
-            limitModal: {
-                title: "Guide limit reached 🏠",
-                desc: "You've reached the maximum number of guides for your current plan.",
-                upgrade: "🚀 Upgrade to Unlimited (Pro)",
-                or: "Or",
-                addon: "➕ Add just 1 guide",
-                loading: "Loading..."
-            },
-            addonSuccessModal: {
-                title: "Guide added! ✨",
-                heading: "Ready!",
-                desc: "Your limit has been increased by 1 guide. You can now create your new guide.",
-                cta: "Great, thanks!"
-            },
-            proModal: {
-                heading: "You're Pro!",
-                desc: "Your Pro subscription is active. Enjoy unlimited guides and all premium features.",
-                cta: "Start creating"
-            }
-        },
-        pricingPage: {
-            hero: {
-                badge: "Invest in excellence",
-                title1: "A pro guide,",
-                title2: "at the price of a coffee.",
-                subtitle: "Increase your direct revenue, reduce repetitive questions and offer a 5-star experience. Profitable from the very first booking."
-            },
-            popular: "Popular",
-            header: { login: "Login", signup: "Sign Up" },
-            compare: {
-                title: "Detailed Comparison",
-                subtitle: "Everything you need to succeed.",
-                features: {
-                    unlimited: "Unlimited Guides",
-                    maps: "Google Maps Integration",
-                    translation: "AI Translation (all languages)",
-                    domain: "Custom Domain Name",
-                    support: "Priority Support",
-                    whiteLabel: "White Label (No Branding)",
-                    analytics: "Advanced Analytics"
+            "compare": {
+                "title": "Comp",
+                "subtitle": "...",
+                "features": {
+                    "unlimited": "Illimité",
+                    "maps": "Maps",
+                    "translation": "IA",
+                    "domain": "Domaine",
+                    "support": "Support",
+                    "whiteLabel": "Marque",
+                    "analytics": "Analytiques"
                 },
-                values: { oneLang: "1 language", unlimited: "Unlimited", emailSupport: "Email", whatsappSupport: "WhatsApp 24/7" }
+                "values": {
+                    "oneLang": "1 langue",
+                    "unlimited": "Illimité",
+                    "emailSupport": "Email",
+                    "whatsappSupport": "WhatsApp"
+                }
             },
-            faqSection: {
-                title: "FAQ",
-                subtitle: "We're transparent. Here are the answers.",
-                items: [
-                    { q: "Can I change plans at any time?", a: "Yes, absolutely. You can switch between Basic and Pro from your dashboard. Changes take effect immediately and prorated automatically." },
-                    { q: "Is there a commitment?", a: "No commitment at all. Our subscriptions are monthly and you can cancel at any time with one click. No hidden fees." },
-                    { q: "How does payment work?", a: "We use Stripe, the world leader in secure online payments. Your banking details are never stored on our servers." },
-                    { q: "Is support included?", a: "Yes! Email support is included in all paid plans. The Pro plan gets priority access and a WhatsApp contact for ultra-fast assistance." }
+            "faqSection": {
+                "title": "FAQ",
+                "subtitle": "...",
+                "items": [
+                    {
+                        "q": "Q",
+                        "a": "A"
+                    }
                 ]
             },
-            trust: "Trusted by",
-            addonLabel: "/ extra guide"
+            "trust": "Garantie"
         },
-        guideLock: {
-            title: "Secure Access",
-            desc: "Please unlock this guide to access the access codes and sensitive information.",
-            demoCode: "Demo code"
+        "builder": {
+            "blocks": "blocs",
+            "chooseTheme": "Choisir Thème",
+            "reset": "Reset",
+            "viewGuide": "Voir Guide",
+            "catEssentials": "Essentiels",
+            "catTravel": "Voyage",
+            "catBusiness": "Business",
+            "guideStructure": "Structure",
+            "startHere": "Commencez ici",
+            "selectBlocks": "Sélectionnez des blocs",
+            "mobilePreview": "Aperçu Mobile",
+            "blockProperties": "Propriétés",
+            "editing": "Modification",
+            "selectToEdit": "Sélectionnez un bloc",
+            "paramsHere": "Réglages ici",
+            "backHome": "Retour",
+            "backDashboard": "Dashboard",
+            "editorMode": "Mode Édition",
+            "themeLabel": "Thème",
+            "qrLabel": "QR",
+            "createAccount": "Créer Compte",
+            "saveCreateAccount": "Sauver",
+            "online": "En ligne",
+            "confirmUnpublish": "Dépublier ?",
+            "unpublish": "Dépublier",
+            "publishSuccess": "Publié !",
+            "publishError": "Erreur",
+            "publish": "Publier",
+            "library": "Bibliothèque",
+            "mobileMode": "Mode Mobile",
+            "emptyGuide": "Vide",
+            "selectBlock": "Bloc ?",
+            "close": "Fermer",
+            "blockTitle": "Titre Bloc",
+            "designTheme": "Thèmes Design",
+            "upgradePro": "Passer Pro",
+            "unlock": "Débloquer",
+            "unlockPublish": "Publiez !",
+            "publishDesc": "Passez Pro.",
+            "seeOffers": "Offres",
+            "themes": {
+                "minimal-white": {
+                    "name": "Minimal",
+                    "desc": "Blanc"
+                },
+                "soft-gray": {
+                    "name": "Gris",
+                    "desc": "Doux"
+                },
+                "ocean": {
+                    "name": "Océan",
+                    "desc": "Bleu"
+                },
+                "nature": {
+                    "name": "Nature",
+                    "desc": "Vert"
+                },
+                "sunset": {
+                    "name": "Sunset",
+                    "desc": "Orange"
+                }
+            }
         },
-        settings: {
-            title: "Settings",
-            tabProfile: "Profile",
-            tabPlan: "Plan",
-            tabShop: "Shop",
-            personalInfo: "Personal Info",
-            fullName: "Full Name",
-            email: "Email",
-            saveProfile: "Save Profile",
-            yourPlan: "Your Plan",
-            currentPlan: "Current Plan",
-            active: "Active",
-            unlimitedGuides: "Unlimited Guides",
-            oneGuideIncluded: "1 guide included",
-            oneGuideDraft: "1 guide (draft)",
-            themesUnlocked: "Themes unlocked",
-            extraGuides: "extra guides",
-            upgradeToPro: "Upgrade to Pro",
-            youArePro: "You are Pro",
-            info: "Info",
-            noBillingAccount: "No billing account found.",
-            serverError: "Server error.",
-            manageSubscription: "Manage Subscription",
-            shop: "Shop (Add-ons)",
-            securePayment: "Secure Payment",
-            bestSeller: "Best Seller",
-            qrCanvas: "QR Code Canvas",
-            qrCanvasDesc: "A beautiful canvas with your QR Code for your property.",
-            hdPrint: "HD Print",
-            frameIncluded: "Frame included",
-            trackedShipping: "Tracked shipping",
-            shippingTtc: "Shipping included",
-            order: "Order",
-            requiredPro: "Pro Required",
-            extraGuide: "Extra Guide",
-            extraGuideDesc: "Add an extra guide to your subscription.",
-            perMonth: "per month",
-            proReserved: "Pro members only",
-            onlyProCanAdd: "Only Pro members can add extra guides.",
-            addGuide: "Add a Guide",
-            confirmAddGuide: "Do you want to add an extra guide for 20 DH/month?",
-            cancel: "Cancel",
-            confirm: "Confirm",
-            guideAdded: "Guide added!",
-            limitIncreased: "Your limit has been increased.",
-            error: "Error",
-            success: "Success"
+        "showcase": {
+            "tag": "Exemples",
+            "title": "Showcase",
+            "description": "Voir.",
+            "messageFrom": "De",
+            "viewFull": "Voir",
+            "example1": {
+                "type": "Loft",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Génial"
+            },
+            "example2": {
+                "type": "Villa",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Top"
+            },
+            "example3": {
+                "type": "Riad",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Super"
+            }
         },
-        ai: {
-            assistant: "AI Assistant",
-            online: "Online",
-            empty: "Ask me anything about your stay!",
-            thinking: "Thinking...",
-            placeholder: "Ask a question...",
-            error: "Sorry, there was an error."
+        "guideLock": {
+            "title": "Accès Sécurisé",
+            "desc": "Dévérouillez pour voir les codes.",
+            "demoCode": "Code Démo"
         },
-        builder: {
-            blocks: "blocks"
+        "auth": {
+            "login": {
+                "title": "Connexion",
+                "subtitle": "Bienvenue",
+                "email": "Email",
+                "password": "Mot de passe",
+                "forgot": "Oublié ?",
+                "error": "Erreur",
+                "submit": "Se connecter",
+                "noAccount": "Pas de compte ?",
+                "createFree": "Créer",
+                "resetLink": "Reset"
+            },
+            "signup": {
+                "title": "Inscription",
+                "subtitle": "Gratuit",
+                "successTitle": "Succès",
+                "successMsg": "Vérifiez vos emails",
+                "successDesc": "Lien envoyé",
+                "backToLogin": "Retour",
+                "firstName": "Prénom",
+                "lastName": "Nom",
+                "businessEmail": "Email pro",
+                "businessName": "Entreprise",
+                "phone": "Tel",
+                "passwordLabel": "Pass",
+                "passwordHint": "6+ cars",
+                "submit": "S'inscrire",
+                "hasAccount": "Déjà inscrit ?",
+                "signIn": "Se connecter"
+            }
         }
     },
-    es: {
-        common: {
-            getStarted: "Empezar",
-            login: "Iniciar sesión",
-            signup: "Regístrate",
-            tryFree: "Prueba gratis",
-            popular: "Más popular",
-            month: "/mes",
-            loading: "Cargando...",
-            choose: "Elegir",
-            viewGuide: "Ver guía completa",
-            more: "Ver más",
-            checkin: "Llegada",
-            qrCodeWall: "Escanea para probar",
-            checkout: "Salida",
-            location: "Ubicación",
-            viewOnMap: "Ver en el mapa",
-            wifi: "WiFi",
+    "es": {
+        "common": {
+            "getStarted": "Commencer",
+            "login": "Connexion",
+            "signup": "S'inscrire",
+            "tryFree": "Essayer Gratuitement",
+            "popular": "Le plus populaire",
+            "month": "/mois",
+            "loading": "Chargement...",
+            "choose": "Choisir",
+            "viewGuide": "Voir le guide complet",
+            "more": "Voir plus",
+            "checkin": "Arrivée",
+            "qrCodeWall": "Scannez pour tester",
+            "checkout": "Départ",
+            "location": "Localisation",
+            "viewOnMap": "Voir sur la carte",
+            "wifi": "WiFi",
+            "other": "Autre"
         },
-        socialProof: {
-            trustpilot: "4.9/5 por 500+ Anfitriones",
-            usedBy: "Usado por los mejores gestores",
-            autoTranslate: { title: "Auto-Traducido", desc: "Tus guías hablan su idioma." },
-            googleMaps: { title: "Google Maps Integrado", desc: "Maps directamente en la guía." }
+        "renderer": {
+            "welcome": "Bienvenue",
+            "wifi": "WiFi",
+            "access": "Codes d'accès",
+            "location": "Localisation",
+            "contact": "Contact",
+            "amenities": "Équipements",
+            "places": "À proximité",
+            "rules": "Règlement",
+            "tipOfTheDay": "Conseil du jour",
+            "sunday": "Dimanche",
+            "monday": "Lundi",
+            "tuesday": "Mardi",
+            "wednesday": "Mercredi",
+            "thursday": "Jeudi",
+            "friday": "Vendredi",
+            "saturday": "Samedi",
+            "lazy": "Détente",
+            "mood": "Motivé",
+            "discovery": "Découverte",
+            "tasty": "Gourmand",
+            "adventure": "Aventure",
+            "festive": "Festif",
+            "outing": "Sortie",
+            "brunch": "Un brunch à",
+            "explore": "Explorez",
+            "museums": "Visitez",
+            "taste": "Goûtez",
+            "excursion": "Une excursion",
+            "nightlife": "Vie nocturne",
+            "walk": "Une balade",
+            "secureAccess": "Accès Sécurisé",
+            "checkin": "Arrivée",
+            "checkout": "Départ",
+            "viewMap": "Voir sur la carte",
+            "upsells": "Extras",
+            "items": "éléments",
+            "empty": "Rien à afficher",
+            "searchPlaceholder": "Rechercher...",
+            "secureAccessDesc": "Entrez le code fourni par votre hôte."
         },
-        hero: {
-            tag: "PARA ANFITRIONES",
-            title: "Nunca repitas el código WiFi.",
-            subtitle: "Digitaliza tu guía de bienvenida. Mayor valoración, menos mensajes.",
-            cta: "Crear mi guía",
-            demo: "Ver ejemplo",
-            noCreditCard: "Sin tarjeta",
-            setupTime: "Configura en 2 min",
-        },
-        features: {
-            title: "Todo lo que necesitas.", subtitle: "Nada más.", description: "Herramientas poderosas.",
-            items: {
-                mobileFirst: { title: "100% Móvil", desc: "Abre instantáneo." },
-                secure: { title: "Códigos Seguros", desc: "Protege acceso WiFi." },
-                map: { title: "Mapa Interactivo", desc: "Recomendaciones un clic." },
-                live: { title: "Cambios en Vivo", desc: "Se actualiza ahora." },
-                translate: { title: "Auto Traducción", desc: "Detecta idioma del huésped." },
-                checklist: { title: "Check-lists", desc: "Instrucciones claras." }
+        "socialProof": {
+            "trustpilot": "4.9/5 par 500+ Hôtes",
+            "usedBy": "Utilisé par les meilleures conciergeries",
+            "autoTranslate": {
+                "title": "Auto-Traduit",
+                "desc": "Vos guides parlent la langue de vos invités."
+            },
+            "googleMaps": {
+                "title": "Google Maps Intégré",
+                "desc": "Google Maps directement dans le guide."
             }
         },
-        pricing: {
-            title: "Precios Transparentes",
-            subtitle: "Inicia gratis, escala después.",
-            bestOffer: "Mejor oferta:",
-            addon: "+ Extra",
-            enterprise: { title: "Enterprise?", desc: "Plan a medida.", cta: "Contactar" },
-            plans: {
-                demo: { name: "Descubrir", price: "Gratis", desc: "Pruébalo", button: "Crear guía", features: ['Acceso total', 'Vista móvil', 'Sin publicar'] },
-                basic: { name: "Esencial", desc: "Lanza tu primera", button: "Iniciar", features: ['Guía Digital', 'QR WiFi', 'Mapa', '1 Guía'] },
-                pro: { name: "Crecimiento", desc: "Maximiza ingresos", button: "Mejorar", features: ['Guías ilimitadas', 'Traductor automático', 'Soporte prioritario'] },
-                business: { name: "Agencia", desc: "Para portfolios", button: "Hablar", price: "Por medida", features: ['Ilimitado', 'Dashboard multi', 'Marca blanca'] }
-            },
-            trust: "Pago seguro"
+        "hero": {
+            "tag": "POUR LES HÔTES ET CONCIERGERIES",
+            "title": "Ne répétez plus jamais le code WiFi.",
+            "subtitle": "Digitalisez votre livret d'accueil. Offrez une expérience 5 étoiles, réduisez les messages de 50%, et augmentez vos avis positifs.",
+            "cta": "Créer mon guide gratuit",
+            "demo": "Voir un exemple",
+            "noCreditCard": "Pas de carte requise",
+            "setupTime": "Configuré en 2 min",
+            "badge": "Livret d'accueil digital #1",
+            "title1": "Pour vos invités,",
+            "title2": "une expérience 5 étoiles.",
+            "users": "Approuvé par 500+ hôtes"
         },
-        testimonials: {
-            title: "Aprobado por Profesionales",
-            subtitle: "Únase a más de 500 anfitriones que han automatizado su bienvenida.",
-            items: [
-                {
-                    name: "Jean-Philippe R.",
-                    role: "Superhost Airbnb (Marrakech)",
-                    text: "Mis huéspedes no paraban de pedir la clave del Wifi o cómo encender el aire acondicionado. Con Maplyo, lo tienen todo en su teléfono. Ahorré fácilmente 2 horas a la semana.",
-                    result: "-60% mensajes",
+        "features": {
+            "title": "Tout ce dont vous avez besoin.",
+            "subtitle": "Rien de superflu.",
+            "description": "Des outils puissants pour automatiser votre accueil.",
+            "badge": "Fonctionnalités",
+            "items": {
+                "mobileFirst": {
+                    "title": "100% Mobile First",
+                    "desc": "Pas d'application à télécharger."
                 },
-                {
-                    name: "Sofia B.",
-                    role: "Gerente de Conserjería (Casablanca)",
-                    text: "El cambio de juego para nosotros es la venta adicional. Ofrecemos servicios de limpieza o transporte directamente en la guía. Aumentó nuestros ingresos.",
-                    result: "+15% ingresos",
+                "secure": {
+                    "title": "Codes Sécurisés",
+                    "desc": "WiFi et boîtes à clés protégés."
                 },
+                "map": {
+                    "title": "Carte Interactive",
+                    "desc": "Intégrez vos lieux favoris."
+                },
+                "live": {
+                    "title": "Modifications Live",
+                    "desc": "Mise à jour instantanée."
+                },
+                "translate": {
+                    "title": "Traduction Auto",
+                    "desc": "Détecte la langue du visiteur."
+                },
+                "checklist": {
+                    "title": "Check-lists",
+                    "desc": "Instructions claires arrivée/départ."
+                }
+            }
+        },
+        "pricing": {
+            "title": "Tarification Transparente",
+            "subtitle": "Commencez gratuitement. Évoluez quand vous voulez.",
+            "bestOffer": "La meilleure offre du monde :",
+            "addon": "+20 DH / guide supplémentaire",
+            "trust": "Garantie 30 jours",
+            "enterprise": {
+                "title": "Solution Enterprise",
+                "desc": "Pour les pros (50+ biens).",
+                "cta": "Contacter"
+            },
+            "plans": {
+                "demo": {
+                    "name": "Découverte",
+                    "price": "Gratuit",
+                    "desc": "Testez sans carte.",
+                    "button": "Essayer",
+                    "features": [
+                        "Accès Créateur",
+                        "Aperçu Mobile"
+                    ]
+                },
+                "basic": {
+                    "name": "Essentiel",
+                    "desc": "Pour 1 propriété.",
+                    "button": "Démarrer",
+                    "features": [
+                        "Livret Digital",
+                        "WiFi QR",
+                        "1 Guide"
+                    ]
+                },
+                "pro": {
+                    "name": "Croissance",
+                    "desc": "Pour les pros.",
+                    "button": "Passer Pro",
+                    "features": [
+                        "Guides Illimités",
+                        "Traduction IA",
+                        "Support WhatsApp"
+                    ]
+                },
+                "business": {
+                    "name": "Agence",
+                    "desc": "Pour les portfolios.",
+                    "button": "Talk to Expert",
+                    "price": "Sur mesure",
+                    "features": [
+                        "Marque Blanche",
+                        "Multi-Propriétés"
+                    ]
+                }
+            }
+        },
+        "testimonials": {
+            "title": "Approuvé par les Pros",
+            "subtitle": "Rejoignez 500+ hôtes.",
+            "items": [
                 {
-                    name: "Karim M.",
-                    role: "Propietario de Riad (Fez)",
-                    text: "Muy profesional. El aspecto multilingüe es impresionante, mis clientes americanos y españoles están encantados de tener la información en su idioma sin que yo haga nada.",
-                    result: "5★ Reseñas",
+                    "name": "Jean R.",
+                    "role": "Superhost",
+                    "text": "Gain de temps énorme.",
+                    "result": "-60% messages"
                 }
             ]
         },
-        faq: {
-            title: "Preguntas Frecuentes",
-            subtitle: "Todo lo que necesitas saber para empezar.",
-            questions: [
+        "faq": {
+            "title": "Questions Fréquentes",
+            "subtitle": "Tout savoir.",
+            "questions": [
                 {
-                    q: "¿Necesito habilidades técnicas?",
-                    a: "Ninguna en absoluto. Es tan fácil como completar un perfil de red social. Tú añades la info, nosotros nos encargamos del diseño."
-                },
-                {
-                    q: "¿Cómo acceden los huéspedes a la guía?",
-                    a: "A través de un simple código QR que colocas en el alojamiento, o un enlace que envías por mensaje antes de su llegada."
-                },
-                {
-                    q: "¿Puedo actualizar la guía después de imprimir el código QR?",
-                    a: "¡Sí! Esa es la magia. Actualiza tu información (wifi, restaurantes...) y el código QR sigue siendo el mismo."
-                },
-                {
-                    q: "¿Hay algún compromiso o contrato?",
-                    a: "No, cancela cuando quieras."
+                    "q": "Gratuit ?",
+                    "a": "Oui, plan découverte dispo."
                 }
             ]
         },
-        footer: {
-            product: "Producto", support: "Soporte", legal: "Legal", desc: "Maplyo para anfitriones.",
-            links: { features: "Características", pricing: "Precios", testimonials: "Testimonios", roadmap: "Roadmap", help: "Ayuda", contact: "Contacto", privacy: "Privacidad", terms: "Términos", legal: "Aviso Legal" },
-            securePayment: "Pago Seguro", rights: "Derechos reservados."
-        },
-        cta: { title: "¿Listo para impresionar?", subtitle: "Únete a la nueva generación.", button: "Crear mi guía", subtext: "Cancelación flexible" },
-        tipOfTheDay: "Consejo del Día", sunday: "Dom", monday: "Lun", tuesday: "Mar", wednesday: "Mié", thursday: "Jue", friday: "Vie", saturday: "Sáb",
-        lazy: "Relajado", mood: "Motivado", discovery: "Descubrimiento", tasty: "Sabroso", adventure: "Aventura", festive: "Fiesta", outing: "Salida",
-        brunch: "Brunch", explore: "Explorar", museums: "Museos", taste: "Saborear", excursion: "Excursión", nightlife: "Noche", walk: "Paseo",
-        guide: { accessCode: "Códigos", locked: "Protegido por código.", enterCode: "Código de acceso", apartmentDoor: "Puerta", buildingDoor: "Edificio", gate: "Portón", notes: "Notas" },
-        ai: { assistant: "Asistente", online: "En línea", placeholder: "Mensaje...", empty: "Haz una pregunta.", error: "Error.", thinking: "Escribiendo..." },
-        qrCodeWall: {
-            titlePart1: "Comparte", titlePart2: "donde sea", description: "Un scan basta.",
-            items: { wifi: { title: "Wi-Fi", desc: "Pre-llenado" }, perpetual: { title: "Permanente", desc: "Válido siempre" }, remote: { title: "En Vivo", desc: "Actualizado" } },
-            visual: { welcome: "Bienvenido", scan: "Escanéame", detected: "Detectado", notification: { app: "Maplyo", title: "Abrir guía" } }
-        },
-        upsells: "Extras",
-        legalPage: {
-            titlePrivacy: "Privacidad", titleTerms: "Términos", lastUpdated: "Actualizado", effectiveDate: "En vigor",
-            privacy: { intro: "Política.", section1: { title: "Datos", items: ["Nombre"] }, section2: { title: "Fines", intro: "Para:", items: ["Proveer el servicio"] }, section3: { title: "Compartir", content: "No vendemos datos." }, section4: { title: "Seguridad", content: "Seguro." }, section5: { title: "Derechos", content: "Puedes pedir acceder.", contact: "contact@maplyo.com" } },
-            terms: { intro: "Términos.", section1: { title: "Servicio", content: "SaaS" }, section2: { title: "Pagos", items: ["Facturación"] }, section3: { title: "Responsabilidad", intro: "Deberes:", items: ["Veracidad"] }, section4: { title: "IP", content: "Propiedad" }, section5: { title: "Límites", content: "Sin daños indirectos" }, section6: { title: "Ley", content: "Marruecos" } }
-        },
-        auth: {
-            login: {
-                title: "Bienvenido 👋",
-                subtitle: "Inicia sesión para gestionar tus guías",
-                email: "Correo electrónico",
-                password: "Contraseña",
-                forgot: "¿Olvidaste?",
-                submit: "Iniciar sesión",
-                noAccount: "¿No tienes cuenta?",
-                createFree: "Crear una cuenta gratis",
-                resetLink: "¿Problema de conexión? Restablecer",
-                error: "Se produjo un error inesperado."
+        "footer": {
+            "product": "Produit",
+            "support": "Support",
+            "legal": "Légal",
+            "desc": "Maplyo aide les hôtes.",
+            "links": {
+                "features": "Fonctions",
+                "pricing": "Tarifs",
+                "testimonials": "Avis",
+                "roadmap": "Roadmap",
+                "help": "Aide",
+                "contact": "Contact",
+                "privacy": "Confidentialité",
+                "terms": "Conditions",
+                "legal": "Mentions"
             },
-            signup: {
-                title: "Únete a Maplyo",
-                subtitle: "Crea guías excepcionales en minutos.",
-                firstName: "Nombre",
-                lastName: "Apellido",
-                businessEmail: "Correo profesional",
-                businessName: "Nombre del negocio",
-                phone: "Teléfono",
-                passwordLabel: "Contraseña",
-                passwordHint: "Mínimo 6 caracteres",
-                submit: "Comenzar gratis",
-                hasAccount: "¿Ya tienes cuenta?",
-                signIn: "Iniciar sesión",
-                successTitle: "¡Cuenta creada!",
-                successMsg: "Se envió un correo de confirmación a",
-                successDesc: "Haz clic en el enlace para activar tu cuenta.",
-                backToLogin: "Volver al inicio de sesión"
+            "securePayment": "Paiement Sécurisé",
+            "rights": "Tous droits réservés."
+        },
+        "cta": {
+            "title": "Prêt à impressionner ?",
+            "subtitle": "Créez votre guide aujourd'hui.",
+            "button": "Créer mon guide",
+            "subtext": "Sans carte."
+        },
+        "guide": {
+            "accessCode": "Codes d'accès",
+            "locked": "Protégé par code.",
+            "enterCode": "Code d'accès",
+            "confirm": "Valider",
+            "apartmentDoor": "Porte :",
+            "buildingDoor": "Immeuble :",
+            "gate": "Portail :",
+            "notes": "Notes"
+        },
+        "guideBlocks": {
+            "checkIn": {
+                "title": "Arrivée"
+            },
+            "location": {
+                "notSet": "Non défini",
+                "address": "Adresse",
+                "openInMaps": "Ouvrir",
+                "copyAddress": "Copier",
+                "viewOnMap": "Voir sur la carte"
+            },
+            "contact": {
+                "host": "Hôte",
+                "yourHost": "Votre Hôte",
+                "phone": "Tel",
+                "openConversation": "Ouvrir"
+            },
+            "rules": {
+                "noRules": "Pas de règles"
+            },
+            "amenities": {
+                "noAmenities": "Pas d'équipements"
+            },
+            "faq": {
+                "noFaq": "Pas de FAQ",
+                "question": "Question",
+                "answer": "Réponse"
+            },
+            "trash": {
+                "title": "Bacs",
+                "items": "Ordures",
+                "recycling": "Recyclage"
+            },
+            "breakfast": {
+                "title": "Petit Déjeuner",
+                "menu": "Menu"
+            },
+            "transport": {
+                "noInfo": "Pas d'infos",
+                "call": "Appeler"
             }
         },
-        dashboard: {
-            title: "Mis Guías",
-            subtitle: "Gestiona las experiencias de tus huéspedes.",
-            newGuide: "Nueva Guía",
-            logout: "Cerrar sesión",
-            viewPublic: "Ver página pública",
-            passProToShare: "Pásate a Pro para compartir",
-            delete: "Eliminar",
-            emptyTitle: "Sin guías todavía",
-            emptyDesc: "Crea tu primera guía para ofrecer una experiencia excepcional a tus huéspedes.",
-            tryAi: "✨ Probar IA",
-            createManual: "Crear manualmente",
-            published: "En línea",
-            draft: "Borrador",
-            edit: "Editar",
-            sortRecent: "Recientes",
-            sortName: "Nombre",
-            confirmDelete: "¿Seguro que quieres eliminar esta guía? Esto es permanente.",
-            deleteError: "Error al eliminar.",
-            aiModal: {
-                title: "Creación Mágica ✨",
-                city: "Ciudad o Lugar",
-                cityPlaceholder: "Ej: Marrakech, Guéliz",
-                type: "Tipo",
-                typeAirbnb: "Airbnb / Apartamento",
-                typeHotel: "Hotel / Riad",
-                typeGuesthouse: "Casa de huéspedes",
-                audience: "Huéspedes",
-                audienceFamilies: "Familias",
-                audienceCouples: "Parejas",
-                audienceRemote: "Teletrabajadores",
-                audienceGroups: "Grupos",
-                generate: "Generar mi guía",
-                generating: "La IA está creando tu guía...",
-                generatingDesc: "Creando recomendaciones para"
+        "editor": {
+            "common": {
+                "title": "Titre",
+                "description": "Description",
+                "uploadImage": "Image",
+                "tags": "Tags",
+                "placeholderTags": "Wifi, Piscine...",
+                "time": "Heure",
+                "instructions": "Instructions",
+                "videoUrl": "Vidéo",
+                "location": "Lieu",
+                "address": "Adresse",
+                "placeholderAddress": "Rue...",
+                "mapUrl": "Maps",
+                "placeholderMap": "Lien Maps",
+                "phone": "Tel",
+                "placeholderPhone": "+33...",
+                "whatsapp": "WhatsApp",
+                "placeholderWhatsapp": "Numéro",
+                "email": "Email",
+                "placeholderEmail": "...",
+                "price": "Prix",
+                "placeholderPrice": "150 DH",
+                "placeholderReserve": "Réserver",
+                "cost": "Coût",
+                "placeholderWelcome": "Bienvenue...",
+                "linkUrl": "Lien",
+                "priceCheap": "Eco",
+                "priceModerate": "Moyen",
+                "priceExpensive": "Premium",
+                "day": "Jour",
+                "placeholderMonth": "JAN",
+                "placeholderDay": "15",
+                "placeholderTime": "19:00",
+                "other": "Autre",
+                "hours": "Heures",
+                "month": "Mois",
+                "placeholder": "..."
             },
-            createModal: {
-                title: "Nueva Guía",
-                nameLabel: "Nombre de la guía",
-                namePlaceholder: "Ej: Riad de las Luces",
-                cancel: "Cancelar",
-                create: "Crear guía"
+            "labels": {
+                "hero": "Accueil",
+                "wifi": "WiFi",
+                "access_codes": "Codes",
+                "location": "Localisation",
+                "contact": "Contact",
+                "amenities": "Équipements",
+                "places": "Lieux",
+                "rules": "Règlement",
+                "faq": "FAQ",
+                "trash": "Bacs",
+                "parking": "Parking",
+                "breakfast": "Petit Déj",
+                "transport": "Transport",
+                "checkin": "Arrivée",
+                "checkout": "Départ",
+                "documents": "Documents",
+                "events": "Événements",
+                "upsells": "Extras",
+                "embed": "Iframe",
+                "ai_assistant": "IA"
             },
-            limitModal: {
-                title: "Límite de guías alcanzado 🏠",
-                desc: "Has alcanzado el límite de guías de tu plan actual.",
-                upgrade: "🚀 Actualizar a ilimitado (Pro)",
-                or: "O",
-                addon: "➕ Agregar solo 1 guía",
-                loading: "Cargando..."
+            "access_codes": {
+                "security": "Sécurité",
+                "mode": "Affichage",
+                "alwaysVisible": "Toujours visible",
+                "unlockByCode": "Par code",
+                "unlockCode": "Code",
+                "unlockCodeDesc": "Requis.",
+                "aptCode": "Porte",
+                "buildingCode": "Immeuble",
+                "gateCode": "Portail",
+                "notes": "Notes"
             },
-            addonSuccessModal: {
-                title: "¡Guía añadida! ✨",
-                heading: "¡Listo!",
-                desc: "Tu límite ha aumentado en 1 guía. Ya puedes crear tu nueva guía.",
-                cta: "¡Genial, gracias!"
+            "wifi": {
+                "networkName": "Nom WiFi",
+                "password": "Mot de passe",
+                "notes": "Notes"
             },
-            proModal: {
-                heading: "¡Eres Pro!",
-                desc: "Tu suscripción Pro está activa. Disfruta guías ilimitadas y todas las funciones premium.",
-                cta: "Empezar a crear"
+            "documents": {
+                "name": "Nom",
+                "url": "Lien",
+                "add": "Ajouter"
+            },
+            "places": {
+                "aiButton": "IA",
+                "name": "Nom",
+                "add": "Ajouter"
+            },
+            "events": {
+                "aiButton": "IA",
+                "add": "Ajouter"
+            },
+            "upsells": {
+                "buttonText": "Bouton",
+                "buttonLink": "Lien",
+                "add": "Ajouter"
+            },
+            "embed": {
+                "url": "Iframe",
+                "warning": "Attention"
+            },
+            "checkin": {
+                "timePlaceholder": "15:00",
+                "instrPlaceholder": "Procédure..."
+            },
+            "contact": {
+                "nameLabel": "Nom",
+                "namePlaceholder": "Concierge"
+            },
+            "rules": {
+                "title": "Règle",
+                "placeholder": "...",
+                "add": "Ajouter"
+            },
+            "amenities": {
+                "title": "Équipement",
+                "placeholder": "...",
+                "add": "Ajouter"
+            },
+            "faq": {
+                "question": "Q",
+                "qPlaceholder": "...",
+                "answer": "R",
+                "aPlaceholder": "...",
+                "add": "Ajouter"
+            },
+            "trash": {
+                "instrPlaceholder": "Tri...",
+                "dayTrash": "Ordures",
+                "dayTrashPlaceholder": "Lundi",
+                "dayRecycling": "Recyclage",
+                "dayRecyclingPlaceholder": "Jeudi",
+                "location": "Bacs",
+                "locPlaceholder": "Garage",
+                "photoLocal": "Photo"
+            },
+            "parking": {
+                "instrPlaceholder": "N°42",
+                "locPlaceholder": "Rue...",
+                "costPlaceholder": "Gratuit",
+                "photo": "Photo"
+            },
+            "breakfast": {
+                "hoursPlaceholder": "07:00 - 10:30",
+                "locPlaceholder": "Salle à manger",
+                "menu": "Menu",
+                "menuPlaceholder": "Café, thé..."
+            },
+            "transport": {
+                "bus": "Bus",
+                "train": "Train",
+                "taxi": "Taxi",
+                "bike": "Vélo",
+                "linePlaceholder": "Ligne 4",
+                "stop": "Arrêt",
+                "stopPlaceholder": "Arrêt...",
+                "add": "Ajouter"
             }
         },
-        pricingPage: {
-            hero: {
-                badge: "Invierte en la excelencia",
-                title1: "Una guía pro,",
-                title2: "al precio de un café.",
-                subtitle: "Aumenta tus ingresos directos, reduce las preguntas repetitivas y ofrece una experiencia 5 estrellas. Rentable desde la primera reserva."
+        "dashboard": {
+            "title": "Mes Guides",
+            "subtitle": "Gérez vos biens.",
+            "newGuide": "Nouveau Guide",
+            "logout": "Déconnexion",
+            "viewPublic": "Page publique",
+            "passProToShare": "Passer Pro",
+            "delete": "Supprimer",
+            "emptyTitle": "Aucun guide",
+            "emptyDesc": "Créez votre premier guide.",
+            "tryAi": "✨ IA",
+            "createManual": "Manuel",
+            "published": "En ligne",
+            "draft": "Brouillon",
+            "edit": "Modifier",
+            "sortRecent": "Récent",
+            "sortName": "Nom",
+            "confirmDelete": "Supprimer ?",
+            "deleteError": "Erreur",
+            "aiModal": {
+                "title": "Magie ✨",
+                "city": "Ville",
+                "cityPlaceholder": "Marrakech",
+                "type": "Type",
+                "typeAirbnb": "Airbnb",
+                "typeHotel": "Hôtel",
+                "typeGuesthouse": "Maison",
+                "audience": "Public",
+                "audienceFamilies": "Familles",
+                "audienceCouples": "Parejas",
+                "audienceRemote": "Pros",
+                "audienceGroups": "Groupes",
+                "generate": "Générer",
+                "generating": "IA...",
+                "generatingDesc": "Calcul..."
             },
-            popular: "Popular",
-            header: { login: "Iniciar sesión", signup: "Regístrate" },
-            compare: {
-                title: "Comparativa Detallada",
-                subtitle: "Todo lo que necesitas para tener éxito.",
-                features: {
-                    unlimited: "Guías Ilimitadas",
-                    maps: "Integración Google Maps",
-                    translation: "Traducción IA (todos los idiomas)",
-                    domain: "Dominio personalizado",
-                    support: "Soporte Prioritario",
-                    whiteLabel: "Marca Blanca (Sin Branding)",
-                    analytics: "Analíticas Avanzadas"
+            "createModal": {
+                "title": "Nouveau Guide",
+                "nameLabel": "Nom",
+                "namePlaceholder": "Nom...",
+                "cancel": "Annuler",
+                "create": "Créer"
+            },
+            "limitModal": {
+                "title": "Limite",
+                "desc": "Limite atteinte.",
+                "upgrade": "Passer Pro",
+                "or": "Ou",
+                "addon": "Ajouter 1",
+                "loading": "..."
+            },
+            "addonSuccessModal": {
+                "title": "Succès",
+                "heading": "Prêt !",
+                "desc": "Limite augmentée.",
+                "cta": "Merci"
+            }
+        },
+        "settings": {
+            "title": "Réglages",
+            "tabProfile": "Profil",
+            "tabPlan": "Plan",
+            "tabShop": "Boutique",
+            "personalInfo": "Infos",
+            "fullName": "Nom",
+            "email": "Email",
+            "saveProfile": "Sauver",
+            "yourPlan": "Votre Plan",
+            "currentPlan": "Plan actuel",
+            "active": "Actif",
+            "unlimitedGuides": "Illimité",
+            "oneGuideIncluded": "1 guide",
+            "oneGuideDraft": "1 brouillon",
+            "themesUnlocked": "Thèmes OK",
+            "extraGuides": "Extras",
+            "upgradeToPro": "Passer Pro",
+            "youArePro": "Vous êtes Pro",
+            "info": "Info",
+            "noBillingAccount": "Pas de compte",
+            "serverError": "Erreur",
+            "manageSubscription": "Gérer",
+            "shop": "Boutique",
+            "securePayment": "Sécurisé",
+            "bestSeller": "Top",
+            "qrCanvas": "Tableau QR",
+            "qrCanvasDesc": "Tableau...",
+            "hdPrint": "HD",
+            "frameIncluded": "Cadre",
+            "trackedShipping": "Suivi",
+            "shippingTtc": "Livraison OK",
+            "order": "Commander",
+            "requiredPro": "Pro Requis",
+            "extraGuide": "Extra",
+            "extraGuideDesc": "Ajouter guide.",
+            "perMonth": "/mois",
+            "proReserved": "Pro",
+            "onlyProCanAdd": "Pro requis",
+            "addGuide": "Ajouter",
+            "confirmAddGuide": "Ajouter (20 DH/m) ?",
+            "cancel": "Non",
+            "confirm": "Oui",
+            "guideAdded": "OK",
+            "limitIncreased": "OK",
+            "error": "Erreur",
+            "success": "OK"
+        },
+        "ai": {
+            "assistant": "IA",
+            "online": "IA OK",
+            "placeholder": "Message...",
+            "empty": "Question ?",
+            "error": "Erreur",
+            "thinking": "..."
+        },
+        "qrCodeWall": {
+            "titlePart1": "Partagez",
+            "titlePart2": "partout",
+            "description": "Scannez.",
+            "items": {
+                "wifi": {
+                    "title": "WiFi",
+                    "desc": "Connecté"
                 },
-                values: { oneLang: "1 idioma", unlimited: "Ilimitado", emailSupport: "Email", whatsappSupport: "WhatsApp 24/7" }
+                "perpetual": {
+                    "title": "Permanent",
+                    "desc": "Lien valide"
+                },
+                "remote": {
+                    "title": "Live",
+                    "desc": "Direct"
+                }
             },
-            faqSection: {
-                title: "Preguntas Frecuentes",
-                subtitle: "Somos transparentes. Aquí las respuestas.",
-                items: [
-                    { q: "¿Puedo cambiar de plan en cualquier momento?", a: "Sí, absolutamente. Puedes cambiar entre Basic y Pro desde tu dashboard. El cambio es inmediato y el prorrateo es automático." },
-                    { q: "¿Hay algún compromiso?", a: "No hay compromiso. Nuestras suscripciones son mensuales y puedes cancelar en cualquier momento con un clic. Sin cargos ocultos." },
-                    { q: "¿Cómo funciona el pago?", a: "Usamos Stripe, el líder mundial en pagos seguros online. Tus datos bancarios nunca se almacenan en nuestros servidores." },
-                    { q: "¿El soporte está incluido?", a: "¡Sí! El soporte por email está incluido en todos los planes de pago. El plan Pro tiene acceso prioritario y contacto por WhatsApp." }
+            "visual": {
+                "welcome": "Bienvenue",
+                "scan": "Scannez",
+                "detected": "Trouvé",
+                "notification": {
+                    "app": "Maplyo",
+                    "title": "Ouvrir"
+                }
+            }
+        },
+        "upsells": "Extras",
+        "legalPage": {
+            "titlePrivacy": "Privacité",
+            "titleTerms": "Termes",
+            "lastUpdated": "MAJ :",
+            "effectiveDate": "Date :",
+            "privacy": {
+                "intro": "...",
+                "section1": {
+                    "title": "1",
+                    "items": [
+                        "1"
+                    ]
+                },
+                "section2": {
+                    "title": "2",
+                    "intro": "2",
+                    "items": [
+                        "2"
+                    ]
+                },
+                "section3": {
+                    "title": "3",
+                    "content": "3"
+                },
+                "section4": {
+                    "title": "4",
+                    "content": "4"
+                },
+                "section5": {
+                    "title": "5",
+                    "content": "5",
+                    "contact": "..."
+                }
+            },
+            "terms": {
+                "intro": "...",
+                "section1": {
+                    "title": "1",
+                    "content": "1"
+                },
+                "section2": {
+                    "title": "2",
+                    "items": [
+                        "2"
+                    ]
+                },
+                "section3": {
+                    "title": "3",
+                    "intro": "3",
+                    "items": [
+                        "3"
+                    ]
+                },
+                "section4": {
+                    "title": "4",
+                    "content": "4"
+                },
+                "section5": {
+                    "title": "5",
+                    "content": "5"
+                },
+                "section6": {
+                    "title": "6",
+                    "content": "6"
+                }
+            }
+        },
+        "pricingPage": {
+            "hero": {
+                "badge": "Top",
+                "title1": "Pro,",
+                "title2": "pas cher.",
+                "subtitle": "..."
+            },
+            "popular": "Top",
+            "header": {
+                "login": "Dentrée",
+                "signup": "S'inscrire"
+            },
+            "compare": {
+                "title": "Comp",
+                "subtitle": "...",
+                "features": {
+                    "unlimited": "Illimité",
+                    "maps": "Maps",
+                    "translation": "IA",
+                    "domain": "Domaine",
+                    "support": "Support",
+                    "whiteLabel": "Marque",
+                    "analytics": "Analytiques"
+                },
+                "values": {
+                    "oneLang": "1 langue",
+                    "unlimited": "Illimité",
+                    "emailSupport": "Email",
+                    "whatsappSupport": "WhatsApp"
+                }
+            },
+            "faqSection": {
+                "title": "FAQ",
+                "subtitle": "...",
+                "items": [
+                    {
+                        "q": "Q",
+                        "a": "A"
+                    }
                 ]
             },
-            trust: "Con la confianza de",
-            addonLabel: "/ guía extra"
+            "trust": "Garantie"
         },
-        guideLock: {
-            title: "Acceso Seguro",
-            desc: "Por favor desbloquea esta guía para acceder a los códigos de acceso e información sensible.",
-            demoCode: "Código de demostración"
+        "builder": {
+            "blocks": "blocs",
+            "chooseTheme": "Choisir Thème",
+            "reset": "Reset",
+            "viewGuide": "Voir Guide",
+            "catEssentials": "Essentiels",
+            "catTravel": "Voyage",
+            "catBusiness": "Business",
+            "guideStructure": "Structure",
+            "startHere": "Commencez ici",
+            "selectBlocks": "Sélectionnez des blocs",
+            "mobilePreview": "Aperçu Mobile",
+            "blockProperties": "Propriétés",
+            "editing": "Modification",
+            "selectToEdit": "Sélectionnez un bloc",
+            "paramsHere": "Réglages ici",
+            "backHome": "Retour",
+            "backDashboard": "Dashboard",
+            "editorMode": "Mode Édition",
+            "themeLabel": "Thème",
+            "qrLabel": "QR",
+            "createAccount": "Créer Compte",
+            "saveCreateAccount": "Sauver",
+            "online": "En ligne",
+            "confirmUnpublish": "Dépublier ?",
+            "unpublish": "Dépublier",
+            "publishSuccess": "Publié !",
+            "publishError": "Erreur",
+            "publish": "Publier",
+            "library": "Bibliothèque",
+            "mobileMode": "Mode Mobile",
+            "emptyGuide": "Vide",
+            "selectBlock": "Bloc ?",
+            "close": "Fermer",
+            "blockTitle": "Titre Bloc",
+            "designTheme": "Thèmes Design",
+            "upgradePro": "Passer Pro",
+            "unlock": "Débloquer",
+            "unlockPublish": "Publiez !",
+            "publishDesc": "Passez Pro.",
+            "seeOffers": "Offres",
+            "themes": {
+                "minimal-white": {
+                    "name": "Minimal",
+                    "desc": "Blanc"
+                },
+                "soft-gray": {
+                    "name": "Gris",
+                    "desc": "Doux"
+                },
+                "ocean": {
+                    "name": "Océan",
+                    "desc": "Bleu"
+                },
+                "nature": {
+                    "name": "Nature",
+                    "desc": "Vert"
+                },
+                "sunset": {
+                    "name": "Sunset",
+                    "desc": "Orange"
+                }
+            }
         },
-        settings: {
-            title: "Ajustes",
-            tabProfile: "Perfil",
-            tabPlan: "Plan",
-            tabShop: "Tienda",
-            personalInfo: "Información Personal",
-            fullName: "Nombre Completo",
-            email: "Email",
-            saveProfile: "Guardar Perfil",
-            yourPlan: "Tu Plan",
-            currentPlan: "Plan Actual",
-            active: "Activo",
-            unlimitedGuides: "Guías Ilimitadas",
-            oneGuideIncluded: "1 guía incluida",
-            oneGuideDraft: "1 guía (borrador)",
-            themesUnlocked: "Temas desbloqueados",
-            extraGuides: "guías extra",
-            upgradeToPro: "Pasar a Pro",
-            youArePro: "Eres Pro",
-            info: "Info",
-            noBillingAccount: "No se encontró cuenta de facturación.",
-            serverError: "Error de servidor.",
-            manageSubscription: "Gestionar Suscripción",
-            shop: "Tienda (Add-ons)",
-            securePayment: "Pago Seguro",
-            bestSeller: "Best Seller",
-            qrCanvas: "Cuadro QR Code",
-            qrCanvasDesc: "Un hermoso cuadro con tu QR Code para tu alojamiento.",
-            hdPrint: "Impresión HD",
-            frameIncluded: "Marco incluido",
-            trackedShipping: "Envío con seguimiento",
-            shippingTtc: "Envío incluido",
-            order: "Pedir",
-            requiredPro: "Pro Requerido",
-            extraGuide: "Guía Extra",
-            extraGuideDesc: "Añade una guía extra a tu suscripción.",
-            perMonth: "por mes",
-            proReserved: "Solo para miembros Pro",
-            onlyProCanAdd: "Solo los miembros Pro pueden añadir guías extra.",
-            addGuide: "Añadir Guía",
-            confirmAddGuide: "¿Quieres añadir una guía extra por 20 DH/mes?",
-            cancel: "Cancelar",
-            confirm: "Confirmar",
-            guideAdded: "¡Guía añadida!",
-            limitIncreased: "Tu límite ha aumentado.",
-            error: "Error",
-            success: "Éxito"
+        "showcase": {
+            "tag": "Exemples",
+            "title": "Showcase",
+            "description": "Voir.",
+            "messageFrom": "De",
+            "viewFull": "Voir",
+            "example1": {
+                "type": "Loft",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Génial"
+            },
+            "example2": {
+                "type": "Villa",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Top"
+            },
+            "example3": {
+                "type": "Riad",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Super"
+            }
         },
-        ai: {
-            assistant: "Asistente IA",
-            online: "En línea",
-            empty: "¡Pregúntame cualquier cosa sobre tu estancia!",
-            thinking: "Pensando...",
-            placeholder: "Haz una pregunta...",
-            error: "Lo siento, hubo un error."
+        "guideLock": {
+            "title": "Accès Sécurisé",
+            "desc": "Dévérouillez pour voir les codes.",
+            "demoCode": "Code Démo"
         },
-        builder: {
-            blocks: "bloques"
+        "auth": {
+            "login": {
+                "title": "Connexion",
+                "subtitle": "Bienvenue",
+                "email": "Email",
+                "password": "Mot de passe",
+                "forgot": "Oublié ?",
+                "error": "Erreur",
+                "submit": "Se connecter",
+                "noAccount": "Pas de compte ?",
+                "createFree": "Créer",
+                "resetLink": "Reset"
+            },
+            "signup": {
+                "title": "Inscription",
+                "subtitle": "Gratuit",
+                "successTitle": "Succès",
+                "successMsg": "Vérifiez vos emails",
+                "successDesc": "Lien envoyé",
+                "backToLogin": "Retour",
+                "firstName": "Prénom",
+                "lastName": "Nom",
+                "businessEmail": "Email pro",
+                "businessName": "Entreprise",
+                "phone": "Tel",
+                "passwordLabel": "Pass",
+                "passwordHint": "6+ cars",
+                "submit": "S'inscrire",
+                "hasAccount": "Déjà inscrit ?",
+                "signIn": "Se connecter"
+            }
         }
     },
-    ar: {
-        common: {
-            getStarted: "ابدأ", login: "تسجيل الدخول", signup: "اشتراك", tryFree: "جرب مجاناً", popular: "الأكثر شيوعاً", month: "/شهر", loading: "جاري التحميل...", choose: "اختر", viewGuide: "عرض الدليل", more: "عرض المزيد", checkin: "تسجيل الوصول", qrCodeWall: "امسح للتجربة", checkout: "المغادرة", location: "الموقع", viewOnMap: "عرض على الخريطة", wifi: "واي فاي",
+    "ar": {
+        "common": {
+            "getStarted": "Commencer",
+            "login": "Connexion",
+            "signup": "S'inscrire",
+            "tryFree": "Essayer Gratuitement",
+            "popular": "Le plus populaire",
+            "month": "/mois",
+            "loading": "Chargement...",
+            "choose": "Choisir",
+            "viewGuide": "Voir le guide complet",
+            "more": "Voir plus",
+            "checkin": "Arrivée",
+            "qrCodeWall": "Scannez pour tester",
+            "checkout": "Départ",
+            "location": "Localisation",
+            "viewOnMap": "Voir sur la carte",
+            "wifi": "WiFi",
+            "other": "Autre"
         },
-        socialProof: {
-            trustpilot: "4.9/5 بواسطة +500", usedBy: "يستخدمه أفضل المديرين", autoTranslate: { title: "مترجم آلياً", desc: "دليلك يتحدث لغتهم." }, googleMaps: { title: "خرائط جوجل مدمجة", desc: "الخرائط في الدليل مباشرة." }
+        "renderer": {
+            "welcome": "Bienvenue",
+            "wifi": "WiFi",
+            "access": "Codes d'accès",
+            "location": "Localisation",
+            "contact": "Contact",
+            "amenities": "Équipements",
+            "places": "À proximité",
+            "rules": "Règlement",
+            "tipOfTheDay": "Conseil du jour",
+            "sunday": "Dimanche",
+            "monday": "Lundi",
+            "tuesday": "Mardi",
+            "wednesday": "Mercredi",
+            "thursday": "Jeudi",
+            "friday": "Vendredi",
+            "saturday": "Samedi",
+            "lazy": "Détente",
+            "mood": "Motivé",
+            "discovery": "Découverte",
+            "tasty": "Gourmand",
+            "adventure": "Aventure",
+            "festive": "Festif",
+            "outing": "Sortie",
+            "brunch": "Un brunch à",
+            "explore": "Explorez",
+            "museums": "Visitez",
+            "taste": "Goûtez",
+            "excursion": "Une excursion",
+            "nightlife": "Vie nocturne",
+            "walk": "Une balade",
+            "secureAccess": "Accès Sécurisé",
+            "checkin": "Arrivée",
+            "checkout": "Départ",
+            "viewMap": "Voir sur la carte",
+            "upsells": "Extras",
+            "items": "éléments",
+            "empty": "Rien à afficher",
+            "searchPlaceholder": "Rechercher...",
+            "secureAccessDesc": "Entrez le code fourni par votre hôte."
         },
-        hero: {
-            tag: "للمضيفين", title: "لا تكرر الرمز أبداً.", subtitle: "حول دليلك للرقمية. تجربة خمس نجوم.", cta: "إنشاء دليلي مجاناً", demo: "مشاهدة مثال", noCreditCard: "بدون بطاقة", setupTime: "مُعدّ في دقيقتين",
-        },
-        features: {
-            title: "كل ما تحتاجه.", subtitle: "دون تعقيد.", description: "أدوات قوية.",
-            items: { mobileFirst: { title: "موبايل أولاً", desc: "يُفتح فوراً." }, secure: { title: "رموز آمنة", desc: "أقفال محمية." }, map: { title: "تفاعلي", desc: "خريطة مدمجة." }, live: { title: "تعديل مباشر", desc: "الكل مُدرج." }, translate: { title: "ترجمة آلية", desc: "لغة الزائر." }, checklist: { title: "قوائم", desc: "إرشادات." } }
-        },
-        pricing: {
-            title: "تسعير واضح", subtitle: "ابدأ مجاناً، وقم بالترقية عند الحاجة.", bestOffer: "أفضل عرض:", addon: "+ إضافي",
-            enterprise: { title: "للشركات؟", desc: "حل مخصص.", cta: "اتصل بنا" },
-            plans: {
-                demo: { name: "اكتشاف", price: "مجاني", desc: "تجربة الخدمة", button: "إنشاء دليل", features: ['وصول كامل', 'معاينة الجوال', 'عدم النشر'] },
-                basic: { name: "أساسي", desc: "لإطلاق عقارك الأول.", button: "ابدأ", features: ['دليل رقمي', 'واي فاي فوري', 'خريطة', 'دليل واحد'] },
-                pro: { name: "نمو", desc: "تحسين الدخل.", button: "تحديث", features: ['أدلة لا محدودة', 'ترجمة تلقائية', 'دعم واتساب'] },
-                business: { name: "وكالة", desc: "للمجموعات", button: "تواصل", price: "مخصص", features: ['لا محدود', 'لوحة تحكم', 'علامة بيضاء'] }
+        "socialProof": {
+            "trustpilot": "4.9/5 par 500+ Hôtes",
+            "usedBy": "Utilisé par les meilleures conciergeries",
+            "autoTranslate": {
+                "title": "Auto-Traduit",
+                "desc": "Vos guides parlent la langue de vos invités."
             },
-            trust: "دفع آمن SSL"
+            "googleMaps": {
+                "title": "Google Maps Intégré",
+                "desc": "Google Maps directement dans le guide."
+            }
         },
-        testimonials: {
-            title: "معتمد من المحترفين",
-            subtitle: "انضم إلى أكثر من 500 مضيف قاموا بأتمتة استقبالهم.",
-            items: [
-                {
-                    name: "جون فيليب ر.",
-                    role: "مضيف مميز في Airbnb (مراكش)",
-                    text: "كان ضيوفي يسألون باستمرار عن رمز الواي فاي أو كيفية تشغيل مكيف الهواء. مع Maplyo، كل شيء موجود على هواتفهم. لقد وفرت ساعتين في الأسبوع بسهولة.",
-                    result: "-60% من الرسائل"
+        "hero": {
+            "tag": "POUR LES HÔTES ET CONCIERGERIES",
+            "title": "Ne répétez plus jamais le code WiFi.",
+            "subtitle": "Digitalisez votre livret d'accueil. Offrez une expérience 5 étoiles, réduisez les messages de 50%, et augmentez vos avis positifs.",
+            "cta": "Créer mon guide gratuit",
+            "demo": "Voir un exemple",
+            "noCreditCard": "Pas de carte requise",
+            "setupTime": "Configuré en 2 min",
+            "badge": "Livret d'accueil digital #1",
+            "title1": "Pour vos invités,",
+            "title2": "une expérience 5 étoiles.",
+            "users": "Approuvé par 500+ hôtes"
+        },
+        "features": {
+            "title": "Tout ce dont vous avez besoin.",
+            "subtitle": "Rien de superflu.",
+            "description": "Des outils puissants pour automatiser votre accueil.",
+            "badge": "Fonctionnalités",
+            "items": {
+                "mobileFirst": {
+                    "title": "100% Mobile First",
+                    "desc": "Pas d'application à télécharger."
                 },
-                {
-                    name: "صوفيا ب.",
-                    role: "مديرة شركة كونسيرج (الدار البيضاء)",
-                    text: "نقطة التحول بالنسبة لنا هي الخدمات الإضافية. نحن نقدم خدمات تنظيف أو نقل مباشرة في الدليل. لقد عزز ذلك من إيراداتنا.",
-                    result: "+15% إيرادات"
+                "secure": {
+                    "title": "Codes Sécurisés",
+                    "desc": "WiFi et boîtes à clés protégés."
                 },
+                "map": {
+                    "title": "Carte Interactive",
+                    "desc": "Intégrez vos lieux favoris."
+                },
+                "live": {
+                    "title": "Modifications Live",
+                    "desc": "Mise à jour instantanée."
+                },
+                "translate": {
+                    "title": "Traduction Auto",
+                    "desc": "Détecte la langue du visiteur."
+                },
+                "checklist": {
+                    "title": "Check-lists",
+                    "desc": "Instructions claires arrivée/départ."
+                }
+            }
+        },
+        "pricing": {
+            "title": "Tarification Transparente",
+            "subtitle": "Commencez gratuitement. Évoluez quand vous voulez.",
+            "bestOffer": "La meilleure offre du monde :",
+            "addon": "+20 DH / guide supplémentaire",
+            "trust": "Garantie 30 jours",
+            "enterprise": {
+                "title": "Solution Enterprise",
+                "desc": "Pour les pros (50+ biens).",
+                "cta": "Contacter"
+            },
+            "plans": {
+                "demo": {
+                    "name": "Découverte",
+                    "price": "Gratuit",
+                    "desc": "Testez sans carte.",
+                    "button": "Essayer",
+                    "features": [
+                        "Accès Créateur",
+                        "Aperçu Mobile"
+                    ]
+                },
+                "basic": {
+                    "name": "Essentiel",
+                    "desc": "Pour 1 propriété.",
+                    "button": "Démarrer",
+                    "features": [
+                        "Livret Digital",
+                        "WiFi QR",
+                        "1 Guide"
+                    ]
+                },
+                "pro": {
+                    "name": "Croissance",
+                    "desc": "Pour les pros.",
+                    "button": "Passer Pro",
+                    "features": [
+                        "Guides Illimités",
+                        "Traduction IA",
+                        "Support WhatsApp"
+                    ]
+                },
+                "business": {
+                    "name": "Agence",
+                    "desc": "Pour les portfolios.",
+                    "button": "Talk to Expert",
+                    "price": "Sur mesure",
+                    "features": [
+                        "Marque Blanche",
+                        "Multi-Propriétés"
+                    ]
+                }
+            }
+        },
+        "testimonials": {
+            "title": "Approuvé par les Pros",
+            "subtitle": "Rejoignez 500+ hôtes.",
+            "items": [
                 {
-                    name: "كريم م.",
-                    role: "مالك رياض (فاس)",
-                    text: "محترف جداً. الجانب متعدد اللغات مبهر، عملائي الأمريكيون والمقربون سعداء جداً بالحصول على المعلومات بلغتهم دون أن أفعل أي شيء.",
-                    result: "5★ تقييمات"
+                    "name": "Jean R.",
+                    "role": "Superhost",
+                    "text": "Gain de temps énorme.",
+                    "result": "-60% messages"
                 }
             ]
         },
-        faq: {
-            title: "الأسئلة الشائعة",
-            subtitle: "كل ما تحتاج لمعرفته للبدء.",
-            questions: [
+        "faq": {
+            "title": "Questions Fréquentes",
+            "subtitle": "Tout savoir.",
+            "questions": [
                 {
-                    q: "هل أحتاج إلى مهارات تقنية؟",
-                    a: "لا على الإطلاق. الأمر سهل مثل ملء ملف شخصي على وسائل التواصل الاجتماعي. أنت تضيف المعلومات، ونحن نتعامل مع التصميم."
-                },
-                {
-                    q: "كيف يصل الضيوف إلى الدليل؟",
-                    a: "عبر رمز QR بسيط تضعه في مكان الإقامة، أو رابط ترسله في رسالة قبل وصولهم."
-                },
-                {
-                    q: "هل يمكنني تحديث الدليل بعد طباعة رمز الـ QR؟",
-                    a: "نعم! هذا هو السحر. قم بتحديث معلوماتك (الواي فاي، المطاعم...) وسيبقى رمز الـ QR كما هو تماماً."
-                },
-                {
-                    q: "هل هناك أي التزام أو عقد؟",
-                    a: "لا، يمكنك الإلغاء في أي وقت."
+                    "q": "Gratuit ?",
+                    "a": "Oui, plan découverte dispo."
                 }
             ]
         },
-        footer: {
-            product: "المنتج", support: "الدعم", legal: "قانوني", desc: "مابليو للمضيفين.",
-            links: { features: "الميزات", pricing: "التسعير", testimonials: "شهادات", roadmap: "خارطة طريق", help: "مساعدة", contact: "اتصال", privacy: "الخصوصية", terms: "الشروط", legal: "إشعار" },
-            securePayment: "دفع آمن", rights: "جميع الحقوق محفوظة."
-        },
-        cta: { title: "جاهز للتميز؟", subtitle: "انضم للجيل القادم.", button: "إنشاء دليلي", subtext: "إلغاء في أي وقت" },
-        tipOfTheDay: "نصيحة اليوم", sunday: "الأحد", monday: "الإثنين", tuesday: "الثلاثاء", wednesday: "الأربعاء", thursday: "الخميس", friday: "الجمعة", saturday: "السبت",
-        lazy: "مسترخي", mood: "متحمس", discovery: "اكتشاف", tasty: "لذيذ", adventure: "مغامرة", festive: "احتفالي", outing: "نزهة",
-        brunch: "فطور متأخر", explore: "استكشف", museums: "متاحف", taste: "تذوق", excursion: "رحلة", nightlife: "الحياة الليلية", walk: "تمشية",
-        guide: { accessCode: "رموز الدخول", locked: "هذا القسم محمي برمز.", enterCode: "رمز الدخول", apartmentDoor: "باب الشقة", buildingDoor: "باب العمارة", gate: "البوابة", notes: "ملاحظات" },
-        ai: { assistant: "المساعد", online: "متاح", placeholder: "رسالة...", empty: "اسأل أي شيء.", error: "خطأ في الشبكة.", thinking: "جاري الكتابة..." },
-        qrCodeWall: {
-            titlePart1: "شارك", titlePart2: "دليلك", description: "مجرد مسح للزوار.",
-            items: { wifi: { title: "Wi-Fi", desc: "معبأ مسبقاً" }, perpetual: { title: "وصول دائم", desc: "الرابط صالح" }, remote: { title: "تحديث مباشر", desc: "دائماً محدث" } },
-            visual: { welcome: "مرحباً", scan: "امسحني", detected: "تم الكشف", notification: { app: "Maplyo", title: "افتح الدليل" } }
-        },
-        upsells: "إضافات",
-        legalPage: {
-            titlePrivacy: "سياسة الخصوصية", titleTerms: "شروط الاستخدام", lastUpdated: "آخر تحديث", effectiveDate: "ساري المفعول",
-            privacy: { intro: "سياسة.", section1: { title: "بيانات", items: ["الاسم"] }, section2: { title: "أغراض", intro: "إلى:", items: ["تقديم الخدمة"] }, section3: { title: "مشاركة", content: "لا نبيع بيانات." }, section4: { title: "أمان", content: "نظام آمن." }, section5: { title: "حقوق", content: "تواصل معنا.", contact: "contact@maplyo.com" } },
-            terms: { intro: "شروط.", section1: { title: "خدمة", content: "منصة ويب" }, section2: { title: "دفع", items: ["فواتير"] }, section3: { title: "مسؤولية", intro: "عليك:", items: ["المعلومات"] }, section4: { title: "حقوق ملكية", content: "ملك لمنشئ المحتوى" }, section5: { title: "حدود", content: "غير مسؤول" }, section6: { title: "قانون", content: "المغرب" } }
-        },
-        auth: {
-            login: {
-                title: "مرحباً بعودتك 👋",
-                subtitle: "سجّل الدخول لإدارة أدلتك",
-                email: "البريد الإلكتروني",
-                password: "كلمة المرور",
-                forgot: "نسيت؟",
-                submit: "تسجيل الدخول",
-                noAccount: "ليس لديك حساب؟",
-                createFree: "إنشاء حساب مجاني",
-                resetLink: "مشكلة في الدخول؟ إعادة تعيين",
-                error: "حدث خطأ غير متوقع."
+        "footer": {
+            "product": "Produit",
+            "support": "Support",
+            "legal": "Légal",
+            "desc": "Maplyo aide les hôtes.",
+            "links": {
+                "features": "Fonctions",
+                "pricing": "Tarifs",
+                "testimonials": "Avis",
+                "roadmap": "Roadmap",
+                "help": "Aide",
+                "contact": "Contact",
+                "privacy": "Confidentialité",
+                "terms": "Conditions",
+                "legal": "Mentions"
             },
-            signup: {
-                title: "انضم إلى Maplyo",
-                subtitle: "أنشئ أدلة استثنائية في دقائق.",
-                firstName: "الاسم الأول",
-                lastName: "اسم العائلة",
-                businessEmail: "البريد المهني",
-                businessName: "اسم المنشأة",
-                phone: "الهاتف",
-                passwordLabel: "كلمة المرور",
-                passwordHint: "6 أحرف على الأقل",
-                submit: "ابدأ مجاناً",
-                hasAccount: "لديك حساب بالفعل؟",
-                signIn: "تسجيل الدخول",
-                successTitle: "تم إنشاء الحساب!",
-                successMsg: "تم إرسال بريد تأكيد إلى",
-                successDesc: "يرجى النقر على الرابط لتفعيل حسابك.",
-                backToLogin: "العودة لتسجيل الدخول"
+            "securePayment": "Paiement Sécurisé",
+            "rights": "Tous droits réservés."
+        },
+        "cta": {
+            "title": "Prêt à impressionner ?",
+            "subtitle": "Créez votre guide aujourd'hui.",
+            "button": "Créer mon guide",
+            "subtext": "Sans carte."
+        },
+        "guide": {
+            "accessCode": "Codes d'accès",
+            "locked": "Protégé par code.",
+            "enterCode": "Code d'accès",
+            "confirm": "Valider",
+            "apartmentDoor": "Porte :",
+            "buildingDoor": "Immeuble :",
+            "gate": "Portail :",
+            "notes": "Notes"
+        },
+        "guideBlocks": {
+            "checkIn": {
+                "title": "Arrivée"
+            },
+            "location": {
+                "notSet": "Non défini",
+                "address": "Adresse",
+                "openInMaps": "Ouvrir",
+                "copyAddress": "Copier",
+                "viewOnMap": "Voir sur la carte"
+            },
+            "contact": {
+                "host": "Hôte",
+                "yourHost": "Votre Hôte",
+                "phone": "Tel",
+                "openConversation": "Ouvrir"
+            },
+            "rules": {
+                "noRules": "Pas de règles"
+            },
+            "amenities": {
+                "noAmenities": "Pas d'équipements"
+            },
+            "faq": {
+                "noFaq": "Pas de FAQ",
+                "question": "Question",
+                "answer": "Réponse"
+            },
+            "trash": {
+                "title": "Bacs",
+                "items": "Ordures",
+                "recycling": "Recyclage"
+            },
+            "breakfast": {
+                "title": "Petit Déjeuner",
+                "menu": "Menu"
+            },
+            "transport": {
+                "noInfo": "Pas d'infos",
+                "call": "Appeler"
             }
         },
-        dashboard: {
-            title: "أدلتي",
-            subtitle: "أدِر تجارب ضيوفك.",
-            newGuide: "دليل جديد",
-            logout: "تسجيل الخروج",
-            viewPublic: "عرض الصفحة العامة",
-            passProToShare: "الترقية إلى Pro للمشاركة",
-            delete: "حذف",
-            emptyTitle: "لا توجد أدلة بعد",
-            emptyDesc: "أنشئ دليلك الأول لتقديم تجربة استثنائية لضيوفك.",
-            tryAi: "✨ جرّب الذكاء الاصطناعي",
-            createManual: "إنشاء يدوي",
-            published: "منشور",
-            draft: "مسودة",
-            edit: "تعديل",
-            sortRecent: "الأحدث",
-            sortName: "الاسم",
-            confirmDelete: "هل أنت متأكد من حذف هذا الدليل؟ سيكون نهائياً.",
-            deleteError: "خطأ أثناء الحذف.",
-            aiModal: {
-                title: "إنشاء سحري ✨",
-                city: "المدينة أو المكان",
-                cityPlaceholder: "مثال: مراكش، قلعة السراغنة",
-                type: "النوع",
-                typeAirbnb: "Airbnb / شقة",
-                typeHotel: "فندق / رياض",
-                typeGuesthouse: "بيت ضيافة",
-                audience: "الضيوف",
-                audienceFamilies: "عائلات",
-                audienceCouples: "أزواج",
-                audienceRemote: "عمل عن بُعد",
-                audienceGroups: "مجموعات",
-                generate: "إنشاء دليلي",
-                generating: "الذكاء الاصطناعي يكتب دليلك...",
-                generatingDesc: "جارٍ إنشاء توصيات لـ"
+        "editor": {
+            "common": {
+                "title": "Titre",
+                "description": "Description",
+                "uploadImage": "Image",
+                "tags": "Tags",
+                "placeholderTags": "Wifi, Piscine...",
+                "time": "Heure",
+                "instructions": "Instructions",
+                "videoUrl": "Vidéo",
+                "location": "Lieu",
+                "address": "Adresse",
+                "placeholderAddress": "Rue...",
+                "mapUrl": "Maps",
+                "placeholderMap": "Lien Maps",
+                "phone": "Tel",
+                "placeholderPhone": "+33...",
+                "whatsapp": "WhatsApp",
+                "placeholderWhatsapp": "Numéro",
+                "email": "Email",
+                "placeholderEmail": "...",
+                "price": "Prix",
+                "placeholderPrice": "150 DH",
+                "placeholderReserve": "Réserver",
+                "cost": "Coût",
+                "placeholderWelcome": "Bienvenue...",
+                "linkUrl": "Lien",
+                "priceCheap": "Eco",
+                "priceModerate": "Moyen",
+                "priceExpensive": "Premium",
+                "day": "Jour",
+                "placeholderMonth": "JAN",
+                "placeholderDay": "15",
+                "placeholderTime": "19:00",
+                "other": "Autre",
+                "hours": "Heures",
+                "month": "Mois",
+                "placeholder": "..."
             },
-            createModal: {
-                title: "دليل جديد",
-                nameLabel: "اسم الدليل",
-                namePlaceholder: "مثال: رياض الأنوار",
-                cancel: "إلغاء",
-                create: "إنشاء الدليل"
+            "labels": {
+                "hero": "Accueil",
+                "wifi": "WiFi",
+                "access_codes": "Codes",
+                "location": "Localisation",
+                "contact": "Contact",
+                "amenities": "Équipements",
+                "places": "Lieux",
+                "rules": "Règlement",
+                "faq": "FAQ",
+                "trash": "Bacs",
+                "parking": "Parking",
+                "breakfast": "Petit Déj",
+                "transport": "Transport",
+                "checkin": "Arrivée",
+                "checkout": "Départ",
+                "documents": "Documents",
+                "events": "Événements",
+                "upsells": "Extras",
+                "embed": "Iframe",
+                "ai_assistant": "IA"
             },
-            limitModal: {
-                title: "تم الوصول لحد الأدلة 🏠",
-                desc: "وصلت إلى الحد الأقصى لعدد الأدلة في خطتك الحالية.",
-                upgrade: "🚀 الترقية للنسخة المحترفة",
-                or: "أو",
-                addon: "➕ إضافة دليل واحد فقط",
-                loading: "جاري التحميل..."
+            "access_codes": {
+                "security": "Sécurité",
+                "mode": "Affichage",
+                "alwaysVisible": "Toujours visible",
+                "unlockByCode": "Par code",
+                "unlockCode": "Code",
+                "unlockCodeDesc": "Requis.",
+                "aptCode": "Porte",
+                "buildingCode": "Immeuble",
+                "gateCode": "Portail",
+                "notes": "Notes"
             },
-            addonSuccessModal: {
-                title: "تمت إضافة الدليل! ✨",
-                heading: "جاهز!",
-                desc: "تم زيادة حدّك بدليل واحد. يمكنك الآن إنشاء دليلك الجديد.",
-                cta: "رائع، شكراً!"
+            "wifi": {
+                "networkName": "Nom WiFi",
+                "password": "Mot de passe",
+                "notes": "Notes"
             },
-            proModal: {
-                heading: "أنت محترف الآن!",
-                desc: "اشتراكك المحترف نشط. استمتع بأدلة غير محدودة وجميع المزايا المميزة.",
-                cta: "ابدأ الإنشاء"
+            "documents": {
+                "name": "Nom",
+                "url": "Lien",
+                "add": "Ajouter"
+            },
+            "places": {
+                "aiButton": "IA",
+                "name": "Nom",
+                "add": "Ajouter"
+            },
+            "events": {
+                "aiButton": "IA",
+                "add": "Ajouter"
+            },
+            "upsells": {
+                "buttonText": "Bouton",
+                "buttonLink": "Lien",
+                "add": "Ajouter"
+            },
+            "embed": {
+                "url": "Iframe",
+                "warning": "Attention"
+            },
+            "checkin": {
+                "timePlaceholder": "15:00",
+                "instrPlaceholder": "Procédure..."
+            },
+            "contact": {
+                "nameLabel": "Nom",
+                "namePlaceholder": "Concierge"
+            },
+            "rules": {
+                "title": "Règle",
+                "placeholder": "...",
+                "add": "Ajouter"
+            },
+            "amenities": {
+                "title": "Équipement",
+                "placeholder": "...",
+                "add": "Ajouter"
+            },
+            "faq": {
+                "question": "Q",
+                "qPlaceholder": "...",
+                "answer": "R",
+                "aPlaceholder": "...",
+                "add": "Ajouter"
+            },
+            "trash": {
+                "instrPlaceholder": "Tri...",
+                "dayTrash": "Ordures",
+                "dayTrashPlaceholder": "Lundi",
+                "dayRecycling": "Recyclage",
+                "dayRecyclingPlaceholder": "Jeudi",
+                "location": "Bacs",
+                "locPlaceholder": "Garage",
+                "photoLocal": "Photo"
+            },
+            "parking": {
+                "instrPlaceholder": "N°42",
+                "locPlaceholder": "Rue...",
+                "costPlaceholder": "Gratuit",
+                "photo": "Photo"
+            },
+            "breakfast": {
+                "hoursPlaceholder": "07:00 - 10:30",
+                "locPlaceholder": "Salle à manger",
+                "menu": "Menu",
+                "menuPlaceholder": "Café, thé..."
+            },
+            "transport": {
+                "bus": "Bus",
+                "train": "Train",
+                "taxi": "Taxi",
+                "bike": "Vélo",
+                "linePlaceholder": "Ligne 4",
+                "stop": "Arrêt",
+                "stopPlaceholder": "Arrêt...",
+                "add": "Ajouter"
             }
         },
-        pricingPage: {
-            hero: {
-                badge: "استثمر في التميز",
-                title1: "دليل محترف،",
-                title2: "بسعر فنجان قهوة.",
-                subtitle: "زِد إيراداتك المباشرة، قلّل الأسئلة المتكررة وقدّم تجربة 5 نجوم. مُربح منذ أول حجز."
+        "dashboard": {
+            "title": "Mes Guides",
+            "subtitle": "Gérez vos biens.",
+            "newGuide": "Nouveau Guide",
+            "logout": "Déconnexion",
+            "viewPublic": "Page publique",
+            "passProToShare": "Passer Pro",
+            "delete": "Supprimer",
+            "emptyTitle": "Aucun guide",
+            "emptyDesc": "Créez votre premier guide.",
+            "tryAi": "✨ IA",
+            "createManual": "Manuel",
+            "published": "En ligne",
+            "draft": "Brouillon",
+            "edit": "Modifier",
+            "sortRecent": "Récent",
+            "sortName": "Nom",
+            "confirmDelete": "Supprimer ?",
+            "deleteError": "Erreur",
+            "aiModal": {
+                "title": "Magie ✨",
+                "city": "Ville",
+                "cityPlaceholder": "Marrakech",
+                "type": "Type",
+                "typeAirbnb": "Airbnb",
+                "typeHotel": "Hôtel",
+                "typeGuesthouse": "Maison",
+                "audience": "Public",
+                "audienceFamilies": "Familles",
+                "audienceCouples": "Parejas",
+                "audienceRemote": "Pros",
+                "audienceGroups": "Groupes",
+                "generate": "Générer",
+                "generating": "IA...",
+                "generatingDesc": "Calcul..."
             },
-            popular: "الأكثر شيوعاً",
-            header: { login: "تسجيل الدخول", signup: "اشتراك" },
-            compare: {
-                title: "مقارنة تفصيلية",
-                subtitle: "كل ما تحتاجه للنجاح.",
-                features: {
-                    unlimited: "أدلة غير محدودة",
-                    maps: "تكامل خرائط جوجل",
-                    translation: "ترجمة ذكاء اصطناعي (جميع اللغات)",
-                    domain: "نطاق مخصص",
-                    support: "دعم ذو أولوية",
-                    whiteLabel: "العلامة البيضاء (بدون شعار)",
-                    analytics: "تحليلات متقدمة"
+            "createModal": {
+                "title": "Nouveau Guide",
+                "nameLabel": "Nom",
+                "namePlaceholder": "Nom...",
+                "cancel": "Annuler",
+                "create": "Créer"
+            },
+            "limitModal": {
+                "title": "Limite",
+                "desc": "Limite atteinte.",
+                "upgrade": "Passer Pro",
+                "or": "Ou",
+                "addon": "Ajouter 1",
+                "loading": "..."
+            },
+            "addonSuccessModal": {
+                "title": "Succès",
+                "heading": "Prêt !",
+                "desc": "Limite augmentée.",
+                "cta": "Merci"
+            }
+        },
+        "settings": {
+            "title": "Réglages",
+            "tabProfile": "Profil",
+            "tabPlan": "Plan",
+            "tabShop": "Boutique",
+            "personalInfo": "Infos",
+            "fullName": "Nom",
+            "email": "Email",
+            "saveProfile": "Sauver",
+            "yourPlan": "Votre Plan",
+            "currentPlan": "Plan actuel",
+            "active": "Actif",
+            "unlimitedGuides": "Illimité",
+            "oneGuideIncluded": "1 guide",
+            "oneGuideDraft": "1 brouillon",
+            "themesUnlocked": "Thèmes OK",
+            "extraGuides": "Extras",
+            "upgradeToPro": "Passer Pro",
+            "youArePro": "Vous êtes Pro",
+            "info": "Info",
+            "noBillingAccount": "Pas de compte",
+            "serverError": "Erreur",
+            "manageSubscription": "Gérer",
+            "shop": "Boutique",
+            "securePayment": "Sécurisé",
+            "bestSeller": "Top",
+            "qrCanvas": "Tableau QR",
+            "qrCanvasDesc": "Tableau...",
+            "hdPrint": "HD",
+            "frameIncluded": "Cadre",
+            "trackedShipping": "Suivi",
+            "shippingTtc": "Livraison OK",
+            "order": "Commander",
+            "requiredPro": "Pro Requis",
+            "extraGuide": "Extra",
+            "extraGuideDesc": "Ajouter guide.",
+            "perMonth": "/mois",
+            "proReserved": "Pro",
+            "onlyProCanAdd": "Pro requis",
+            "addGuide": "Ajouter",
+            "confirmAddGuide": "Ajouter (20 DH/m) ?",
+            "cancel": "Non",
+            "confirm": "Oui",
+            "guideAdded": "OK",
+            "limitIncreased": "OK",
+            "error": "Erreur",
+            "success": "OK"
+        },
+        "ai": {
+            "assistant": "IA",
+            "online": "IA OK",
+            "placeholder": "Message...",
+            "empty": "Question ?",
+            "error": "Erreur",
+            "thinking": "..."
+        },
+        "qrCodeWall": {
+            "titlePart1": "Partagez",
+            "titlePart2": "partout",
+            "description": "Scannez.",
+            "items": {
+                "wifi": {
+                    "title": "WiFi",
+                    "desc": "Connecté"
                 },
-                values: { oneLang: "لغة واحدة", unlimited: "غير محدود", emailSupport: "بريد إلكتروني", whatsappSupport: "واتساب 24/7" }
+                "perpetual": {
+                    "title": "Permanent",
+                    "desc": "Lien valide"
+                },
+                "remote": {
+                    "title": "Live",
+                    "desc": "Direct"
+                }
             },
-            faqSection: {
-                title: "الأسئلة الشائعة",
-                subtitle: "نحن شفافون. إليك الإجابات.",
-                items: [
-                    { q: "هل يمكنني تغيير الخطة في أي وقت؟", a: "نعم، بالتأكيد. يمكنك التبديل بين Basic وPro من لوحة تحكمك. التغيير فوري والحساب التناسبي تلقائي." },
-                    { q: "هل هناك التزام؟", a: "لا التزام على الإطلاق. اشتراكاتنا شهرية ويمكنك الإلغاء في أي وقت بنقرة واحدة. بدون رسوم خفية." },
-                    { q: "كيف يعمل الدفع؟", a: "نستخدم Stripe، الرائد العالمي في المدفوعات الآمنة عبر الإنترنت. بياناتك البنكية لا تُخزَّن أبداً على خوادمنا." },
-                    { q: "هل الدعم مشمول؟", a: "نعم! دعم البريد الإلكتروني مشمول في جميع الخطط المدفوعة. الخطة Pro تحصل على وصول ذو أولوية وجهة اتصال واتساب." }
+            "visual": {
+                "welcome": "Bienvenue",
+                "scan": "Scannez",
+                "detected": "Trouvé",
+                "notification": {
+                    "app": "Maplyo",
+                    "title": "Ouvrir"
+                }
+            }
+        },
+        "upsells": "Extras",
+        "legalPage": {
+            "titlePrivacy": "Privacité",
+            "titleTerms": "Termes",
+            "lastUpdated": "MAJ :",
+            "effectiveDate": "Date :",
+            "privacy": {
+                "intro": "...",
+                "section1": {
+                    "title": "1",
+                    "items": [
+                        "1"
+                    ]
+                },
+                "section2": {
+                    "title": "2",
+                    "intro": "2",
+                    "items": [
+                        "2"
+                    ]
+                },
+                "section3": {
+                    "title": "3",
+                    "content": "3"
+                },
+                "section4": {
+                    "title": "4",
+                    "content": "4"
+                },
+                "section5": {
+                    "title": "5",
+                    "content": "5",
+                    "contact": "..."
+                }
+            },
+            "terms": {
+                "intro": "...",
+                "section1": {
+                    "title": "1",
+                    "content": "1"
+                },
+                "section2": {
+                    "title": "2",
+                    "items": [
+                        "2"
+                    ]
+                },
+                "section3": {
+                    "title": "3",
+                    "intro": "3",
+                    "items": [
+                        "3"
+                    ]
+                },
+                "section4": {
+                    "title": "4",
+                    "content": "4"
+                },
+                "section5": {
+                    "title": "5",
+                    "content": "5"
+                },
+                "section6": {
+                    "title": "6",
+                    "content": "6"
+                }
+            }
+        },
+        "pricingPage": {
+            "hero": {
+                "badge": "Top",
+                "title1": "Pro,",
+                "title2": "pas cher.",
+                "subtitle": "..."
+            },
+            "popular": "Top",
+            "header": {
+                "login": "Dentrée",
+                "signup": "S'inscrire"
+            },
+            "compare": {
+                "title": "Comp",
+                "subtitle": "...",
+                "features": {
+                    "unlimited": "Illimité",
+                    "maps": "Maps",
+                    "translation": "IA",
+                    "domain": "Domaine",
+                    "support": "Support",
+                    "whiteLabel": "Marque",
+                    "analytics": "Analytiques"
+                },
+                "values": {
+                    "oneLang": "1 langue",
+                    "unlimited": "Illimité",
+                    "emailSupport": "Email",
+                    "whatsappSupport": "WhatsApp"
+                }
+            },
+            "faqSection": {
+                "title": "FAQ",
+                "subtitle": "...",
+                "items": [
+                    {
+                        "q": "Q",
+                        "a": "A"
+                    }
                 ]
             },
-            trust: "بثقة",
-            addonLabel: "/ دليل إضافي"
+            "trust": "Garantie"
         },
-        guideLock: {
-            title: "وصول آمن",
-            desc: "يرجى فتح هذا الدليل للوصول إلى رموز الدخول والمعلومات الحساسة.",
-            demoCode: "رمز التجربة"
-        },
-        settings: {
-            title: "الإعدادات",
-            tabProfile: "الملف الشخصي",
-            tabPlan: "الاشتراك",
-            tabShop: "المتجر",
-            personalInfo: "المعلومات الشخصية",
-            fullName: "الاسم الكامل",
-            email: "البريد الإلكتروني",
-            saveProfile: "حفظ الملف الشخصي",
-            yourPlan: "اشتراكك",
-            currentPlan: "الخطة الحالية",
-            active: "نشط",
-            unlimitedGuides: "أدلة غير محدودة",
-            oneGuideIncluded: "دليل واحد مشمول",
-            oneGuideDraft: "دليل واحد (مسودة)",
-            themesUnlocked: "تم فتح السمات",
-            extraGuides: "أدلة إضافية",
-            upgradeToPro: "الترقية إلى Pro",
-            youArePro: "أنت Pro",
-            info: "معلومات",
-            noBillingAccount: "لم يتم العثور على حساب فواتير.",
-            serverError: "خطأ في الخادم.",
-            manageSubscription: "إدارة الاشتراك",
-            shop: "المتجر (الإضافات)",
-            securePayment: "دفع آمن",
-            bestSeller: "الأكثر مبيعاً",
-            qrCanvas: "لوحة رمز QR",
-            qrCanvasDesc: "لوحة رائعة مع رمز QR الخاص بك لمكان إقامتك.",
-            hdPrint: "طباعة عالية الجودة",
-            frameIncluded: "الإطار مشمول",
-            trackedShipping: "شحن متتبع",
-            shippingTtc: "الشحن مشمول",
-            order: "طلب",
-            requiredPro: "مطلوب Pro",
-            extraGuide: "دليل إضافي",
-            extraGuideDesc: "أضف دليلاً إضافياً إلى اشتراكك.",
-            perMonth: "شهرياً",
-            proReserved: "خاص لأعضاء Pro",
-            onlyProCanAdd: "فقط أعضاء Pro يمكنهم إضافة أدلة إضافية.",
-            addGuide: "إضافة دليل",
-            confirmAddGuide: "هل تريد إضافة دليل إضافي مقابل 20 درهم/شهر؟",
-            cancel: "إلغاء",
-            confirm: "تأكيد",
-            guideAdded: "تمت إضافة الدليل!",
-            limitIncreased: "تمت زيادة الحد الخاص بك.",
-            error: "خطأ",
-            success: "تم بنجاح"
-        },
-        ai: {
-            assistant: "مساعد الذكاء الاصطناعي",
-            online: "متصل",
-            empty: "اسألني أي شيء عن إقامتك!",
-            thinking: "يفكر...",
-            placeholder: "اسأل سؤالاً...",
-            error: "عذراً، حدث خطأ."
-        },
-        builder: {
-            blocks: "كتل"
-        }
-    },
-    nl: {
-        common: {
-            getStarted: "Beginnen",
-            login: "Inloggen",
-            signup: "Registreren",
-            tryFree: "Gratis Proberen",
-            loading: "Laden...",
-            viewGuide: "Bekijk gids",
-            checkin: "Inchecken",
-            checkout: "Uitchecken",
-            location: "Locatie",
-            wifi: "WiFi"
-        },
-        renderer: {
-            wifi: "WiFi",
-            access: "Toegangscodes",
-            location: "Locatie",
-            contact: "Contact",
-            amenities: "Voorzieningen",
-            places: "Plaatsen in de buurt",
-            rules: "Huisregels"
-        },
-        ai: {
-            assistant: "AI Assistent",
-            online: "Online",
-            empty: "Stel me gerust vragen over je verblijf!",
-            thinking: "Nadenken...",
-            placeholder: "Stel een vraag...",
-            error: "Sorry, er is een fout opgetreden."
-        },
-        dashboard: {
-            logout: "Uitloggen",
-            viewPublic: "Bekijk openbare pagina",
-            passProToShare: "Upgrade naar Pro om te delen",
-            delete: "Verwijderen",
-            title: "Mijn Gidsen",
-            subtitle: "Beheer uw gastenervaringen.",
-            newGuide: "Nieuwe Gids",
-            emptyTitle: "Nog geen gidsen",
-            emptyDesc: "Maak uw eerste gids om een uitzonderlijke ervaring aan uw gasten te bieden.",
-            tryAi: "✨ Probeer AI",
-            createManual: "Handmatig maken",
-            published: "Gepubliceerd",
-            draft: "Concept",
-            edit: "Bewerken",
-            sortRecent: "Recent",
-            sortName: "Naam",
-            confirmDelete: "Weet u zeker dat u deze gids wilt verwijderen? Dit is definitief.",
-            deleteError: "Fout bij verwijderen.",
-            aiModal: {
-                title: "Magische Creatie ✨",
-                city: "Stad of Plaats",
-                cityPlaceholder: "Bijv: Amsterdam, Jordaan",
-                type: "Type",
-                typeAirbnb: "Airbnb / Appartement",
-                typeHotel: "Hotel / Riad",
-                typeGuesthouse: "Gastenverblijf",
-                audience: "Gasten",
-                audienceFamilies: "Gezinnen",
-                audienceCouples: "Stellen",
-                audienceRemote: "Thuiswerkers",
-                audienceGroups: "Groepen",
-                generate: "Mijn gids genereren",
-                generating: "AI schrijft uw gids...",
-                generatingDesc: "Aanbevelingen maken voor"
-            },
-            createModal: {
-                title: "Nieuwe Gids",
-                nameLabel: "Gidsnaam",
-                namePlaceholder: "Bijv: Riad van het Licht",
-                cancel: "Annuleren",
-                create: "Gids maken"
-            },
-            limitModal: {
-                title: "Gidslimiet bereikt 🏠",
-                desc: "U heeft de limiet van toegestane gidsen voor uw huidige abonnement bereikt.",
-                upgrade: "🚀 Upgrade naar Onbeperkt (Pro)",
-                or: "Of",
-                addon: "➕ Voeg slechts 1 gids toe",
-                loading: "Laden..."
-            },
-            addonSuccessModal: {
-                title: "Gids toegevoegd! ✨",
-                heading: "Klaar!",
-                desc: "Uw limiet is verhoogd met 1 gids. U kunt nu direct uw nieuwe gids maken.",
-                cta: "Geweldig, bedankt!"
+        "builder": {
+            "blocks": "blocs",
+            "chooseTheme": "Choisir Thème",
+            "reset": "Reset",
+            "viewGuide": "Voir Guide",
+            "catEssentials": "Essentiels",
+            "catTravel": "Voyage",
+            "catBusiness": "Business",
+            "guideStructure": "Structure",
+            "startHere": "Commencez ici",
+            "selectBlocks": "Sélectionnez des blocs",
+            "mobilePreview": "Aperçu Mobile",
+            "blockProperties": "Propriétés",
+            "editing": "Modification",
+            "selectToEdit": "Sélectionnez un bloc",
+            "paramsHere": "Réglages ici",
+            "backHome": "Retour",
+            "backDashboard": "Dashboard",
+            "editorMode": "Mode Édition",
+            "themeLabel": "Thème",
+            "qrLabel": "QR",
+            "createAccount": "Créer Compte",
+            "saveCreateAccount": "Sauver",
+            "online": "En ligne",
+            "confirmUnpublish": "Dépublier ?",
+            "unpublish": "Dépublier",
+            "publishSuccess": "Publié !",
+            "publishError": "Erreur",
+            "publish": "Publier",
+            "library": "Bibliothèque",
+            "mobileMode": "Mode Mobile",
+            "emptyGuide": "Vide",
+            "selectBlock": "Bloc ?",
+            "close": "Fermer",
+            "blockTitle": "Titre Bloc",
+            "designTheme": "Thèmes Design",
+            "upgradePro": "Passer Pro",
+            "unlock": "Débloquer",
+            "unlockPublish": "Publiez !",
+            "publishDesc": "Passez Pro.",
+            "seeOffers": "Offres",
+            "themes": {
+                "minimal-white": {
+                    "name": "Minimal",
+                    "desc": "Blanc"
+                },
+                "soft-gray": {
+                    "name": "Gris",
+                    "desc": "Doux"
+                },
+                "ocean": {
+                    "name": "Océan",
+                    "desc": "Bleu"
+                },
+                "nature": {
+                    "name": "Nature",
+                    "desc": "Vert"
+                },
+                "sunset": {
+                    "name": "Sunset",
+                    "desc": "Orange"
+                }
             }
         },
-        builder: {
-            blocks: "blokken"
-        },
-        settings: {
-            title: "Instellingen",
-            tabProfile: "Profiel",
-            tabPlan: "Abonnement",
-            tabShop: "Winkel",
-            personalInfo: "Persoonlijke info",
-            fullName: "Volledige naam",
-            email: "E-mail",
-            saveProfile: "Profiel opslaan",
-            yourPlan: "Uw abonnement",
-            currentPlan: "Huidig plan",
-            active: "Actief",
-            unlimitedGuides: "Onbeperkte gidsen",
-            oneGuideIncluded: "1 gids inbegrepen",
-            oneGuideDraft: "1 gids (concept)",
-            themesUnlocked: "Thema's ontgrendeld",
-            extraGuides: "extra gidsen",
-            upgradeToPro: "Upgrade naar Pro",
-            youArePro: "U bent Pro",
-            info: "Info",
-            noBillingAccount: "Geen facturatieaccount gevonden.",
-            serverError: "Serverfout.",
-            manageSubscription: "Abonnement beheren",
-            shop: "Winkel (Add-ons)",
-            securePayment: "Veilige betaling",
-            bestSeller: "Best Seller",
-            qrCanvas: "QR-code canvas",
-            qrCanvasDesc: "Een prachtig canvas met uw QR-code voor uw woning.",
-            hdPrint: "HD-print",
-            frameIncluded: "Inclusief lijst",
-            trackedShipping: "Gevolgde verzending",
-            shippingTtc: "Inclusief verzending",
-            order: "Bestellen",
-            requiredPro: "Pro vereist",
-            extraGuide: "Extra gids",
-            extraGuideDesc: "Voeg een extra gids toe aan uw abonnement.",
-            perMonth: "per maand",
-            proReserved: "Alleen Pro-leden",
-            onlyProCanAdd: "Alleen Pro-leden kunnen extra gidsen toevoegen.",
-            addGuide: "Gids toevoegen",
-            confirmAddGuide: "Wilt u een extra gids toevoegen voor 20 DH/maand?",
-            cancel: "Annuleren",
-            confirm: "Bevestigen",
-            guideAdded: "Gids toegevoegd!",
-            limitIncreased: "Uw limiet is verhoogd.",
-            error: "Fout",
-            success: "Succes"
-        }
-    },
-    zh: {
-        common: {
-            getStarted: "开始使用",
-            login: "登录",
-            signup: "注册",
-            tryFree: "免费试用",
-            loading: "加载中...",
-            viewGuide: "查看指南",
-            checkin: "入住",
-            checkout: "退房",
-            location: "位置",
-            wifi: "WiFi"
-        },
-        renderer: {
-            wifi: "WiFi",
-            access: "访问代码",
-            location: "位置",
-            contact: "联系我们",
-            amenities: "设施",
-            places: "附近地点",
-            rules: "房屋守则"
-        },
-        ai: {
-            assistant: "AI 助手",
-            online: "在线",
-            empty: "您可以问我关于住宿的任何问题！",
-            thinking: "思考中...",
-            placeholder: "提问...",
-            error: "抱歉，出错了。"
-        },
-        dashboard: {
-            logout: "注销",
-            viewPublic: "查看公开页面",
-            passProToShare: "升级到 Pro 以分享",
-            delete: "删除",
-            title: "我的指南",
-            subtitle: "管理您的访客体验。",
-            newGuide: "新指南",
-            emptyTitle: "尚无指南",
-            emptyDesc: "创建您的第一个指南，为您的客人提供卓越的体验。",
-            tryAi: "✨ 尝试 AI",
-            createManual: "手动创建",
-            published: "已发布",
-            draft: "草稿",
-            edit: "编辑",
-            sortRecent: "最近",
-            sortName: "名称",
-            confirmDelete: "您确定要删除此指南吗？此操作不可逆。",
-            deleteError: "删除时出错。",
-            aiModal: {
-                title: "神奇创建 ✨",
-                city: "城市或地点",
-                cityPlaceholder: "例如：马拉喀什，格利兹区",
-                type: "类型",
-                typeAirbnb: "Airbnb / 公寓",
-                typeHotel: "酒店 / 利亚德",
-                typeGuesthouse: "民宿",
-                audience: "访客",
-                audienceFamilies: "家庭",
-                audienceCouples: "情侣",
-                audienceRemote: "远程工作者",
-                audienceGroups: "团体",
-                generate: "生成我的指南",
-                generating: "AI 正在编写您的指南...",
-                generatingDesc: "正在创建推荐："
+        "showcase": {
+            "tag": "Exemples",
+            "title": "Showcase",
+            "description": "Voir.",
+            "messageFrom": "De",
+            "viewFull": "Voir",
+            "example1": {
+                "type": "Loft",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Génial"
             },
-            createModal: {
-                title: "新指南",
-                nameLabel: "指南名称",
-                namePlaceholder: "例如：光之利亚德",
-                cancel: "取消",
-                create: "创建指南"
+            "example2": {
+                "type": "Villa",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Top"
             },
-            limitModal: {
-                title: "已达到指南上限 🏠",
-                desc: "您已达到当前订阅允许的指南上限。",
-                upgrade: "🚀 升级到无限 (Pro)",
-                or: "或",
-                addon: "➕ 仅添加 1 个指南",
-                loading: "加载中..."
-            },
-            addonSuccessModal: {
-                title: "指南已添加！ ✨",
-                heading: "准备好了！",
-                desc: "您的上限已增加 1 个指南。您现在可以立即创建新指南。",
-                cta: "太棒了，谢谢！"
+            "example3": {
+                "type": "Riad",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Super"
             }
         },
-        builder: {
-            blocks: "块"
+        "guideLock": {
+            "title": "Accès Sécurisé",
+            "desc": "Dévérouillez pour voir les codes.",
+            "demoCode": "Code Démo"
         },
-        settings: {
-            title: "设置",
-            tabProfile: "个人资料",
-            tabPlan: "订阅",
-            tabShop: "商店",
-            personalInfo: "个人信息",
-            fullName: "全名",
-            email: "电子邮件",
-            saveProfile: "保存资料",
-            yourPlan: "您的订阅",
-            currentPlan: "当前方案",
-            active: "有效",
-            unlimitedGuides: "无限指南",
-            oneGuideIncluded: "包含 1 个指南",
-            oneGuideDraft: "1 个指南（草稿）",
-            themesUnlocked: "主题已解锁",
-            extraGuides: "额外指南",
-            upgradeToPro: "升级到 Pro",
-            youArePro: "您是 Pro 用户",
-            info: "信息",
-            noBillingAccount: "未找到计费帐户。",
-            serverError: "服务器错误。",
-            manageSubscription: "管理订阅",
-            shop: "商店（附加组件）",
-            securePayment: "安全支付",
-            bestSeller: "畅销产品",
-            qrCanvas: "二维码画布",
-            qrCanvasDesc: "为您准备的一幅带有二维码的美丽画布。",
-            hdPrint: "高清打印",
-            frameIncluded: "含框",
-            trackedShipping: "追踪物流",
-            shippingTtc: "含运费",
-            order: "订购",
-            requiredPro: "需要 Pro 账户",
-            extraGuide: "额外指南",
-            extraGuideDesc: "为您的订阅添加额外指南。",
-            perMonth: "每月",
-            proReserved: "仅限 Pro 会员",
-            onlyProCanAdd: "只有 Pro 会员可以添加额外指南。",
-            addGuide: "添加指南",
-            confirmAddGuide: "您想每月以 20 DH 的价格添加额外指南吗？",
-            cancel: "取消",
-            confirm: "确认",
-            guideAdded: "指南已添加！",
-            limitIncreased: "您的上限已增加。",
-            error: "错误",
-            success: "成功"
+        "auth": {
+            "login": {
+                "title": "Connexion",
+                "subtitle": "Bienvenue",
+                "email": "Email",
+                "password": "Mot de passe",
+                "forgot": "Oublié ?",
+                "error": "Erreur",
+                "submit": "Se connecter",
+                "noAccount": "Pas de compte ?",
+                "createFree": "Créer",
+                "resetLink": "Reset"
+            },
+            "signup": {
+                "title": "Inscription",
+                "subtitle": "Gratuit",
+                "successTitle": "Succès",
+                "successMsg": "Vérifiez vos emails",
+                "successDesc": "Lien envoyé",
+                "backToLogin": "Retour",
+                "firstName": "Prénom",
+                "lastName": "Nom",
+                "businessEmail": "Email pro",
+                "businessName": "Entreprise",
+                "phone": "Tel",
+                "passwordLabel": "Pass",
+                "passwordHint": "6+ cars",
+                "submit": "S'inscrire",
+                "hasAccount": "Déjà inscrit ?",
+                "signIn": "Se connecter"
+            }
+        }
+    },
+    "nl": {
+        "common": {
+            "getStarted": "Commencer",
+            "login": "Connexion",
+            "signup": "S'inscrire",
+            "tryFree": "Essayer Gratuitement",
+            "popular": "Le plus populaire",
+            "month": "/mois",
+            "loading": "Chargement...",
+            "choose": "Choisir",
+            "viewGuide": "Voir le guide complet",
+            "more": "Voir plus",
+            "checkin": "Arrivée",
+            "qrCodeWall": "Scannez pour tester",
+            "checkout": "Départ",
+            "location": "Localisation",
+            "viewOnMap": "Voir sur la carte",
+            "wifi": "WiFi",
+            "other": "Autre"
+        },
+        "renderer": {
+            "welcome": "Bienvenue",
+            "wifi": "WiFi",
+            "access": "Codes d'accès",
+            "location": "Localisation",
+            "contact": "Contact",
+            "amenities": "Équipements",
+            "places": "À proximité",
+            "rules": "Règlement",
+            "tipOfTheDay": "Conseil du jour",
+            "sunday": "Dimanche",
+            "monday": "Lundi",
+            "tuesday": "Mardi",
+            "wednesday": "Mercredi",
+            "thursday": "Jeudi",
+            "friday": "Vendredi",
+            "saturday": "Samedi",
+            "lazy": "Détente",
+            "mood": "Motivé",
+            "discovery": "Découverte",
+            "tasty": "Gourmand",
+            "adventure": "Aventure",
+            "festive": "Festif",
+            "outing": "Sortie",
+            "brunch": "Un brunch à",
+            "explore": "Explorez",
+            "museums": "Visitez",
+            "taste": "Goûtez",
+            "excursion": "Une excursion",
+            "nightlife": "Vie nocturne",
+            "walk": "Une balade",
+            "secureAccess": "Accès Sécurisé",
+            "checkin": "Arrivée",
+            "checkout": "Départ",
+            "viewMap": "Voir sur la carte",
+            "upsells": "Extras",
+            "items": "éléments",
+            "empty": "Rien à afficher",
+            "searchPlaceholder": "Rechercher...",
+            "secureAccessDesc": "Entrez le code fourni par votre hôte."
+        },
+        "socialProof": {
+            "trustpilot": "4.9/5 par 500+ Hôtes",
+            "usedBy": "Utilisé par les meilleures conciergeries",
+            "autoTranslate": {
+                "title": "Auto-Traduit",
+                "desc": "Vos guides parlent la langue de vos invités."
+            },
+            "googleMaps": {
+                "title": "Google Maps Intégré",
+                "desc": "Google Maps directement dans le guide."
+            }
+        },
+        "hero": {
+            "tag": "POUR LES HÔTES ET CONCIERGERIES",
+            "title": "Ne répétez plus jamais le code WiFi.",
+            "subtitle": "Digitalisez votre livret d'accueil. Offrez une expérience 5 étoiles, réduisez les messages de 50%, et augmentez vos avis positifs.",
+            "cta": "Créer mon guide gratuit",
+            "demo": "Voir un exemple",
+            "noCreditCard": "Pas de carte requise",
+            "setupTime": "Configuré en 2 min",
+            "badge": "Livret d'accueil digital #1",
+            "title1": "Pour vos invités,",
+            "title2": "une expérience 5 étoiles.",
+            "users": "Approuvé par 500+ hôtes"
+        },
+        "features": {
+            "title": "Tout ce dont vous avez besoin.",
+            "subtitle": "Rien de superflu.",
+            "description": "Des outils puissants pour automatiser votre accueil.",
+            "badge": "Fonctionnalités",
+            "items": {
+                "mobileFirst": {
+                    "title": "100% Mobile First",
+                    "desc": "Pas d'application à télécharger."
+                },
+                "secure": {
+                    "title": "Codes Sécurisés",
+                    "desc": "WiFi et boîtes à clés protégés."
+                },
+                "map": {
+                    "title": "Carte Interactive",
+                    "desc": "Intégrez vos lieux favoris."
+                },
+                "live": {
+                    "title": "Modifications Live",
+                    "desc": "Mise à jour instantanée."
+                },
+                "translate": {
+                    "title": "Traduction Auto",
+                    "desc": "Détecte la langue du visiteur."
+                },
+                "checklist": {
+                    "title": "Check-lists",
+                    "desc": "Instructions claires arrivée/départ."
+                }
+            }
+        },
+        "pricing": {
+            "title": "Tarification Transparente",
+            "subtitle": "Commencez gratuitement. Évoluez quand vous voulez.",
+            "bestOffer": "La meilleure offre du monde :",
+            "addon": "+20 DH / guide supplémentaire",
+            "trust": "Garantie 30 jours",
+            "enterprise": {
+                "title": "Solution Enterprise",
+                "desc": "Pour les pros (50+ biens).",
+                "cta": "Contacter"
+            },
+            "plans": {
+                "demo": {
+                    "name": "Découverte",
+                    "price": "Gratuit",
+                    "desc": "Testez sans carte.",
+                    "button": "Essayer",
+                    "features": [
+                        "Accès Créateur",
+                        "Aperçu Mobile"
+                    ]
+                },
+                "basic": {
+                    "name": "Essentiel",
+                    "desc": "Pour 1 propriété.",
+                    "button": "Démarrer",
+                    "features": [
+                        "Livret Digital",
+                        "WiFi QR",
+                        "1 Guide"
+                    ]
+                },
+                "pro": {
+                    "name": "Croissance",
+                    "desc": "Pour les pros.",
+                    "button": "Passer Pro",
+                    "features": [
+                        "Guides Illimités",
+                        "Traduction IA",
+                        "Support WhatsApp"
+                    ]
+                },
+                "business": {
+                    "name": "Agence",
+                    "desc": "Pour les portfolios.",
+                    "button": "Talk to Expert",
+                    "price": "Sur mesure",
+                    "features": [
+                        "Marque Blanche",
+                        "Multi-Propriétés"
+                    ]
+                }
+            }
+        },
+        "testimonials": {
+            "title": "Approuvé par les Pros",
+            "subtitle": "Rejoignez 500+ hôtes.",
+            "items": [
+                {
+                    "name": "Jean R.",
+                    "role": "Superhost",
+                    "text": "Gain de temps énorme.",
+                    "result": "-60% messages"
+                }
+            ]
+        },
+        "faq": {
+            "title": "Questions Fréquentes",
+            "subtitle": "Tout savoir.",
+            "questions": [
+                {
+                    "q": "Gratuit ?",
+                    "a": "Oui, plan découverte dispo."
+                }
+            ]
+        },
+        "footer": {
+            "product": "Produit",
+            "support": "Support",
+            "legal": "Légal",
+            "desc": "Maplyo aide les hôtes.",
+            "links": {
+                "features": "Fonctions",
+                "pricing": "Tarifs",
+                "testimonials": "Avis",
+                "roadmap": "Roadmap",
+                "help": "Aide",
+                "contact": "Contact",
+                "privacy": "Confidentialité",
+                "terms": "Conditions",
+                "legal": "Mentions"
+            },
+            "securePayment": "Paiement Sécurisé",
+            "rights": "Tous droits réservés."
+        },
+        "cta": {
+            "title": "Prêt à impressionner ?",
+            "subtitle": "Créez votre guide aujourd'hui.",
+            "button": "Créer mon guide",
+            "subtext": "Sans carte."
+        },
+        "guide": {
+            "accessCode": "Codes d'accès",
+            "locked": "Protégé par code.",
+            "enterCode": "Code d'accès",
+            "confirm": "Valider",
+            "apartmentDoor": "Porte :",
+            "buildingDoor": "Immeuble :",
+            "gate": "Portail :",
+            "notes": "Notes"
+        },
+        "guideBlocks": {
+            "checkIn": {
+                "title": "Arrivée"
+            },
+            "location": {
+                "notSet": "Non défini",
+                "address": "Adresse",
+                "openInMaps": "Ouvrir",
+                "copyAddress": "Copier",
+                "viewOnMap": "Voir sur la carte"
+            },
+            "contact": {
+                "host": "Hôte",
+                "yourHost": "Votre Hôte",
+                "phone": "Tel",
+                "openConversation": "Ouvrir"
+            },
+            "rules": {
+                "noRules": "Pas de règles"
+            },
+            "amenities": {
+                "noAmenities": "Pas d'équipements"
+            },
+            "faq": {
+                "noFaq": "Pas de FAQ",
+                "question": "Question",
+                "answer": "Réponse"
+            },
+            "trash": {
+                "title": "Bacs",
+                "items": "Ordures",
+                "recycling": "Recyclage"
+            },
+            "breakfast": {
+                "title": "Petit Déjeuner",
+                "menu": "Menu"
+            },
+            "transport": {
+                "noInfo": "Pas d'infos",
+                "call": "Appeler"
+            }
+        },
+        "editor": {
+            "common": {
+                "title": "Titre",
+                "description": "Description",
+                "uploadImage": "Image",
+                "tags": "Tags",
+                "placeholderTags": "Wifi, Piscine...",
+                "time": "Heure",
+                "instructions": "Instructions",
+                "videoUrl": "Vidéo",
+                "location": "Lieu",
+                "address": "Adresse",
+                "placeholderAddress": "Rue...",
+                "mapUrl": "Maps",
+                "placeholderMap": "Lien Maps",
+                "phone": "Tel",
+                "placeholderPhone": "+33...",
+                "whatsapp": "WhatsApp",
+                "placeholderWhatsapp": "Numéro",
+                "email": "Email",
+                "placeholderEmail": "...",
+                "price": "Prix",
+                "placeholderPrice": "150 DH",
+                "placeholderReserve": "Réserver",
+                "cost": "Coût",
+                "placeholderWelcome": "Bienvenue...",
+                "linkUrl": "Lien",
+                "priceCheap": "Eco",
+                "priceModerate": "Moyen",
+                "priceExpensive": "Premium",
+                "day": "Jour",
+                "placeholderMonth": "JAN",
+                "placeholderDay": "15",
+                "placeholderTime": "19:00",
+                "other": "Autre",
+                "hours": "Heures",
+                "month": "Mois",
+                "placeholder": "..."
+            },
+            "labels": {
+                "hero": "Accueil",
+                "wifi": "WiFi",
+                "access_codes": "Codes",
+                "location": "Localisation",
+                "contact": "Contact",
+                "amenities": "Équipements",
+                "places": "Lieux",
+                "rules": "Règlement",
+                "faq": "FAQ",
+                "trash": "Bacs",
+                "parking": "Parking",
+                "breakfast": "Petit Déj",
+                "transport": "Transport",
+                "checkin": "Arrivée",
+                "checkout": "Départ",
+                "documents": "Documents",
+                "events": "Événements",
+                "upsells": "Extras",
+                "embed": "Iframe",
+                "ai_assistant": "IA"
+            },
+            "access_codes": {
+                "security": "Sécurité",
+                "mode": "Affichage",
+                "alwaysVisible": "Toujours visible",
+                "unlockByCode": "Par code",
+                "unlockCode": "Code",
+                "unlockCodeDesc": "Requis.",
+                "aptCode": "Porte",
+                "buildingCode": "Immeuble",
+                "gateCode": "Portail",
+                "notes": "Notes"
+            },
+            "wifi": {
+                "networkName": "Nom WiFi",
+                "password": "Mot de passe",
+                "notes": "Notes"
+            },
+            "documents": {
+                "name": "Nom",
+                "url": "Lien",
+                "add": "Ajouter"
+            },
+            "places": {
+                "aiButton": "IA",
+                "name": "Nom",
+                "add": "Ajouter"
+            },
+            "events": {
+                "aiButton": "IA",
+                "add": "Ajouter"
+            },
+            "upsells": {
+                "buttonText": "Bouton",
+                "buttonLink": "Lien",
+                "add": "Ajouter"
+            },
+            "embed": {
+                "url": "Iframe",
+                "warning": "Attention"
+            },
+            "checkin": {
+                "timePlaceholder": "15:00",
+                "instrPlaceholder": "Procédure..."
+            },
+            "contact": {
+                "nameLabel": "Nom",
+                "namePlaceholder": "Concierge"
+            },
+            "rules": {
+                "title": "Règle",
+                "placeholder": "...",
+                "add": "Ajouter"
+            },
+            "amenities": {
+                "title": "Équipement",
+                "placeholder": "...",
+                "add": "Ajouter"
+            },
+            "faq": {
+                "question": "Q",
+                "qPlaceholder": "...",
+                "answer": "R",
+                "aPlaceholder": "...",
+                "add": "Ajouter"
+            },
+            "trash": {
+                "instrPlaceholder": "Tri...",
+                "dayTrash": "Ordures",
+                "dayTrashPlaceholder": "Lundi",
+                "dayRecycling": "Recyclage",
+                "dayRecyclingPlaceholder": "Jeudi",
+                "location": "Bacs",
+                "locPlaceholder": "Garage",
+                "photoLocal": "Photo"
+            },
+            "parking": {
+                "instrPlaceholder": "N°42",
+                "locPlaceholder": "Rue...",
+                "costPlaceholder": "Gratuit",
+                "photo": "Photo"
+            },
+            "breakfast": {
+                "hoursPlaceholder": "07:00 - 10:30",
+                "locPlaceholder": "Salle à manger",
+                "menu": "Menu",
+                "menuPlaceholder": "Café, thé..."
+            },
+            "transport": {
+                "bus": "Bus",
+                "train": "Train",
+                "taxi": "Taxi",
+                "bike": "Vélo",
+                "linePlaceholder": "Ligne 4",
+                "stop": "Arrêt",
+                "stopPlaceholder": "Arrêt...",
+                "add": "Ajouter"
+            }
+        },
+        "dashboard": {
+            "title": "Mes Guides",
+            "subtitle": "Gérez vos biens.",
+            "newGuide": "Nouveau Guide",
+            "logout": "Déconnexion",
+            "viewPublic": "Page publique",
+            "passProToShare": "Passer Pro",
+            "delete": "Supprimer",
+            "emptyTitle": "Aucun guide",
+            "emptyDesc": "Créez votre premier guide.",
+            "tryAi": "✨ IA",
+            "createManual": "Manuel",
+            "published": "En ligne",
+            "draft": "Brouillon",
+            "edit": "Modifier",
+            "sortRecent": "Récent",
+            "sortName": "Nom",
+            "confirmDelete": "Supprimer ?",
+            "deleteError": "Erreur",
+            "aiModal": {
+                "title": "Magie ✨",
+                "city": "Ville",
+                "cityPlaceholder": "Marrakech",
+                "type": "Type",
+                "typeAirbnb": "Airbnb",
+                "typeHotel": "Hôtel",
+                "typeGuesthouse": "Maison",
+                "audience": "Public",
+                "audienceFamilies": "Familles",
+                "audienceCouples": "Parejas",
+                "audienceRemote": "Pros",
+                "audienceGroups": "Groupes",
+                "generate": "Générer",
+                "generating": "IA...",
+                "generatingDesc": "Calcul..."
+            },
+            "createModal": {
+                "title": "Nouveau Guide",
+                "nameLabel": "Nom",
+                "namePlaceholder": "Nom...",
+                "cancel": "Annuler",
+                "create": "Créer"
+            },
+            "limitModal": {
+                "title": "Limite",
+                "desc": "Limite atteinte.",
+                "upgrade": "Passer Pro",
+                "or": "Ou",
+                "addon": "Ajouter 1",
+                "loading": "..."
+            },
+            "addonSuccessModal": {
+                "title": "Succès",
+                "heading": "Prêt !",
+                "desc": "Limite augmentée.",
+                "cta": "Merci"
+            }
+        },
+        "settings": {
+            "title": "Réglages",
+            "tabProfile": "Profil",
+            "tabPlan": "Plan",
+            "tabShop": "Boutique",
+            "personalInfo": "Infos",
+            "fullName": "Nom",
+            "email": "Email",
+            "saveProfile": "Sauver",
+            "yourPlan": "Votre Plan",
+            "currentPlan": "Plan actuel",
+            "active": "Actif",
+            "unlimitedGuides": "Illimité",
+            "oneGuideIncluded": "1 guide",
+            "oneGuideDraft": "1 brouillon",
+            "themesUnlocked": "Thèmes OK",
+            "extraGuides": "Extras",
+            "upgradeToPro": "Passer Pro",
+            "youArePro": "Vous êtes Pro",
+            "info": "Info",
+            "noBillingAccount": "Pas de compte",
+            "serverError": "Erreur",
+            "manageSubscription": "Gérer",
+            "shop": "Boutique",
+            "securePayment": "Sécurisé",
+            "bestSeller": "Top",
+            "qrCanvas": "Tableau QR",
+            "qrCanvasDesc": "Tableau...",
+            "hdPrint": "HD",
+            "frameIncluded": "Cadre",
+            "trackedShipping": "Suivi",
+            "shippingTtc": "Livraison OK",
+            "order": "Commander",
+            "requiredPro": "Pro Requis",
+            "extraGuide": "Extra",
+            "extraGuideDesc": "Ajouter guide.",
+            "perMonth": "/mois",
+            "proReserved": "Pro",
+            "onlyProCanAdd": "Pro requis",
+            "addGuide": "Ajouter",
+            "confirmAddGuide": "Ajouter (20 DH/m) ?",
+            "cancel": "Non",
+            "confirm": "Oui",
+            "guideAdded": "OK",
+            "limitIncreased": "OK",
+            "error": "Erreur",
+            "success": "OK"
+        },
+        "ai": {
+            "assistant": "IA",
+            "online": "IA OK",
+            "placeholder": "Message...",
+            "empty": "Question ?",
+            "error": "Erreur",
+            "thinking": "..."
+        },
+        "qrCodeWall": {
+            "titlePart1": "Partagez",
+            "titlePart2": "partout",
+            "description": "Scannez.",
+            "items": {
+                "wifi": {
+                    "title": "WiFi",
+                    "desc": "Connecté"
+                },
+                "perpetual": {
+                    "title": "Permanent",
+                    "desc": "Lien valide"
+                },
+                "remote": {
+                    "title": "Live",
+                    "desc": "Direct"
+                }
+            },
+            "visual": {
+                "welcome": "Bienvenue",
+                "scan": "Scannez",
+                "detected": "Trouvé",
+                "notification": {
+                    "app": "Maplyo",
+                    "title": "Ouvrir"
+                }
+            }
+        },
+        "upsells": "Extras",
+        "legalPage": {
+            "titlePrivacy": "Privacité",
+            "titleTerms": "Termes",
+            "lastUpdated": "MAJ :",
+            "effectiveDate": "Date :",
+            "privacy": {
+                "intro": "...",
+                "section1": {
+                    "title": "1",
+                    "items": [
+                        "1"
+                    ]
+                },
+                "section2": {
+                    "title": "2",
+                    "intro": "2",
+                    "items": [
+                        "2"
+                    ]
+                },
+                "section3": {
+                    "title": "3",
+                    "content": "3"
+                },
+                "section4": {
+                    "title": "4",
+                    "content": "4"
+                },
+                "section5": {
+                    "title": "5",
+                    "content": "5",
+                    "contact": "..."
+                }
+            },
+            "terms": {
+                "intro": "...",
+                "section1": {
+                    "title": "1",
+                    "content": "1"
+                },
+                "section2": {
+                    "title": "2",
+                    "items": [
+                        "2"
+                    ]
+                },
+                "section3": {
+                    "title": "3",
+                    "intro": "3",
+                    "items": [
+                        "3"
+                    ]
+                },
+                "section4": {
+                    "title": "4",
+                    "content": "4"
+                },
+                "section5": {
+                    "title": "5",
+                    "content": "5"
+                },
+                "section6": {
+                    "title": "6",
+                    "content": "6"
+                }
+            }
+        },
+        "pricingPage": {
+            "hero": {
+                "badge": "Top",
+                "title1": "Pro,",
+                "title2": "pas cher.",
+                "subtitle": "..."
+            },
+            "popular": "Top",
+            "header": {
+                "login": "Dentrée",
+                "signup": "S'inscrire"
+            },
+            "compare": {
+                "title": "Comp",
+                "subtitle": "...",
+                "features": {
+                    "unlimited": "Illimité",
+                    "maps": "Maps",
+                    "translation": "IA",
+                    "domain": "Domaine",
+                    "support": "Support",
+                    "whiteLabel": "Marque",
+                    "analytics": "Analytiques"
+                },
+                "values": {
+                    "oneLang": "1 langue",
+                    "unlimited": "Illimité",
+                    "emailSupport": "Email",
+                    "whatsappSupport": "WhatsApp"
+                }
+            },
+            "faqSection": {
+                "title": "FAQ",
+                "subtitle": "...",
+                "items": [
+                    {
+                        "q": "Q",
+                        "a": "A"
+                    }
+                ]
+            },
+            "trust": "Garantie"
+        },
+        "builder": {
+            "blocks": "blocs",
+            "chooseTheme": "Choisir Thème",
+            "reset": "Reset",
+            "viewGuide": "Voir Guide",
+            "catEssentials": "Essentiels",
+            "catTravel": "Voyage",
+            "catBusiness": "Business",
+            "guideStructure": "Structure",
+            "startHere": "Commencez ici",
+            "selectBlocks": "Sélectionnez des blocs",
+            "mobilePreview": "Aperçu Mobile",
+            "blockProperties": "Propriétés",
+            "editing": "Modification",
+            "selectToEdit": "Sélectionnez un bloc",
+            "paramsHere": "Réglages ici",
+            "backHome": "Retour",
+            "backDashboard": "Dashboard",
+            "editorMode": "Mode Édition",
+            "themeLabel": "Thème",
+            "qrLabel": "QR",
+            "createAccount": "Créer Compte",
+            "saveCreateAccount": "Sauver",
+            "online": "En ligne",
+            "confirmUnpublish": "Dépublier ?",
+            "unpublish": "Dépublier",
+            "publishSuccess": "Publié !",
+            "publishError": "Erreur",
+            "publish": "Publier",
+            "library": "Bibliothèque",
+            "mobileMode": "Mode Mobile",
+            "emptyGuide": "Vide",
+            "selectBlock": "Bloc ?",
+            "close": "Fermer",
+            "blockTitle": "Titre Bloc",
+            "designTheme": "Thèmes Design",
+            "upgradePro": "Passer Pro",
+            "unlock": "Débloquer",
+            "unlockPublish": "Publiez !",
+            "publishDesc": "Passez Pro.",
+            "seeOffers": "Offres",
+            "themes": {
+                "minimal-white": {
+                    "name": "Minimal",
+                    "desc": "Blanc"
+                },
+                "soft-gray": {
+                    "name": "Gris",
+                    "desc": "Doux"
+                },
+                "ocean": {
+                    "name": "Océan",
+                    "desc": "Bleu"
+                },
+                "nature": {
+                    "name": "Nature",
+                    "desc": "Vert"
+                },
+                "sunset": {
+                    "name": "Sunset",
+                    "desc": "Orange"
+                }
+            }
+        },
+        "showcase": {
+            "tag": "Exemples",
+            "title": "Showcase",
+            "description": "Voir.",
+            "messageFrom": "De",
+            "viewFull": "Voir",
+            "example1": {
+                "type": "Loft",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Génial"
+            },
+            "example2": {
+                "type": "Villa",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Top"
+            },
+            "example3": {
+                "type": "Riad",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Super"
+            }
+        },
+        "guideLock": {
+            "title": "Accès Sécurisé",
+            "desc": "Dévérouillez pour voir les codes.",
+            "demoCode": "Code Démo"
+        },
+        "auth": {
+            "login": {
+                "title": "Connexion",
+                "subtitle": "Bienvenue",
+                "email": "Email",
+                "password": "Mot de passe",
+                "forgot": "Oublié ?",
+                "error": "Erreur",
+                "submit": "Se connecter",
+                "noAccount": "Pas de compte ?",
+                "createFree": "Créer",
+                "resetLink": "Reset"
+            },
+            "signup": {
+                "title": "Inscription",
+                "subtitle": "Gratuit",
+                "successTitle": "Succès",
+                "successMsg": "Vérifiez vos emails",
+                "successDesc": "Lien envoyé",
+                "backToLogin": "Retour",
+                "firstName": "Prénom",
+                "lastName": "Nom",
+                "businessEmail": "Email pro",
+                "businessName": "Entreprise",
+                "phone": "Tel",
+                "passwordLabel": "Pass",
+                "passwordHint": "6+ cars",
+                "submit": "S'inscrire",
+                "hasAccount": "Déjà inscrit ?",
+                "signIn": "Se connecter"
+            }
+        }
+    },
+    "zh": {
+        "common": {
+            "getStarted": "Commencer",
+            "login": "Connexion",
+            "signup": "S'inscrire",
+            "tryFree": "Essayer Gratuitement",
+            "popular": "Le plus populaire",
+            "month": "/mois",
+            "loading": "Chargement...",
+            "choose": "Choisir",
+            "viewGuide": "Voir le guide complet",
+            "more": "Voir plus",
+            "checkin": "Arrivée",
+            "qrCodeWall": "Scannez pour tester",
+            "checkout": "Départ",
+            "location": "Localisation",
+            "viewOnMap": "Voir sur la carte",
+            "wifi": "WiFi",
+            "other": "Autre"
+        },
+        "renderer": {
+            "welcome": "Bienvenue",
+            "wifi": "WiFi",
+            "access": "Codes d'accès",
+            "location": "Localisation",
+            "contact": "Contact",
+            "amenities": "Équipements",
+            "places": "À proximité",
+            "rules": "Règlement",
+            "tipOfTheDay": "Conseil du jour",
+            "sunday": "Dimanche",
+            "monday": "Lundi",
+            "tuesday": "Mardi",
+            "wednesday": "Mercredi",
+            "thursday": "Jeudi",
+            "friday": "Vendredi",
+            "saturday": "Samedi",
+            "lazy": "Détente",
+            "mood": "Motivé",
+            "discovery": "Découverte",
+            "tasty": "Gourmand",
+            "adventure": "Aventure",
+            "festive": "Festif",
+            "outing": "Sortie",
+            "brunch": "Un brunch à",
+            "explore": "Explorez",
+            "museums": "Visitez",
+            "taste": "Goûtez",
+            "excursion": "Une excursion",
+            "nightlife": "Vie nocturne",
+            "walk": "Une balade",
+            "secureAccess": "Accès Sécurisé",
+            "checkin": "Arrivée",
+            "checkout": "Départ",
+            "viewMap": "Voir sur la carte",
+            "upsells": "Extras",
+            "items": "éléments",
+            "empty": "Rien à afficher",
+            "searchPlaceholder": "Rechercher...",
+            "secureAccessDesc": "Entrez le code fourni par votre hôte."
+        },
+        "socialProof": {
+            "trustpilot": "4.9/5 par 500+ Hôtes",
+            "usedBy": "Utilisé par les meilleures conciergeries",
+            "autoTranslate": {
+                "title": "Auto-Traduit",
+                "desc": "Vos guides parlent la langue de vos invités."
+            },
+            "googleMaps": {
+                "title": "Google Maps Intégré",
+                "desc": "Google Maps directement dans le guide."
+            }
+        },
+        "hero": {
+            "tag": "POUR LES HÔTES ET CONCIERGERIES",
+            "title": "Ne répétez plus jamais le code WiFi.",
+            "subtitle": "Digitalisez votre livret d'accueil. Offrez une expérience 5 étoiles, réduisez les messages de 50%, et augmentez vos avis positifs.",
+            "cta": "Créer mon guide gratuit",
+            "demo": "Voir un exemple",
+            "noCreditCard": "Pas de carte requise",
+            "setupTime": "Configuré en 2 min",
+            "badge": "Livret d'accueil digital #1",
+            "title1": "Pour vos invités,",
+            "title2": "une expérience 5 étoiles.",
+            "users": "Approuvé par 500+ hôtes"
+        },
+        "features": {
+            "title": "Tout ce dont vous avez besoin.",
+            "subtitle": "Rien de superflu.",
+            "description": "Des outils puissants pour automatiser votre accueil.",
+            "badge": "Fonctionnalités",
+            "items": {
+                "mobileFirst": {
+                    "title": "100% Mobile First",
+                    "desc": "Pas d'application à télécharger."
+                },
+                "secure": {
+                    "title": "Codes Sécurisés",
+                    "desc": "WiFi et boîtes à clés protégés."
+                },
+                "map": {
+                    "title": "Carte Interactive",
+                    "desc": "Intégrez vos lieux favoris."
+                },
+                "live": {
+                    "title": "Modifications Live",
+                    "desc": "Mise à jour instantanée."
+                },
+                "translate": {
+                    "title": "Traduction Auto",
+                    "desc": "Détecte la langue du visiteur."
+                },
+                "checklist": {
+                    "title": "Check-lists",
+                    "desc": "Instructions claires arrivée/départ."
+                }
+            }
+        },
+        "pricing": {
+            "title": "Tarification Transparente",
+            "subtitle": "Commencez gratuitement. Évoluez quand vous voulez.",
+            "bestOffer": "La meilleure offre du monde :",
+            "addon": "+20 DH / guide supplémentaire",
+            "trust": "Garantie 30 jours",
+            "enterprise": {
+                "title": "Solution Enterprise",
+                "desc": "Pour les pros (50+ biens).",
+                "cta": "Contacter"
+            },
+            "plans": {
+                "demo": {
+                    "name": "Découverte",
+                    "price": "Gratuit",
+                    "desc": "Testez sans carte.",
+                    "button": "Essayer",
+                    "features": [
+                        "Accès Créateur",
+                        "Aperçu Mobile"
+                    ]
+                },
+                "basic": {
+                    "name": "Essentiel",
+                    "desc": "Pour 1 propriété.",
+                    "button": "Démarrer",
+                    "features": [
+                        "Livret Digital",
+                        "WiFi QR",
+                        "1 Guide"
+                    ]
+                },
+                "pro": {
+                    "name": "Croissance",
+                    "desc": "Pour les pros.",
+                    "button": "Passer Pro",
+                    "features": [
+                        "Guides Illimités",
+                        "Traduction IA",
+                        "Support WhatsApp"
+                    ]
+                },
+                "business": {
+                    "name": "Agence",
+                    "desc": "Pour les portfolios.",
+                    "button": "Talk to Expert",
+                    "price": "Sur mesure",
+                    "features": [
+                        "Marque Blanche",
+                        "Multi-Propriétés"
+                    ]
+                }
+            }
+        },
+        "testimonials": {
+            "title": "Approuvé par les Pros",
+            "subtitle": "Rejoignez 500+ hôtes.",
+            "items": [
+                {
+                    "name": "Jean R.",
+                    "role": "Superhost",
+                    "text": "Gain de temps énorme.",
+                    "result": "-60% messages"
+                }
+            ]
+        },
+        "faq": {
+            "title": "Questions Fréquentes",
+            "subtitle": "Tout savoir.",
+            "questions": [
+                {
+                    "q": "Gratuit ?",
+                    "a": "Oui, plan découverte dispo."
+                }
+            ]
+        },
+        "footer": {
+            "product": "Produit",
+            "support": "Support",
+            "legal": "Légal",
+            "desc": "Maplyo aide les hôtes.",
+            "links": {
+                "features": "Fonctions",
+                "pricing": "Tarifs",
+                "testimonials": "Avis",
+                "roadmap": "Roadmap",
+                "help": "Aide",
+                "contact": "Contact",
+                "privacy": "Confidentialité",
+                "terms": "Conditions",
+                "legal": "Mentions"
+            },
+            "securePayment": "Paiement Sécurisé",
+            "rights": "Tous droits réservés."
+        },
+        "cta": {
+            "title": "Prêt à impressionner ?",
+            "subtitle": "Créez votre guide aujourd'hui.",
+            "button": "Créer mon guide",
+            "subtext": "Sans carte."
+        },
+        "guide": {
+            "accessCode": "Codes d'accès",
+            "locked": "Protégé par code.",
+            "enterCode": "Code d'accès",
+            "confirm": "Valider",
+            "apartmentDoor": "Porte :",
+            "buildingDoor": "Immeuble :",
+            "gate": "Portail :",
+            "notes": "Notes"
+        },
+        "guideBlocks": {
+            "checkIn": {
+                "title": "Arrivée"
+            },
+            "location": {
+                "notSet": "Non défini",
+                "address": "Adresse",
+                "openInMaps": "Ouvrir",
+                "copyAddress": "Copier",
+                "viewOnMap": "Voir sur la carte"
+            },
+            "contact": {
+                "host": "Hôte",
+                "yourHost": "Votre Hôte",
+                "phone": "Tel",
+                "openConversation": "Ouvrir"
+            },
+            "rules": {
+                "noRules": "Pas de règles"
+            },
+            "amenities": {
+                "noAmenities": "Pas d'équipements"
+            },
+            "faq": {
+                "noFaq": "Pas de FAQ",
+                "question": "Question",
+                "answer": "Réponse"
+            },
+            "trash": {
+                "title": "Bacs",
+                "items": "Ordures",
+                "recycling": "Recyclage"
+            },
+            "breakfast": {
+                "title": "Petit Déjeuner",
+                "menu": "Menu"
+            },
+            "transport": {
+                "noInfo": "Pas d'infos",
+                "call": "Appeler"
+            }
+        },
+        "editor": {
+            "common": {
+                "title": "Titre",
+                "description": "Description",
+                "uploadImage": "Image",
+                "tags": "Tags",
+                "placeholderTags": "Wifi, Piscine...",
+                "time": "Heure",
+                "instructions": "Instructions",
+                "videoUrl": "Vidéo",
+                "location": "Lieu",
+                "address": "Adresse",
+                "placeholderAddress": "Rue...",
+                "mapUrl": "Maps",
+                "placeholderMap": "Lien Maps",
+                "phone": "Tel",
+                "placeholderPhone": "+33...",
+                "whatsapp": "WhatsApp",
+                "placeholderWhatsapp": "Numéro",
+                "email": "Email",
+                "placeholderEmail": "...",
+                "price": "Prix",
+                "placeholderPrice": "150 DH",
+                "placeholderReserve": "Réserver",
+                "cost": "Coût",
+                "placeholderWelcome": "Bienvenue...",
+                "linkUrl": "Lien",
+                "priceCheap": "Eco",
+                "priceModerate": "Moyen",
+                "priceExpensive": "Premium",
+                "day": "Jour",
+                "placeholderMonth": "JAN",
+                "placeholderDay": "15",
+                "placeholderTime": "19:00",
+                "other": "Autre",
+                "hours": "Heures",
+                "month": "Mois",
+                "placeholder": "..."
+            },
+            "labels": {
+                "hero": "Accueil",
+                "wifi": "WiFi",
+                "access_codes": "Codes",
+                "location": "Localisation",
+                "contact": "Contact",
+                "amenities": "Équipements",
+                "places": "Lieux",
+                "rules": "Règlement",
+                "faq": "FAQ",
+                "trash": "Bacs",
+                "parking": "Parking",
+                "breakfast": "Petit Déj",
+                "transport": "Transport",
+                "checkin": "Arrivée",
+                "checkout": "Départ",
+                "documents": "Documents",
+                "events": "Événements",
+                "upsells": "Extras",
+                "embed": "Iframe",
+                "ai_assistant": "IA"
+            },
+            "access_codes": {
+                "security": "Sécurité",
+                "mode": "Affichage",
+                "alwaysVisible": "Toujours visible",
+                "unlockByCode": "Par code",
+                "unlockCode": "Code",
+                "unlockCodeDesc": "Requis.",
+                "aptCode": "Porte",
+                "buildingCode": "Immeuble",
+                "gateCode": "Portail",
+                "notes": "Notes"
+            },
+            "wifi": {
+                "networkName": "Nom WiFi",
+                "password": "Mot de passe",
+                "notes": "Notes"
+            },
+            "documents": {
+                "name": "Nom",
+                "url": "Lien",
+                "add": "Ajouter"
+            },
+            "places": {
+                "aiButton": "IA",
+                "name": "Nom",
+                "add": "Ajouter"
+            },
+            "events": {
+                "aiButton": "IA",
+                "add": "Ajouter"
+            },
+            "upsells": {
+                "buttonText": "Bouton",
+                "buttonLink": "Lien",
+                "add": "Ajouter"
+            },
+            "embed": {
+                "url": "Iframe",
+                "warning": "Attention"
+            },
+            "checkin": {
+                "timePlaceholder": "15:00",
+                "instrPlaceholder": "Procédure..."
+            },
+            "contact": {
+                "nameLabel": "Nom",
+                "namePlaceholder": "Concierge"
+            },
+            "rules": {
+                "title": "Règle",
+                "placeholder": "...",
+                "add": "Ajouter"
+            },
+            "amenities": {
+                "title": "Équipement",
+                "placeholder": "...",
+                "add": "Ajouter"
+            },
+            "faq": {
+                "question": "Q",
+                "qPlaceholder": "...",
+                "answer": "R",
+                "aPlaceholder": "...",
+                "add": "Ajouter"
+            },
+            "trash": {
+                "instrPlaceholder": "Tri...",
+                "dayTrash": "Ordures",
+                "dayTrashPlaceholder": "Lundi",
+                "dayRecycling": "Recyclage",
+                "dayRecyclingPlaceholder": "Jeudi",
+                "location": "Bacs",
+                "locPlaceholder": "Garage",
+                "photoLocal": "Photo"
+            },
+            "parking": {
+                "instrPlaceholder": "N°42",
+                "locPlaceholder": "Rue...",
+                "costPlaceholder": "Gratuit",
+                "photo": "Photo"
+            },
+            "breakfast": {
+                "hoursPlaceholder": "07:00 - 10:30",
+                "locPlaceholder": "Salle à manger",
+                "menu": "Menu",
+                "menuPlaceholder": "Café, thé..."
+            },
+            "transport": {
+                "bus": "Bus",
+                "train": "Train",
+                "taxi": "Taxi",
+                "bike": "Vélo",
+                "linePlaceholder": "Ligne 4",
+                "stop": "Arrêt",
+                "stopPlaceholder": "Arrêt...",
+                "add": "Ajouter"
+            }
+        },
+        "dashboard": {
+            "title": "Mes Guides",
+            "subtitle": "Gérez vos biens.",
+            "newGuide": "Nouveau Guide",
+            "logout": "Déconnexion",
+            "viewPublic": "Page publique",
+            "passProToShare": "Passer Pro",
+            "delete": "Supprimer",
+            "emptyTitle": "Aucun guide",
+            "emptyDesc": "Créez votre premier guide.",
+            "tryAi": "✨ IA",
+            "createManual": "Manuel",
+            "published": "En ligne",
+            "draft": "Brouillon",
+            "edit": "Modifier",
+            "sortRecent": "Récent",
+            "sortName": "Nom",
+            "confirmDelete": "Supprimer ?",
+            "deleteError": "Erreur",
+            "aiModal": {
+                "title": "Magie ✨",
+                "city": "Ville",
+                "cityPlaceholder": "Marrakech",
+                "type": "Type",
+                "typeAirbnb": "Airbnb",
+                "typeHotel": "Hôtel",
+                "typeGuesthouse": "Maison",
+                "audience": "Public",
+                "audienceFamilies": "Familles",
+                "audienceCouples": "Parejas",
+                "audienceRemote": "Pros",
+                "audienceGroups": "Groupes",
+                "generate": "Générer",
+                "generating": "IA...",
+                "generatingDesc": "Calcul..."
+            },
+            "createModal": {
+                "title": "Nouveau Guide",
+                "nameLabel": "Nom",
+                "namePlaceholder": "Nom...",
+                "cancel": "Annuler",
+                "create": "Créer"
+            },
+            "limitModal": {
+                "title": "Limite",
+                "desc": "Limite atteinte.",
+                "upgrade": "Passer Pro",
+                "or": "Ou",
+                "addon": "Ajouter 1",
+                "loading": "..."
+            },
+            "addonSuccessModal": {
+                "title": "Succès",
+                "heading": "Prêt !",
+                "desc": "Limite augmentée.",
+                "cta": "Merci"
+            }
+        },
+        "settings": {
+            "title": "Réglages",
+            "tabProfile": "Profil",
+            "tabPlan": "Plan",
+            "tabShop": "Boutique",
+            "personalInfo": "Infos",
+            "fullName": "Nom",
+            "email": "Email",
+            "saveProfile": "Sauver",
+            "yourPlan": "Votre Plan",
+            "currentPlan": "Plan actuel",
+            "active": "Actif",
+            "unlimitedGuides": "Illimité",
+            "oneGuideIncluded": "1 guide",
+            "oneGuideDraft": "1 brouillon",
+            "themesUnlocked": "Thèmes OK",
+            "extraGuides": "Extras",
+            "upgradeToPro": "Passer Pro",
+            "youArePro": "Vous êtes Pro",
+            "info": "Info",
+            "noBillingAccount": "Pas de compte",
+            "serverError": "Erreur",
+            "manageSubscription": "Gérer",
+            "shop": "Boutique",
+            "securePayment": "Sécurisé",
+            "bestSeller": "Top",
+            "qrCanvas": "Tableau QR",
+            "qrCanvasDesc": "Tableau...",
+            "hdPrint": "HD",
+            "frameIncluded": "Cadre",
+            "trackedShipping": "Suivi",
+            "shippingTtc": "Livraison OK",
+            "order": "Commander",
+            "requiredPro": "Pro Requis",
+            "extraGuide": "Extra",
+            "extraGuideDesc": "Ajouter guide.",
+            "perMonth": "/mois",
+            "proReserved": "Pro",
+            "onlyProCanAdd": "Pro requis",
+            "addGuide": "Ajouter",
+            "confirmAddGuide": "Ajouter (20 DH/m) ?",
+            "cancel": "Non",
+            "confirm": "Oui",
+            "guideAdded": "OK",
+            "limitIncreased": "OK",
+            "error": "Erreur",
+            "success": "OK"
+        },
+        "ai": {
+            "assistant": "IA",
+            "online": "IA OK",
+            "placeholder": "Message...",
+            "empty": "Question ?",
+            "error": "Erreur",
+            "thinking": "..."
+        },
+        "qrCodeWall": {
+            "titlePart1": "Partagez",
+            "titlePart2": "partout",
+            "description": "Scannez.",
+            "items": {
+                "wifi": {
+                    "title": "WiFi",
+                    "desc": "Connecté"
+                },
+                "perpetual": {
+                    "title": "Permanent",
+                    "desc": "Lien valide"
+                },
+                "remote": {
+                    "title": "Live",
+                    "desc": "Direct"
+                }
+            },
+            "visual": {
+                "welcome": "Bienvenue",
+                "scan": "Scannez",
+                "detected": "Trouvé",
+                "notification": {
+                    "app": "Maplyo",
+                    "title": "Ouvrir"
+                }
+            }
+        },
+        "upsells": "Extras",
+        "legalPage": {
+            "titlePrivacy": "Privacité",
+            "titleTerms": "Termes",
+            "lastUpdated": "MAJ :",
+            "effectiveDate": "Date :",
+            "privacy": {
+                "intro": "...",
+                "section1": {
+                    "title": "1",
+                    "items": [
+                        "1"
+                    ]
+                },
+                "section2": {
+                    "title": "2",
+                    "intro": "2",
+                    "items": [
+                        "2"
+                    ]
+                },
+                "section3": {
+                    "title": "3",
+                    "content": "3"
+                },
+                "section4": {
+                    "title": "4",
+                    "content": "4"
+                },
+                "section5": {
+                    "title": "5",
+                    "content": "5",
+                    "contact": "..."
+                }
+            },
+            "terms": {
+                "intro": "...",
+                "section1": {
+                    "title": "1",
+                    "content": "1"
+                },
+                "section2": {
+                    "title": "2",
+                    "items": [
+                        "2"
+                    ]
+                },
+                "section3": {
+                    "title": "3",
+                    "intro": "3",
+                    "items": [
+                        "3"
+                    ]
+                },
+                "section4": {
+                    "title": "4",
+                    "content": "4"
+                },
+                "section5": {
+                    "title": "5",
+                    "content": "5"
+                },
+                "section6": {
+                    "title": "6",
+                    "content": "6"
+                }
+            }
+        },
+        "pricingPage": {
+            "hero": {
+                "badge": "Top",
+                "title1": "Pro,",
+                "title2": "pas cher.",
+                "subtitle": "..."
+            },
+            "popular": "Top",
+            "header": {
+                "login": "Dentrée",
+                "signup": "S'inscrire"
+            },
+            "compare": {
+                "title": "Comp",
+                "subtitle": "...",
+                "features": {
+                    "unlimited": "Illimité",
+                    "maps": "Maps",
+                    "translation": "IA",
+                    "domain": "Domaine",
+                    "support": "Support",
+                    "whiteLabel": "Marque",
+                    "analytics": "Analytiques"
+                },
+                "values": {
+                    "oneLang": "1 langue",
+                    "unlimited": "Illimité",
+                    "emailSupport": "Email",
+                    "whatsappSupport": "WhatsApp"
+                }
+            },
+            "faqSection": {
+                "title": "FAQ",
+                "subtitle": "...",
+                "items": [
+                    {
+                        "q": "Q",
+                        "a": "A"
+                    }
+                ]
+            },
+            "trust": "Garantie"
+        },
+        "builder": {
+            "blocks": "blocs",
+            "chooseTheme": "Choisir Thème",
+            "reset": "Reset",
+            "viewGuide": "Voir Guide",
+            "catEssentials": "Essentiels",
+            "catTravel": "Voyage",
+            "catBusiness": "Business",
+            "guideStructure": "Structure",
+            "startHere": "Commencez ici",
+            "selectBlocks": "Sélectionnez des blocs",
+            "mobilePreview": "Aperçu Mobile",
+            "blockProperties": "Propriétés",
+            "editing": "Modification",
+            "selectToEdit": "Sélectionnez un bloc",
+            "paramsHere": "Réglages ici",
+            "backHome": "Retour",
+            "backDashboard": "Dashboard",
+            "editorMode": "Mode Édition",
+            "themeLabel": "Thème",
+            "qrLabel": "QR",
+            "createAccount": "Créer Compte",
+            "saveCreateAccount": "Sauver",
+            "online": "En ligne",
+            "confirmUnpublish": "Dépublier ?",
+            "unpublish": "Dépublier",
+            "publishSuccess": "Publié !",
+            "publishError": "Erreur",
+            "publish": "Publier",
+            "library": "Bibliothèque",
+            "mobileMode": "Mode Mobile",
+            "emptyGuide": "Vide",
+            "selectBlock": "Bloc ?",
+            "close": "Fermer",
+            "blockTitle": "Titre Bloc",
+            "designTheme": "Thèmes Design",
+            "upgradePro": "Passer Pro",
+            "unlock": "Débloquer",
+            "unlockPublish": "Publiez !",
+            "publishDesc": "Passez Pro.",
+            "seeOffers": "Offres",
+            "themes": {
+                "minimal-white": {
+                    "name": "Minimal",
+                    "desc": "Blanc"
+                },
+                "soft-gray": {
+                    "name": "Gris",
+                    "desc": "Doux"
+                },
+                "ocean": {
+                    "name": "Océan",
+                    "desc": "Bleu"
+                },
+                "nature": {
+                    "name": "Nature",
+                    "desc": "Vert"
+                },
+                "sunset": {
+                    "name": "Sunset",
+                    "desc": "Orange"
+                }
+            }
+        },
+        "showcase": {
+            "tag": "Exemples",
+            "title": "Showcase",
+            "description": "Voir.",
+            "messageFrom": "De",
+            "viewFull": "Voir",
+            "example1": {
+                "type": "Loft",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Génial"
+            },
+            "example2": {
+                "type": "Villa",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Top"
+            },
+            "example3": {
+                "type": "Riad",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Super"
+            }
+        },
+        "guideLock": {
+            "title": "Accès Sécurisé",
+            "desc": "Dévérouillez pour voir les codes.",
+            "demoCode": "Code Démo"
+        },
+        "auth": {
+            "login": {
+                "title": "Connexion",
+                "subtitle": "Bienvenue",
+                "email": "Email",
+                "password": "Mot de passe",
+                "forgot": "Oublié ?",
+                "error": "Erreur",
+                "submit": "Se connecter",
+                "noAccount": "Pas de compte ?",
+                "createFree": "Créer",
+                "resetLink": "Reset"
+            },
+            "signup": {
+                "title": "Inscription",
+                "subtitle": "Gratuit",
+                "successTitle": "Succès",
+                "successMsg": "Vérifiez vos emails",
+                "successDesc": "Lien envoyé",
+                "backToLogin": "Retour",
+                "firstName": "Prénom",
+                "lastName": "Nom",
+                "businessEmail": "Email pro",
+                "businessName": "Entreprise",
+                "phone": "Tel",
+                "passwordLabel": "Pass",
+                "passwordHint": "6+ cars",
+                "submit": "S'inscrire",
+                "hasAccount": "Déjà inscrit ?",
+                "signIn": "Se connecter"
+            }
         }
     }
 };
 
-export type DictionaryShape = typeof DICTIONARY['fr'] & {
-    ai: {
-        assistant: string;
-        online: string;
-        empty: string;
-        thinking: string;
-        placeholder: string;
-        error: string;
-    }
-};
-
-
-
+export type DictionaryShape = typeof DICTIONARY['fr'];

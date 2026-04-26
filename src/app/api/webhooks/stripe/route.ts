@@ -11,17 +11,18 @@ const getStripe = () => {
 };
 
 // Init Supabase Admin (Bypass RLS to update user status)
-// ...
-
-// Init Supabase Admin (Bypass RLS to update user status)
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+const getSupabaseAdmin = () => {
+    return createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+        process.env.SUPABASE_SERVICE_ROLE_KEY || "placeholder-key"
+    );
+};
 
 export async function POST(req: Request) {
+    const supabase = getSupabaseAdmin();
+
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || "whsec_placeholder";
+
     const body = await req.text();
     const signature = (await headers()).get("stripe-signature") as string;
 
@@ -41,17 +42,17 @@ export async function POST(req: Request) {
         switch (event.type) {
             case "checkout.session.completed": {
                 const session = event.data.object as Stripe.Checkout.Session;
-                await handleCheckoutCompleted(session);
+                await handleCheckoutCompleted(session, supabase);
                 break;
             }
             case "customer.subscription.updated": {
                 const subscription = event.data.object as Stripe.Subscription;
-                await handleSubscriptionUpdated(subscription);
+                await handleSubscriptionUpdated(subscription, supabase);
                 break;
             }
             case "customer.subscription.deleted": {
                 const subscription = event.data.object as Stripe.Subscription;
-                await handleSubscriptionDeleted(subscription);
+                await handleSubscriptionDeleted(subscription, supabase);
                 break;
             }
             default:
@@ -66,7 +67,7 @@ export async function POST(req: Request) {
 
 // --- HANDLERS ---
 
-async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabase: any) {
     const userId = session.metadata?.userId;
     const planId = session.metadata?.planId || 'pro'; // You should pass this in metadata
 
@@ -89,7 +90,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     else console.log(`✅ User ${userId} upgraded to ${planId}`);
 }
 
-async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
+async function handleSubscriptionUpdated(sub: Stripe.Subscription, supabase: any) {
     const customerId = sub.customer as string;
 
     // Find user by stripe_customer_id
@@ -158,7 +159,7 @@ async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
     console.log(`🔄 Subscription updated for ${profiles.id}: Plan=${planVariant}, Status=${status}, Extra=${extraGuides}, Themes=${themesUnlocked}`);
 }
 
-async function handleSubscriptionDeleted(sub: Stripe.Subscription) {
+async function handleSubscriptionDeleted(sub: Stripe.Subscription, supabase: any) {
     const customerId = sub.customer as string;
 
     const { data: profiles } = await supabase

@@ -2,12 +2,11 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2025-01-27.acacia" as any,
-});
-
 export async function POST(req: Request) {
     try {
+        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_placeholder", {
+            apiVersion: "2025-01-27.acacia" as any,
+        });
         const authHeader = req.headers.get("Authorization");
         if (!authHeader) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

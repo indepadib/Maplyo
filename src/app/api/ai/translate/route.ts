@@ -1,12 +1,12 @@
-import { OpenAI } from 'openai';
+import { createOpenAIClient } from '@/lib/ai/openai';
 import { NextResponse } from 'next/server';
-
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
 
 export async function POST(req: Request) {
     try {
+        const openai = createOpenAIClient();
+        if (!openai) {
+            return NextResponse.json({ error: 'OpenAI configuration missing' }, { status: 500 });
+        }
         const { text, targetLang } = await req.json();
 
         if (!text || !targetLang) {
