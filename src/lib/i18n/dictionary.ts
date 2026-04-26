@@ -4512,7 +4512,7 @@ export const DICTIONARY: Record<Language, any> = {
             placeholder: "اسأل سؤالاً...",
             error: "عذراً، حدث خطأ."
         }
-    }
+    },
 };
 
 export type DictionaryShape = typeof DICTIONARY['fr'] & {
