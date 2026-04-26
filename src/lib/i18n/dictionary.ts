@@ -464,6 +464,14 @@ export const DICTIONARY = {
                 title: "选择主题",
                 subtitle: "个性化您的指南外观。"
             }
+        },
+        ai: {
+            assistant: "AI 助手",
+            online: "在线",
+            empty: "您可以问我关于住宿的任何问题！",
+            thinking: "思考中...",
+            placeholder: "提问...",
+            error: "抱歉，出错了。"
         }
     },
     fr: {
@@ -1289,6 +1297,14 @@ export const DICTIONARY = {
             openMaps: "Ouvrir Maps",
             call: "Appeler",
             message: "Message"
+        },
+        ai: {
+            assistant: "Assistant IA",
+            online: "En ligne",
+            empty: "Posez-moi vos questions sur le séjour !",
+            thinking: "Réflexion...",
+            placeholder: "Posez une question...",
+            error: "Désolé, une erreur est survenue."
         }
     },
 
@@ -2121,6 +2137,14 @@ export const DICTIONARY = {
             openMaps: "Open Maps",
             call: "Call",
             message: "Message"
+        },
+        ai: {
+            assistant: "AI Assistant",
+            online: "Online",
+            empty: "Ask me anything about your stay!",
+            thinking: "Thinking...",
+            placeholder: "Ask a question...",
+            error: "Sorry, there was an error."
         }
     },
     es: {
@@ -2674,6 +2698,14 @@ export const DICTIONARY = {
             items: "artículos",
             viewMap: "Ver el mapa",
             secureAccess: "Acceso seguro"
+        },
+        ai: {
+            assistant: "Asistente IA",
+            online: "En línea",
+            empty: "¡Pregúntame cualquier cosa sobre tu estancia!",
+            thinking: "Pensando...",
+            placeholder: "Haz una pregunta...",
+            error: "Lo siento, hubo un error."
         }
     },
     ar: {
@@ -3850,6 +3882,14 @@ export const DICTIONARY = {
             openMaps: "Maps openen",
             call: "Bellen",
             message: "Bericht",
+            ai: {
+                assistant: "AI Assistent",
+                online: "Online",
+                empty: "Stel me gerust vragen over je verblijf!",
+                thinking: "Nadenken...",
+                placeholder: "Stel een vraag...",
+                error: "Sorry, er is een fout opgetreden."
+            },
             empty: "Geen resultaten gevonden",
             seeAll: "Alles tonen",
             less: "Minder tonen",
@@ -4622,12 +4662,12 @@ export const DICTIONARY = {
             notes: "ملاحظات"
         },
         ai: {
-            assistant: "مساعد الدليل",
-            online: "الذكاء الاصطناعي متصل",
-            placeholder: "رسالة...",
-            empty: "اسأل سؤالاً عن هذا الدليل.",
-            error: "عذراً، لا يمكنني الإجابة الآن.",
-            thinking: "جاري الصياغة..."
+            assistant: "مساعد الذكاء الاصطناعي",
+            online: "متصل",
+            empty: "اسألني أي شيء عن إقامتك!",
+            thinking: "يفكر...",
+            placeholder: "اسأل سؤالاً...",
+            error: "عذراً، حدث خطأ."
         },
         qrCodeWall: {
             titlePart1: "شارك دليلك",
@@ -4978,6 +5018,14 @@ export const DICTIONARY = {
             openMaps: "فتح الخرائط",
             call: "اتصال",
             message: "رسالة",
+            ai: {
+                assistant: "مساعد الذكاء الاصطناعي",
+                online: "متصل",
+                empty: "اسألني أي شيء عن إقامتك!",
+                thinking: "يفكر...",
+                placeholder: "اسأل سؤالاً...",
+                error: "عذراً، حدث خطأ."
+            },
             empty: "لا توجد نتائج مطابقة لبحثك",
             seeAll: "عرض الكل",
             less: "عرض أقل",
