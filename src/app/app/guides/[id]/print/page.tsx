@@ -66,7 +66,7 @@ export default function PrintPage({ params }: { params: Promise<{ id: string }> 
                 allowTaint: true,
                 backgroundColor: "#ffffff", // Solid background to avoid transparency issues
                 logging: false,
-                letterRendering: true,
+
                 // html2canvas doesn't support all CSS properties perfectly, 
                 // but Maplyo's PrintLayout uses inline styles specifically for this reason
             });
