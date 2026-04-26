@@ -379,6 +379,9 @@ export const DICTIONARY = {
             subtitle: "Gérez vos expériences voyageurs.",
             newGuide: "Nouveau Guide",
             logout: "Déconnexion",
+            viewPublic: "Voir page publique",
+            passProToShare: "Passez Pro pour partager",
+            delete: "Supprimer",
             emptyTitle: "Aucun guide pour le moment",
             emptyDesc: "Créez votre premier guide pour offrir une expérience exceptionnelle à vos voyageurs.",
             tryAi: "✨ Essayer l'IA",
@@ -530,6 +533,9 @@ export const DICTIONARY = {
             thinking: "Réflexion...",
             placeholder: "Posez une question...",
             error: "Désolé, une erreur est survenue."
+        },
+        builder: {
+            blocks: "blocs"
         }
     },
 
@@ -911,6 +917,9 @@ export const DICTIONARY = {
             subtitle: "Manage your guest experiences.",
             newGuide: "New Guide",
             logout: "Log out",
+            viewPublic: "View public page",
+            passProToShare: "Upgrade to Pro to share",
+            delete: "Delete",
             emptyTitle: "No guides yet",
             emptyDesc: "Create your first guide to offer an exceptional experience to your guests.",
             tryAi: "✨ Try AI",
@@ -1062,6 +1071,9 @@ export const DICTIONARY = {
             thinking: "Thinking...",
             placeholder: "Ask a question...",
             error: "Sorry, there was an error."
+        },
+        builder: {
+            blocks: "blocks"
         }
     },
     es: {
@@ -1228,6 +1240,9 @@ export const DICTIONARY = {
             subtitle: "Gestiona las experiencias de tus huéspedes.",
             newGuide: "Nueva Guía",
             logout: "Cerrar sesión",
+            viewPublic: "Ver página pública",
+            passProToShare: "Pásate a Pro para compartir",
+            delete: "Eliminar",
             emptyTitle: "Sin guías todavía",
             emptyDesc: "Crea tu primera guía para ofrecer una experiencia excepcional a tus huéspedes.",
             tryAi: "✨ Probar IA",
@@ -1379,6 +1394,9 @@ export const DICTIONARY = {
             thinking: "Pensando...",
             placeholder: "Haz una pregunta...",
             error: "Lo siento, hubo un error."
+        },
+        builder: {
+            blocks: "bloques"
         }
     },
     ar: {
@@ -1511,6 +1529,9 @@ export const DICTIONARY = {
             subtitle: "أدِر تجارب ضيوفك.",
             newGuide: "دليل جديد",
             logout: "تسجيل الخروج",
+            viewPublic: "عرض الصفحة العامة",
+            passProToShare: "الترقية إلى Pro للمشاركة",
+            delete: "حذف",
             emptyTitle: "لا توجد أدلة بعد",
             emptyDesc: "أنشئ دليلك الأول لتقديم تجربة استثنائية لضيوفك.",
             tryAi: "✨ جرّب الذكاء الاصطناعي",
@@ -1662,6 +1683,9 @@ export const DICTIONARY = {
             thinking: "يفكر...",
             placeholder: "اسأل سؤالاً...",
             error: "عذراً، حدث خطأ."
+        },
+        builder: {
+            blocks: "كتل"
         }
     },
     nl: {
@@ -1695,7 +1719,65 @@ export const DICTIONARY = {
             error: "Sorry, er is een fout opgetreden."
         },
         dashboard: {
-            logout: "Uitloggen"
+            logout: "Uitloggen",
+            viewPublic: "Bekijk openbare pagina",
+            passProToShare: "Upgrade naar Pro om te delen",
+            delete: "Verwijderen",
+            title: "Mijn Gidsen",
+            subtitle: "Beheer uw gastenervaringen.",
+            newGuide: "Nieuwe Gids",
+            emptyTitle: "Nog geen gidsen",
+            emptyDesc: "Maak uw eerste gids om een uitzonderlijke ervaring aan uw gasten te bieden.",
+            tryAi: "✨ Probeer AI",
+            createManual: "Handmatig maken",
+            published: "Gepubliceerd",
+            draft: "Concept",
+            edit: "Bewerken",
+            sortRecent: "Recent",
+            sortName: "Naam",
+            confirmDelete: "Weet u zeker dat u deze gids wilt verwijderen? Dit is definitief.",
+            deleteError: "Fout bij verwijderen.",
+            aiModal: {
+                title: "Magische Creatie ✨",
+                city: "Stad of Plaats",
+                cityPlaceholder: "Bijv: Amsterdam, Jordaan",
+                type: "Type",
+                typeAirbnb: "Airbnb / Appartement",
+                typeHotel: "Hotel / Riad",
+                typeGuesthouse: "Gastenverblijf",
+                audience: "Gasten",
+                audienceFamilies: "Gezinnen",
+                audienceCouples: "Stellen",
+                audienceRemote: "Thuiswerkers",
+                audienceGroups: "Groepen",
+                generate: "Mijn gids genereren",
+                generating: "AI schrijft uw gids...",
+                generatingDesc: "Aanbevelingen maken voor"
+            },
+            createModal: {
+                title: "Nieuwe Gids",
+                nameLabel: "Gidsnaam",
+                namePlaceholder: "Bijv: Riad van het Licht",
+                cancel: "Annuleren",
+                create: "Gids maken"
+            },
+            limitModal: {
+                title: "Gidslimiet bereikt 🏠",
+                desc: "U heeft de limiet van toegestane gidsen voor uw huidige abonnement bereikt.",
+                upgrade: "🚀 Upgrade naar Onbeperkt (Pro)",
+                or: "Of",
+                addon: "➕ Voeg slechts 1 gids toe",
+                loading: "Laden..."
+            },
+            addonSuccessModal: {
+                title: "Gids toegevoegd! ✨",
+                heading: "Klaar!",
+                desc: "Uw limiet is verhoogd met 1 gids. U kunt nu direct uw nieuwe gids maken.",
+                cta: "Geweldig, bedankt!"
+            }
+        },
+        builder: {
+            blocks: "blokken"
         },
         settings: {
             title: "Instellingen",
@@ -1777,7 +1859,65 @@ export const DICTIONARY = {
             error: "抱歉，出错了。"
         },
         dashboard: {
-            logout: "注销"
+            logout: "注销",
+            viewPublic: "查看公开页面",
+            passProToShare: "升级到 Pro 以分享",
+            delete: "删除",
+            title: "我的指南",
+            subtitle: "管理您的访客体验。",
+            newGuide: "新指南",
+            emptyTitle: "尚无指南",
+            emptyDesc: "创建您的第一个指南，为您的客人提供卓越的体验。",
+            tryAi: "✨ 尝试 AI",
+            createManual: "手动创建",
+            published: "已发布",
+            draft: "草稿",
+            edit: "编辑",
+            sortRecent: "最近",
+            sortName: "名称",
+            confirmDelete: "您确定要删除此指南吗？此操作不可逆。",
+            deleteError: "删除时出错。",
+            aiModal: {
+                title: "神奇创建 ✨",
+                city: "城市或地点",
+                cityPlaceholder: "例如：马拉喀什，格利兹区",
+                type: "类型",
+                typeAirbnb: "Airbnb / 公寓",
+                typeHotel: "酒店 / 利亚德",
+                typeGuesthouse: "民宿",
+                audience: "访客",
+                audienceFamilies: "家庭",
+                audienceCouples: "情侣",
+                audienceRemote: "远程工作者",
+                audienceGroups: "团体",
+                generate: "生成我的指南",
+                generating: "AI 正在编写您的指南...",
+                generatingDesc: "正在创建推荐："
+            },
+            createModal: {
+                title: "新指南",
+                nameLabel: "指南名称",
+                namePlaceholder: "例如：光之利亚德",
+                cancel: "取消",
+                create: "创建指南"
+            },
+            limitModal: {
+                title: "已达到指南上限 🏠",
+                desc: "您已达到当前订阅允许的指南上限。",
+                upgrade: "🚀 升级到无限 (Pro)",
+                or: "或",
+                addon: "➕ 仅添加 1 个指南",
+                loading: "加载中..."
+            },
+            addonSuccessModal: {
+                title: "指南已添加！ ✨",
+                heading: "准备好了！",
+                desc: "您的上限已增加 1 个指南。您现在可以立即创建新指南。",
+                cta: "太棒了，谢谢！"
+            }
+        },
+        builder: {
+            blocks: "块"
         },
         settings: {
             title: "设置",
