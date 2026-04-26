@@ -5,8 +5,10 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Lock, ArrowRight, Mail, User, Phone, Building, Map as MapIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/components/providers/LanguageProvider";
 
 export default function SignupPage() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -49,13 +51,8 @@ export default function SignupPage() {
         // TRIGGER WELCOME EMAIL (Fire & Forget)
         fetch('/api/email/welcome', {
           method: 'POST',
-          body: JSON.stringify({
-            email: formData.email,
-            name: formData.firstName
-          })
+          body: JSON.stringify({ email: formData.email, name: formData.firstName })
         });
-
-        // Show Success View instead of Alert
         setSuccess(true);
       }
     }
@@ -67,7 +64,6 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 font-sans selection:bg-rose-500/30 flex flex-col items-center justify-center p-4 py-10 relative overflow-hidden">
-      {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] right-[-10%] w-[80vw] h-[80vw] bg-rose-600/10 rounded-full blur-[150px] mix-blend-screen animate-pulse delay-700" />
         <div className="absolute bottom-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-purple-600/10 rounded-full blur-[150px] mix-blend-screen" />
@@ -85,8 +81,8 @@ export default function SignupPage() {
           <Link href="/" className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500 to-purple-600 shadow-xl shadow-rose-500/20 mb-6 group hover:scale-105 transition-transform duration-300">
             <MapIcon className="text-white w-8 h-8" />
           </Link>
-          <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Rejoignez Maplyo</h1>
-          <p className="text-zinc-400">Créez des guides d'exception en quelques minutes.</p>
+          <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">{t.auth.signup.title}</h1>
+          <p className="text-zinc-400">{t.auth.signup.subtitle}</p>
         </div>
 
         {/* Card */}
@@ -100,24 +96,22 @@ export default function SignupPage() {
                   <ArrowRight className="w-6 h-6 text-white rotate-[-45deg]" />
                 </div>
               </div>
-              <h2 className="text-2xl font-bold text-white mb-4">Compte créé !</h2>
+              <h2 className="text-2xl font-bold text-white mb-4">{t.auth.signup.successTitle}</h2>
               <p className="text-zinc-400 mb-8 max-w-sm mx-auto">
-                Un email de confirmation vient d'être envoyé à <strong>{formData.email}</strong>.
-                Veuillez cliquer sur le lien pour activer votre compte.
+                {t.auth.signup.successMsg} <strong>{formData.email}</strong>. {t.auth.signup.successDesc}
               </p>
               <Link
                 href="/login"
                 className="inline-flex px-8 py-3 bg-white text-black font-bold rounded-xl hover:bg-zinc-200 transition-colors"
               >
-                Retour à la connexion
+                {t.auth.signup.backToLogin}
               </Link>
             </div>
           ) : (
             <form onSubmit={handleSignup} className="space-y-4 relative z-10">
-
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-300 ml-1">Prénom</label>
+                  <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.signup.firstName}</label>
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                       <User className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
@@ -134,7 +128,7 @@ export default function SignupPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-300 ml-1">Nom</label>
+                  <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.signup.lastName}</label>
                   <div className="relative group">
                     <input
                       type="text"
@@ -150,7 +144,7 @@ export default function SignupPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-300 ml-1">Email professionnel</label>
+                <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.signup.businessEmail}</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Mail className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
@@ -168,7 +162,7 @@ export default function SignupPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-300 ml-1">Nom de l'établissement</label>
+                <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.signup.businessName}</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Building className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
@@ -185,7 +179,7 @@ export default function SignupPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-300 ml-1">Téléphone</label>
+                <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.signup.phone}</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Phone className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
@@ -195,14 +189,14 @@ export default function SignupPage() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    placeholder="+33 6 12 34 56 78"
+                    placeholder="+212 6 12 34 56 78"
                     className="w-full h-12 pl-11 pr-4 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-300 ml-1">Mot de passe</label>
+                <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.signup.passwordLabel}</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Lock className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
@@ -212,7 +206,7 @@ export default function SignupPage() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder="Minimum 6 caractères"
+                    placeholder={t.auth.signup.passwordHint}
                     className="w-full h-12 pl-11 pr-4 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all"
                     minLength={6}
                     required
@@ -236,7 +230,7 @@ export default function SignupPage() {
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
-                    Commencer gratuitement
+                    {t.auth.signup.submit}
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </>
                 )}
@@ -247,13 +241,13 @@ export default function SignupPage() {
 
         {/* Footer */}
         <p className="text-center mt-8 text-zinc-500 text-sm">
-          Déjà un compte ?{" "}
+          {t.auth.signup.hasAccount}{" "}
           <Link href="/login" className="text-white font-medium hover:text-rose-300 transition-colors">
-            Se connecter
+            {t.auth.signup.signIn}
           </Link>
         </p>
         <div className="mt-8 text-center opacity-20 text-xs font-mono uppercase tracking-widest text-white">
-          Maplyo &copy; 2024
+          Maplyo &copy; 2025
         </div>
       </motion.div>
     </div>

@@ -297,7 +297,7 @@ export default function LandingPage() {
               >
                 <span>TRUSTPILOT</span>
                 <div className="flex gap-1 text-green-500">★★★★★</div>
-                <span className="text-zinc-400">4.9/5 par 500+ Hôtes</span>
+                <span className="text-zinc-400">{t.socialProof.trustpilot}</span>
               </motion.div>
             </div>
 
@@ -323,9 +323,9 @@ export default function LandingPage() {
               >
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 text-xs font-bold">✓</div>
-                  <span className="text-white text-sm font-bold">Auto-Traduit</span>
+                  <span className="text-white text-sm font-bold">{t.socialProof.autoTranslate.title}</span>
                 </div>
-                <p className="text-xs text-zinc-400">Vos guides parlent la langue de vos invités.</p>
+                <p className="text-xs text-zinc-400">{t.socialProof.autoTranslate.desc}</p>
               </motion.div>
 
               <motion.div
@@ -336,9 +336,9 @@ export default function LandingPage() {
               >
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 text-xs font-bold">Map</div>
-                  <span className="text-white text-sm font-bold">Google Maps Intégré</span>
+                  <span className="text-white text-sm font-bold">{t.socialProof.googleMaps.title}</span>
                 </div>
-                <p className="text-xs text-zinc-400">Google Maps directement dans le guide.</p>
+                <p className="text-xs text-zinc-400">{t.socialProof.googleMaps.desc}</p>
               </motion.div>
 
             </motion.div>

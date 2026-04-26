@@ -133,8 +133,8 @@ export default function PricingPage() {
                             <Button onClick={() => router.push('/dashboard')} variant="ghost" className="font-medium text-zinc-300 hover:text-white hover:bg-white/5">Dashboard</Button>
                         ) : (
                             <>
-                                <Button onClick={() => router.push('/login')} variant="ghost" className="hidden md:flex font-medium text-zinc-300 hover:text-white hover:bg-white/5">Connexion</Button>
-                                <Button onClick={() => router.push('/signup')} className="bg-white text-slate-950 hover:bg-zinc-200 rounded-full px-6 font-bold">S'inscrire</Button>
+                                <Button onClick={() => router.push('/login')} variant="ghost" className="hidden md:flex font-medium text-zinc-300 hover:text-white hover:bg-white/5">{t.pricingPage.header.login}</Button>
+                                <Button onClick={() => router.push('/signup')} className="bg-white text-slate-950 hover:bg-zinc-200 rounded-full px-6 font-bold">{t.pricingPage.header.signup}</Button>
                             </>
                         )}
                     </div>
@@ -158,7 +158,7 @@ export default function PricingPage() {
                             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] mb-8 backdrop-blur-md"
                         >
                             <Sparkles size={14} className="text-rose-400" />
-                            <span className="text-sm font-semibold text-zinc-300 uppercase tracking-wider">Investissez dans l'excellence</span>
+                            <span className="text-sm font-semibold text-zinc-300 uppercase tracking-wider">{t.pricingPage.hero.badge}</span>
                         </motion.div>
 
                         <motion.h1
@@ -167,8 +167,8 @@ export default function PricingPage() {
                             transition={{ delay: 0.1 }}
                             className="text-5xl md:text-7xl font-bold text-white mb-8 leading-[1.1] tracking-tight"
                         >
-                            Un guide pro,<br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-purple-400 to-rose-400 animate-gradient">au prix d'un café.</span>
+                            {t.pricingPage.hero.title1}<br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-purple-400 to-rose-400 animate-gradient">{t.pricingPage.hero.title2}</span>
                         </motion.h1>
 
                         <motion.p
@@ -177,7 +177,7 @@ export default function PricingPage() {
                             transition={{ delay: 0.2 }}
                             className="text-xl text-zinc-400 leading-relaxed max-w-2xl mx-auto"
                         >
-                            Augmentez vos revenus directs, réduisez les questions répétitives et offrez une expérience 5 étoiles. Rentabilisé dès la première réservation.
+                            {t.pricingPage.hero.subtitle}
                         </motion.p>
                     </div>
 
@@ -224,7 +224,7 @@ export default function PricingPage() {
                             <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-[2rem] p-8 h-full flex flex-col border border-white/10">
                                 <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-rose-500 to-purple-600 rounded-t-[2rem]" />
                                 <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold uppercase tracking-wider">
-                                    Populaire
+                                    {t.pricingPage.popular}
                                 </div>
 
                                 <div className="mb-8 mt-4">
@@ -319,13 +319,13 @@ export default function PricingPage() {
                                 </thead>
                                 <tbody className="text-sm">
                                     {[
-                                        { feature: "Guides Illimités", demo: false, basic: true, pro: true },
-                                        { feature: "Intégration Google Maps", demo: true, basic: true, pro: true },
-                                        { feature: "Traduction IA (toutes langues)", demo: "1 langue", basic: "Illimité", pro: "Illimité" },
-                                        { feature: "Nom de domaine personnalisé", demo: false, basic: false, pro: true },
-                                        { feature: "Support Prioritaire", demo: false, basic: "Email", pro: "WhatsApp 24/7" },
-                                        { feature: "Marque Blanche (No Branding)", demo: false, basic: false, pro: true },
-                                        { feature: "Analytiques Avancées", demo: false, basic: true, pro: true },
+                                        { feature: t.pricingPage.compare.features.unlimited, demo: false, basic: true, pro: true },
+                                        { feature: t.pricingPage.compare.features.maps, demo: true, basic: true, pro: true },
+                                        { feature: t.pricingPage.compare.features.translation, demo: t.pricingPage.compare.values.oneLang, basic: t.pricingPage.compare.values.unlimited, pro: t.pricingPage.compare.values.unlimited },
+                                        { feature: t.pricingPage.compare.features.domain, demo: false, basic: false, pro: true },
+                                        { feature: t.pricingPage.compare.features.support, demo: false, basic: t.pricingPage.compare.values.emailSupport, pro: t.pricingPage.compare.values.whatsappSupport },
+                                        { feature: t.pricingPage.compare.features.whiteLabel, demo: false, basic: false, pro: true },
+                                        { feature: t.pricingPage.compare.features.analytics, demo: false, basic: true, pro: true },
                                     ].map((row, i) => (
                                         <tr key={i} className="hover:bg-white/[0.02]">
                                             <td className="p-6 border-b border-white/5 text-zinc-300 font-medium">{row.feature}</td>
@@ -380,7 +380,7 @@ export default function PricingPage() {
 
                     {/* Trust/Social Proof */}
                     <div className="text-center pt-20 border-t border-white/10">
-                        <p className="text-zinc-500 text-sm font-medium uppercase tracking-widest mb-8">Ils nous font confiance</p>
+                        <p className="text-zinc-500 text-sm font-medium uppercase tracking-widest mb-8">{t.pricingPage.trust}</p>
                         <div className="flex flex-wrap justify-center gap-12 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
                             {/* Mock Logos - Replace with real ones later */}
                             {['Airbnb', 'Booking.com', 'Expedia', 'TripAdvisor'].map((brand, i) => (

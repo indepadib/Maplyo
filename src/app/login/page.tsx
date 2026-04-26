@@ -5,8 +5,10 @@ import { Lock, ArrowRight, Mail, Map as MapIcon } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/components/providers/LanguageProvider";
 
 export default function LoginPage() {
+    const { t } = useTranslation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -19,11 +21,9 @@ export default function LoginPage() {
 
         try {
             // HYGIENE: Clear any existing sub-path cookies before login
-            // This prevents "Duplicate Cookies" where one exists at /dashboard and one at /
             if (typeof document !== 'undefined') {
                 const cookiesToClear = ['sb-access-token', 'sb-refresh-token'];
                 const paths = ['/', '/dashboard', '/dashboard/settings', '/app'];
-                
                 cookiesToClear.forEach(name => {
                     paths.forEach(path => {
                         document.cookie = `${name}=; Path=${path}; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
@@ -31,27 +31,19 @@ export default function LoginPage() {
                 });
             }
 
-            console.log("Attempting login...");
-            const { error } = await supabase.auth.signInWithPassword({
-                email,
-                password,
-            });
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
 
             if (error) {
-                console.error("Login failed:", error.message);
                 setError(error.message);
                 setLoading(false);
             } else {
-                console.log("Login success, warming up dashboard...");
-                // Pre-fetch dashboard to trigger cookie sync in background
                 const timer = setTimeout(() => {
                     window.location.href = "/dashboard";
-                }, 800); // 800ms is safer for cookie commitment
+                }, 800);
                 return () => clearTimeout(timer);
             }
         } catch (err: any) {
-            console.error("Unexpected login error:", err);
-            setError("Une erreur inattendue est survenue.");
+            setError(t.auth.login.error);
             setLoading(false);
         }
     };
@@ -76,8 +68,8 @@ export default function LoginPage() {
                     <Link href="/" className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500 to-purple-600 shadow-xl shadow-rose-500/20 mb-6 group hover:scale-105 transition-transform duration-300">
                         <MapIcon className="text-white w-8 h-8" />
                     </Link>
-                    <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Bon retour 👋</h1>
-                    <p className="text-zinc-400">Connectez-vous pour gérer vos guides</p>
+                    <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">{t.auth.login.title}</h1>
+                    <p className="text-zinc-400">{t.auth.login.subtitle}</p>
                 </div>
 
                 {/* Card */}
@@ -86,7 +78,7 @@ export default function LoginPage() {
 
                     <form onSubmit={handleLogin} className="space-y-5 relative z-10">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-zinc-300 ml-1">Email</label>
+                            <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.login.email}</label>
                             <div className="relative group">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <Mail className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
@@ -95,7 +87,7 @@ export default function LoginPage() {
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="votre@email.com"
+                                    placeholder="your@email.com"
                                     className="w-full h-12 pl-11 pr-4 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all"
                                     required
                                 />
@@ -104,9 +96,9 @@ export default function LoginPage() {
 
                         <div className="space-y-2">
                             <div className="flex items-center justify-between ml-1">
-                                <label className="text-sm font-medium text-zinc-300">Mot de passe</label>
+                                <label className="text-sm font-medium text-zinc-300">{t.auth.login.password}</label>
                                 <Link href="#" className="text-xs text-rose-400 hover:text-rose-300 transition-colors">
-                                    Oublié ?
+                                    {t.auth.login.forgot}
                                 </Link>
                             </div>
                             <div className="relative group">
@@ -140,7 +132,7 @@ export default function LoginPage() {
                                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                             ) : (
                                 <>
-                                    Se connecter
+                                    {t.auth.login.submit}
                                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 </>
                             )}
@@ -151,30 +143,29 @@ export default function LoginPage() {
                 {/* Footer */}
                 <div className="mt-8 space-y-4 text-center">
                     <p className="text-zinc-500 text-sm">
-                        Pas encore de compte ?{" "}
+                        {t.auth.login.noAccount}{" "}
                         <Link href="/signup" className="text-white font-medium hover:text-rose-300 transition-colors">
-                            Créer un compte gratuitement
+                            {t.auth.login.createFree}
                         </Link>
                     </p>
-                    
+
                     <button
                         onClick={async () => {
-                             if (confirm("Cela va réinitialiser complètement votre connexion. Continuer ?")) {
-                                 await supabase.auth.signOut();
-                                 localStorage.clear();
-                                 sessionStorage.clear();
-                                 // Delete all cookies
-                                 document.cookie.split(";").forEach((c) => {
-                                     document.cookie = c
-                                         .replace(/^ +/, "")
-                                         .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-                                 });
-                                 window.location.reload();
-                             }
+                            if (confirm(t.auth.login.resetLink)) {
+                                await supabase.auth.signOut();
+                                localStorage.clear();
+                                sessionStorage.clear();
+                                document.cookie.split(";").forEach((c) => {
+                                    document.cookie = c
+                                        .replace(/^ +/, "")
+                                        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                                });
+                                window.location.reload();
+                            }
                         }}
                         className="text-xs text-zinc-600 hover:text-zinc-400 underline underline-offset-4 transition-colors tracking-wide uppercase font-semibold"
                     >
-                        Problème de connexion ? Réinitialiser
+                        {t.auth.login.resetLink}
                     </button>
                 </div>
             </motion.div>

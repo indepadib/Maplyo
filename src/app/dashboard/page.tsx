@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Plus, Edit2, Trash2, ExternalLink, Moon, Sun, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2 } from "lucide-react";
+import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { guideThemes } from "@/types/themes";
 import { Modal } from "@/components/ui/Modal";
@@ -14,6 +14,7 @@ import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 import { getUserSubscription, checkLimit } from "@/lib/subscription";
 import { UserSubscription } from "@/types/subscription";
 import { slugify } from "@/lib/utils/slugify";
+import { useTranslation } from "@/components/providers/LanguageProvider";
 
 type GuideSummary = {
     id: string;
@@ -39,6 +40,7 @@ export default function DashboardPage() {
 
 function DashboardContent() {
     const { user, signOut } = useAuth();
+    const { t } = useTranslation();
     const searchParams = useSearchParams();
     const router = useRouter();
 
@@ -241,12 +243,12 @@ function DashboardContent() {
     });
 
     const deleteGuide = async (id: string) => {
-        if (confirm("Êtes-vous sûr de vouloir supprimer ce guide ? Ce sera définitif.")) {
+        if (confirm(t.dashboard.confirmDelete)) {
             const { error } = await supabase.from("guides").delete().eq("id", id);
             if (!error) {
                 setGuides(guides.filter(g => g.id !== id));
             } else {
-                alert("Erreur lors de la suppression.");
+                alert(t.dashboard.deleteError);
             }
         }
     };
@@ -395,8 +397,8 @@ function DashboardContent() {
             <main className="max-w-7xl mx-auto px-6 pt-32 pb-20">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                     <div>
-                        <h2 className="text-4xl font-bold mb-2 tracking-tight text-white">Mes Guides</h2>
-                        <p className="text-zinc-500 text-lg">Gérez vos expériences voyageurs.</p>
+                        <h2 className="text-4xl font-bold mb-2 tracking-tight text-white">{t.dashboard.title}</h2>
+                        <p className="text-zinc-500 text-lg">{t.dashboard.subtitle}</p>
                     </div>
                     <div className="flex gap-4">
                         <button
@@ -429,9 +431,9 @@ function DashboardContent() {
                             <div className="w-20 h-20 bg-white/5 text-rose-400 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner border border-white/5">
                                 <Sparkles className="w-10 h-10" />
                             </div>
-                            <h3 className="text-2xl font-bold mb-3 text-white">Aucun guide pour le moment</h3>
+                            <h3 className="text-2xl font-bold mb-3 text-white">{t.dashboard.emptyTitle}</h3>
                             <p className="text-zinc-500 mb-8 max-w-md mx-auto text-lg leading-relaxed">
-                                Créez votre premier guide pour offrir une expérience exceptionnelle à vos voyageurs.
+                                {t.dashboard.emptyDesc}
                                 <br />
                                 <span className="text-[10px] opacity-20 block mt-4 select-all">ID Diagnostic: {user?.id}</span>
                             </p>
@@ -449,7 +451,7 @@ function DashboardContent() {
                                     }}
                                     className="bg-white text-slate-900 px-8 py-4 rounded-2xl font-bold hover:bg-zinc-200 transition-all shadow-lg"
                                 >
-                                    Créer manuellement
+                                    {t.dashboard.createManual}
                                 </button>
                             </div>
                         </motion.div>
@@ -546,7 +548,7 @@ function DashboardContent() {
             <Modal
                 isOpen={isAiModalOpen}
                 onClose={() => setIsAiModalOpen(false)}
-                title="Création Magique ✨"
+                title={t.dashboard.aiModal.title}
                 icon="🤖"
             >
                 {!isGenerating ? (
@@ -617,7 +619,7 @@ function DashboardContent() {
             <Modal
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
-                title="Nouveau Voyage"
+                title={t.dashboard.createModal.title}
                 icon="✨"
             >
                 <form onSubmit={handleCreateGuide} className="space-y-6">
@@ -658,12 +660,12 @@ function DashboardContent() {
             <Modal
                 isOpen={isLimitModalOpen}
                 onClose={() => setIsLimitModalOpen(false)}
-                title="Limite de guides atteinte 🏠"
+                title={t.dashboard.limitModal.title}
                 icon="⚠️"
             >
                 <div className="text-center py-6">
                     <p className="text-gray-500 mb-8 leading-relaxed">
-                        Vous avez atteint la limite de guides autorisés par votre abonnement actuel.
+                        {t.dashboard.limitModal.desc}
                     </p>
 
                     <div className="grid grid-cols-1 gap-4">
@@ -671,12 +673,12 @@ function DashboardContent() {
                             onClick={() => window.location.href = '/pricing'}
                             className="w-full py-4 rounded-xl bg-gradient-to-r from-rose-600 to-purple-600 text-white font-bold text-lg hover:shadow-lg transition-all"
                         >
-                            🚀 Passer à l'illimité (Pro)
+                            {t.dashboard.limitModal.upgrade}
                         </button>
                         
                         <div className="relative py-2">
                             <div className="absolute inset-x-0 top-1/2 h-px bg-gray-100" />
-                            <span className="relative z-10 bg-white px-3 text-xs font-bold text-gray-400 uppercase tracking-widest">Ou</span>
+                            <span className="relative z-10 bg-white px-3 text-xs font-bold text-gray-400 uppercase tracking-widest">{t.dashboard.limitModal.or}</span>
                         </div>
 
                         <button
@@ -684,7 +686,7 @@ function DashboardContent() {
                             className="w-full py-4 rounded-xl bg-white border-2 border-gray-100 text-gray-900 font-bold text-lg hover:border-rose-500 transition-all"
                             disabled={loading}
                         >
-                            {loading ? "Chargement..." : "➕ Rajouter juste 1 guide (20 DH)"}
+                            {loading ? t.dashboard.limitModal.loading : t.dashboard.limitModal.addon}
                         </button>
                     </div>
                 </div>
@@ -694,22 +696,22 @@ function DashboardContent() {
             <Modal
                 isOpen={isAddonSuccessOpen}
                 onClose={() => setIsAddonSuccessOpen(false)}
-                title="Guide ajouté ! ✨"
+                title={t.dashboard.addonSuccessModal.title}
                 icon="🎟️"
             >
                 <div className="text-center py-6">
                     <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
                         <CheckCircle2 className="w-10 h-10" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">C'est prêt !</h3>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{t.dashboard.addonSuccessModal.heading}</h3>
                     <p className="text-gray-500 mb-8">
-                        Votre limite a été augmentée de 1 guide. Vous pouvez désormais créer votre nouveau guide dès maintenant.
+                        {t.dashboard.addonSuccessModal.desc}
                     </p>
                     <button
                         onClick={() => setIsAddonSuccessOpen(false)}
                         className="w-full py-4 rounded-xl bg-gray-900 text-white font-bold text-lg hover:bg-black transition-all"
                     >
-                        Super, merci !
+                        {t.dashboard.addonSuccessModal.cta}
                     </button>
                 </div>
             </Modal>

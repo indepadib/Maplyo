@@ -1,5 +1,8 @@
 export type Language = 'fr' | 'en' | 'es' | 'ar';
 
+// Extended key interface for auth, dashboard, guide lock, pricing
+export type DictionaryShape = typeof DICTIONARY['fr'];
+
 export const DICTIONARY = {
     fr: {
         common: {
@@ -340,6 +343,138 @@ export const DICTIONARY = {
                     content: "Ces conditions sont régies par le droit marocain. Tout litige relatif à leur interprétation et/ou à leur exécution relève des tribunaux compétents de Casablanca."
                 }
             }
+        },
+        auth: {
+            login: {
+                title: "Bon retour 👋",
+                subtitle: "Connectez-vous pour gérer vos guides",
+                email: "Email",
+                password: "Mot de passe",
+                forgot: "Oublié ?",
+                submit: "Se connecter",
+                noAccount: "Pas encore de compte ?",
+                createFree: "Créer un compte gratuitement",
+                resetLink: "Problème de connexion ? Réinitialiser",
+                error: "Une erreur inattendue est survenue."
+            },
+            signup: {
+                title: "Rejoignez Maplyo",
+                subtitle: "Créez des guides d'exception en quelques minutes.",
+                firstName: "Prénom",
+                lastName: "Nom",
+                businessEmail: "Email professionnel",
+                businessName: "Nom de l'établissement",
+                phone: "Téléphone",
+                passwordLabel: "Mot de passe",
+                passwordHint: "Minimum 6 caractères",
+                submit: "Commencer gratuitement",
+                hasAccount: "Déjà un compte ?",
+                signIn: "Se connecter",
+                successTitle: "Compte créé !",
+                successMsg: "Un email de confirmation vient d'être envoyé à",
+                successDesc: "Veuillez cliquer sur le lien pour activer votre compte.",
+                backToLogin: "Retour à la connexion"
+            }
+        },
+        dashboard: {
+            title: "Mes Guides",
+            subtitle: "Gérez vos expériences voyageurs.",
+            newGuide: "Nouveau Guide",
+            emptyTitle: "Aucun guide pour le moment",
+            emptyDesc: "Créez votre premier guide pour offrir une expérience exceptionnelle à vos voyageurs.",
+            tryAi: "✨ Essayer l'IA",
+            createManual: "Créer manuellement",
+            published: "En ligne",
+            draft: "Brouillon",
+            edit: "Éditer",
+            sortRecent: "Récents",
+            sortName: "Nom",
+            confirmDelete: "Êtes-vous sûr de vouloir supprimer ce guide ? Ce sera définitif.",
+            deleteError: "Erreur lors de la suppression.",
+            aiModal: {
+                title: "Création Magique ✨",
+                city: "Ville ou Lieu",
+                cityPlaceholder: "Ex: Marrakech, Quartier Guéliz",
+                type: "Type",
+                typeAirbnb: "Airbnb / Appartement",
+                typeHotel: "Hôtel / Riad",
+                typeGuesthouse: "Maison d'hôtes",
+                audience: "Voyageurs",
+                audienceFamilies: "Familles",
+                audienceCouples: "Couples",
+                audienceRemote: "Télétravailleurs",
+                audienceGroups: "Groupes",
+                generate: "Générer mon guide",
+                generating: "L'IA rédige votre guide...",
+                generatingDesc: "Création des recommandations pour"
+            },
+            createModal: {
+                title: "Nouveau Voyage",
+                nameLabel: "Nom du guide",
+                namePlaceholder: "Ex: Riad des Lumières",
+                cancel: "Annuler",
+                create: "Créer le guide"
+            },
+            limitModal: {
+                title: "Limite de guides atteinte 🏠",
+                desc: "Vous avez atteint la limite de guides autorisés par votre abonnement actuel.",
+                upgrade: "🚀 Passer à l'illimité (Pro)",
+                or: "Ou",
+                addon: "➕ Rajouter juste 1 guide",
+                loading: "Chargement..."
+            },
+            addonSuccessModal: {
+                title: "Guide ajouté ! ✨",
+                heading: "C'est prêt !",
+                desc: "Votre limite a été augmentée de 1 guide. Vous pouvez désormais créer votre nouveau guide dès maintenant.",
+                cta: "Super, merci !"
+            },
+            proModal: {
+                heading: "Vous êtes Pro !",
+                desc: "Votre abonnement Pro est actif. Profitez de guides illimités et de toutes les fonctionnalités premium.",
+                cta: "Commencer à créer"
+            }
+        },
+        pricingPage: {
+            hero: {
+                badge: "Investissez dans l'excellence",
+                title1: "Un guide pro,",
+                title2: "au prix d'un café.",
+                subtitle: "Augmentez vos revenus directs, réduisez les questions répétitives et offrez une expérience 5 étoiles. Rentabilisé dès la première réservation."
+            },
+            popular: "Populaire",
+            header: { login: "Connexion", signup: "S'inscrire" },
+            compare: {
+                title: "Comparatif Détaillé",
+                subtitle: "Tout ce dont vous avez besoin pour réussir.",
+                features: {
+                    unlimited: "Guides Illimités",
+                    maps: "Intégration Google Maps",
+                    translation: "Traduction IA (toutes langues)",
+                    domain: "Nom de domaine personnalisé",
+                    support: "Support Prioritaire",
+                    whiteLabel: "Marque Blanche (No Branding)",
+                    analytics: "Analytiques Avancées"
+                },
+                values: { oneLang: "1 langue", unlimited: "Illimité", emailSupport: "Email", whatsappSupport: "WhatsApp 24/7" }
+            },
+            faqSection: {
+                title: "Questions Fréquentes",
+                subtitle: "Nous sommes transparents. Voici les réponses.",
+                items: [
+                    { q: "Puis-je changer de plan à tout moment ?", a: "Oui, absolument. Vous pouvez passer du plan Basic au plan Pro depuis votre dashboard. Le changement est immédiat et le prorata est calculé automatiquement." },
+                    { q: "Y a-t-il un engagement ?", a: "Non, aucune période d'engagement. Nos abonnements sont mensuels et vous pouvez annuler à tout moment en un clic. Pas de frais cachés." },
+                    { q: "Comment fonctionne le paiement ?", a: "Nous utilisons Stripe, le leader mondial du paiement en ligne sécurisé. Vos coordonnées bancaires ne sont jamais stockées sur nos serveurs." },
+                    { q: "Le support est-il inclus ?", a: "Oui ! Le support par email est inclus dans tous les plans payants. Le plan Pro bénéficie d'une ligne prioritaire et d'un contact WhatsApp pour une assistance ultra-rapide." }
+                ]
+            },
+            trust: "Ils nous font confiance",
+            addonLabel: "/ guide supp."
+        },
+        guideLock: {
+            title: "Accès sécurisé",
+            desc: "Veuillez déverrouiller ce guide pour accéder aux codes d'accès et informations sensibles.",
+            demoCode: "Code de démonstration"
         }
     },
 
@@ -683,6 +818,138 @@ export const DICTIONARY = {
                     content: "These terms are governed by Moroccan law. Any dispute relating to their interpretation and/or execution shall be subject to the competent courts of Casablanca."
                 }
             }
+        },
+        auth: {
+            login: {
+                title: "Welcome back 👋",
+                subtitle: "Sign in to manage your guides",
+                email: "Email",
+                password: "Password",
+                forgot: "Forgot?",
+                submit: "Sign In",
+                noAccount: "No account yet?",
+                createFree: "Create a free account",
+                resetLink: "Login issue? Reset",
+                error: "An unexpected error occurred."
+            },
+            signup: {
+                title: "Join Maplyo",
+                subtitle: "Create exceptional guides in minutes.",
+                firstName: "First Name",
+                lastName: "Last Name",
+                businessEmail: "Business Email",
+                businessName: "Business Name",
+                phone: "Phone",
+                passwordLabel: "Password",
+                passwordHint: "Minimum 6 characters",
+                submit: "Start for free",
+                hasAccount: "Already have an account?",
+                signIn: "Sign in",
+                successTitle: "Account created!",
+                successMsg: "A confirmation email was sent to",
+                successDesc: "Please click the link to activate your account.",
+                backToLogin: "Back to login"
+            }
+        },
+        dashboard: {
+            title: "My Guides",
+            subtitle: "Manage your guest experiences.",
+            newGuide: "New Guide",
+            emptyTitle: "No guides yet",
+            emptyDesc: "Create your first guide to offer an exceptional experience to your guests.",
+            tryAi: "✨ Try AI",
+            createManual: "Create manually",
+            published: "Online",
+            draft: "Draft",
+            edit: "Edit",
+            sortRecent: "Recent",
+            sortName: "Name",
+            confirmDelete: "Are you sure you want to delete this guide? This is permanent.",
+            deleteError: "Error during deletion.",
+            aiModal: {
+                title: "Magic Create ✨",
+                city: "City or Place",
+                cityPlaceholder: "Ex: Marrakech, Guéliz",
+                type: "Type",
+                typeAirbnb: "Airbnb / Apartment",
+                typeHotel: "Hotel / Riad",
+                typeGuesthouse: "Guest House",
+                audience: "Guests",
+                audienceFamilies: "Families",
+                audienceCouples: "Couples",
+                audienceRemote: "Remote Workers",
+                audienceGroups: "Groups",
+                generate: "Generate my guide",
+                generating: "AI is writing your guide...",
+                generatingDesc: "Creating recommendations for"
+            },
+            createModal: {
+                title: "New Guide",
+                nameLabel: "Guide name",
+                namePlaceholder: "Ex: Riad des Lumières",
+                cancel: "Cancel",
+                create: "Create guide"
+            },
+            limitModal: {
+                title: "Guide limit reached 🏠",
+                desc: "You've reached the maximum number of guides for your current plan.",
+                upgrade: "🚀 Upgrade to Unlimited (Pro)",
+                or: "Or",
+                addon: "➕ Add just 1 guide",
+                loading: "Loading..."
+            },
+            addonSuccessModal: {
+                title: "Guide added! ✨",
+                heading: "Ready!",
+                desc: "Your limit has been increased by 1 guide. You can now create your new guide.",
+                cta: "Great, thanks!"
+            },
+            proModal: {
+                heading: "You're Pro!",
+                desc: "Your Pro subscription is active. Enjoy unlimited guides and all premium features.",
+                cta: "Start creating"
+            }
+        },
+        pricingPage: {
+            hero: {
+                badge: "Invest in excellence",
+                title1: "A pro guide,",
+                title2: "at the price of a coffee.",
+                subtitle: "Increase your direct revenue, reduce repetitive questions and offer a 5-star experience. Profitable from the very first booking."
+            },
+            popular: "Popular",
+            header: { login: "Login", signup: "Sign Up" },
+            compare: {
+                title: "Detailed Comparison",
+                subtitle: "Everything you need to succeed.",
+                features: {
+                    unlimited: "Unlimited Guides",
+                    maps: "Google Maps Integration",
+                    translation: "AI Translation (all languages)",
+                    domain: "Custom Domain Name",
+                    support: "Priority Support",
+                    whiteLabel: "White Label (No Branding)",
+                    analytics: "Advanced Analytics"
+                },
+                values: { oneLang: "1 language", unlimited: "Unlimited", emailSupport: "Email", whatsappSupport: "WhatsApp 24/7" }
+            },
+            faqSection: {
+                title: "FAQ",
+                subtitle: "We're transparent. Here are the answers.",
+                items: [
+                    { q: "Can I change plans at any time?", a: "Yes, absolutely. You can switch between Basic and Pro from your dashboard. Changes take effect immediately and prorated automatically." },
+                    { q: "Is there a commitment?", a: "No commitment at all. Our subscriptions are monthly and you can cancel at any time with one click. No hidden fees." },
+                    { q: "How does payment work?", a: "We use Stripe, the world leader in secure online payments. Your banking details are never stored on our servers." },
+                    { q: "Is support included?", a: "Yes! Email support is included in all paid plans. The Pro plan gets priority access and a WhatsApp contact for ultra-fast assistance." }
+                ]
+            },
+            trust: "Trusted by",
+            addonLabel: "/ extra guide"
+        },
+        guideLock: {
+            title: "Secure Access",
+            desc: "Please unlock this guide to access the access codes and sensitive information.",
+            demoCode: "Demo code"
         }
     },
     es: {
@@ -811,6 +1078,138 @@ export const DICTIONARY = {
             titlePrivacy: "Privacidad", titleTerms: "Términos", lastUpdated: "Actualizado", effectiveDate: "En vigor",
             privacy: { intro: "Política.", section1: { title: "Datos", items: ["Nombre"] }, section2: { title: "Fines", intro: "Para:", items: ["Proveer el servicio"] }, section3: { title: "Compartir", content: "No vendemos datos." }, section4: { title: "Seguridad", content: "Seguro." }, section5: { title: "Derechos", content: "Puedes pedir acceder.", contact: "contact@maplyo.com" } },
             terms: { intro: "Términos.", section1: { title: "Servicio", content: "SaaS" }, section2: { title: "Pagos", items: ["Facturación"] }, section3: { title: "Responsabilidad", intro: "Deberes:", items: ["Veracidad"] }, section4: { title: "IP", content: "Propiedad" }, section5: { title: "Límites", content: "Sin daños indirectos" }, section6: { title: "Ley", content: "Marruecos" } }
+        },
+        auth: {
+            login: {
+                title: "Bienvenido 👋",
+                subtitle: "Inicia sesión para gestionar tus guías",
+                email: "Correo electrónico",
+                password: "Contraseña",
+                forgot: "¿Olvidaste?",
+                submit: "Iniciar sesión",
+                noAccount: "¿No tienes cuenta?",
+                createFree: "Crear una cuenta gratis",
+                resetLink: "¿Problema de conexión? Restablecer",
+                error: "Se produjo un error inesperado."
+            },
+            signup: {
+                title: "Únete a Maplyo",
+                subtitle: "Crea guías excepcionales en minutos.",
+                firstName: "Nombre",
+                lastName: "Apellido",
+                businessEmail: "Correo profesional",
+                businessName: "Nombre del negocio",
+                phone: "Teléfono",
+                passwordLabel: "Contraseña",
+                passwordHint: "Mínimo 6 caracteres",
+                submit: "Comenzar gratis",
+                hasAccount: "¿Ya tienes cuenta?",
+                signIn: "Iniciar sesión",
+                successTitle: "¡Cuenta creada!",
+                successMsg: "Se envió un correo de confirmación a",
+                successDesc: "Haz clic en el enlace para activar tu cuenta.",
+                backToLogin: "Volver al inicio de sesión"
+            }
+        },
+        dashboard: {
+            title: "Mis Guías",
+            subtitle: "Gestiona las experiencias de tus huéspedes.",
+            newGuide: "Nueva Guía",
+            emptyTitle: "Sin guías todavía",
+            emptyDesc: "Crea tu primera guía para ofrecer una experiencia excepcional a tus huéspedes.",
+            tryAi: "✨ Probar IA",
+            createManual: "Crear manualmente",
+            published: "En línea",
+            draft: "Borrador",
+            edit: "Editar",
+            sortRecent: "Recientes",
+            sortName: "Nombre",
+            confirmDelete: "¿Seguro que quieres eliminar esta guía? Esto es permanente.",
+            deleteError: "Error al eliminar.",
+            aiModal: {
+                title: "Creación Mágica ✨",
+                city: "Ciudad o Lugar",
+                cityPlaceholder: "Ej: Marrakech, Guéliz",
+                type: "Tipo",
+                typeAirbnb: "Airbnb / Apartamento",
+                typeHotel: "Hotel / Riad",
+                typeGuesthouse: "Casa de huéspedes",
+                audience: "Huéspedes",
+                audienceFamilies: "Familias",
+                audienceCouples: "Parejas",
+                audienceRemote: "Teletrabajadores",
+                audienceGroups: "Grupos",
+                generate: "Generar mi guía",
+                generating: "La IA está creando tu guía...",
+                generatingDesc: "Creando recomendaciones para"
+            },
+            createModal: {
+                title: "Nueva Guía",
+                nameLabel: "Nombre de la guía",
+                namePlaceholder: "Ej: Riad de las Luces",
+                cancel: "Cancelar",
+                create: "Crear guía"
+            },
+            limitModal: {
+                title: "Límite de guías alcanzado 🏠",
+                desc: "Has alcanzado el límite de guías de tu plan actual.",
+                upgrade: "🚀 Actualizar a ilimitado (Pro)",
+                or: "O",
+                addon: "➕ Agregar solo 1 guía",
+                loading: "Cargando..."
+            },
+            addonSuccessModal: {
+                title: "¡Guía añadida! ✨",
+                heading: "¡Listo!",
+                desc: "Tu límite ha aumentado en 1 guía. Ya puedes crear tu nueva guía.",
+                cta: "¡Genial, gracias!"
+            },
+            proModal: {
+                heading: "¡Eres Pro!",
+                desc: "Tu suscripción Pro está activa. Disfruta guías ilimitadas y todas las funciones premium.",
+                cta: "Empezar a crear"
+            }
+        },
+        pricingPage: {
+            hero: {
+                badge: "Invierte en la excelencia",
+                title1: "Una guía pro,",
+                title2: "al precio de un café.",
+                subtitle: "Aumenta tus ingresos directos, reduce las preguntas repetitivas y ofrece una experiencia 5 estrellas. Rentable desde la primera reserva."
+            },
+            popular: "Popular",
+            header: { login: "Iniciar sesión", signup: "Regístrate" },
+            compare: {
+                title: "Comparativa Detallada",
+                subtitle: "Todo lo que necesitas para tener éxito.",
+                features: {
+                    unlimited: "Guías Ilimitadas",
+                    maps: "Integración Google Maps",
+                    translation: "Traducción IA (todos los idiomas)",
+                    domain: "Dominio personalizado",
+                    support: "Soporte Prioritario",
+                    whiteLabel: "Marca Blanca (Sin Branding)",
+                    analytics: "Analíticas Avanzadas"
+                },
+                values: { oneLang: "1 idioma", unlimited: "Ilimitado", emailSupport: "Email", whatsappSupport: "WhatsApp 24/7" }
+            },
+            faqSection: {
+                title: "Preguntas Frecuentes",
+                subtitle: "Somos transparentes. Aquí las respuestas.",
+                items: [
+                    { q: "¿Puedo cambiar de plan en cualquier momento?", a: "Sí, absolutamente. Puedes cambiar entre Basic y Pro desde tu dashboard. El cambio es inmediato y el prorrateo es automático." },
+                    { q: "¿Hay algún compromiso?", a: "No hay compromiso. Nuestras suscripciones son mensuales y puedes cancelar en cualquier momento con un clic. Sin cargos ocultos." },
+                    { q: "¿Cómo funciona el pago?", a: "Usamos Stripe, el líder mundial en pagos seguros online. Tus datos bancarios nunca se almacenan en nuestros servidores." },
+                    { q: "¿El soporte está incluido?", a: "¡Sí! El soporte por email está incluido en todos los planes de pago. El plan Pro tiene acceso prioritario y contacto por WhatsApp." }
+                ]
+            },
+            trust: "Con la confianza de",
+            addonLabel: "/ guía extra"
+        },
+        guideLock: {
+            title: "Acceso Seguro",
+            desc: "Por favor desbloquea esta guía para acceder a los códigos de acceso e información sensible.",
+            demoCode: "Código de demostración"
         }
     },
     ar: {
@@ -905,6 +1304,138 @@ export const DICTIONARY = {
             titlePrivacy: "سياسة الخصوصية", titleTerms: "شروط الاستخدام", lastUpdated: "آخر تحديث", effectiveDate: "ساري المفعول",
             privacy: { intro: "سياسة.", section1: { title: "بيانات", items: ["الاسم"] }, section2: { title: "أغراض", intro: "إلى:", items: ["تقديم الخدمة"] }, section3: { title: "مشاركة", content: "لا نبيع بيانات." }, section4: { title: "أمان", content: "نظام آمن." }, section5: { title: "حقوق", content: "تواصل معنا.", contact: "contact@maplyo.com" } },
             terms: { intro: "شروط.", section1: { title: "خدمة", content: "منصة ويب" }, section2: { title: "دفع", items: ["فواتير"] }, section3: { title: "مسؤولية", intro: "عليك:", items: ["المعلومات"] }, section4: { title: "حقوق ملكية", content: "ملك لمنشئ المحتوى" }, section5: { title: "حدود", content: "غير مسؤول" }, section6: { title: "قانون", content: "المغرب" } }
+        },
+        auth: {
+            login: {
+                title: "مرحباً بعودتك 👋",
+                subtitle: "سجّل الدخول لإدارة أدلتك",
+                email: "البريد الإلكتروني",
+                password: "كلمة المرور",
+                forgot: "نسيت؟",
+                submit: "تسجيل الدخول",
+                noAccount: "ليس لديك حساب؟",
+                createFree: "إنشاء حساب مجاني",
+                resetLink: "مشكلة في الدخول؟ إعادة تعيين",
+                error: "حدث خطأ غير متوقع."
+            },
+            signup: {
+                title: "انضم إلى Maplyo",
+                subtitle: "أنشئ أدلة استثنائية في دقائق.",
+                firstName: "الاسم الأول",
+                lastName: "اسم العائلة",
+                businessEmail: "البريد المهني",
+                businessName: "اسم المنشأة",
+                phone: "الهاتف",
+                passwordLabel: "كلمة المرور",
+                passwordHint: "6 أحرف على الأقل",
+                submit: "ابدأ مجاناً",
+                hasAccount: "لديك حساب بالفعل؟",
+                signIn: "تسجيل الدخول",
+                successTitle: "تم إنشاء الحساب!",
+                successMsg: "تم إرسال بريد تأكيد إلى",
+                successDesc: "يرجى النقر على الرابط لتفعيل حسابك.",
+                backToLogin: "العودة لتسجيل الدخول"
+            }
+        },
+        dashboard: {
+            title: "أدلتي",
+            subtitle: "أدِر تجارب ضيوفك.",
+            newGuide: "دليل جديد",
+            emptyTitle: "لا توجد أدلة بعد",
+            emptyDesc: "أنشئ دليلك الأول لتقديم تجربة استثنائية لضيوفك.",
+            tryAi: "✨ جرّب الذكاء الاصطناعي",
+            createManual: "إنشاء يدوي",
+            published: "منشور",
+            draft: "مسودة",
+            edit: "تعديل",
+            sortRecent: "الأحدث",
+            sortName: "الاسم",
+            confirmDelete: "هل أنت متأكد من حذف هذا الدليل؟ سيكون نهائياً.",
+            deleteError: "خطأ أثناء الحذف.",
+            aiModal: {
+                title: "إنشاء سحري ✨",
+                city: "المدينة أو المكان",
+                cityPlaceholder: "مثال: مراكش، قلعة السراغنة",
+                type: "النوع",
+                typeAirbnb: "Airbnb / شقة",
+                typeHotel: "فندق / رياض",
+                typeGuesthouse: "بيت ضيافة",
+                audience: "الضيوف",
+                audienceFamilies: "عائلات",
+                audienceCouples: "أزواج",
+                audienceRemote: "عمل عن بُعد",
+                audienceGroups: "مجموعات",
+                generate: "إنشاء دليلي",
+                generating: "الذكاء الاصطناعي يكتب دليلك...",
+                generatingDesc: "جارٍ إنشاء توصيات لـ"
+            },
+            createModal: {
+                title: "دليل جديد",
+                nameLabel: "اسم الدليل",
+                namePlaceholder: "مثال: رياض الأنوار",
+                cancel: "إلغاء",
+                create: "إنشاء الدليل"
+            },
+            limitModal: {
+                title: "تم الوصول لحد الأدلة 🏠",
+                desc: "وصلت إلى الحد الأقصى لعدد الأدلة في خطتك الحالية.",
+                upgrade: "🚀 الترقية للنسخة المحترفة",
+                or: "أو",
+                addon: "➕ إضافة دليل واحد فقط",
+                loading: "جاري التحميل..."
+            },
+            addonSuccessModal: {
+                title: "تمت إضافة الدليل! ✨",
+                heading: "جاهز!",
+                desc: "تم زيادة حدّك بدليل واحد. يمكنك الآن إنشاء دليلك الجديد.",
+                cta: "رائع، شكراً!"
+            },
+            proModal: {
+                heading: "أنت محترف الآن!",
+                desc: "اشتراكك المحترف نشط. استمتع بأدلة غير محدودة وجميع المزايا المميزة.",
+                cta: "ابدأ الإنشاء"
+            }
+        },
+        pricingPage: {
+            hero: {
+                badge: "استثمر في التميز",
+                title1: "دليل محترف،",
+                title2: "بسعر فنجان قهوة.",
+                subtitle: "زِد إيراداتك المباشرة، قلّل الأسئلة المتكررة وقدّم تجربة 5 نجوم. مُربح منذ أول حجز."
+            },
+            popular: "الأكثر شيوعاً",
+            header: { login: "تسجيل الدخول", signup: "اشتراك" },
+            compare: {
+                title: "مقارنة تفصيلية",
+                subtitle: "كل ما تحتاجه للنجاح.",
+                features: {
+                    unlimited: "أدلة غير محدودة",
+                    maps: "تكامل خرائط جوجل",
+                    translation: "ترجمة ذكاء اصطناعي (جميع اللغات)",
+                    domain: "نطاق مخصص",
+                    support: "دعم ذو أولوية",
+                    whiteLabel: "العلامة البيضاء (بدون شعار)",
+                    analytics: "تحليلات متقدمة"
+                },
+                values: { oneLang: "لغة واحدة", unlimited: "غير محدود", emailSupport: "بريد إلكتروني", whatsappSupport: "واتساب 24/7" }
+            },
+            faqSection: {
+                title: "الأسئلة الشائعة",
+                subtitle: "نحن شفافون. إليك الإجابات.",
+                items: [
+                    { q: "هل يمكنني تغيير الخطة في أي وقت؟", a: "نعم، بالتأكيد. يمكنك التبديل بين Basic وPro من لوحة تحكمك. التغيير فوري والحساب التناسبي تلقائي." },
+                    { q: "هل هناك التزام؟", a: "لا التزام على الإطلاق. اشتراكاتنا شهرية ويمكنك الإلغاء في أي وقت بنقرة واحدة. بدون رسوم خفية." },
+                    { q: "كيف يعمل الدفع؟", a: "نستخدم Stripe، الرائد العالمي في المدفوعات الآمنة عبر الإنترنت. بياناتك البنكية لا تُخزَّن أبداً على خوادمنا." },
+                    { q: "هل الدعم مشمول؟", a: "نعم! دعم البريد الإلكتروني مشمول في جميع الخطط المدفوعة. الخطة Pro تحصل على وصول ذو أولوية وجهة اتصال واتساب." }
+                ]
+            },
+            trust: "بثقة",
+            addonLabel: "/ دليل إضافي"
+        },
+        guideLock: {
+            title: "وصول آمن",
+            desc: "يرجى فتح هذا الدليل للوصول إلى رموز الدخول والمعلومات الحساسة.",
+            demoCode: "رمز التجربة"
         }
     }
 }
