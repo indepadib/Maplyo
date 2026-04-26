@@ -378,6 +378,7 @@ export const DICTIONARY = {
             title: "Mes Guides",
             subtitle: "Gérez vos expériences voyageurs.",
             newGuide: "Nouveau Guide",
+            logout: "Déconnexion",
             emptyTitle: "Aucun guide pour le moment",
             emptyDesc: "Créez votre premier guide pour offrir une expérience exceptionnelle à vos voyageurs.",
             tryAi: "✨ Essayer l'IA",
@@ -861,6 +862,7 @@ export const DICTIONARY = {
             title: "My Guides",
             subtitle: "Manage your guest experiences.",
             newGuide: "New Guide",
+            logout: "Log out",
             emptyTitle: "No guides yet",
             emptyDesc: "Create your first guide to offer an exceptional experience to your guests.",
             tryAi: "✨ Try AI",
@@ -1129,6 +1131,7 @@ export const DICTIONARY = {
             title: "Mis Guías",
             subtitle: "Gestiona las experiencias de tus huéspedes.",
             newGuide: "Nueva Guía",
+            logout: "Cerrar sesión",
             emptyTitle: "Sin guías todavía",
             emptyDesc: "Crea tu primera guía para ofrecer una experiencia excepcional a tus huéspedes.",
             tryAi: "✨ Probar IA",
@@ -1363,6 +1366,7 @@ export const DICTIONARY = {
             title: "أدلتي",
             subtitle: "أدِر تجارب ضيوفك.",
             newGuide: "دليل جديد",
+            logout: "تسجيل الخروج",
             emptyTitle: "لا توجد أدلة بعد",
             emptyDesc: "أنشئ دليلك الأول لتقديم تجربة استثنائية لضيوفك.",
             tryAi: "✨ جرّب الذكاء الاصطناعي",
@@ -1497,6 +1501,9 @@ export const DICTIONARY = {
             thinking: "Nadenken...",
             placeholder: "Stel een vraag...",
             error: "Sorry, er is een fout opgetreden."
+        },
+        dashboard: {
+            logout: "Uitloggen"
         }
     },
     zh: {
@@ -1528,6 +1535,9 @@ export const DICTIONARY = {
             thinking: "思考中...",
             placeholder: "提问...",
             error: "抱歉，出错了。"
+        },
+        dashboard: {
+            logout: "注销"
         }
     }
 };
