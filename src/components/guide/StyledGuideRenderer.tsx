@@ -15,6 +15,7 @@ import { TipModal } from "./TipModal";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { Language } from "@/lib/i18n/dictionary";
 import { TranslatedText } from "@/components/ui/TranslatedText";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 
 // --- TRANSLATIONS ---
 
