@@ -14,12 +14,12 @@ import { TranslatedText } from "@/components/ui/TranslatedText";
 // Actually, `StyledGuideRenderer` defines `DICTIONARY` locally. 
 // We should preferably import `DICTIONARY` from `@/lib/i18n/dictionary`.
 
-import { DICTIONARY } from "@/lib/i18n/dictionary";
+import { DICTIONARY, Language } from "@/lib/i18n/dictionary";
 
 interface GuideChatbotProps {
     guide: Guide;
     primaryColor?: string;
-    lang: 'fr' | 'en'; // Added lang prop
+    lang: Language; // Fixed to accept all supported languages
 }
 
 export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = false, lang }: GuideChatbotProps & { forceMobile?: boolean }) {
