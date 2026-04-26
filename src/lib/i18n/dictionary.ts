@@ -4472,14 +4472,6 @@ export const DICTIONARY: Record<Language, any> = {
             openMaps: "فتح الخرائط",
             call: "اتصال",
             message: "رسالة",
-            ai: {
-                assistant: "مساعد الذكاء الاصطناعي",
-                online: "متصل",
-                empty: "اسألني أي شيء عن إقامتك!",
-                thinking: "يفكر...",
-                placeholder: "اسأل سؤالاً...",
-                error: "عذراً، حدث خطأ."
-            },
             empty: "لا توجد نتائج مطابقة لبحثك",
             seeAll: "عرض الكل",
             less: "عرض أقل",
@@ -4511,6 +4503,15 @@ export const DICTIONARY: Record<Language, any> = {
             items: "عناصر",
             viewMap: "عرض الخريطة",
             secureAccess: "وصول آمن"
+        },
+        ai: {
+            assistant: "مساعد الذكاء الاصطناعي",
+            online: "متصل",
+            empty: "اسألني أي شيء عن إقامتك!",
+            thinking: "يفكر...",
+            placeholder: "اسأل سؤالاً...",
+            error: "عذراً، حدث خطأ."
+        }
     }
 };
 
