@@ -1,13 +1,12 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { DICTIONARY, Language } from '@/lib/i18n/dictionary';
+import { DICTIONARY, Language, DictionaryShape } from '@/lib/i18n/dictionary';
 
 type LanguageContextType = {
     lang: Language;
     setLang: (lang: Language) => void;
-    t: any;
-    //t: typeof DICTIONARY['fr']; // Type inference from French dictionary
+    t: DictionaryShape;
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
