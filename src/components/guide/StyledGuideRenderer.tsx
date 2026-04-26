@@ -818,7 +818,7 @@ function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, o
 export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forceDesktop = false }: { guide: Guide; unlocked: boolean; forceMobile?: boolean; forceDesktop?: boolean }) {
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const { language: lang, setLanguage: setLang } = useTranslation();
+    const { lang, setLang } = useTranslation();
     // Notification state
     const [showTip, setShowTip] = useState(true);
 
