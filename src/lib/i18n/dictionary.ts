@@ -739,14 +739,7 @@ export const DICTIONARY = {
             notes: "Notes",
             confirm: "Valider"
         },
-        ai: {
-            assistant: "Assistant Guide",
-            online: "IA en ligne",
-            placeholder: "Message...",
-            empty: "Posez une question sur ce guide.",
-            error: "Désolé, je ne parviens pas à répondre pour le moment.",
-            thinking: "Rédaction..."
-        },
+
         qrCodeWall: {
             titlePart1: "Partagez votre guide",
             titlePart2: "partout",
@@ -1574,14 +1567,7 @@ export const DICTIONARY = {
             notes: "Notes",
             confirm: "Confirm"
         },
-        ai: {
-            assistant: "Guide Assistant",
-            online: "AI online",
-            placeholder: "Message...",
-            empty: "Ask a question about this guide.",
-            error: "Sorry, I can't answer right now.",
-            thinking: "Drafting..."
-        },
+
         qrCodeWall: {
             titlePart1: "Share your guide",
             titlePart2: "everywhere",
@@ -2262,7 +2248,7 @@ export const DICTIONARY = {
         lazy: "Relajado", mood: "Motivado", discovery: "Descubrimiento", tasty: "Sabroso", adventure: "Aventura", festive: "Fiesta", outing: "Salida",
         brunch: "Brunch", explore: "Explorar", museums: "Museos", taste: "Saborear", excursion: "Excursión", nightlife: "Noche", walk: "Paseo",
         guide: { accessCode: "Códigos", locked: "Protegido por código.", enterCode: "Código de acceso", apartmentDoor: "Puerta", buildingDoor: "Edificio", gate: "Portón", notes: "Notas", confirm: "Validar" },
-        ai: { assistant: "Asistente", online: "En línea", placeholder: "Mensaje...", empty: "Haz una pregunta.", error: "Error.", thinking: "Escribiendo..." },
+
         qrCodeWall: {
             titlePart1: "Comparte", titlePart2: "donde sea", description: "Un scan basta.",
             items: { wifi: { title: "Wi-Fi", desc: "Pre-llenado" }, perpetual: { title: "Permanente", desc: "Válido siempre" }, remote: { title: "En Vivo", desc: "Actualizado" } },
@@ -2584,63 +2570,7 @@ export const DICTIONARY = {
             },
             places: {
                 name: "Nombre del lugar",
-                add: "Añadir un lugar",
-                aiButton: "Recomendación IA"
-            },
-            events: {
-                add: "Añadir un evento",
-                month: "Mes (3 letras)",
-                day: "Día",
-                aiButton: "Buscar eventos"
-            },
-            documents: {
-                add: "Añadir un documento",
-                name: "Nombre del documento",
-                url: "URL del archivo (PDF...)"
-            },
-            upsells: {
-                add: "Añadir una oferta",
-                image: "Imagen de la oferta",
-                buttonText: "Texto del botón",
-                buttonLink: "Enlace del botón"
-            },
-            access_codes: {
-                security: "Seguridad",
-                mode: "Modo",
-                alwaysVisible: "Siempre visible",
-                unlockByCode: "Desbloquear con código",
-                unlockCode: "Código de desbloqueo",
-                unlockCodeDesc: "Ej: el código que envías al huésped.",
-                aptCode: "Código puerta apartamento",
-                buildingCode: "Código puerta edificio",
-                gateCode: "Código verja",
-                notes: "Notas"
-            },
-            embed: {
-                url: "URL para integrar (Iframe)",
-                warning: "Asegúrate de que el sitio permite la integración (X-Frame-Options)."
-            }
-        },
-        settings: {
-            title: "Configuración y Cuenta",
-            tabProfile: "Perfil",
-            tabPlan: "Suscripción",
-            tabShop: "Tienda (Upsells)",
-            personalInfo: "Información Personal",
-            fullName: "Nombre Completo",
-            email: "Email",
-            saveProfile: "Guardar Perfil",
-            yourPlan: "Tu Suscripción",
-            currentPlan: "Plan Actual",
-            manageSubscription: "Gestionar suscripción",
-            success: "Éxito",
-            error: "Error"
-        },
-        renderer: {
-            searchPlaceholder: "Buscar información, un código...",
-            wifi: "Wi-Fi",
-            access: "Códigos de acceso",
-            checkin: "Llegada",
+                 checkin: "Llegada",
             checkout: "Salida",
             location: "Ubicación",
             rules: "Reglas de la casa",
@@ -2708,31 +2638,9 @@ export const DICTIONARY = {
             error: "Lo siento, hubo un error."
         }
     },
-    ar: {
-        common: {
-            getStarted: "ابدأ", login: "تسجيل الدخول", signup: "اشتراك", tryFree: "جرب مجاناً", popular: "الأكثر شيوعاً", month: "/شهر", loading: "جاري التحميل...", choose: "اختر", viewGuide: "عرض الدليل", more: "عرض المزيد", checkin: "تسجيل الوصول", qrCodeWall: "امسح للتجربة", checkout: "المغادرة", location: "الموقع", viewOnMap: "عرض على الخريطة", wifi: "واي فاي",
-        },
-        socialProof: {
-            trustpilot: "4.9/5 بواسطة +500", usedBy: "يستخدمه أفضل المديرين", autoTranslate: { title: "مترجم آلياً", desc: "دليلك يتحدث لغتهم." }, googleMaps: { title: "خرائط جوجل مدمجة", desc: "الخرائط في الدليل مباشرة." }
-        },
-        hero: {
-            tag: "للمضيفين", title: "لا تكرر الرمز أبداً.", subtitle: "حول دليلك للرقمية. تجربة خمس نجوم.", cta: "إنشاء دليلي مجاناً", demo: "مشاهدة مثال", noCreditCard: "بدون بطاقة", setupTime: "مُعدّ في دقيقتين",
-        },
-        features: {
-            title: "كل ما تحتاجه.", subtitle: "دون تعقيد.", description: "أدوات قوية.",
-            items: { mobileFirst: { title: "موبايل أولاً", desc: "يُفتح فوراً." }, secure: { title: "رموز آمنة", desc: "أقفال محمية." }, map: { title: "تفاعلي", desc: "خريطة مدمجة." }, live: { title: "تعديل مباشر", desc: "الكل مُدرج." }, translate: { title: "ترجمة آلية", desc: "لغة الزائر." }, checklist: { title: "قوائم", desc: "إرشادات." } }
-        },
-        pricing: {
-            title: "تسعير واضح", subtitle: "ابدأ مجاناً، وقم بالترقية عند الحاجة.", bestOffer: "أفضل عرض:", addon: "+ إضافي",
-            enterprise: { title: "للشركات؟", desc: "حل مخصص.", cta: "اتصل بنا" },
-            plans: {
-                demo: { name: "اكتشاف", price: "مجاني", desc: "تجربة الخدمة", button: "إنشاء دليل", features: ['وصول كامل', 'معاينة الجوال', 'عدم النشر'] },
-                basic: { name: "أساسي", desc: "لإطلاق عقارك الأول.", button: "ابدأ", features: ['دليل رقمي', 'واي فاي فوري', 'خريطة', 'دليل واحد'] },
-                pro: { name: "نمو", desc: "تحسين الدخل.", button: "تحديث", features: ['أدلة لا محدودة', 'ترجمة تلقائية', 'دعم واتساب'] },
-                business: { name: "وكالة", desc: "للمجموعات", button: "تواصل", price: "مخصص", features: ['لا محدود', 'لوحة تحكم', 'علامة بيضاء'] }
-            },
-            trust: "دفع آمن SSL"
-        },
+
+
+
         testimonials: {
             title: "معتمد من المحترفين",
             subtitle: "انضم إلى أكثر من 500 مضيف قاموا بأتمتة استقبالهم.",
@@ -2817,7 +2725,7 @@ export const DICTIONARY = {
         lazy: "مسترخي", mood: "متحمس", discovery: "اكتشاف", tasty: "لذيذ", adventure: "مغامرة", festive: "احتفالي", outing: "نزهة",
         brunch: "فطور متأخر", explore: "استكشف", museums: "متاحف", taste: "تذوق", excursion: "رحلة", nightlife: "الحياة الليلية", walk: "تمشية",
         guide: { accessCode: "رموز الدخول", locked: "هذا القسم محمي برمز.", enterCode: "رمز الدخول", apartmentDoor: "باب الشقة", buildingDoor: "باب العمارة", gate: "البوابة", notes: "ملاحظات", confirm: "تأكيد" },
-        ai: { assistant: "المساعد", online: "متاح", placeholder: "رسالة...", empty: "اسأل أي شيء.", error: "خطأ في الشبكة.", thinking: "جاري الكتابة..." },
+
         qrCodeWall: {
             titlePart1: "شارك", titlePart2: "دليلك", description: "مجرد مسح للزوار.",
             items: { wifi: { title: "Wi-Fi", desc: "معبأ مسبقاً" }, perpetual: { title: "وصول دائم", desc: "الرابط صالح" }, remote: { title: "تحديث مباشر", desc: "دائماً محدث" } },
@@ -3425,14 +3333,7 @@ export const DICTIONARY = {
             notes: "Notities",
             confirm: "Bevestigen"
         },
-        ai: {
-            assistant: "Gids Assistent",
-            online: "AI online",
-            placeholder: "Bericht...",
-            empty: "Stel een vraag over deze gids.",
-            error: "Sorry, ik kan op dit moment niet antwoorden.",
-            thinking: "Aan het typen..."
-        },
+
         qrCodeWall: {
             titlePart1: "Deel uw gids",
             titlePart2: "overal",
@@ -4159,14 +4060,7 @@ export const DICTIONARY = {
             notes: "备注",
             confirm: "确认"
         },
-        ai: {
-            assistant: "指南助手",
-            online: "AI 在线",
-            placeholder: "输入消息...",
-            empty: "关于本指南，您可以向我提问。",
-            error: "抱歉，我现在无法回答。",
-            thinking: "正在构思..."
-        },
+
         qrCodeWall: {
             titlePart1: "随时随地",
             titlePart2: "共享您的指南",
@@ -4661,14 +4555,7 @@ export const DICTIONARY = {
             gate: "البوابة:",
             notes: "ملاحظات"
         },
-        ai: {
-            assistant: "مساعد الذكاء الاصطناعي",
-            online: "متصل",
-            empty: "اسألني أي شيء عن إقامتك!",
-            thinking: "يفكر...",
-            placeholder: "اسأل سؤالاً...",
-            error: "عذراً، حدث خطأ."
-        },
+
         qrCodeWall: {
             titlePart1: "شارك دليلك",
             titlePart2: "في كل مكان",
