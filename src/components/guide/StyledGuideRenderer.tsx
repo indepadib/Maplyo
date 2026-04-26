@@ -440,7 +440,7 @@ function MiniInfoCard({ icon: Icon, title, count, subtitle, colorClass, theme, o
 export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forceDesktop = false }: { guide: Guide; unlocked: boolean; forceMobile?: boolean; forceDesktop?: boolean }) {
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     // Notification state
     const [showTip, setShowTip] = useState(true);
 
