@@ -1,4 +1,5 @@
 import React from "react";
+import { Language } from "@/lib/i18n/dictionary";
 import { HeroTraveler } from "./traveler/HeroTraveler";
 import { WifiTraveler } from "./traveler/WifiTraveler";
 import { AccessCodesTraveler } from "./traveler/AccessCodesTraveler";
@@ -34,7 +35,7 @@ import {
   VisibilityRule
 } from "@/types/blocks";
 
-export type BlockRenderContext = { mode: "traveler" | "builder"; unlocked: boolean; lang?: 'fr' | 'en' };
+export type BlockRenderContext = { mode: "traveler" | "builder"; unlocked: boolean; lang?: Language };
 
 export type BlockDefinition = {
   type: BlockType;
