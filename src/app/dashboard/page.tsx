@@ -25,6 +25,7 @@ type GuideSummary = {
     updatedAt: number;
     blockCount: number;
     is_published: boolean;
+    views: number;
 };
 
 export default function DashboardPage() {
@@ -149,7 +150,7 @@ function DashboardContent() {
                 // 1. Load Guides
                 const { data, error } = await supabase
                     .from('guides')
-                    .select('id, title, slug, theme_id, updated_at, content, is_published')
+                    .select('id, title, slug, theme_id, updated_at, content, is_published, guide_views(count)')
                     .eq('user_id', user.id)
                     .order('updated_at', { ascending: false });
 
@@ -181,7 +182,8 @@ function DashboardContent() {
                         themeId: g.theme_id || "minimal-white",
                         updatedAt: new Date(g.updated_at).getTime(),
                         blockCount: g.content?.blocks?.length || 0,
-                        is_published: g.is_published ?? false
+                        is_published: g.is_published ?? false,
+                        views: g.guide_views?.[0]?.count || 0
                     }));
                     setGuides(items);
                 }
@@ -217,7 +219,7 @@ function DashboardContent() {
             
             const { data } = await supabase
                 .from('guides')
-                .select('id, title, slug, theme_id, updated_at, content, is_published')
+                .select('id, title, slug, theme_id, updated_at, content, is_published, guide_views(count)')
                 .eq('user_id', sid)
                 .order('updated_at', { ascending: false });
             
@@ -229,7 +231,8 @@ function DashboardContent() {
                     themeId: g.theme_id || "minimal-white",
                     updatedAt: new Date(g.updated_at).getTime(),
                     blockCount: g.content?.blocks?.length || 0,
-                    is_published: g.is_published ?? false
+                    is_published: g.is_published ?? false,
+                    views: g.guide_views?.[0]?.count || 0
                 })));
             }
         } catch (e) {
@@ -497,6 +500,9 @@ function DashboardContent() {
                                                 <div className="flex items-center gap-2 mb-2">
                                                     <span className="text-[10px] font-bold px-2 py-1 rounded-lg bg-white/10 backdrop-blur-md border border-white/10 text-zinc-300 uppercase tracking-wider">
                                                         {guide.blockCount} {t.builder.blocks}
+                                                    </span>
+                                                    <span className="text-[10px] font-bold px-2 py-1 rounded-lg bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-blue-300 uppercase tracking-wider">
+                                                        {guide.views || 0} vues
                                                     </span>
                                                 </div>
                                                 <h3 className="text-2xl font-bold text-white mb-0 leading-tight drop-shadow-md">

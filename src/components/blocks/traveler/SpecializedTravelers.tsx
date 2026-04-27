@@ -2,6 +2,7 @@ import { MinimalIcons } from "@/components/icons/MinimalIcons";
 import { ExternalLink, Copy, Phone, MessageCircle, Mail } from "lucide-react";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { TranslatedText } from "@/components/ui/TranslatedText";
+import Image from "next/image";
 
 // --- CHECK-IN / CHECK-OUT ---
 export function CheckinTraveler({ data, title }: { data: any; title?: string }) {
@@ -34,8 +35,8 @@ export function CheckinTraveler({ data, title }: { data: any; title?: string }) 
             {data.images && data.images.length > 0 && (
                 <div className="grid grid-cols-2 gap-2">
                     {data.images.map((img: string, i: number) => (
-                        <div key={i} className="aspect-square rounded-2xl overflow-hidden bg-gray-100">
-                            <img src={img} alt="Detail" className="w-full h-full object-cover" />
+                        <div key={i} className="aspect-square rounded-2xl overflow-hidden bg-gray-100 relative">
+                            <Image src={img} alt="Detail" fill className="object-cover" sizes="(max-width: 768px) 50vw, 33vw" />
                         </div>
                     ))}
                 </div>
@@ -257,7 +258,7 @@ export function TrashTraveler({ data }: { data: any }) {
 
             {data.imageUrl && (
                 <div className="rounded-xl overflow-hidden aspect-video relative">
-                    <img src={data.imageUrl} alt="Trash Location" className="w-full h-full object-cover" />
+                    <Image src={data.imageUrl} alt="Trash Location" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
                 </div>
             )}
 

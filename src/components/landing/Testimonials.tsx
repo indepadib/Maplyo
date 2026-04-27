@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
-
 import { useTranslation } from "@/components/providers/LanguageProvider";
+import Image from "next/image";
 
 export function Testimonials() {
     const { t } = useTranslation();
@@ -45,11 +45,13 @@ export function Testimonials() {
                             <p className="text-zinc-300 mb-8 leading-relaxed">"{item.text}"</p>
 
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/10 bg-zinc-800">
-                                    <img 
+                                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/10 bg-zinc-800 relative">
+                                    <Image 
                                       src={i === 0 ? "https://randomuser.me/api/portraits/men/32.jpg" : i === 1 ? "https://randomuser.me/api/portraits/women/44.jpg" : "https://randomuser.me/api/portraits/men/85.jpg"} 
                                       alt={item.name} 
-                                      className="w-full h-full object-cover" 
+                                      fill
+                                      className="object-cover"
+                                      sizes="48px"
                                     />
                                 </div>
                                 <div>

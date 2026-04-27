@@ -131,6 +131,11 @@ export default async function PublicGuidePage({
                 blocks: guideData.content?.blocks || [],
                 updatedAt: guideData.updated_at
             };
+
+            // Track view asynchronously if not owner
+            if (!isOwner) {
+                supabase.from("guide_views").insert({ guide_id: guide.id }).then();
+            }
         }
     } else {
         guide = {

@@ -45,6 +45,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             title: title,
             description: excerpt,
             type: "article",
+            images: ['/api/og?title=' + encodeURIComponent(title) + '&type=Blog'],
             publishedTime: post.published_at,
             authors: ["Maplyo"],
         },

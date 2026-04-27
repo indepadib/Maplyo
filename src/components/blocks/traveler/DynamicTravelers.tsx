@@ -1,6 +1,7 @@
 import { ExternalLink, Calendar, MapPin, FileText, Download, ShoppingBag } from "lucide-react";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { TranslatedText } from "@/components/ui/TranslatedText";
+import Image from "next/image";
 
 // --- WELCOME (Text/Rich Content) ---
 export function WelcomeTraveler({ data }: { data: any }) {
@@ -8,8 +9,8 @@ export function WelcomeTraveler({ data }: { data: any }) {
     return (
         <div className="space-y-4">
             {data.imageUrl && (
-                <div className="rounded-2xl overflow-hidden aspect-video shadow-sm">
-                    <img src={data.imageUrl} alt="Welcome" className="w-full h-full object-cover" />
+                <div className="rounded-2xl overflow-hidden aspect-video shadow-sm relative">
+                    <Image src={data.imageUrl} alt="Welcome" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
                 </div>
             )}
             <div className="prose prose-sm max-w-none text-gray-600 bg-white p-6 rounded-2xl border border-gray-100">
@@ -36,8 +37,8 @@ export function PlacesTraveler({ data }: { data: any }) {
             {items.map((item: any, i: number) => (
                 <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                     {item.imageUrl && (
-                        <div className="h-32 bg-gray-100">
-                            <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+                        <div className="h-32 bg-gray-100 relative">
+                            <Image src={item.imageUrl} alt={item.name || "Lieu"} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
                         </div>
                     )}
                     <div className="p-4">
@@ -195,8 +196,8 @@ export function UpsellsTraveler({ data }: { data: any }) {
             {items.map((item: any, i: number) => (
                 <div key={i} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg transition-all">
                     {item.imageUrl && (
-                        <div className="h-40 overflow-hidden">
-                            <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div className="h-40 overflow-hidden relative">
+                            <Image src={item.imageUrl} alt={item.title || "Upsell"} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 768px) 100vw, 50vw" />
                         </div>
                     )}
                     <div className="p-5">
