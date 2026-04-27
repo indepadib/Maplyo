@@ -1,10 +1,11 @@
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
 import { ExternalLink, Copy, Phone, MessageCircle, Mail } from "lucide-react";
 import { useTranslation } from "@/components/providers/LanguageProvider";
+import { TranslatedText } from "@/components/ui/TranslatedText";
 
 // --- CHECK-IN / CHECK-OUT ---
 export function CheckinTraveler({ data, title }: { data: any; title?: string }) {
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     const time = data.time || "15:00";
     return (
         <div className="space-y-6">
@@ -15,7 +16,7 @@ export function CheckinTraveler({ data, title }: { data: any; title?: string }) 
 
             {data.instruction && (
                 <div className="prose prose-sm max-w-none text-gray-600 bg-white p-4 rounded-2xl border border-gray-100">
-                    <p>{data.instruction}</p>
+                    <p><TranslatedText text={data.instruction} lang={lang} /></p>
                 </div>
             )}
 
@@ -156,7 +157,7 @@ export function ContactTraveler({ data }: { data: any }) {
 
 // --- RULES ---
 export function RulesTraveler({ data }: { data: any }) {
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     const rules = Array.isArray(data.items) ? data.items : [];
 
     if (rules.length === 0) {
@@ -175,7 +176,7 @@ export function RulesTraveler({ data }: { data: any }) {
                         {i + 1}
                     </div>
                     <div className="pt-1.5 font-medium text-gray-900">
-                        {typeof rule === "string" ? rule : (rule.text || "")}
+                        <TranslatedText text={typeof rule === "string" ? rule : (rule.text || "")} lang={lang} />
                     </div>
                 </div>
             ))}
@@ -185,7 +186,7 @@ export function RulesTraveler({ data }: { data: any }) {
 
 // --- AMENITIES ---
 export function AmenitiesTraveler({ data }: { data: any }) {
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     const items = Array.isArray(data.items) ? data.items : [];
 
     if (items.length === 0) {
@@ -204,7 +205,7 @@ export function AmenitiesTraveler({ data }: { data: any }) {
                         <MinimalIcons.amenities className="w-4 h-4" />
                     </div>
                     <div className="font-medium text-gray-900 text-sm">
-                        {typeof item === "string" ? item : (item.text || "")}
+                        <TranslatedText text={typeof item === "string" ? item : (item.text || "")} lang={lang} />
                     </div>
                 </div>
             ))}
@@ -214,7 +215,7 @@ export function AmenitiesTraveler({ data }: { data: any }) {
 
 // --- FAQ ---
 export function FaqTraveler({ data }: { data: any }) {
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     const items = Array.isArray(data.items) ? data.items : [];
 
     if (items.length === 0) {
@@ -231,10 +232,10 @@ export function FaqTraveler({ data }: { data: any }) {
                 <div key={i} className="bg-gray-50 rounded-2xl border border-gray-100 p-5">
                     <div className="font-bold text-gray-900 mb-2 flex gap-3">
                         <span className="text-blue-500">Q.</span>
-                        {item.question || t.guideBlocks.faq.question}
+                        <TranslatedText text={item.question || t.guideBlocks.faq.question} lang={lang} />
                     </div>
                     <div className="text-gray-600 pl-6 border-l-2 border-blue-100 italic">
-                        {item.answer || t.guideBlocks.faq.answer}
+                        <TranslatedText text={item.answer || t.guideBlocks.faq.answer} lang={lang} />
                     </div>
                 </div>
             ))}
@@ -244,13 +245,13 @@ export function FaqTraveler({ data }: { data: any }) {
 
 // --- TRASH ---
 export function TrashTraveler({ data }: { data: any }) {
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     return (
         <div className="space-y-6">
             <div className="bg-gray-50 p-6 rounded-[24px] border border-gray-100 flex flex-col gap-4">
                 <div>
                     <h3 className="font-bold text-gray-900 text-lg">{t.guideBlocks.trash.title}</h3>
-                    {data.location && <p className="text-gray-500 text-sm">{data.location}</p>}
+                    {data.location && <p className="text-gray-500 text-sm"><TranslatedText text={data.location} lang={lang} /></p>}
                 </div>
             </div>
 
@@ -279,7 +280,7 @@ export function TrashTraveler({ data }: { data: any }) {
             {
                 data.instructions && (
                     <div className="prose prose-sm max-w-none text-gray-600 bg-white p-4 rounded-2xl border border-gray-100">
-                        <p>{data.instructions}</p>
+                        <p><TranslatedText text={data.instructions} lang={lang} /></p>
                     </div>
                 )
             }
@@ -289,7 +290,7 @@ export function TrashTraveler({ data }: { data: any }) {
 
 // --- PARKING ---
 export function ParkingTraveler({ data }: { data: any }) {
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     const mapUrl = data.mapUrl || (data.location ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.location)}` : null);
 
     return (
@@ -302,14 +303,14 @@ export function ParkingTraveler({ data }: { data: any }) {
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6 text-center">
                     <MinimalIcons.parking className="w-10 h-10 mb-2 opacity-90" />
-                    {data.location && <h3 className="text-lg font-bold">{data.location}</h3>}
-                    {data.cost && <div className="mt-2 inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase">{data.cost}</div>}
+                    {data.location && <h3 className="text-lg font-bold"><TranslatedText text={data.location} lang={lang} /></h3>}
+                    {data.cost && <div className="mt-2 inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase"><TranslatedText text={data.cost} lang={lang} /></div>}
                 </div>
             </div>
 
             {data.instructions && (
                 <div className="prose prose-sm max-w-none text-gray-600 bg-white p-4 rounded-2xl border border-gray-100">
-                    <p>{data.instructions}</p>
+                    <p><TranslatedText text={data.instructions} lang={lang} /></p>
                 </div>
             )}
 
@@ -330,7 +331,7 @@ export function ParkingTraveler({ data }: { data: any }) {
 
 // --- BREAKFAST ---
 export function BreakfastTraveler({ data }: { data: any }) {
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     return (
         <div className="space-y-6">
             <div className="flex flex-col items-center justify-center p-8 bg-amber-50 rounded-[32px] border border-amber-100 relative overflow-hidden">
@@ -342,7 +343,7 @@ export function BreakfastTraveler({ data }: { data: any }) {
                     </div>
                 )}
                 <div className="text-sm font-bold text-amber-400 uppercase tracking-widest relative z-10">
-                    {data.location || t.guideBlocks.breakfast.title}
+                    <TranslatedText text={data.location || t.guideBlocks.breakfast.title} lang={lang} />
                 </div>
             </div>
 
@@ -350,7 +351,7 @@ export function BreakfastTraveler({ data }: { data: any }) {
                 <div className="bg-white p-6 rounded-[24px] border border-gray-100 shadow-sm">
                     <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">{t.guideBlocks.breakfast.menu}</h3>
                     <p className="text-gray-700 italic leading-relaxed">
-                        "{data.menu}"
+                        "<TranslatedText text={data.menu} lang={lang} />"
                     </p>
                 </div>
             )}
@@ -360,7 +361,7 @@ export function BreakfastTraveler({ data }: { data: any }) {
 
 // --- TRANSPORT ---
 export function TransportTraveler({ data }: { data: any }) {
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     const options = Array.isArray(data.options) ? data.options : [];
 
     const getIcon = (type: string) => {
@@ -384,14 +385,14 @@ export function TransportTraveler({ data }: { data: any }) {
                     </div>
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                            <h3 className="font-bold text-gray-900">{opt.name}</h3>
+                            <h3 className="font-bold text-gray-900"><TranslatedText text={opt.name} lang={lang} /></h3>
                             {opt.phone && (
                                 <a href={`tel:${opt.phone}`} className="text-xs font-bold bg-green-100 text-green-700 px-2 py-1 rounded-lg hover:bg-green-200">
                                     {t.guideBlocks.transport.call}
                                 </a>
                             )}
                         </div>
-                        {opt.description && <p className="text-sm text-gray-500 truncate">{opt.description}</p>}
+                        {opt.description && <p className="text-sm text-gray-500 truncate"><TranslatedText text={opt.description} lang={lang} /></p>}
                     </div>
                     {opt.url && (
                         <a href={opt.url} target="_blank" rel="noopener noreferrer" className="p-2 text-gray-400 hover:text-gray-900">
