@@ -1,0 +1,32 @@
+name: Generate Weekly Blog
+
+on:
+  schedule:
+    # Runs at 09:00 on Monday.
+    - cron: '0 9 * * 1'
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Blog Generation API
+        run: |
+          # Ensure you have added ADMIN_SECRET_KEY to your GitHub Repository Secrets
+          response=$(curl -s -w "\n%{http_code}" -X POST https://maplyo.com/api/admin/generate-blog \
+          -H "Authorization: Bearer ${{ secrets.ADMIN_SECRET_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{}')
+          
+          # Extract body and HTTP status code
+          body=$(echo "$response" | head -n -1)
+          status_code=$(echo "$response" | tail -n 1)
+          
+          echo "Status Code: $status_code"
+          echo "Response Body: $body"
+          
+          if [ "$status_code" -ne 200 ]; then
+            echo "Failed to generate blog post."
+            exit 1
+          fi

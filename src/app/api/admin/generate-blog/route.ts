@@ -16,6 +16,8 @@ const getSupabaseAdmin = () => {
     );
 };
 
+export const maxDuration = 60; // Allow up to 60s for multi-language generation
+
 export async function POST(req: Request) {
     try {
         // Secure the endpoint: check for a secret admin key
@@ -36,18 +38,25 @@ export async function POST(req: Request) {
 
         const prompt = `
         You are an expert SEO copywriter and Airbnb superhost consultant.
-        Write a highly engaging, SEO-optimized blog post in French about ${customTopic ? `"${customTopic}"` : "a relevant topic for short-term rental hosts (e.g., maximizing revenue, creating digital welcome books, improving guest experience, local SEO for Airbnb, smart home tech for hosts)"}.
+        Write a highly engaging, SEO-optimized blog post about ${customTopic ? `"${customTopic}"` : "a relevant topic for short-term rental hosts (e.g., maximizing revenue, creating digital welcome books, improving guest experience, local SEO for Airbnb, smart home tech for hosts)"}.
         
         The target audience is Airbnb hosts, property managers, and conciergeries.
         
+        You must generate the exact same article translated perfectly into 6 languages: French (fr), English (en), Spanish (es), Arabic (ar), Dutch (nl), and Chinese (zh).
+        For each language, provide the 'title', 'excerpt' (2-3 sentences), and 'content' (the full blog post written in clean, semantic HTML formatting using <h2>, <h3>, <p>, <ul>, <li>, and <strong>. Do NOT use markdown code blocks like \`\`\`html).
+        Each article should be around 500-800 words.
+
         Return the result EXACTLY as a JSON object with the following structure, and nothing else:
         {
-            "title": "A catchy, SEO-friendly title",
-            "slug": "a-clean-url-slug-without-special-chars",
-            "excerpt": "A compelling 2-3 sentence meta description for the blog list and SEO.",
+            "slug": "a-clean-url-slug-in-french-without-special-chars",
             "seo_keywords": ["keyword1", "keyword2", "keyword3"],
-            "content": "The full blog post content written in clean, semantic HTML formatting. Do NOT wrap it in \`\`\`html markdown blocks. Use <h2>, <h3>, <p>, <ul>, <li>, and <strong> tags to format the content beautifully. It should be at least 800 words."
-        }\`;
+            "fr": { "title": "...", "excerpt": "...", "content": "..." },
+            "en": { "title": "...", "excerpt": "...", "content": "..." },
+            "es": { "title": "...", "excerpt": "...", "content": "..." },
+            "ar": { "title": "...", "excerpt": "...", "content": "..." },
+            "nl": { "title": "...", "excerpt": "...", "content": "..." },
+            "zh": { "title": "...", "excerpt": "...", "content": "..." }
+        }`;
 
         const response = await openai.chat.completions.create({
             model: "gpt-4o-mini",
@@ -61,15 +70,24 @@ export async function POST(req: Request) {
 
         const blogData = JSON.parse(resultText);
 
+        const translations = {
+            en: blogData.en,
+            es: blogData.es,
+            ar: blogData.ar,
+            nl: blogData.nl,
+            zh: blogData.zh
+        };
+
         // Insert into Supabase
         const { data, error } = await supabase
             .from("blog_posts")
             .insert({
-                title: blogData.title,
+                title: blogData.fr.title,
                 slug: blogData.slug,
-                excerpt: blogData.excerpt,
-                content: blogData.content,
+                excerpt: blogData.fr.excerpt,
+                content: blogData.fr.content,
                 seo_keywords: blogData.seo_keywords,
+                translations: translations,
                 generated_by_ai: true,
                 published_at: new Date().toISOString()
             })
