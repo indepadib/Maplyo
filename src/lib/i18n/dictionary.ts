@@ -75,17 +75,13 @@ export const DICTIONARY = {
             }
         },
         "hero": {
-            "tag": "POUR LES HÔTES ET CONCIERGERIES",
-            "title": "Ne répétez plus jamais le code WiFi.",
-            "subtitle": "Digitalisez votre livret d'accueil. Offrez une expérience 5 étoiles, réduisez les messages de 50%, et augmentez vos avis positifs.",
-            "cta": "Créer mon guide gratuit",
+            "tag": "POUR LES H├öTES ET CONCIERGERIES",
+            "title": "Ne r├®p├®tez plus jamais le code WiFi.",
+            "subtitle": "Digitalisez votre livret d'accueil. Offrez une exp├®rience 5 ├®toiles, r├®duisez les messages de 50%, et augmentez vos avis positifs.",
+            "cta": "Cr├®er mon guide gratuit",
             "demo": "Voir un exemple",
             "noCreditCard": "Pas de carte requise",
-            "setupTime": "Configuré en 2 min",
-            "badge": "Livret d'accueil digital #1",
-            "title1": "Pour vos invités,",
-            "title2": "une expérience 5 étoiles.",
-            "users": "Approuvé par 500+ hôtes"
+            "setupTime": "Configur├® en 2 min"
         },
         "features": {
             "title": "Tout ce dont vous avez besoin.",
@@ -121,104 +117,136 @@ export const DICTIONARY = {
         },
         "pricing": {
             "title": "Tarification Transparente",
-            "subtitle": "Commencez gratuitement. Évoluez quand vous voulez.",
+            "subtitle": "Commencez gratuitement. ├ëvoluez quand vous voulez.",
             "bestOffer": "La meilleure offre du monde :",
-            "addon": "+20 DH / guide supplémentaire",
-            "trust": "Garantie 30 jours",
+            "addon": "+20 DH / guide suppl├®mentaire",
             "enterprise": {
-                "title": "Solution Enterprise",
-                "desc": "Pour les pros (50+ biens).",
-                "cta": "Contacter"
+                "title": "Besoin d'une solution Enterprise ?",
+                "desc": "Pour les gestionnaires de plus de 50 propri├®t├®s, nous proposons des tarifs d├®gressifs et une int├®gration PMS.",
+                "cta": "Contacter l'├®quipe commerciale"
             },
             "plans": {
                 "demo": {
-                    "name": "Découverte",
+                    "name": "D├®couverte",
                     "price": "Gratuit",
-                    "desc": "Testez sans carte.",
-                    "button": "Essayer",
+                    "desc": "Testez la puissance de Maplyo sans carte bancaire.",
+                    "button": "Cr├®er un guide (Gratuit)",
                     "features": [
-                        "Accès Créateur",
-                        "Aperçu Mobile"
+                        "Acc├¿s complet au Cr├®ateur",
+                        "Pr├®visualisation Mobile",
+                        "Sans publication"
                     ]
                 },
                 "basic": {
                     "name": "Essentiel",
-                    "desc": "Pour 1 propriété.",
-                    "button": "Démarrer",
+                    "desc": "Pour lancer votre premi├¿re propri├®t├®.",
+                    "button": "D├®marrer",
                     "features": [
-                        "Livret Digital",
-                        "WiFi QR",
-                        "1 Guide"
+                        "Livret Digital Complet",
+                        "QR Code WiFi Instantan├®",
+                        "Carte Interactive (Google Maps)",
+                        "Th├¿mes Gratuits (Pack Premium +15 DH)",
+                        "1 Guide Unique"
                     ]
                 },
                 "pro": {
                     "name": "Croissance",
-                    "desc": "Pour les pros.",
-                    "button": "Passer Pro",
+                    "desc": "Pour maximiser vos revenus & avis.",
+                    "button": "Passer en Croissance",
                     "features": [
-                        "Guides Illimités",
-                        "Traduction IA",
-                        "Support WhatsApp"
+                        "Guides Illimit├®s (+20 DH/supp.)",
+                        "Th├¿mes Premium INCLUS",
+                        "Traduction Automatique (IA)",
+                        "Assistant Voyageur 24/7 (IA)",
+                        "Support Prioritaire WhatsApp"
                     ]
                 },
                 "business": {
                     "name": "Agence",
-                    "desc": "Pour les portfolios.",
-                    "button": "Talk to Expert",
+                    "desc": "Pour les portfolios de 10+ biens.",
+                    "button": "Parler ├á un Expert",
                     "price": "Sur mesure",
                     "features": [
-                        "Marque Blanche",
-                        "Multi-Propriétés"
+                        "Guides Illimit├®s",
+                        "Tableau de Bord Multi-Propri├®t├®s",
+                        "Marque Blanche (Sans logo Maplyo)",
+                        "Int├®gration PMS & Channel Mgr",
+                        "Facturation Centralis├®e"
                     ]
                 }
-            }
+            },
+            "trust": "Garantie Satisfait ou Rembours├® (30 jours) ÔÇó Paiement S├®curis├® SSL"
         },
         "testimonials": {
-            "title": "Approuvé par les Pros",
-            "subtitle": "Rejoignez 500+ hôtes.",
+            "title": "Approuv├® par les Pros",
+            "subtitle": "Rejoignez plus de 500 h├┤tes qui ont automatis├® leur accueil.",
             "items": [
                 {
-                    "name": "Jean R.",
-                    "role": "Superhost",
-                    "text": "Gain de temps énorme.",
-                    "result": "-60% messages"
+                    "name": "Jean-Philippe R.",
+                    "role": "Superhost Airbnb (Marrakech)",
+                    "text": "Mes voyageurs arr├¬taient pas de demander le code Wifi ou comment allumer la clim. Avec Maplyo, ils ont tout sur leur t├®l├®phone. J'ai gagn├® facile 2h par semaine.",
+                    "result": "-60% de messages"
+                },
+                {
+                    "name": "Sofia B.",
+                    "role": "G├®rante Conciergerie (Casablanca)",
+                    "text": "Le game changer pour nous, c'est l'upsell. On propose des services de m├®nage ou de transport directement dans le guide. ├ça a boost├® notre chiffre d'affaires.",
+                    "result": "+15% revenus"
+                },
+                {
+                    "name": "Karim M.",
+                    "role": "Propri├®taire Riad (F├¿s)",
+                    "text": "Tr├¿s pro. L'aspect multilingue est bluffant, mes clients am├®ricains et espagnols sont ravis d'avoir les infos dans leur langue sans que je fasse rien.",
+                    "result": "5Ôÿà Avis"
                 }
             ]
         },
         "faq": {
-            "title": "Questions Fréquentes",
-            "subtitle": "Tout savoir.",
+            "title": "Questions Fr├®quentes",
+            "subtitle": "Tout ce que vous devez savoir pour d├®marrer.",
             "questions": [
                 {
-                    "q": "Gratuit ?",
-                    "a": "Oui, plan découverte dispo."
+                    "q": "Faut-il des comp├®tences techniques ?",
+                    "a": "Aucune. C'est aussi simple que de remplir un profil Facebook. Vous ajoutez vos infos, on g├®n├¿re le design."
+                },
+                {
+                    "q": "Comment mes voyageurs acc├¿dent au guide ?",
+                    "a": "Via un simple QR Code que vous placez dans le logement, ou un lien que vous envoyez par message avant leur arriv├®e."
+                },
+                {
+                    "q": "Puis-je modifier le guide apr├¿s impression du QR Code ?",
+                    "a": "Oui ! C'est la magie du num├®rique. Mettez ├á jour vos infos (code wifi, restos...) et le QR Code reste le m├¬me."
+                },
+                {
+                    "q": "Y a-t-il un engagement ?",
+                    "a": "Non, c'est sans engagement. Vous pouvez arr├¬ter quand vous voulez."
                 }
             ]
         },
         "footer": {
             "product": "Produit",
             "support": "Support",
-            "legal": "Légal",
-            "desc": "Maplyo aide les hôtes.",
+            "legal": "L├®gal",
+            "desc": "Maplyo aide les h├┤tes et les conciergeries ├á offrir une exp├®rience 5 ├®toiles gr├óce ├á des guides digitaux intelligents.",
             "links": {
-                "features": "Fonctions",
+                "features": "Fonctionnalit├®s",
                 "pricing": "Tarifs",
-                "testimonials": "Avis",
+                "testimonials": "T├®moignages",
                 "roadmap": "Roadmap",
                 "help": "Aide",
                 "contact": "Contact",
-                "privacy": "Confidentialité",
+                "privacy": "Confidentialit├®",
                 "terms": "Conditions",
-                "legal": "Mentions"
+                "legal": "Mentions l├®gales"
             },
-            "securePayment": "Paiement Sécurisé",
-            "rights": "Tous droits réservés."
+            "securePayment": "Paiement S├®curis├®",
+            "rights": "Tous droits r├®serv├®s."
         },
         "cta": {
-            "title": "Prêt à impressionner ?",
-            "subtitle": "Créez votre guide aujourd'hui.",
-            "button": "Créer mon guide",
-            "subtext": "Sans carte."
+            "title": "Pr├¬t ├á impressionner ?",
+            "subtitle": "Rejoignez la nouvelle g├®n├®ration d'h├┤tes qui offrent une exp├®rience exceptionnelle.",
+            "button": "Cr├®er mon premier guide",
+            "subtext": "Aucune carte de cr├®dit requise ÔÇó Annulable ├á tout moment"
         },
         "guide": {
             "accessCode": "Codes d'accès",
@@ -888,17 +916,13 @@ export const DICTIONARY = {
             }
         },
         "hero": {
-            "tag": "FOR HOSTS AND CONCIERGES",
+            "tag": "FOR HOSTS & PROPERTY MANAGERS",
             "title": "Never repeat the WiFi code again.",
-            "subtitle": "Digitize your welcome book. Offer a 5-star experience, reduce messages by 50%, and increase positive reviews.",
+            "subtitle": "Digitalize your welcome book. Offer a 5-star experience, reduce messages by 50%, and boost your positive reviews.",
             "cta": "Create my free guide",
-            "demo": "View an example",
+            "demo": "See an example",
             "noCreditCard": "No credit card required",
-            "setupTime": "Set up in 2 mins",
-            "badge": "Digital Welcome Book #1",
-            "title1": "For your guests,",
-            "title2": "a 5-star experience.",
-            "users": "Trusted by 500+ hosts"
+            "setupTime": "Set up in 2 min"
         },
         "features": {
             "title": "Everything you need.",
@@ -935,76 +959,108 @@ export const DICTIONARY = {
         "pricing": {
             "title": "Transparent Pricing",
             "subtitle": "Start for free. Scale when you want.",
-            "bestOffer": "The world's best offer:",
-            "addon": "+20 DH / extra guide",
-            "trust": "30-day guarantee",
+            "bestOffer": "The best offer in the world:",
+            "addon": "+20 DH / additional guide",
             "enterprise": {
-                "title": "Enterprise Solution",
-                "desc": "For pros (50+ properties).",
-                "cta": "Contact"
+                "title": "Need an Enterprise solution?",
+                "desc": "For managers with 50+ properties, we offer volume discounts and PMS integration.",
+                "cta": "Contact Sales Team"
             },
             "plans": {
                 "demo": {
                     "name": "Discovery",
                     "price": "Free",
-                    "desc": "Test without card.",
-                    "button": "Try",
+                    "desc": "Test the power of Maplyo without a credit card.",
+                    "button": "Create a guide (Free)",
                     "features": [
-                        "Creator Access",
-                        "Mobile Preview"
+                        "Full access to Creator",
+                        "Mobile Preview",
+                        "No publishing"
                     ]
                 },
                 "basic": {
                     "name": "Essential",
-                    "desc": "For 1 property.",
-                    "button": "Start",
+                    "desc": "To launch your first property.",
+                    "button": "Start Now",
                     "features": [
-                        "Digital Book",
-                        "WiFi QR",
-                        "1 Guide"
+                        "Complete Digital Guidebook",
+                        "Instant WiFi QR Code",
+                        "Interactive Map (Google Maps)",
+                        "Free Themes (Premium Pack +15 DH)",
+                        "1 Unique Guide"
                     ]
                 },
                 "pro": {
                     "name": "Growth",
-                    "desc": "For pros.",
-                    "button": "Upgrade Pro",
+                    "desc": "To maximize your revenue & reviews.",
+                    "button": "Upgrade to Growth",
                     "features": [
-                        "Unlimited Guides",
-                        "AI Translation",
-                        "WhatsApp Support"
+                        "Unlimited Guides (+20 DH/ea.)",
+                        "INCLUDED Premium Themes",
+                        "Automatic Translation (AI)",
+                        "24/7 Guest Assistant (AI)",
+                        "Priority WhatsApp Support"
                     ]
                 },
                 "business": {
                     "name": "Agency",
-                    "desc": "For portfolios.",
-                    "button": "Talk to Expert",
+                    "desc": "For portfolios of 10+ properties.",
+                    "button": "Talk to an Expert",
                     "price": "Custom",
                     "features": [
-                        "White Label",
-                        "Multi-Property"
+                        "Unlimited Guides",
+                        "Multi-Property Dashboard",
+                        "White Label (No Maplyo logo)",
+                        "PMS & Channel Mgr Integration",
+                        "Centralized Billing"
                     ]
                 }
-            }
+            },
+            "trust": "30-Day Money Back Guarantee ÔÇó Secure SSL Payment"
         },
         "testimonials": {
-            "title": "Trusted by Pros",
-            "subtitle": "Join 500+ hosts.",
+            "title": "Approved by Pros",
+            "subtitle": "Join over 500 hosts who automated their welcome.",
             "items": [
                 {
-                    "name": "Jean R.",
-                    "role": "Superhost",
-                    "text": "Huge time saver.",
+                    "name": "Jean-Philippe R.",
+                    "role": "Superhost Airbnb (Marrakech)",
+                    "text": "My guests kept asking for the Wifi code or how to turn on the AC. With Maplyo, they have everything on their phone. I easily saved 2 hours a week.",
                     "result": "-60% messages"
+                },
+                {
+                    "name": "Sofia B.",
+                    "role": "Concierge Manager (Casablanca)",
+                    "text": "The game changer for us is the upsell. We offer cleaning or transport services directly in the guide. It boosted our revenue.",
+                    "result": "+15% revenue"
+                },
+                {
+                    "name": "Karim M.",
+                    "role": "Riad Owner (Fes)",
+                    "text": "Very professional. The multilingual aspect is stunning, my American and Spanish clients are delighted to have info in their language without me doing anything.",
+                    "result": "5Ôÿà Reviews"
                 }
             ]
         },
         "faq": {
             "title": "Frequently Asked Questions",
-            "subtitle": "Know everything.",
+            "subtitle": "Everything you need to know to get started.",
             "questions": [
                 {
-                    "q": "Free?",
-                    "a": "Yes, discovery plan available."
+                    "q": "Do I need technical skills?",
+                    "a": "None at all. It's as easy as filling out a social media profile. You add info, we handle the design."
+                },
+                {
+                    "q": "How do guests access the guide?",
+                    "a": "Via a simple QR Code you place in the rental, or a link you send via message before arrival."
+                },
+                {
+                    "q": "Can I update the guide after printing the QR Code?",
+                    "a": "Yes! That's the magic. Update your info (wifi, restaurants...) and the QR Code stays exactly the same."
+                },
+                {
+                    "q": "Is there a contract?",
+                    "a": "No, cancel anytime."
                 }
             ]
         },
@@ -1012,11 +1068,11 @@ export const DICTIONARY = {
             "product": "Product",
             "support": "Support",
             "legal": "Legal",
-            "desc": "Maplyo helps hosts.",
+            "desc": "Maplyo helps hosts and property managers offer a 5-star experience with smart digital guides.",
             "links": {
                 "features": "Features",
                 "pricing": "Pricing",
-                "testimonials": "Reviews",
+                "testimonials": "Testimonials",
                 "roadmap": "Roadmap",
                 "help": "Help",
                 "contact": "Contact",
@@ -1029,9 +1085,9 @@ export const DICTIONARY = {
         },
         "cta": {
             "title": "Ready to impress?",
-            "subtitle": "Create your guide today.",
-            "button": "Create my guide",
-            "subtext": "No card."
+            "subtitle": "Join the new generation of hosts offering an exceptional experience.",
+            "button": "Create my first guide",
+            "subtext": "No credit card required ÔÇó Cancel anytime"
         },
         "guide": {
             "accessCode": "Access Codes",
@@ -1701,17 +1757,13 @@ export const DICTIONARY = {
             }
         },
         "hero": {
-            "tag": "FOR HOSTS AND CONCIERGES",
-            "title": "Never repeat the WiFi code again.",
-            "subtitle": "Digitize your welcome book. Offer a 5-star experience, reduce messages by 50%, and increase positive reviews.",
-            "cta": "Create my free guide",
-            "demo": "View an example",
-            "noCreditCard": "No credit card required",
-            "setupTime": "Set up in 2 mins",
-            "badge": "Digital Welcome Book #1",
-            "title1": "For your guests,",
-            "title2": "a 5-star experience.",
-            "users": "Trusted by 500+ hosts"
+            "tag": "PARA ANFITRIONES",
+            "title": "Nunca repitas el c├│digo WiFi.",
+            "subtitle": "Digitaliza tu gu├¡a de bienvenida. Mayor valoraci├│n, menos mensajes.",
+            "cta": "Crear mi gu├¡a",
+            "demo": "Ver ejemplo",
+            "noCreditCard": "Sin tarjeta",
+            "setupTime": "Configura en 2 min"
         },
         "features": {
             "title": "Everything you need.",
@@ -1746,105 +1798,132 @@ export const DICTIONARY = {
             }
         },
         "pricing": {
-            "title": "Transparent Pricing",
-            "subtitle": "Start for free. Scale when you want.",
-            "bestOffer": "The world's best offer:",
-            "addon": "+20 DH / extra guide",
-            "trust": "30-day guarantee",
+            "title": "Precios Transparentes",
+            "subtitle": "Inicia gratis, escala despu├®s.",
+            "bestOffer": "Mejor oferta:",
+            "addon": "+ Extra",
             "enterprise": {
-                "title": "Enterprise Solution",
-                "desc": "For pros (50+ properties).",
-                "cta": "Contact"
+                "title": "Enterprise?",
+                "desc": "Plan a medida.",
+                "cta": "Contactar"
             },
             "plans": {
                 "demo": {
-                    "name": "Discovery",
-                    "price": "Free",
-                    "desc": "Test without card.",
-                    "button": "Try",
+                    "name": "Descubrir",
+                    "price": "Gratis",
+                    "desc": "Pru├®balo",
+                    "button": "Crear gu├¡a",
                     "features": [
-                        "Creator Access",
-                        "Mobile Preview"
+                        "Acceso total",
+                        "Vista m├│vil",
+                        "Sin publicar"
                     ]
                 },
                 "basic": {
-                    "name": "Essential",
-                    "desc": "For 1 property.",
-                    "button": "Start",
+                    "name": "Esencial",
+                    "desc": "Lanza tu primera",
+                    "button": "Iniciar",
                     "features": [
-                        "Digital Book",
-                        "WiFi QR",
-                        "1 Guide"
+                        "Gu├¡a Digital",
+                        "QR WiFi",
+                        "Mapa",
+                        "1 Gu├¡a"
                     ]
                 },
                 "pro": {
-                    "name": "Growth",
-                    "desc": "For pros.",
-                    "button": "Upgrade Pro",
+                    "name": "Crecimiento",
+                    "desc": "Maximiza ingresos",
+                    "button": "Mejorar",
                     "features": [
-                        "Unlimited Guides",
-                        "AI Translation",
-                        "WhatsApp Support"
+                        "Gu├¡as ilimitadas",
+                        "Traductor autom├ítico",
+                        "Soporte prioritario"
                     ]
                 },
                 "business": {
-                    "name": "Agency",
-                    "desc": "For portfolios.",
-                    "button": "Talk to Expert",
-                    "price": "Custom",
+                    "name": "Agencia",
+                    "desc": "Para portfolios",
+                    "button": "Hablar",
+                    "price": "Por medida",
                     "features": [
-                        "White Label",
-                        "Multi-Property"
+                        "Ilimitado",
+                        "Dashboard multi",
+                        "Marca blanca"
                     ]
                 }
-            }
+            },
+            "trust": "Pago seguro"
         },
         "testimonials": {
-            "title": "Trusted by Pros",
-            "subtitle": "Join 500+ hosts.",
+            "title": "Aprobado por Profesionales",
+            "subtitle": "├Ünase a m├ís de 500 anfitriones que han automatizado su bienvenida.",
             "items": [
                 {
-                    "name": "Jean R.",
-                    "role": "Superhost",
-                    "text": "Huge time saver.",
-                    "result": "-60% messages"
+                    "name": "Jean-Philippe R.",
+                    "role": "Superhost Airbnb (Marrakech)",
+                    "text": "Mis hu├®spedes no paraban de pedir la clave del Wifi o c├│mo encender el aire acondicionado. Con Maplyo, lo tienen todo en su tel├®fono. Ahorr├® f├ícilmente 2 horas a la semana.",
+                    "result": "-60% mensajes"
+                },
+                {
+                    "name": "Sofia B.",
+                    "role": "Gerente de Conserjer├¡a (Casablanca)",
+                    "text": "El cambio de juego para nosotros es la venta adicional. Ofrecemos servicios de limpieza o transporte directamente en la gu├¡a. Aument├│ nuestros ingresos.",
+                    "result": "+15% ingresos"
+                },
+                {
+                    "name": "Karim M.",
+                    "role": "Propietario de Riad (Fez)",
+                    "text": "Muy profesional. El aspecto multiling├╝e es impresionante, mis clientes americanos y espa├▒oles est├ín encantados de tener la informaci├│n en su idioma sin que yo haga nada.",
+                    "result": "5Ôÿà Rese├▒as"
                 }
             ]
         },
         "faq": {
-            "title": "Frequently Asked Questions",
-            "subtitle": "Know everything.",
+            "title": "Preguntas Frecuentes",
+            "subtitle": "Todo lo que necesitas saber para empezar.",
             "questions": [
                 {
-                    "q": "Free?",
-                    "a": "Yes, discovery plan available."
+                    "q": "┬┐Necesito habilidades t├®cnicas?",
+                    "a": "Ninguna en absoluto. Es tan f├ícil como completar un perfil de red social. T├║ a├▒ades la info, nosotros nos encargamos del dise├▒o."
+                },
+                {
+                    "q": "┬┐C├│mo acceden los hu├®spedes a la gu├¡a?",
+                    "a": "A trav├®s de un simple c├│digo QR que colocas en el alojamiento, o un enlace que env├¡as por mensaje antes de su llegada."
+                },
+                {
+                    "q": "┬┐Puedo actualizar la gu├¡a despu├®s de imprimir el c├│digo QR?",
+                    "a": "┬íS├¡! Esa es la magia. Actualiza tu informaci├│n (wifi, restaurantes...) y el c├│digo QR sigue siendo el mismo."
+                },
+                {
+                    "q": "┬┐Hay alg├║n compromiso o contrato?",
+                    "a": "No, cancela cuando quieras."
                 }
             ]
         },
         "footer": {
-            "product": "Product",
-            "support": "Support",
+            "product": "Producto",
+            "support": "Soporte",
             "legal": "Legal",
-            "desc": "Maplyo helps hosts.",
+            "desc": "Maplyo para anfitriones.",
             "links": {
-                "features": "Features",
-                "pricing": "Pricing",
-                "testimonials": "Reviews",
+                "features": "Caracter├¡sticas",
+                "pricing": "Precios",
+                "testimonials": "Testimonios",
                 "roadmap": "Roadmap",
-                "help": "Help",
-                "contact": "Contact",
-                "privacy": "Privacy",
-                "terms": "Terms",
-                "legal": "Legal Notice"
+                "help": "Ayuda",
+                "contact": "Contacto",
+                "privacy": "Privacidad",
+                "terms": "T├®rminos",
+                "legal": "Aviso Legal"
             },
-            "securePayment": "Secure Payment",
-            "rights": "All rights reserved."
+            "securePayment": "Pago Seguro",
+            "rights": "Derechos reservados."
         },
         "cta": {
-            "title": "Ready to impress?",
-            "subtitle": "Create your guide today.",
-            "button": "Create my guide",
-            "subtext": "No card."
+            "title": "┬┐Listo para impresionar?",
+            "subtitle": "├Ünete a la nueva generaci├│n.",
+            "button": "Crear mi gu├¡a",
+            "subtext": "Cancelaci├│n flexible"
         },
         "guide": {
             "accessCode": "Access Codes",
@@ -2514,17 +2593,13 @@ export const DICTIONARY = {
             }
         },
         "hero": {
-            "tag": "FOR HOSTS AND CONCIERGES",
-            "title": "Never repeat the WiFi code again.",
-            "subtitle": "Digitize your welcome book. Offer a 5-star experience, reduce messages by 50%, and increase positive reviews.",
-            "cta": "Create my free guide",
-            "demo": "View an example",
-            "noCreditCard": "No credit card required",
-            "setupTime": "Set up in 2 mins",
-            "badge": "Digital Welcome Book #1",
-            "title1": "For your guests,",
-            "title2": "a 5-star experience.",
-            "users": "Trusted by 500+ hosts"
+            "tag": "┘ä┘ä┘àÏÂ┘è┘ü┘è┘å",
+            "title": "┘äÏº Ï¬┘âÏ▒Ï▒ Ïº┘äÏ▒┘àÏ▓ ÏúÏ¿Ï»Ïº┘ï.",
+            "subtitle": "Ï¡┘ê┘ä Ï»┘ä┘è┘ä┘â ┘ä┘äÏ▒┘é┘à┘èÏ®. Ï¬Ï¼Ï▒Ï¿Ï® Ï«┘àÏ│ ┘åÏ¼┘ê┘à.",
+            "cta": "ÏÑ┘åÏ┤ÏºÏí Ï»┘ä┘è┘ä┘è ┘àÏ¼Ïº┘åÏº┘ï",
+            "demo": "┘àÏ┤Ïº┘çÏ»Ï® ┘àÏ½Ïº┘ä",
+            "noCreditCard": "Ï¿Ï»┘ê┘å Ï¿ÏÀÏº┘éÏ®",
+            "setupTime": "┘à┘ÅÏ╣Ï»┘æ ┘ü┘è Ï»┘é┘è┘éÏ¬┘è┘å"
         },
         "features": {
             "title": "Everything you need.",
@@ -2559,105 +2634,132 @@ export const DICTIONARY = {
             }
         },
         "pricing": {
-            "title": "Transparent Pricing",
-            "subtitle": "Start for free. Scale when you want.",
-            "bestOffer": "The world's best offer:",
-            "addon": "+20 DH / extra guide",
-            "trust": "30-day guarantee",
+            "title": "Ï¬Ï│Ï╣┘èÏ▒ ┘êÏºÏÂÏ¡",
+            "subtitle": "ÏºÏ¿Ï»Ïú ┘àÏ¼Ïº┘åÏº┘ïÏî ┘ê┘é┘à Ï¿Ïº┘äÏ¬Ï▒┘é┘èÏ® Ï╣┘åÏ» Ïº┘äÏ¡ÏºÏ¼Ï®.",
+            "bestOffer": "Ïú┘üÏÂ┘ä Ï╣Ï▒ÏÂ:",
+            "addon": "+ ÏÑÏÂÏº┘ü┘è",
             "enterprise": {
-                "title": "Enterprise Solution",
-                "desc": "For pros (50+ properties).",
-                "cta": "Contact"
+                "title": "┘ä┘äÏ┤Ï▒┘âÏºÏ¬Ïƒ",
+                "desc": "Ï¡┘ä ┘àÏ«ÏÁÏÁ.",
+                "cta": "ÏºÏ¬ÏÁ┘ä Ï¿┘åÏº"
             },
             "plans": {
                 "demo": {
-                    "name": "Discovery",
-                    "price": "Free",
-                    "desc": "Test without card.",
-                    "button": "Try",
+                    "name": "Ïº┘âÏ¬Ï┤Ïº┘ü",
+                    "price": "┘àÏ¼Ïº┘å┘è",
+                    "desc": "Ï¬Ï¼Ï▒Ï¿Ï® Ïº┘äÏ«Ï»┘àÏ®",
+                    "button": "ÏÑ┘åÏ┤ÏºÏí Ï»┘ä┘è┘ä",
                     "features": [
-                        "Creator Access",
-                        "Mobile Preview"
+                        "┘êÏÁ┘ê┘ä ┘âÏº┘à┘ä",
+                        "┘àÏ╣Ïº┘è┘åÏ® Ïº┘äÏ¼┘êÏº┘ä",
+                        "Ï╣Ï»┘à Ïº┘ä┘åÏ┤Ï▒"
                     ]
                 },
                 "basic": {
-                    "name": "Essential",
-                    "desc": "For 1 property.",
-                    "button": "Start",
+                    "name": "ÏúÏ│ÏºÏ│┘è",
+                    "desc": "┘äÏÑÏÀ┘äÏº┘é Ï╣┘éÏºÏ▒┘â Ïº┘äÏú┘ê┘ä.",
+                    "button": "ÏºÏ¿Ï»Ïú",
                     "features": [
-                        "Digital Book",
-                        "WiFi QR",
-                        "1 Guide"
+                        "Ï»┘ä┘è┘ä Ï▒┘é┘à┘è",
+                        "┘êÏº┘è ┘üÏº┘è ┘ü┘êÏ▒┘è",
+                        "Ï«Ï▒┘èÏÀÏ®",
+                        "Ï»┘ä┘è┘ä ┘êÏºÏ¡Ï»"
                     ]
                 },
                 "pro": {
-                    "name": "Growth",
-                    "desc": "For pros.",
-                    "button": "Upgrade Pro",
+                    "name": "┘å┘à┘ê",
+                    "desc": "Ï¬Ï¡Ï│┘è┘å Ïº┘äÏ»Ï«┘ä.",
+                    "button": "Ï¬Ï¡Ï»┘èÏ½",
                     "features": [
-                        "Unlimited Guides",
-                        "AI Translation",
-                        "WhatsApp Support"
+                        "ÏúÏ»┘äÏ® ┘äÏº ┘àÏ¡Ï»┘êÏ»Ï®",
+                        "Ï¬Ï▒Ï¼┘àÏ® Ï¬┘ä┘éÏºÏª┘èÏ®",
+                        "Ï»Ï╣┘à ┘êÏºÏ¬Ï│ÏºÏ¿"
                     ]
                 },
                 "business": {
-                    "name": "Agency",
-                    "desc": "For portfolios.",
-                    "button": "Talk to Expert",
-                    "price": "Custom",
+                    "name": "┘ê┘âÏº┘äÏ®",
+                    "desc": "┘ä┘ä┘àÏ¼┘à┘êÏ╣ÏºÏ¬",
+                    "button": "Ï¬┘êÏºÏÁ┘ä",
+                    "price": "┘àÏ«ÏÁÏÁ",
                     "features": [
-                        "White Label",
-                        "Multi-Property"
+                        "┘äÏº ┘àÏ¡Ï»┘êÏ»",
+                        "┘ä┘êÏ¡Ï® Ï¬Ï¡┘â┘à",
+                        "Ï╣┘äÏº┘àÏ® Ï¿┘èÏÂÏºÏí"
                     ]
                 }
-            }
+            },
+            "trust": "Ï»┘üÏ╣ Ïó┘à┘å SSL"
         },
         "testimonials": {
-            "title": "Trusted by Pros",
-            "subtitle": "Join 500+ hosts.",
+            "title": "┘àÏ╣Ï¬┘àÏ» ┘à┘å Ïº┘ä┘àÏ¡Ï¬Ï▒┘ü┘è┘å",
+            "subtitle": "Ïº┘åÏÂ┘à ÏÑ┘ä┘ë Ïú┘âÏ½Ï▒ ┘à┘å 500 ┘àÏÂ┘è┘ü ┘éÏº┘à┘êÏº Ï¿ÏúÏ¬┘àÏ¬Ï® ÏºÏ│Ï¬┘éÏ¿Ïº┘ä┘ç┘à.",
             "items": [
                 {
-                    "name": "Jean R.",
-                    "role": "Superhost",
-                    "text": "Huge time saver.",
-                    "result": "-60% messages"
+                    "name": "Ï¼┘ê┘å ┘ü┘è┘ä┘èÏ¿ Ï▒.",
+                    "role": "┘àÏÂ┘è┘ü ┘à┘à┘èÏ▓ ┘ü┘è Airbnb (┘àÏ▒Ïº┘âÏ┤)",
+                    "text": "┘âÏº┘å ÏÂ┘è┘ê┘ü┘è ┘èÏ│Ïú┘ä┘ê┘å Ï¿ÏºÏ│Ï¬┘àÏ▒ÏºÏ▒ Ï╣┘å Ï▒┘àÏ▓ Ïº┘ä┘êÏº┘è ┘üÏº┘è Ïú┘ê ┘â┘è┘ü┘èÏ® Ï¬Ï┤Ï║┘è┘ä ┘à┘â┘è┘ü Ïº┘ä┘ç┘êÏºÏí. ┘àÏ╣ MaplyoÏî ┘â┘ä Ï┤┘èÏí ┘à┘êÏ¼┘êÏ» Ï╣┘ä┘ë ┘ç┘êÏºÏ¬┘ü┘ç┘à. ┘ä┘éÏ» ┘ê┘üÏ▒Ï¬ Ï│ÏºÏ╣Ï¬┘è┘å ┘ü┘è Ïº┘äÏúÏ│Ï¿┘êÏ╣ Ï¿Ï│┘ç┘ê┘äÏ®.",
+                    "result": "-60% ┘à┘å Ïº┘äÏ▒Ï│ÏºÏª┘ä"
+                },
+                {
+                    "name": "ÏÁ┘ê┘ü┘èÏº Ï¿.",
+                    "role": "┘àÏ»┘èÏ▒Ï® Ï┤Ï▒┘âÏ® ┘â┘ê┘åÏ│┘èÏ▒Ï¼ (Ïº┘äÏ»ÏºÏ▒ Ïº┘äÏ¿┘èÏÂÏºÏí)",
+                    "text": "┘å┘éÏÀÏ® Ïº┘äÏ¬Ï¡┘ê┘ä Ï¿Ïº┘ä┘åÏ│Ï¿Ï® ┘ä┘åÏº ┘ç┘è Ïº┘äÏ«Ï»┘àÏºÏ¬ Ïº┘äÏÑÏÂÏº┘ü┘èÏ®. ┘åÏ¡┘å ┘å┘éÏ»┘à Ï«Ï»┘àÏºÏ¬ Ï¬┘åÏ©┘è┘ü Ïú┘ê ┘å┘é┘ä ┘àÏ¿ÏºÏ┤Ï▒Ï® ┘ü┘è Ïº┘äÏ»┘ä┘è┘ä. ┘ä┘éÏ» Ï╣Ï▓Ï▓ Ï░┘ä┘â ┘à┘å ÏÑ┘èÏ▒ÏºÏ»ÏºÏ¬┘åÏº.",
+                    "result": "+15% ÏÑ┘èÏ▒ÏºÏ»ÏºÏ¬"
+                },
+                {
+                    "name": "┘âÏ▒┘è┘à ┘à.",
+                    "role": "┘àÏº┘ä┘â Ï▒┘èÏºÏÂ (┘üÏºÏ│)",
+                    "text": "┘àÏ¡Ï¬Ï▒┘ü Ï¼Ï»Ïº┘ï. Ïº┘äÏ¼Ïº┘åÏ¿ ┘àÏ¬Ï╣Ï»Ï» Ïº┘ä┘äÏ║ÏºÏ¬ ┘àÏ¿┘çÏ▒Ïî Ï╣┘à┘äÏºÏª┘è Ïº┘äÏú┘àÏ▒┘è┘â┘è┘ê┘å ┘êÏº┘ä┘à┘éÏ▒Ï¿┘ê┘å Ï│Ï╣Ï»ÏºÏí Ï¼Ï»Ïº┘ï Ï¿Ïº┘äÏ¡ÏÁ┘ê┘ä Ï╣┘ä┘ë Ïº┘ä┘àÏ╣┘ä┘ê┘àÏºÏ¬ Ï¿┘äÏ║Ï¬┘ç┘à Ï»┘ê┘å Ïú┘å Ïú┘üÏ╣┘ä Ïú┘è Ï┤┘èÏí.",
+                    "result": "5Ôÿà Ï¬┘é┘è┘è┘àÏºÏ¬"
                 }
             ]
         },
         "faq": {
-            "title": "Frequently Asked Questions",
-            "subtitle": "Know everything.",
+            "title": "Ïº┘äÏúÏ│Ïª┘äÏ® Ïº┘äÏ┤ÏºÏªÏ╣Ï®",
+            "subtitle": "┘â┘ä ┘àÏº Ï¬Ï¡Ï¬ÏºÏ¼ ┘ä┘àÏ╣Ï▒┘üÏ¬┘ç ┘ä┘äÏ¿Ï»Ïí.",
             "questions": [
                 {
-                    "q": "Free?",
-                    "a": "Yes, discovery plan available."
+                    "q": "┘ç┘ä ÏúÏ¡Ï¬ÏºÏ¼ ÏÑ┘ä┘ë ┘à┘çÏºÏ▒ÏºÏ¬ Ï¬┘é┘å┘èÏ®Ïƒ",
+                    "a": "┘äÏº Ï╣┘ä┘ë Ïº┘äÏÑÏÀ┘äÏº┘é. Ïº┘äÏú┘àÏ▒ Ï│┘ç┘ä ┘àÏ½┘ä ┘à┘äÏí ┘à┘ä┘ü Ï┤Ï«ÏÁ┘è Ï╣┘ä┘ë ┘êÏ│ÏºÏª┘ä Ïº┘äÏ¬┘êÏºÏÁ┘ä Ïº┘äÏºÏ¼Ï¬┘àÏºÏ╣┘è. Ïú┘åÏ¬ Ï¬ÏÂ┘è┘ü Ïº┘ä┘àÏ╣┘ä┘ê┘àÏºÏ¬Ïî ┘ê┘åÏ¡┘å ┘åÏ¬Ï╣Ïº┘à┘ä ┘àÏ╣ Ïº┘äÏ¬ÏÁ┘à┘è┘à."
+                },
+                {
+                    "q": "┘â┘è┘ü ┘èÏÁ┘ä Ïº┘äÏÂ┘è┘ê┘ü ÏÑ┘ä┘ë Ïº┘äÏ»┘ä┘è┘äÏƒ",
+                    "a": "Ï╣Ï¿Ï▒ Ï▒┘àÏ▓ QR Ï¿Ï│┘èÏÀ Ï¬ÏÂÏ╣┘ç ┘ü┘è ┘à┘âÏº┘å Ïº┘äÏÑ┘éÏº┘àÏ®Ïî Ïú┘ê Ï▒ÏºÏ¿ÏÀ Ï¬Ï▒Ï│┘ä┘ç ┘ü┘è Ï▒Ï│Ïº┘äÏ® ┘éÏ¿┘ä ┘êÏÁ┘ê┘ä┘ç┘à."
+                },
+                {
+                    "q": "┘ç┘ä ┘è┘à┘â┘å┘å┘è Ï¬Ï¡Ï»┘èÏ½ Ïº┘äÏ»┘ä┘è┘ä Ï¿Ï╣Ï» ÏÀÏ¿ÏºÏ╣Ï® Ï▒┘àÏ▓ Ïº┘ä┘Ç QRÏƒ",
+                    "a": "┘åÏ╣┘à! ┘çÏ░Ïº ┘ç┘ê Ïº┘äÏ│Ï¡Ï▒. ┘é┘à Ï¿Ï¬Ï¡Ï»┘èÏ½ ┘àÏ╣┘ä┘ê┘àÏºÏ¬┘â (Ïº┘ä┘êÏº┘è ┘üÏº┘èÏî Ïº┘ä┘àÏÀÏºÏ╣┘à...) ┘êÏ│┘èÏ¿┘é┘ë Ï▒┘àÏ▓ Ïº┘ä┘Ç QR ┘â┘àÏº ┘ç┘ê Ï¬┘àÏº┘àÏº┘ï."
+                },
+                {
+                    "q": "┘ç┘ä ┘ç┘åÏº┘â Ïú┘è Ïº┘äÏ¬Ï▓Ïº┘à Ïú┘ê Ï╣┘éÏ»Ïƒ",
+                    "a": "┘äÏºÏî ┘è┘à┘â┘å┘â Ïº┘äÏÑ┘äÏ║ÏºÏí ┘ü┘è Ïú┘è ┘ê┘éÏ¬."
                 }
             ]
         },
         "footer": {
-            "product": "Product",
-            "support": "Support",
-            "legal": "Legal",
-            "desc": "Maplyo helps hosts.",
+            "product": "Ïº┘ä┘à┘åÏ¬Ï¼",
+            "support": "Ïº┘äÏ»Ï╣┘à",
+            "legal": "┘éÏº┘å┘ê┘å┘è",
+            "desc": "┘àÏºÏ¿┘ä┘è┘ê ┘ä┘ä┘àÏÂ┘è┘ü┘è┘å.",
             "links": {
-                "features": "Features",
-                "pricing": "Pricing",
-                "testimonials": "Reviews",
-                "roadmap": "Roadmap",
-                "help": "Help",
-                "contact": "Contact",
-                "privacy": "Privacy",
-                "terms": "Terms",
-                "legal": "Legal Notice"
+                "features": "Ïº┘ä┘à┘èÏ▓ÏºÏ¬",
+                "pricing": "Ïº┘äÏ¬Ï│Ï╣┘èÏ▒",
+                "testimonials": "Ï┤┘çÏºÏ»ÏºÏ¬",
+                "roadmap": "Ï«ÏºÏ▒ÏÀÏ® ÏÀÏ▒┘è┘é",
+                "help": "┘àÏ│ÏºÏ╣Ï»Ï®",
+                "contact": "ÏºÏ¬ÏÁÏº┘ä",
+                "privacy": "Ïº┘äÏ«ÏÁ┘êÏÁ┘èÏ®",
+                "terms": "Ïº┘äÏ┤Ï▒┘êÏÀ",
+                "legal": "ÏÑÏ┤Ï╣ÏºÏ▒"
             },
-            "securePayment": "Secure Payment",
-            "rights": "All rights reserved."
+            "securePayment": "Ï»┘üÏ╣ Ïó┘à┘å",
+            "rights": "Ï¼┘à┘èÏ╣ Ïº┘äÏ¡┘é┘ê┘é ┘àÏ¡┘ü┘êÏ©Ï®."
         },
         "cta": {
-            "title": "Ready to impress?",
-            "subtitle": "Create your guide today.",
-            "button": "Create my guide",
-            "subtext": "No card."
+            "title": "Ï¼Ïº┘çÏ▓ ┘ä┘äÏ¬┘à┘èÏ▓Ïƒ",
+            "subtitle": "Ïº┘åÏÂ┘à ┘ä┘äÏ¼┘è┘ä Ïº┘ä┘éÏºÏ»┘à.",
+            "button": "ÏÑ┘åÏ┤ÏºÏí Ï»┘ä┘è┘ä┘è",
+            "subtext": "ÏÑ┘äÏ║ÏºÏí ┘ü┘è Ïú┘è ┘ê┘éÏ¬"
         },
         "guide": {
             "accessCode": "Access Codes",
