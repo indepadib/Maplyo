@@ -16,6 +16,8 @@ import { UserSubscription } from "@/types/subscription";
 import { slugify } from "@/lib/utils/slugify";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { OnboardingTour } from "@/components/dashboard/OnboardingTour";
+import { BookingsDashboard } from "@/components/dashboard/BookingsDashboard";
 
 type GuideSummary = {
     id: string;
@@ -338,6 +340,7 @@ function DashboardContent() {
 
     return (
         <div className="min-h-screen bg-slate-950 font-sans selection:bg-rose-500/30 text-zinc-100">
+            <OnboardingTour />
             {/* Ambient Background Gradient */}
             <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
                 <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-rose-900/10 rounded-full blur-[120px] mix-blend-screen" />
@@ -389,6 +392,7 @@ function DashboardContent() {
                             <Sparkles className="w-4 h-4" />
                         </button>
                         <Link
+                            data-tour="settings-button"
                             href="/dashboard/settings"
                             className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-white/10 hover:text-white transition-all hover:scale-105"
                             title={t.settings.title}
@@ -407,6 +411,7 @@ function DashboardContent() {
                     </div>
                     <div className="flex gap-4">
                         <button
+                            data-tour="ai-button"
                             onClick={() => setIsAiModalOpen(true)}
                             className="flex items-center gap-2 bg-gradient-to-r from-rose-600 to-purple-600 text-white px-6 py-3.5 rounded-2xl font-bold hover:shadow-lg hover:shadow-rose-600/30 transition-all active:scale-95 group border border-white/10"
                         >
@@ -414,6 +419,7 @@ function DashboardContent() {
                             <span className="hidden sm:inline">{t.dashboard.aiModal.title}</span>
                         </button>
                         <button
+                            data-tour="manual-button"
                             onClick={() => {
                                 setNewGuideTitle("");
                                 setIsCreateModalOpen(true);
@@ -550,6 +556,8 @@ function DashboardContent() {
                         </div>
                     )}
                 </AnimatePresence>
+
+                <BookingsDashboard />
             </main>
 
             {/* AI Wizard Modal */}
