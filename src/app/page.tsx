@@ -20,7 +20,9 @@ import {
   ChevronRight,
   Menu,
   X,
-  Play
+  Play,
+  Mail,
+  MessageCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import dynamic from 'next/dynamic';
@@ -75,6 +77,9 @@ const Nav = () => {
           </Link>
           <Link href="/pricing" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
             {t.footer.links.pricing}
+          </Link>
+          <Link href="#contact" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
+            {t.footer.links.contact}
           </Link>
           {/* Language Switcher */}
           <button
@@ -473,10 +478,23 @@ export default function LandingPage() {
               />
             </div>
 
-            <div className="mt-20 p-8 rounded-3xl bg-white/[0.03] border border-white/5 text-center max-w-3xl mx-auto">
+            <div id="contact" className="mt-20 p-8 rounded-3xl bg-white/[0.03] border border-white/5 text-center max-w-3xl mx-auto backdrop-blur-sm">
               <h3 className="text-white font-bold text-lg mb-2">{t.pricing.enterprise.title}</h3>
               <p className="text-zinc-500 mb-6">{t.pricing.enterprise.desc}</p>
-              <Button variant="secondary" className="border-white/20 bg-white text-slate-900 hover:bg-zinc-200 font-bold">{t.pricing.enterprise.cta}</Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href={`mailto:${t.contact.emailValue}`}>
+                  <Button variant="secondary" className="w-full sm:w-auto border-white/20 bg-white text-slate-900 hover:bg-zinc-200 font-bold">
+                    <Mail className="w-4 h-4 mr-2" />
+                    {t.pricing.enterprise.cta}
+                  </Button>
+                </a>
+                <a href="https://wa.me/212661000000" target="_blank" rel="noopener noreferrer">
+                  <Button variant="secondary" className="w-full sm:w-auto border-white/10 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 font-bold">
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    WhatsApp
+                  </Button>
+                </a>
+              </div>
             </div>
           </div>
 
@@ -524,9 +542,12 @@ export default function LandingPage() {
                 </div>
                 <span className="text-xl font-bold text-white">Maplyo</span>
               </Link>
-              <p className="text-zinc-500 text-sm leading-relaxed max-w-xs">
+              <p className="text-zinc-500 text-sm leading-relaxed max-w-xs mb-4">
                 {t.footer.desc}
               </p>
+              <a href={`mailto:${t.footer.email}`} className="text-rose-400 text-sm font-medium hover:underline">
+                {t.footer.email}
+              </a>
             </div>
 
             <div>

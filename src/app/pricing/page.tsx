@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, X, ShieldCheck, Lock, Sparkles, Zap, Home, Hand, ChevronDown, ChevronUp, Star, HelpCircle } from "lucide-react";
+import { CheckCircle2, X, ShieldCheck, Lock, Sparkles, Zap, Home, Hand, ChevronDown, ChevronUp, Star, HelpCircle, Mail, MessageCircle } from "lucide-react";
 import { PLANS } from "@/types/subscription";
 import { Button } from "@/components/ui/Button";
 import { useState } from "react";
@@ -366,13 +366,31 @@ export default function PricingPage() {
                     </div>
 
                     {/* Trust/Social Proof */}
-                    <div className="text-center pt-20 border-t border-white/10">
+                    <div className="text-center pt-20 border-t border-white/10 mb-32">
                         <p className="text-zinc-500 text-sm font-medium uppercase tracking-widest mb-8">{t.pricingPage.trust}</p>
                         <div className="flex flex-wrap justify-center gap-12 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                            {/* Mock Logos - Replace with real ones later */}
                             {['Airbnb', 'Booking.com', 'Expedia', 'TripAdvisor'].map((brand, i) => (
                                 <span key={i} className="text-2xl font-black text-white">{brand}</span>
                             ))}
+                        </div>
+                    </div>
+
+                    <div id="contact" className="p-12 rounded-[2.5rem] bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 text-center max-w-4xl mx-auto backdrop-blur-xl">
+                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t.pricing.enterprise.title}</h2>
+                        <p className="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto">{t.pricing.enterprise.desc}</p>
+                        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                            <a href={`mailto:${t.contact.emailValue}`} className="w-full sm:w-auto">
+                                <Button className="w-full h-14 px-8 bg-white text-slate-950 font-bold hover:bg-zinc-200 border-0 flex items-center justify-center gap-2">
+                                    <Mail className="w-5 h-5" />
+                                    {t.pricing.enterprise.cta}
+                                </Button>
+                            </a>
+                            <a href="https://wa.me/212661000000" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                                <Button variant="secondary" className="w-full h-14 px-8 bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-bold hover:bg-emerald-500/20 flex items-center justify-center gap-2">
+                                    <MessageCircle className="w-5 h-5" />
+                                    WhatsApp Support
+                                </Button>
+                            </a>
                         </div>
                     </div>
 

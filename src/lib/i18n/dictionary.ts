@@ -75,13 +75,13 @@ export const DICTIONARY = {
             }
         },
         "hero": {
-            "tag": "POUR LES H├öTES ET CONCIERGERIES",
-            "title": "Ne r├®p├®tez plus jamais le code WiFi.",
-            "subtitle": "Digitalisez votre livret d'accueil. Offrez une exp├®rience 5 ├®toiles, r├®duisez les messages de 50%, et augmentez vos avis positifs.",
-            "cta": "Cr├®er mon guide gratuit",
+            "tag": "POUR LES HÔTES ET CONCIERGERIES",
+            "title": "Ne répétez plus jamais le code WiFi.",
+            "subtitle": "Digitalisez votre livret d'accueil. Offrez une expérience 5 étoiles, réduisez les messages de 50%, et augmentez vos avis positifs.",
+            "cta": "Créer mon guide gratuit",
             "demo": "Voir un exemple",
             "noCreditCard": "Pas de carte requise",
-            "setupTime": "Configur├® en 2 min"
+            "setupTime": "Configuré en 2 min"
         },
         "features": {
             "title": "Tout ce dont vous avez besoin.",
@@ -117,35 +117,35 @@ export const DICTIONARY = {
         },
         "pricing": {
             "title": "Tarification Transparente",
-            "subtitle": "Commencez gratuitement. ├ëvoluez quand vous voulez.",
+            "subtitle": "Commencez gratuitement. Évoluez quand vous voulez.",
             "bestOffer": "La meilleure offre du monde :",
-            "addon": "+20 DH / guide suppl├®mentaire",
+            "addon": "+20 DH / guide supplémentaire",
             "enterprise": {
                 "title": "Besoin d'une solution Enterprise ?",
-                "desc": "Pour les gestionnaires de plus de 50 propri├®t├®s, nous proposons des tarifs d├®gressifs et une int├®gration PMS.",
-                "cta": "Contacter l'├®quipe commerciale"
+                "desc": "Pour les gestionnaires de plus de 50 propriétés, nous proposons des tarifs dégressifs et une intégration PMS.",
+                "cta": "Contacter l'équipe commerciale"
             },
             "plans": {
                 "demo": {
-                    "name": "D├®couverte",
+                    "name": "Découverte",
                     "price": "Gratuit",
                     "desc": "Testez la puissance de Maplyo sans carte bancaire.",
-                    "button": "Cr├®er un guide (Gratuit)",
+                    "button": "Créer un guide (Gratuit)",
                     "features": [
-                        "Acc├¿s complet au Cr├®ateur",
-                        "Pr├®visualisation Mobile",
+                        "Accès complet au Créateur",
+                        "Prévisualisation Mobile",
                         "Sans publication"
                     ]
                 },
                 "basic": {
                     "name": "Essentiel",
-                    "desc": "Pour lancer votre premi├¿re propri├®t├®.",
-                    "button": "D├®marrer",
+                    "desc": "Pour lancer votre première propriété.",
+                    "button": "Démarrer",
                     "features": [
                         "Livret Digital Complet",
-                        "QR Code WiFi Instantan├®",
+                        "QR Code WiFi Instantané",
                         "Carte Interactive (Google Maps)",
-                        "Th├¿mes Gratuits (Pack Premium +15 DH)",
+                        "Thèmes Gratuits (Pack Premium +15 DH)",
                         "1 Guide Unique"
                     ]
                 },
@@ -154,8 +154,8 @@ export const DICTIONARY = {
                     "desc": "Pour maximiser vos revenus & avis.",
                     "button": "Passer en Croissance",
                     "features": [
-                        "Guides Illimit├®s (+20 DH/supp.)",
-                        "Th├¿mes Premium INCLUS",
+                        "Guides Illimités (+20 DH/supp.)",
+                        "Thèmes Premium INCLUS",
                         "Traduction Automatique (IA)",
                         "Assistant Voyageur 24/7 (IA)",
                         "Support Prioritaire WhatsApp"
@@ -164,89 +164,98 @@ export const DICTIONARY = {
                 "business": {
                     "name": "Agence",
                     "desc": "Pour les portfolios de 10+ biens.",
-                    "button": "Parler ├á un Expert",
+                    "button": "Parler à un Expert",
                     "price": "Sur mesure",
                     "features": [
-                        "Guides Illimit├®s",
-                        "Tableau de Bord Multi-Propri├®t├®s",
+                        "Guides Illimités",
+                        "Tableau de Bord Multi-Propriétés",
                         "Marque Blanche (Sans logo Maplyo)",
-                        "Int├®gration PMS & Channel Mgr",
-                        "Facturation Centralis├®e"
+                        "Intégration PMS & Channel Mgr",
+                        "Facturation Centralisée"
                     ]
                 }
             },
-            "trust": "Garantie Satisfait ou Rembours├® (30 jours) ÔÇó Paiement S├®curis├® SSL"
+            "trust": "Garantie Satisfait ou Remboursé (30 jours) • Paiement Sécurisé SSL"
         },
         "testimonials": {
-            "title": "Approuv├® par les Pros",
-            "subtitle": "Rejoignez plus de 500 h├┤tes qui ont automatis├® leur accueil.",
+            "title": "Approuvé par les Pros",
+            "subtitle": "Rejoignez plus de 500 hôtes qui ont automatisé leur accueil.",
             "items": [
                 {
                     "name": "Jean-Philippe R.",
                     "role": "Superhost Airbnb (Marrakech)",
-                    "text": "Mes voyageurs arr├¬taient pas de demander le code Wifi ou comment allumer la clim. Avec Maplyo, ils ont tout sur leur t├®l├®phone. J'ai gagn├® facile 2h par semaine.",
+                    "text": "Mes voyageurs arrêtaient pas de demander le code Wifi ou comment allumer la clim. Avec Maplyo, ils ont tout sur leur téléphone. J'ai gagné facile 2h par semaine.",
                     "result": "-60% de messages"
                 },
                 {
                     "name": "Sofia B.",
-                    "role": "G├®rante Conciergerie (Casablanca)",
-                    "text": "Le game changer pour nous, c'est l'upsell. On propose des services de m├®nage ou de transport directement dans le guide. ├ça a boost├® notre chiffre d'affaires.",
+                    "role": "Gérante Conciergerie (Casablanca)",
+                    "text": "Le game changer pour nous, c'est l'upsell. On propose des services de ménage ou de transport directement dans le guide. Ça a boosté notre chiffre d'affaires.",
                     "result": "+15% revenus"
                 },
                 {
                     "name": "Karim M.",
-                    "role": "Propri├®taire Riad (F├¿s)",
-                    "text": "Tr├¿s pro. L'aspect multilingue est bluffant, mes clients am├®ricains et espagnols sont ravis d'avoir les infos dans leur langue sans que je fasse rien.",
-                    "result": "5Ôÿà Avis"
+                    "role": "Propriétaire Riad (Fès)",
+                    "text": "Très pro. L'aspect multilingue est bluffant, mes clients américains et espagnols sont ravis d'avoir les infos dans leur langue sans que je fasse rien.",
+                    "result": "5⭐ Avis"
                 }
             ]
         },
         "faq": {
-            "title": "Questions Fr├®quentes",
-            "subtitle": "Tout ce que vous devez savoir pour d├®marrer.",
+            "title": "Questions Fréquentes",
+            "subtitle": "Tout ce que vous devez savoir pour démarrer.",
             "questions": [
                 {
-                    "q": "Faut-il des comp├®tences techniques ?",
-                    "a": "Aucune. C'est aussi simple que de remplir un profil Facebook. Vous ajoutez vos infos, on g├®n├¿re le design."
+                    "q": "Faut-il des compétences techniques ?",
+                    "a": "Aucune. C'est aussi simple que de remplir un profil Facebook. Vous ajoutez vos infos, on génère le design."
                 },
                 {
-                    "q": "Comment mes voyageurs acc├¿dent au guide ?",
-                    "a": "Via un simple QR Code que vous placez dans le logement, ou un lien que vous envoyez par message avant leur arriv├®e."
+                    "q": "Comment mes voyageurs accèdent au guide ?",
+                    "a": "Via un simple QR Code que vous placez dans le logement, ou un lien que vous envoyez par message avant leur arrivée."
                 },
                 {
-                    "q": "Puis-je modifier le guide apr├¿s impression du QR Code ?",
-                    "a": "Oui ! C'est la magie du num├®rique. Mettez ├á jour vos infos (code wifi, restos...) et le QR Code reste le m├¬me."
+                    "q": "Puis-je modifier le guide après impression du QR Code ?",
+                    "a": "Oui ! C'est la magie du numérique. Mettez à jour vos infos (code wifi, restos...) et le QR Code reste le même."
                 },
                 {
                     "q": "Y a-t-il un engagement ?",
-                    "a": "Non, c'est sans engagement. Vous pouvez arr├¬ter quand vous voulez."
+                    "a": "Non, c'est sans engagement. Vous pouvez arrêter quand vous voulez."
                 }
             ]
+        },
+        "contact": {
+            "title": "Contactez-nous",
+            "subtitle": "Une question ? Notre équipe est là pour vous aider.",
+            "email": "Email",
+            "emailValue": "contact@maplyo.com",
+            "whatsapp": "WhatsApp",
+            "button": "Envoyer un message"
         },
         "footer": {
             "product": "Produit",
             "support": "Support",
-            "legal": "L├®gal",
-            "desc": "Maplyo aide les h├┤tes et les conciergeries ├á offrir une exp├®rience 5 ├®toiles gr├óce ├á des guides digitaux intelligents.",
+            "legal": "Légal",
+            "desc": "Maplyo aide les hôtes et les conciergeries à offrir une expérience 5 étoiles grâce à des guides digitaux intelligents.",
+            "email": "contact@maplyo.com",
             "links": {
-                "features": "Fonctionnalit├®s",
+                "features": "Fonctionnalités",
                 "pricing": "Tarifs",
-                "testimonials": "T├®moignages",
+                "testimonials": "Témoignages",
                 "roadmap": "Roadmap",
                 "help": "Aide",
                 "contact": "Contact",
-                "privacy": "Confidentialit├®",
+                "privacy": "Confidentialité",
                 "terms": "Conditions",
-                "legal": "Mentions l├®gales"
+                "legal": "Mentions légales"
             },
-            "securePayment": "Paiement S├®curis├®",
-            "rights": "Tous droits r├®serv├®s."
+            "securePayment": "Paiement Sécurisé",
+            "rights": "Tous droits réservés."
         },
         "cta": {
-            "title": "Pr├¬t ├á impressionner ?",
-            "subtitle": "Rejoignez la nouvelle g├®n├®ration d'h├┤tes qui offrent une exp├®rience exceptionnelle.",
-            "button": "Cr├®er mon premier guide",
-            "subtext": "Aucune carte de cr├®dit requise ÔÇó Annulable ├á tout moment"
+            "title": "Prêt à impressionner ?",
+            "subtitle": "Rejoignez la nouvelle génération d'hôtes qui offrent une expérience exceptionnelle.",
+            "button": "Créer mon premier guide",
+            "subtext": "Aucune carte de crédit requise • Annulable à tout moment"
         },
         "guide": {
             "accessCode": "Codes d'accès",
@@ -1061,27 +1070,36 @@ export const DICTIONARY = {
             "questions": [
                 {
                     "q": "Do I need technical skills?",
-                    "a": "None at all. It's as easy as filling out a social media profile. You add info, we handle the design."
+                    "a": "None. It's as simple as filling out a Facebook profile. You add your info, we generate the design."
                 },
                 {
-                    "q": "How do guests access the guide?",
-                    "a": "Via a simple QR Code you place in the rental, or a link you send via message before arrival."
+                    "q": "How do my guests access the guide?",
+                    "a": "Via a simple QR Code you place in the property, or a link you send by message before their arrival."
                 },
                 {
-                    "q": "Can I update the guide after printing the QR Code?",
-                    "a": "Yes! That's the magic. Update your info (wifi, restaurants...) and the QR Code stays exactly the same."
+                    "q": "Can I modify the guide after printing the QR Code?",
+                    "a": "Yes! That's the magic of digital. Update your info (wifi code, restaurants...) and the QR Code stays exactly the same."
                 },
                 {
-                    "q": "Is there a contract?",
-                    "a": "No, cancel anytime."
+                    "q": "Is there a commitment?",
+                    "a": "No, it's non-binding. You can stop whenever you want."
                 }
             ]
+        },
+        "contact": {
+            "title": "Contact Us",
+            "subtitle": "Got a question? Our team is here to help.",
+            "email": "Email",
+            "emailValue": "contact@maplyo.com",
+            "whatsapp": "WhatsApp",
+            "button": "Send a message"
         },
         "footer": {
             "product": "Product",
             "support": "Support",
             "legal": "Legal",
-            "desc": "Maplyo helps hosts and property managers offer a 5-star experience with smart digital guides.",
+            "desc": "Maplyo helps hosts and concierge services provide a 5-star experience with smart digital guides.",
+            "email": "contact@maplyo.com",
             "links": {
                 "features": "Features",
                 "pricing": "Pricing",
@@ -1091,7 +1109,7 @@ export const DICTIONARY = {
                 "contact": "Contact",
                 "privacy": "Privacy",
                 "terms": "Terms",
-                "legal": "Legal Notice"
+                "legal": "Legal"
             },
             "securePayment": "Secure Payment",
             "rights": "All rights reserved."
@@ -1909,33 +1927,42 @@ export const DICTIONARY = {
             "subtitle": "Todo lo que necesitas saber para empezar.",
             "questions": [
                 {
-                    "q": "┬┐Necesito habilidades t├®cnicas?",
-                    "a": "Ninguna en absoluto. Es tan f├ícil como completar un perfil de red social. T├║ a├▒ades la info, nosotros nos encargamos del dise├▒o."
+                    "q": "¿Necesito habilidades técnicas?",
+                    "a": "Ninguna. Es tan sencillo como rellenar un perfil de Facebook. Añades tu información y nosotros generamos el diseño."
                 },
                 {
-                    "q": "┬┐C├│mo acceden los hu├®spedes a la gu├¡a?",
-                    "a": "A trav├®s de un simple c├│digo QR que colocas en el alojamiento, o un enlace que env├¡as por mensaje antes de su llegada."
+                    "q": "¿Cómo acceden mis huéspedes a la guía?",
+                    "a": "A través de un simple código QR que colocas en el alojamiento, o un enlace que envías por mensaje antes de su llegada."
                 },
                 {
-                    "q": "┬┐Puedo actualizar la gu├¡a despu├®s de imprimir el c├│digo QR?",
-                    "a": "┬íS├¡! Esa es la magia. Actualiza tu informaci├│n (wifi, restaurantes...) y el c├│digo QR sigue siendo el mismo."
+                    "q": "¿Puedo modificar la guía después de imprimir el código QR?",
+                    "a": "¡Sí! Esa es la magia de lo digital. Actualiza tu información (código wifi, restaurantes...) y el código QR sigue siendo exactamente el mismo."
                 },
                 {
-                    "q": "┬┐Hay alg├║n compromiso o contrato?",
-                    "a": "No, cancela cuando quieras."
+                    "q": "¿Hay algún compromiso?",
+                    "a": "No, es sin compromiso. Puedes dejarlo cuando quieras."
                 }
             ]
+        },
+        "contact": {
+            "title": "Contáctenos",
+            "subtitle": "¿Tiene alguna pregunta? Nuestro equipo está aquí para ayudar.",
+            "email": "Correo electrónico",
+            "emailValue": "contact@maplyo.com",
+            "whatsapp": "WhatsApp",
+            "button": "Enviar un mensaje"
         },
         "footer": {
             "product": "Producto",
             "support": "Soporte",
             "legal": "Legal",
-            "desc": "Maplyo para anfitriones.",
+            "desc": "Maplyo ayuda a los anfitriones y servicios de conserjería a ofrecer una experiencia de 5 estrellas con guías digitales inteligentes.",
+            "email": "contact@maplyo.com",
             "links": {
-                "features": "Caracter├¡sticas",
-                "pricing": "Precios",
+                "features": "Funcionalidades",
+                "pricing": "Tarifas",
                 "testimonials": "Testimonios",
-                "roadmap": "Roadmap",
+                "roadmap": "Hoja de ruta",
                 "help": "Ayuda",
                 "contact": "Contacto",
                 "privacy": "Privacidad",
@@ -2562,294 +2589,308 @@ export const DICTIONARY = {
         "common": {
             "getStarted": "البدء",
             "login": "تسجيل الدخول",
-            "signup": "Sign Up",
-            "tryFree": "Try for free",
-            "popular": "Most Popular",
-            "month": "/month",
-            "loading": "Loading...",
-            "choose": "Choose",
-            "viewGuide": "View full guide",
-            "more": "See more",
-            "checkin": "Check-in",
-            "qrCodeWall": "Scan to test",
-            "checkout": "Check-out",
-            "location": "Location",
-            "viewOnMap": "View on map",
-            "wifi": "WiFi",
-            "other": "Other"
+            "signup": "إنشاء حساب",
+            "tryFree": "جرّب مجاناً",
+            "popular": "الأكثر شعبية",
+            "month": "/شهر",
+            "loading": "جارٍ التحميل...",
+            "choose": "اختر",
+            "viewGuide": "عرض الدليل الكامل",
+            "more": "عرض المزيد",
+            "checkin": "تسجيل الوصول",
+            "qrCodeWall": "امسح للتجربة",
+            "checkout": "تسجيل المغادرة",
+            "location": "الموقع",
+            "viewOnMap": "عرض على الخريطة",
+            "wifi": "واي فاي",
+            "other": "أخرى"
         },
         "renderer": {
-            "welcome": "Welcome",
-            "wifi": "WiFi",
-            "access": "Access Codes",
-            "location": "Location",
-            "contact": "Contact",
-            "amenities": "Amenities",
-            "places": "Nearby",
-            "rules": "House Rules",
-            "tipOfTheDay": "Tip of the day",
-            "sunday": "Sunday",
-            "monday": "Monday",
-            "tuesday": "Tuesday",
-            "wednesday": "Wednesday",
-            "thursday": "Thursday",
-            "friday": "Friday",
-            "saturday": "Saturday",
-            "lazy": "Lazy",
-            "mood": "Motivated",
-            "discovery": "Discovery",
-            "tasty": "Tasty",
-            "adventure": "Adventure",
-            "festive": "Festive",
-            "outing": "Outing",
-            "brunch": "Brunch at",
-            "explore": "Explore",
-            "museums": "Visit",
-            "taste": "Taste",
-            "excursion": "An excursion",
-            "nightlife": "Nightlife",
-            "walk": "A walk",
-            "secureAccess": "Secure Access",
-            "checkin": "Check-in",
-            "checkout": "Check-out",
-            "viewMap": "View on map",
-            "upsells": "Extras",
-            "items": "items",
-            "empty": "Nothing to show",
-            "searchPlaceholder": "Search...",
-            "secureAccessDesc": "Enter the code provided by your host."
+            "welcome": "مرحباً",
+            "wifi": "واي فاي",
+            "access": "رموز الدخول",
+            "location": "الموقع",
+            "contact": "التواصل",
+            "amenities": "المرافق",
+            "places": "الأماكن القريبة",
+            "rules": "قواعد المنزل",
+            "tipOfTheDay": "نصيحة اليوم",
+            "sunday": "الأحد",
+            "monday": "الاثنين",
+            "tuesday": "الثلاثاء",
+            "wednesday": "الأربعاء",
+            "thursday": "الخميس",
+            "friday": "الجمعة",
+            "saturday": "السبت",
+            "lazy": "استرخاء",
+            "mood": "نشيط",
+            "discovery": "استكشاف",
+            "tasty": "تذوّق",
+            "adventure": "مغامرة",
+            "festive": "احتفالي",
+            "outing": "نزهة",
+            "brunch": "إفطار في",
+            "explore": "استكشف",
+            "museums": "زيارة",
+            "taste": "تذوّق",
+            "excursion": "رحلة",
+            "nightlife": "حياة ليلية",
+            "walk": "جولة مشي",
+            "secureAccess": "دخول آمن",
+            "checkin": "تسجيل الوصول",
+            "checkout": "تسجيل المغادرة",
+            "viewMap": "عرض على الخريطة",
+            "upsells": "إضافات",
+            "items": "عناصر",
+            "empty": "لا شيء للعرض",
+            "searchPlaceholder": "بحث...",
+            "secureAccessDesc": "أدخل الرمز الذي قدمه لك المضيف."
         },
         "socialProof": {
-            "trustpilot": "4.9/5 by 500+ Hosts",
-            "usedBy": "Used by top concierge services",
+            "trustpilot": "4.9/5 من أكثر من 500 مضيف",
+            "usedBy": "يستخدمه أفضل خدمات الكونسيرج",
             "autoTranslate": {
-                "title": "Auto-Translated",
-                "desc": "Your guides speak your guests' language."
+                "title": "ترجمة تلقائية",
+                "desc": "أدلتك تتحدث بلغة ضيوفك."
             },
             "googleMaps": {
-                "title": "Integrated Google Maps",
-                "desc": "Google Maps directly in the guide."
+                "title": "خرائط جوجل مدمجة",
+                "desc": "خرائط جوجل مباشرة في الدليل."
             }
         },
         "hero": {
-            "tag": "┘ä┘ä┘àÏÂ┘è┘ü┘è┘å",
-            "title": "┘äÏº Ï¬┘âÏ▒Ï▒ Ïº┘äÏ▒┘àÏ▓ ÏúÏ¿Ï»Ïº┘ï.",
-            "subtitle": "Ï¡┘ê┘ä Ï»┘ä┘è┘ä┘â ┘ä┘äÏ▒┘é┘à┘èÏ®. Ï¬Ï¼Ï▒Ï¿Ï® Ï«┘àÏ│ ┘åÏ¼┘ê┘à.",
-            "cta": "ÏÑ┘åÏ┤ÏºÏí Ï»┘ä┘è┘ä┘è ┘àÏ¼Ïº┘åÏº┘ï",
-            "demo": "┘àÏ┤Ïº┘çÏ»Ï® ┘àÏ½Ïº┘ä",
-            "noCreditCard": "Ï¿Ï»┘ê┘å Ï¿ÏÀÏº┘éÏ®",
-            "setupTime": "┘à┘ÅÏ╣Ï»┘æ ┘ü┘è Ï»┘é┘è┘éÏ¬┘è┘å"
+            "tag": "للمضيفين ومديري العقارات",
+            "title": "لا تكرر رمز الواي فاي أبداً.",
+            "subtitle": "حوّل دليلك للرقمية. قدّم تجربة 5 نجوم، قلّل الرسائل بنسبة 50%، وزِد تقييماتك الإيجابية.",
+            "cta": "إنشاء دليلي المجاني",
+            "demo": "مشاهدة مثال",
+            "noCreditCard": "بدون بطاقة ائتمان",
+            "setupTime": "جاهز في دقيقتين"
         },
         "features": {
-            "title": "Everything you need.",
-            "subtitle": "Nothing superfluous.",
-            "description": "Powerful tools to automate your welcoming.",
-            "badge": "Features",
+            "title": "كل ما تحتاجه.",
+            "subtitle": "بدون أي زيادة.",
+            "description": "أدوات قوية لأتمتة استقبالك.",
+            "badge": "المميزات",
             "items": {
                 "mobileFirst": {
-                    "title": "100% Mobile First",
-                    "desc": "No app to download."
+                    "title": "100% موبايل أولاً",
+                    "desc": "لا حاجة لتحميل تطبيق."
                 },
                 "secure": {
-                    "title": "Secure Codes",
-                    "desc": "WiFi and lockboxes protected."
+                    "title": "رموز آمنة",
+                    "desc": "واي فاي وصناديق المفاتيح محمية."
                 },
                 "map": {
-                    "title": "Interactive Map",
-                    "desc": "Integrate your favorite places."
+                    "title": "خريطة تفاعلية",
+                    "desc": "أضف أماكنك المفضلة."
                 },
                 "live": {
-                    "title": "Live Edits",
-                    "desc": "Instant updates."
+                    "title": "تعديلات فورية",
+                    "desc": "تحديثات لحظية."
                 },
                 "translate": {
-                    "title": "Auto Translation",
-                    "desc": "Detects visitor's language."
+                    "title": "ترجمة تلقائية",
+                    "desc": "يكتشف لغة الزائر تلقائياً."
                 },
                 "checklist": {
-                    "title": "Checklists",
-                    "desc": "Clear check-in/out instructions."
+                    "title": "قوائم المهام",
+                    "desc": "تعليمات واضحة للوصول والمغادرة."
                 }
             }
         },
         "pricing": {
-            "title": "Ï¬Ï│Ï╣┘èÏ▒ ┘êÏºÏÂÏ¡",
-            "subtitle": "ÏºÏ¿Ï»Ïú ┘àÏ¼Ïº┘åÏº┘ïÏî ┘ê┘é┘à Ï¿Ïº┘äÏ¬Ï▒┘é┘èÏ® Ï╣┘åÏ» Ïº┘äÏ¡ÏºÏ¼Ï®.",
-            "bestOffer": "Ïú┘üÏÂ┘ä Ï╣Ï▒ÏÂ:",
-            "addon": "+ ÏÑÏÂÏº┘ü┘è",
+            "title": "تسعير شفاف",
+            "subtitle": "ابدأ مجاناً. قم بالترقية عندما تريد.",
+            "bestOffer": "أفضل عرض:",
+            "addon": "+20 درهم / دليل إضافي",
             "enterprise": {
-                "title": "┘ä┘äÏ┤Ï▒┘âÏºÏ¬Ïƒ",
-                "desc": "Ï¡┘ä ┘àÏ«ÏÁÏÁ.",
-                "cta": "ÏºÏ¬ÏÁ┘ä Ï¿┘åÏº"
+                "title": "بحاجة لحل مؤسسي؟",
+                "desc": "لمديري أكثر من 50 عقاراً، نقدم أسعاراً مخفضة وتكاملاً مع نظام إدارة الممتلكات.",
+                "cta": "تواصل معنا"
             },
             "plans": {
                 "demo": {
-                    "name": "Ïº┘âÏ¬Ï┤Ïº┘ü",
-                    "price": "┘àÏ¼Ïº┘å┘è",
-                    "desc": "Ï¬Ï¼Ï▒Ï¿Ï® Ïº┘äÏ«Ï»┘àÏ®",
-                    "button": "ÏÑ┘åÏ┤ÏºÏí Ï»┘ä┘è┘ä",
+                    "name": "اكتشاف",
+                    "price": "مجاني",
+                    "desc": "جرّب قوة Maplyo بدون بطاقة ائتمان.",
+                    "button": "إنشاء دليل (مجاني)",
                     "features": [
-                        "┘êÏÁ┘ê┘ä ┘âÏº┘à┘ä",
-                        "┘àÏ╣Ïº┘è┘åÏ® Ïº┘äÏ¼┘êÏº┘ä",
-                        "Ï╣Ï»┘à Ïº┘ä┘åÏ┤Ï▒"
+                        "وصول كامل للمحرر",
+                        "معاينة الجوال",
+                        "بدون نشر"
                     ]
                 },
                 "basic": {
-                    "name": "ÏúÏ│ÏºÏ│┘è",
-                    "desc": "┘äÏÑÏÀ┘äÏº┘é Ï╣┘éÏºÏ▒┘â Ïº┘äÏú┘ê┘ä.",
-                    "button": "ÏºÏ¿Ï»Ïú",
+                    "name": "أساسي",
+                    "desc": "لإطلاق عقارك الأول.",
+                    "button": "ابدأ الآن",
                     "features": [
-                        "Ï»┘ä┘è┘ä Ï▒┘é┘à┘è",
-                        "┘êÏº┘è ┘üÏº┘è ┘ü┘êÏ▒┘è",
-                        "Ï«Ï▒┘èÏÀÏ®",
-                        "Ï»┘ä┘è┘ä ┘êÏºÏ¡Ï»"
+                        "دليل رقمي كامل",
+                        "رمز QR فوري للواي فاي",
+                        "خريطة تفاعلية (خرائط جوجل)",
+                        "ثيمات مجانية (حزمة بريميوم +15 درهم)",
+                        "دليل واحد"
                     ]
                 },
                 "pro": {
-                    "name": "┘å┘à┘ê",
-                    "desc": "Ï¬Ï¡Ï│┘è┘å Ïº┘äÏ»Ï«┘ä.",
-                    "button": "Ï¬Ï¡Ï»┘èÏ½",
+                    "name": "نمو",
+                    "desc": "لتعظيم دخلك وتقييماتك.",
+                    "button": "الترقية إلى نمو",
                     "features": [
-                        "ÏúÏ»┘äÏ® ┘äÏº ┘àÏ¡Ï»┘êÏ»Ï®",
-                        "Ï¬Ï▒Ï¼┘àÏ® Ï¬┘ä┘éÏºÏª┘èÏ®",
-                        "Ï»Ï╣┘à ┘êÏºÏ¬Ï│ÏºÏ¿"
+                        "أدلة غير محدودة (+20 درهم/إضافي)",
+                        "ثيمات بريميوم مشمولة",
+                        "ترجمة تلقائية (ذكاء اصطناعي)",
+                        "مساعد ضيوف 24/7 (ذكاء اصطناعي)",
+                        "دعم أولوي عبر واتساب"
                     ]
                 },
                 "business": {
-                    "name": "┘ê┘âÏº┘äÏ®",
-                    "desc": "┘ä┘ä┘àÏ¼┘à┘êÏ╣ÏºÏ¬",
-                    "button": "Ï¬┘êÏºÏÁ┘ä",
-                    "price": "┘àÏ«ÏÁÏÁ",
+                    "name": "وكالة",
+                    "desc": "لمحافظ 10+ عقارات.",
+                    "button": "تحدث مع خبير",
+                    "price": "مخصص",
                     "features": [
-                        "┘äÏº ┘àÏ¡Ï»┘êÏ»",
-                        "┘ä┘êÏ¡Ï® Ï¬Ï¡┘â┘à",
-                        "Ï╣┘äÏº┘àÏ® Ï¿┘èÏÂÏºÏí"
+                        "أدلة غير محدودة",
+                        "لوحة تحكم متعددة العقارات",
+                        "علامة بيضاء (بدون شعار Maplyo)",
+                        "تكامل PMS ومدير القنوات",
+                        "فوترة مركزية"
                     ]
                 }
             },
-            "trust": "Ï»┘üÏ╣ Ïó┘à┘å SSL"
+            "trust": "ضمان استرداد 30 يوم • دفع آمن SSL"
         },
         "testimonials": {
-            "title": "┘àÏ╣Ï¬┘àÏ» ┘à┘å Ïº┘ä┘àÏ¡Ï¬Ï▒┘ü┘è┘å",
-            "subtitle": "Ïº┘åÏÂ┘à ÏÑ┘ä┘ë Ïú┘âÏ½Ï▒ ┘à┘å 500 ┘àÏÂ┘è┘ü ┘éÏº┘à┘êÏº Ï¿ÏúÏ¬┘àÏ¬Ï® ÏºÏ│Ï¬┘éÏ¿Ïº┘ä┘ç┘à.",
+            "title": "معتمد من المحترفين",
+            "subtitle": "انضم إلى أكثر من 500 مضيف قاموا بأتمتة استقبالهم.",
             "items": [
                 {
-                    "name": "Ï¼┘ê┘å ┘ü┘è┘ä┘èÏ¿ Ï▒.",
-                    "role": "┘àÏÂ┘è┘ü ┘à┘à┘èÏ▓ ┘ü┘è Airbnb (┘àÏ▒Ïº┘âÏ┤)",
-                    "text": "┘âÏº┘å ÏÂ┘è┘ê┘ü┘è ┘èÏ│Ïú┘ä┘ê┘å Ï¿ÏºÏ│Ï¬┘àÏ▒ÏºÏ▒ Ï╣┘å Ï▒┘àÏ▓ Ïº┘ä┘êÏº┘è ┘üÏº┘è Ïú┘ê ┘â┘è┘ü┘èÏ® Ï¬Ï┤Ï║┘è┘ä ┘à┘â┘è┘ü Ïº┘ä┘ç┘êÏºÏí. ┘àÏ╣ MaplyoÏî ┘â┘ä Ï┤┘èÏí ┘à┘êÏ¼┘êÏ» Ï╣┘ä┘ë ┘ç┘êÏºÏ¬┘ü┘ç┘à. ┘ä┘éÏ» ┘ê┘üÏ▒Ï¬ Ï│ÏºÏ╣Ï¬┘è┘å ┘ü┘è Ïº┘äÏúÏ│Ï¿┘êÏ╣ Ï¿Ï│┘ç┘ê┘äÏ®.",
-                    "result": "-60% ┘à┘å Ïº┘äÏ▒Ï│ÏºÏª┘ä"
+                    "name": "جون فيليب ر.",
+                    "role": "مضيف مميز في Airbnb (مراكش)",
+                    "text": "كان ضيوفي يسألون باستمرار عن رمز الواي فاي أو كيفية تشغيل مكيف الهواء. مع Maplyo، كل شيء موجود على هواتفهم. لقد وفرت ساعتين في الأسبوع بسهولة.",
+                    "result": "-60% من الرسائل"
                 },
                 {
-                    "name": "ÏÁ┘ê┘ü┘èÏº Ï¿.",
-                    "role": "┘àÏ»┘èÏ▒Ï® Ï┤Ï▒┘âÏ® ┘â┘ê┘åÏ│┘èÏ▒Ï¼ (Ïº┘äÏ»ÏºÏ▒ Ïº┘äÏ¿┘èÏÂÏºÏí)",
-                    "text": "┘å┘éÏÀÏ® Ïº┘äÏ¬Ï¡┘ê┘ä Ï¿Ïº┘ä┘åÏ│Ï¿Ï® ┘ä┘åÏº ┘ç┘è Ïº┘äÏ«Ï»┘àÏºÏ¬ Ïº┘äÏÑÏÂÏº┘ü┘èÏ®. ┘åÏ¡┘å ┘å┘éÏ»┘à Ï«Ï»┘àÏºÏ¬ Ï¬┘åÏ©┘è┘ü Ïú┘ê ┘å┘é┘ä ┘àÏ¿ÏºÏ┤Ï▒Ï® ┘ü┘è Ïº┘äÏ»┘ä┘è┘ä. ┘ä┘éÏ» Ï╣Ï▓Ï▓ Ï░┘ä┘â ┘à┘å ÏÑ┘èÏ▒ÏºÏ»ÏºÏ¬┘åÏº.",
-                    "result": "+15% ÏÑ┘èÏ▒ÏºÏ»ÏºÏ¬"
+                    "name": "صوفيا ب.",
+                    "role": "مديرة شركة كونسيرج (الدار البيضاء)",
+                    "text": "نقطة التحول بالنسبة لنا هي الخدمات الإضافية. نحن نقدم خدمات تنظيف أو نقل مباشرة في الدليل. لقد عزز ذلك من إيراداتنا.",
+                    "result": "+15% إيرادات"
                 },
                 {
-                    "name": "┘âÏ▒┘è┘à ┘à.",
-                    "role": "┘àÏº┘ä┘â Ï▒┘èÏºÏÂ (┘üÏºÏ│)",
-                    "text": "┘àÏ¡Ï¬Ï▒┘ü Ï¼Ï»Ïº┘ï. Ïº┘äÏ¼Ïº┘åÏ¿ ┘àÏ¬Ï╣Ï»Ï» Ïº┘ä┘äÏ║ÏºÏ¬ ┘àÏ¿┘çÏ▒Ïî Ï╣┘à┘äÏºÏª┘è Ïº┘äÏú┘àÏ▒┘è┘â┘è┘ê┘å ┘êÏº┘ä┘à┘éÏ▒Ï¿┘ê┘å Ï│Ï╣Ï»ÏºÏí Ï¼Ï»Ïº┘ï Ï¿Ïº┘äÏ¡ÏÁ┘ê┘ä Ï╣┘ä┘ë Ïº┘ä┘àÏ╣┘ä┘ê┘àÏºÏ¬ Ï¿┘äÏ║Ï¬┘ç┘à Ï»┘ê┘å Ïú┘å Ïú┘üÏ╣┘ä Ïú┘è Ï┤┘èÏí.",
-                    "result": "5Ôÿà Ï¬┘é┘è┘è┘àÏºÏ¬"
+                    "name": "كريم م.",
+                    "role": "مالك رياض (فاس)",
+                    "text": "محترف جداً. الجانب متعدد اللغات مبهر، عملائي الأمريكيون والمقربون سعداء جداً بالحصول على المعلومات بلغتهم دون أن أفعل أي شيء.",
+                    "result": "5⭐ تقييمات"
                 }
             ]
         },
         "faq": {
-            "title": "Ïº┘äÏúÏ│Ïª┘äÏ® Ïº┘äÏ┤ÏºÏªÏ╣Ï®",
-            "subtitle": "┘â┘ä ┘àÏº Ï¬Ï¡Ï¬ÏºÏ¼ ┘ä┘àÏ╣Ï▒┘üÏ¬┘ç ┘ä┘äÏ¿Ï»Ïí.",
+            "title": "الأسئلة الشائعة",
+            "subtitle": "كل ما تحتاج لمعرفته للبدء.",
             "questions": [
                 {
-                    "q": "┘ç┘ä ÏúÏ¡Ï¬ÏºÏ¼ ÏÑ┘ä┘ë ┘à┘çÏºÏ▒ÏºÏ¬ Ï¬┘é┘å┘èÏ®Ïƒ",
-                    "a": "┘äÏº Ï╣┘ä┘ë Ïº┘äÏÑÏÀ┘äÏº┘é. Ïº┘äÏú┘àÏ▒ Ï│┘ç┘ä ┘àÏ½┘ä ┘à┘äÏí ┘à┘ä┘ü Ï┤Ï«ÏÁ┘è Ï╣┘ä┘ë ┘êÏ│ÏºÏª┘ä Ïº┘äÏ¬┘êÏºÏÁ┘ä Ïº┘äÏºÏ¼Ï¬┘àÏºÏ╣┘è. Ïú┘åÏ¬ Ï¬ÏÂ┘è┘ü Ïº┘ä┘àÏ╣┘ä┘ê┘àÏºÏ¬Ïî ┘ê┘åÏ¡┘å ┘åÏ¬Ï╣Ïº┘à┘ä ┘àÏ╣ Ïº┘äÏ¬ÏÁ┘à┘è┘à."
+                    "q": "هل أحتاج إلى مهارات تقنية؟",
+                    "a": "لا على الإطلاق. الأمر سهل مثل ملء ملف شخصي على وسائل التواصل الاجتماعي. أنت تضيف المعلومات، ونحن نتعامل مع التصميم."
                 },
                 {
-                    "q": "┘â┘è┘ü ┘èÏÁ┘ä Ïº┘äÏÂ┘è┘ê┘ü ÏÑ┘ä┘ë Ïº┘äÏ»┘ä┘è┘äÏƒ",
-                    "a": "Ï╣Ï¿Ï▒ Ï▒┘àÏ▓ QR Ï¿Ï│┘èÏÀ Ï¬ÏÂÏ╣┘ç ┘ü┘è ┘à┘âÏº┘å Ïº┘äÏÑ┘éÏº┘àÏ®Ïî Ïú┘ê Ï▒ÏºÏ¿ÏÀ Ï¬Ï▒Ï│┘ä┘ç ┘ü┘è Ï▒Ï│Ïº┘äÏ® ┘éÏ¿┘ä ┘êÏÁ┘ê┘ä┘ç┘à."
+                    "q": "كيف يصل الضيوف إلى الدليل؟",
+                    "a": "عبر رمز QR بسيط تضعه في مكان الإقامة، أو رابط ترسله في رسالة قبل وصولهم."
                 },
                 {
-                    "q": "┘ç┘ä ┘è┘à┘â┘å┘å┘è Ï¬Ï¡Ï»┘èÏ½ Ïº┘äÏ»┘ä┘è┘ä Ï¿Ï╣Ï» ÏÀÏ¿ÏºÏ╣Ï® Ï▒┘àÏ▓ Ïº┘ä┘Ç QRÏƒ",
-                    "a": "┘åÏ╣┘à! ┘çÏ░Ïº ┘ç┘ê Ïº┘äÏ│Ï¡Ï▒. ┘é┘à Ï¿Ï¬Ï¡Ï»┘èÏ½ ┘àÏ╣┘ä┘ê┘àÏºÏ¬┘â (Ïº┘ä┘êÏº┘è ┘üÏº┘èÏî Ïº┘ä┘àÏÀÏºÏ╣┘à...) ┘êÏ│┘èÏ¿┘é┘ë Ï▒┘àÏ▓ Ïº┘ä┘Ç QR ┘â┘àÏº ┘ç┘ê Ï¬┘àÏº┘àÏº┘ï."
+                    "q": "هل يمكنني تحديث الدليل بعد طباعة رمز الـ QR؟",
+                    "a": "نعم! هذا هو السحر. قم بتحديث معلوماتك (الواي فاي، المطاعم...) وسيبقى رمز الـ QR كما هو تماماً."
                 },
                 {
-                    "q": "┘ç┘ä ┘ç┘åÏº┘â Ïú┘è Ïº┘äÏ¬Ï▓Ïº┘à Ïú┘ê Ï╣┘éÏ»Ïƒ",
-                    "a": "┘äÏºÏî ┘è┘à┘â┘å┘â Ïº┘äÏÑ┘äÏ║ÏºÏí ┘ü┘è Ïú┘è ┘ê┘éÏ¬."
+                    "q": "هل هناك أي التزام أو عقد؟",
+                    "a": "لا، يمكنك الإلغاء في أي وقت."
                 }
             ]
         },
+        "contact": {
+            "title": "اتصل بنا",
+            "subtitle": "لديك سؤال؟ فريقنا هنا للمساعدة.",
+            "email": "البريد الإلكتروني",
+            "emailValue": "contact@maplyo.com",
+            "whatsapp": "واتساب",
+            "button": "إرسال رسالة"
+        },
         "footer": {
-            "product": "Ïº┘ä┘à┘åÏ¬Ï¼",
-            "support": "Ïº┘äÏ»Ï╣┘à",
-            "legal": "┘éÏº┘å┘ê┘å┘è",
-            "desc": "┘àÏºÏ¿┘ä┘è┘ê ┘ä┘ä┘àÏÂ┘è┘ü┘è┘å.",
+            "product": "المنتج",
+            "support": "الدعم",
+            "legal": "قانوني",
+            "desc": "مابليو يساعد المضيفين ومديري العقارات على تقديم تجربة 5 نجوم بأدلة رقمية ذكية.",
+            "email": "contact@maplyo.com",
             "links": {
-                "features": "Ïº┘ä┘à┘èÏ▓ÏºÏ¬",
-                "pricing": "Ïº┘äÏ¬Ï│Ï╣┘èÏ▒",
-                "testimonials": "Ï┤┘çÏºÏ»ÏºÏ¬",
-                "roadmap": "Ï«ÏºÏ▒ÏÀÏ® ÏÀÏ▒┘è┘é",
-                "help": "┘àÏ│ÏºÏ╣Ï»Ï®",
-                "contact": "ÏºÏ¬ÏÁÏº┘ä",
-                "privacy": "Ïº┘äÏ«ÏÁ┘êÏÁ┘èÏ®",
-                "terms": "Ïº┘äÏ┤Ï▒┘êÏÀ",
-                "legal": "ÏÑÏ┤Ï╣ÏºÏ▒"
+                "features": "المميزات",
+                "pricing": "التسعير",
+                "testimonials": "شهادات",
+                "roadmap": "خارطة الطريق",
+                "help": "مساعدة",
+                "contact": "اتصال",
+                "privacy": "الخصوصية",
+                "terms": "الشروط",
+                "legal": "إشعار قانوني"
             },
-            "securePayment": "Ï»┘üÏ╣ Ïó┘à┘å",
-            "rights": "Ï¼┘à┘èÏ╣ Ïº┘äÏ¡┘é┘ê┘é ┘àÏ¡┘ü┘êÏ©Ï®."
+            "securePayment": "دفع آمن",
+            "rights": "جميع الحقوق محفوظة."
         },
         "cta": {
-            "title": "Ï¼Ïº┘çÏ▓ ┘ä┘äÏ¬┘à┘èÏ▓Ïƒ",
-            "subtitle": "Ïº┘åÏÂ┘à ┘ä┘äÏ¼┘è┘ä Ïº┘ä┘éÏºÏ»┘à.",
-            "button": "ÏÑ┘åÏ┤ÏºÏí Ï»┘ä┘è┘ä┘è",
-            "subtext": "ÏÑ┘äÏ║ÏºÏí ┘ü┘è Ïú┘è ┘ê┘éÏ¬"
+            "title": "جاهز للتميز؟",
+            "subtitle": "انضم للجيل الجديد من المضيفين الذين يقدمون تجربة استثنائية.",
+            "button": "إنشاء دليلي الأول",
+            "subtext": "بدون بطاقة ائتمان • إلغاء في أي وقت"
         },
         "guide": {
-            "accessCode": "Access Codes",
-            "locked": "Protected by code.",
-            "enterCode": "Access Code",
-            "confirm": "Confirm",
-            "apartmentDoor": "Apt Door:",
-            "buildingDoor": "Building:",
-            "gate": "Gate:",
-            "notes": "Notes"
+            "accessCode": "رموز الدخول",
+            "locked": "محمي برمز.",
+            "enterCode": "رمز الدخول",
+            "confirm": "تأكيد",
+            "apartmentDoor": "باب الشقة:",
+            "buildingDoor": "المبنى:",
+            "gate": "البوابة:",
+            "notes": "ملاحظات"
         },
         "guideBlocks": {
             "checkIn": {
-                "title": "Check-in"
+                "title": "تسجيل الوصول"
             },
             "location": {
-                "notSet": "Not set",
-                "address": "Address",
-                "openInMaps": "Open",
-                "copyAddress": "Copy",
-                "viewOnMap": "View on map"
+                "notSet": "غير محدد",
+                "address": "العنوان",
+                "openInMaps": "فتح",
+                "copyAddress": "نسخ",
+                "viewOnMap": "عرض على الخريطة"
             },
             "contact": {
-                "host": "Host",
-                "yourHost": "Your Host",
-                "phone": "Phone",
-                "openConversation": "Open"
+                "host": "المضيف",
+                "yourHost": "مضيفك",
+                "phone": "الهاتف",
+                "openConversation": "فتح"
             },
             "rules": {
-                "noRules": "No rules"
+                "noRules": "لا قواعد"
             },
             "amenities": {
-                "noAmenities": "No amenities"
+                "noAmenities": "لا مرافق"
             },
             "faq": {
-                "noFaq": "No FAQ",
-                "question": "Question",
-                "answer": "Answer"
+                "noFaq": "لا أسئلة",
+                "question": "سؤال",
+                "answer": "إجابة"
             },
             "trash": {
-                "title": "Bins",
-                "items": "Trash",
-                "recycling": "Recycling"
+                "title": "النفايات",
+                "items": "قمامة",
+                "recycling": "إعادة تدوير"
             },
             "breakfast": {
-                "title": "Breakfast",
-                "menu": "Menu"
+                "title": "الإفطار",
+                "menu": "القائمة"
             },
             "transport": {
-                "noInfo": "No info",
-                "call": "Call"
+                "noInfo": "لا معلومات",
+                "call": "اتصال"
             }
         },
         "editor": {
@@ -3592,33 +3633,54 @@ export const DICTIONARY = {
             ]
         },
         "faq": {
-            "title": "Frequently Asked Questions",
-            "subtitle": "Know everything.",
+            "title": "Veelgestelde Vragen",
+            "subtitle": "Alles wat je moet weten om te beginnen.",
             "questions": [
                 {
-                    "q": "Free?",
-                    "a": "Yes, discovery plan available."
+                    "q": "Heb ik technische vaardigheden nodig?",
+                    "a": "Geen. Het is net zo eenvoudig als het invullen van een Facebook-profiel. Jij voegt je info toe, wij genereren het ontwerp."
+                },
+                {
+                    "q": "Hoe hebben mijn gasten toegang tot de gids?",
+                    "a": "Via een simpele QR-code die je in de accommodatie plaatst, of een link die je voor aankomst per bericht verstuurt."
+                },
+                {
+                    "q": "Kan ik de gids aanpassen nadat de QR-code is geprint?",
+                    "a": "Ja! Dat is de magie van digitaal. Werk je info bij (wifi-code, restaurants...) en de QR-code blijft precies hetzelfde."
+                },
+                {
+                    "q": "Is er een verbintenis?",
+                    "a": "Nee, het is vrijblijvend. Je kunt stoppen wanneer je wilt."
                 }
             ]
+        },
+        "contact": {
+            "title": "Neem contact op",
+            "subtitle": "Vragen? Ons team staat voor je klaar.",
+            "email": "E-mail",
+            "emailValue": "contact@maplyo.com",
+            "whatsapp": "WhatsApp",
+            "button": "Stuur een bericht"
         },
         "footer": {
             "product": "Product",
             "support": "Support",
-            "legal": "Legal",
-            "desc": "Maplyo helps hosts.",
+            "legal": "Juridisch",
+            "desc": "Maplyo helpt hosts en conciërgediensten een 5-sterrenervaring te bieden met slimme digitale gidsen.",
+            "email": "contact@maplyo.com",
             "links": {
-                "features": "Features",
-                "pricing": "Pricing",
-                "testimonials": "Reviews",
+                "features": "Kenmerken",
+                "pricing": "Tarieven",
+                "testimonials": "Getuigenissen",
                 "roadmap": "Roadmap",
                 "help": "Help",
                 "contact": "Contact",
                 "privacy": "Privacy",
-                "terms": "Terms",
-                "legal": "Legal Notice"
+                "terms": "Voorwaarden",
+                "legal": "Juridische kennisgeving"
             },
-            "securePayment": "Secure Payment",
-            "rights": "All rights reserved."
+            "securePayment": "Veilig Betalen",
+            "rights": "Alle rechten voorbehouden."
         },
         "cta": {
             "title": "Ready to impress?",
@@ -4418,33 +4480,54 @@ export const DICTIONARY = {
             ]
         },
         "faq": {
-            "title": "Frequently Asked Questions",
-            "subtitle": "Know everything.",
+            "title": "常见问题",
+            "subtitle": "开始使用所需了解的一切。",
             "questions": [
                 {
-                    "q": "Free?",
-                    "a": "Yes, discovery plan available."
+                    "q": "我需要技术技能吗？",
+                    "a": "不需要。就像填写 Facebook 资料一样简单。您添加信息，我们生成设计。"
+                },
+                {
+                    "q": "我的房客如何访问指南？",
+                    "a": "通过您放置在房源内的简单二维码，或您在房客抵达前通过消息发送的链接。"
+                },
+                {
+                    "q": "打印二维码后我可以修改指南吗？",
+                    "a": "可以！这就是数字化的魔力。更新您的信息（无线网络代码、餐厅...），二维码保持完全相同。"
+                },
+                {
+                    "q": "有合同限制吗？",
+                    "a": "没有，没有约束力。您可以随时停止使用。"
                 }
             ]
         },
+        "contact": {
+            "title": "联系我们",
+            "subtitle": "有任何疑问吗？我们的团队随时为您提供帮助。",
+            "email": "电子邮件",
+            "emailValue": "contact@maplyo.com",
+            "whatsapp": "WhatsApp",
+            "button": "发送消息"
+        },
         "footer": {
-            "product": "Product",
-            "support": "Support",
-            "legal": "Legal",
-            "desc": "Maplyo helps hosts.",
+            "product": "产品",
+            "support": "支持",
+            "legal": "法律",
+            "desc": "Maplyo 通过智能数字指南帮助房东和礼宾服务提供 5 星级体验。",
+            "email": "contact@maplyo.com",
             "links": {
-                "features": "Features",
-                "pricing": "Pricing",
-                "testimonials": "Reviews",
-                "roadmap": "Roadmap",
-                "help": "Help",
-                "contact": "Contact",
-                "privacy": "Privacy",
-                "terms": "Terms",
-                "legal": "Legal Notice"
+                "features": "功能",
+                "pricing": "定价",
+                "testimonials": "客户见证",
+                "roadmap": "路线图",
+                "help": "帮助",
+                "contact": "联系我们",
+                "privacy": "隐私政策",
+                "terms": "服务条款",
+                "legal": "法律声明"
             },
-            "securePayment": "Secure Payment",
-            "rights": "All rights reserved."
+            "securePayment": "安全支付",
+            "rights": "版权所有。"
         },
         "cta": {
             "title": "Ready to impress?",
