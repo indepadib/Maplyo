@@ -46,7 +46,7 @@ const Nav = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, lang, setLang } = useTranslation();
   
-  const langs: Language[] = ['fr', 'en', 'es', 'ar'];
+  const langs: Language[] = ['fr', 'en', 'es', 'ar', 'nl', 'zh', 'pt'];
   const nextLang = langs[(langs.indexOf(lang) + 1) % langs.length];
 
   useEffect(() => {
@@ -257,6 +257,12 @@ export default function LandingPage() {
                 <span className="text-xs font-semibold text-zinc-300 tracking-wide uppercase">{t.hero.tag}</span>
               </motion.div>
 
+              <div className="flex gap-2 mb-6">
+                {['FR', 'EN', 'ES', 'AR', 'NL', 'ZH', 'PT'].map(l => (
+                  <span key={l} className="text-[10px] font-bold px-2 py-0.5 rounded bg-white/5 border border-white/10 text-zinc-500 uppercase">{l}</span>
+                ))}
+              </div>
+
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -303,6 +309,9 @@ export default function LandingPage() {
                 <span>TRUSTPILOT</span>
                 <div className="flex gap-1 text-green-500">★★★★★</div>
                 <span className="text-zinc-400">{t.socialProof.trustpilot}</span>
+                <div className="w-px h-4 bg-white/10 mx-2" />
+                <span className="text-rose-400 font-bold">12,450+</span>
+                <span className="text-zinc-500 uppercase tracking-tighter text-[10px]">Guides created this month</span>
               </motion.div>
             </div>
 
@@ -439,6 +448,49 @@ export default function LandingPage() {
                 <FeatureCard key={i} {...f} index={i} delay={i * 0.1} />
               ))}
             </div>
+
+            {/* Outside the Box: Hotel & Concierge Pro Section */}
+            <div className="mt-32 p-12 rounded-[3rem] bg-gradient-to-br from-indigo-900/20 via-slate-900/40 to-transparent border border-white/5 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-rose-500/10 rounded-full blur-[80px] group-hover:bg-rose-500/20 transition-colors" />
+              <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-widest mb-6">
+                    Professional Grade
+                  </div>
+                  <h3 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                    Dedicated to <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-rose-400">Hotels & Large Portfolios</span>
+                  </h3>
+                  <p className="text-lg text-zinc-400 mb-8 leading-relaxed">
+                    Maplyo isn't just for Airbnbs. Our enterprise-grade infrastructure supports hotels, riads, and concierge services with hundreds of units.
+                  </p>
+                  <ul className="space-y-4 mb-10">
+                    {[
+                      "Digital Room Service & Upselling",
+                      "Multi-unit Dashboard & Centralized Management",
+                      "Automated Guest Messaging via WhatsApp",
+                      "White-label Branding (Your Domain, Your Brand)"
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-center gap-3 text-zinc-300">
+                        <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-[10px]">✓</div>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <Button className="bg-indigo-600 hover:bg-indigo-500 text-white border-0 h-14 px-8 rounded-2xl shadow-xl shadow-indigo-600/20 font-bold">
+                    Talk to an Expert
+                  </Button>
+                </div>
+                <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black/40 backdrop-blur-sm shadow-2xl">
+                   {/* Placeholder for Video Sales Letter (VSL) */}
+                   <div className="absolute inset-0 flex items-center justify-center group/play cursor-pointer">
+                      <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center group-hover/play:scale-110 transition-transform">
+                        <Play className="w-8 h-8 text-white fill-white" />
+                      </div>
+                      <span className="absolute bottom-8 text-sm font-medium text-white/60 tracking-widest uppercase">Watch the Demo</span>
+                   </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -488,7 +540,7 @@ export default function LandingPage() {
                     {t.pricing.enterprise.cta}
                   </Button>
                 </a>
-                <a href="https://wa.me/212661000000" target="_blank" rel="noopener noreferrer">
+                <a href={`https://wa.me/${t.contact.whatsappValue.replace('+', '')}`} target="_blank" rel="noopener noreferrer">
                   <Button variant="secondary" className="w-full sm:w-auto border-white/10 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 font-bold">
                     <MessageCircle className="w-4 h-4 mr-2" />
                     WhatsApp

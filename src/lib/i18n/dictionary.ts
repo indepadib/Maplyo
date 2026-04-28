@@ -1,4 +1,4 @@
-export type Language = 'fr' | 'en' | 'es' | 'ar' | 'nl' | 'zh';
+export type Language = 'fr' | 'en' | 'es' | 'ar' | 'nl' | 'zh' | 'pt';
 
 export const DICTIONARY = {
     "fr": {
@@ -229,6 +229,7 @@ export const DICTIONARY = {
             "email": "Email",
             "emailValue": "contact@maplyo.com",
             "whatsapp": "WhatsApp",
+            "whatsappValue": "+33769502017",
             "button": "Envoyer un message"
         },
         "footer": {
@@ -1092,6 +1093,7 @@ export const DICTIONARY = {
             "email": "Email",
             "emailValue": "contact@maplyo.com",
             "whatsapp": "WhatsApp",
+            "whatsappValue": "+33769502017",
             "button": "Send a message"
         },
         "footer": {
@@ -1950,6 +1952,7 @@ export const DICTIONARY = {
             "email": "Correo electrónico",
             "emailValue": "contact@maplyo.com",
             "whatsapp": "WhatsApp",
+            "whatsappValue": "+33769502017",
             "button": "Enviar un mensaje"
         },
         "footer": {
@@ -2813,6 +2816,7 @@ export const DICTIONARY = {
             "email": "البريد الإلكتروني",
             "emailValue": "contact@maplyo.com",
             "whatsapp": "واتساب",
+            "whatsappValue": "+33769502017",
             "button": "إرسال رسالة"
         },
         "footer": {
@@ -3660,6 +3664,7 @@ export const DICTIONARY = {
             "email": "E-mail",
             "emailValue": "contact@maplyo.com",
             "whatsapp": "WhatsApp",
+            "whatsappValue": "+33769502017",
             "button": "Stuur een bericht"
         },
         "footer": {
@@ -4507,6 +4512,7 @@ export const DICTIONARY = {
             "email": "电子邮件",
             "emailValue": "contact@maplyo.com",
             "whatsapp": "WhatsApp",
+            "whatsappValue": "+33769502017",
             "button": "发送消息"
         },
         "footer": {
@@ -5139,6 +5145,470 @@ export const DICTIONARY = {
                 "submit": "Sign Up",
                 "hasAccount": "Already registered?",
                 "signIn": "Login"
+            }
+        }
+    },
+    "pt": {
+        "common": {
+            "getStarted": "Começar",
+            "login": "Entrar",
+            "signup": "Cadastrar-se",
+            "tryFree": "Testar Gratuitamente",
+            "popular": "Mais popular",
+            "month": "/mês",
+            "loading": "Carregando...",
+            "choose": "Escolher",
+            "viewGuide": "Ver guia completo",
+            "more": "Ver mais",
+            "checkin": "Check-in",
+            "qrCodeWall": "Escaneie para testar",
+            "checkout": "Check-out",
+            "location": "Localização",
+            "viewOnMap": "Ver no mapa",
+            "wifi": "WiFi",
+            "other": "Outro"
+        },
+        "renderer": {
+            "welcome": "Bem-vindo",
+            "wifi": "WiFi",
+            "access": "Códigos de acesso",
+            "location": "Localização",
+            "contact": "Contato",
+            "amenities": "Comodidades",
+            "places": "Nas proximidades",
+            "rules": "Regras da casa",
+            "tipOfTheDay": "Dica do dia",
+            "sunday": "Domingo",
+            "monday": "Segunda-feira",
+            "tuesday": "Terça-feira",
+            "wednesday": "Quarta-feira",
+            "thursday": "Quinta-feira",
+            "friday": "Sexta-feira",
+            "saturday": "Sábado",
+            "lazy": "Relaxar",
+            "mood": "Motivado",
+            "discovery": "Descoberta",
+            "tasty": "Saboroso",
+            "adventure": "Aventura",
+            "festive": "Festivo",
+            "outing": "Passeio",
+            "brunch": "Um brunch em",
+            "explore": "Explore",
+            "museums": "Visite",
+            "taste": "Prove",
+            "excursion": "Uma excursão",
+            "nightlife": "Vida noturna",
+            "walk": "Um passeio",
+            "secureAccess": "Acesso Seguro",
+            "checkin": "Check-in",
+            "checkout": "Check-out",
+            "viewMap": "Ver no mapa",
+            "upsells": "Extras",
+            "items": "itens",
+            "empty": "Nada para exibir",
+            "searchPlaceholder": "Pesquisar...",
+            "secureAccessDesc": "Insira o código fornecido pelo seu anfitrião."
+        },
+        "socialProof": {
+            "trustpilot": "4.9/5 por 500+ Anfitriões",
+            "usedBy": "Usado pelas melhores conciergeries",
+            "autoTranslate": {
+                "title": "Auto-Traduzido",
+                "desc": "Seus guias falam a língua dos seus hóspedes."
+            },
+            "googleMaps": {
+                "title": "Google Maps Integrado",
+                "desc": "Google Maps diretamente no guia."
+            }
+        },
+        "hero": {
+            "tag": "PARA ANFITRIÕES E CONCIERGERIES",
+            "title": "Nunca mais repita a senha do WiFi.",
+            "subtitle": "Digitalize seu guia de boas-vindas. Ofereça uma experiência 5 estrelas, reduza as mensagens em 50% e aumente suas avaliações positivas.",
+            "cta": "Criar meu guia gratuito",
+            "demo": "Ver um exemplo",
+            "noCreditCard": "Sem cartão necessário",
+            "setupTime": "Configurado em 2 min"
+        },
+        "features": {
+            "title": "Tudo o que você precisa.",
+            "subtitle": "Nada supérfluo.",
+            "description": "Ferramentas poderosas para automatizar sua recepção.",
+            "badge": "Funcionalidades",
+            "items": {
+                "mobileFirst": {
+                    "title": "100% Mobile First",
+                    "desc": "Sem aplicativo para baixar."
+                },
+                "secure": {
+                    "title": "Códigos Seguros",
+                    "desc": "WiFi e cofres de chaves protegidos."
+                },
+                "map": {
+                    "title": "Mapa Interativo",
+                    "desc": "Adicione seus lugares favoritos."
+                },
+                "live": {
+                    "title": "Edições em tempo real",
+                    "desc": "Atualizações instantâneas."
+                },
+                "translate": {
+                    "title": "Tradução Automática",
+                    "desc": "Detecta o idioma do visitante."
+                },
+                "checklist": {
+                    "title": "Checklists",
+                    "desc": "Instruções claras de check-in/out."
+                }
+            }
+        },
+        "pricing": {
+            "title": "Preços Transparentes",
+            "subtitle": "Comece grátis. Mude quando quiser.",
+            "bestOffer": "Melhor oferta:",
+            "addon": "+20 DH / guia extra",
+            "enterprise": {
+                "title": "Precisa de uma solução corporativa?",
+                "desc": "Para gerentes de 50+ propriedades, oferecemos tarifas regressivas e integrações PMS.",
+                "cta": "Contate-nos"
+            },
+            "plans": {
+                "demo": {
+                    "name": "Descoberta",
+                    "price": "Grátis",
+                    "desc": "Teste o poder do Maplyo sem cartão.",
+                    "button": "Criar guia (Grátis)",
+                    "features": [
+                        "Acesso total ao editor",
+                        "Visualização mobile",
+                        "Sem publicação"
+                    ]
+                },
+                "basic": {
+                    "name": "Básico",
+                    "desc": "Para lançar sua primeira propriedade.",
+                    "button": "Começar agora",
+                    "features": [
+                        "Guia digital completo",
+                        "QR Code WiFi instantâneo",
+                        "Mapa interativo (Google Maps)",
+                        "Temas gratuitos (Premium Pack +15 DH)",
+                        "1 Guia"
+                    ]
+                },
+                "pro": {
+                    "name": "Crescimento",
+                    "desc": "Para maximizar renda e avaliações.",
+                    "button": "Mudar para Crescimento",
+                    "features": [
+                        "Guias ilimitados (+20 DH/extra)",
+                        "Temas Premium inclusos",
+                        "Tradução Automática (IA)",
+                        "Assistente de Hóspedes 24/7 (IA)",
+                        "Suporte prioritário via WhatsApp"
+                    ]
+                },
+                "business": {
+                    "name": "Agência",
+                    "desc": "Para portfólios de 10+ propriedades.",
+                    "button": "Falar com especialista",
+                    "price": "Personalizado",
+                    "features": [
+                        "Guias ilimitados",
+                        "Painel multi-propriedade",
+                        "White Label (Sem logo Maplyo)",
+                        "Integração PMS e Channel Manager",
+                        "Faturamento centralizado"
+                    ]
+                }
+            },
+            "trust": "Garantia de 30 dias • Pagamento Seguro SSL"
+        },
+        "testimonials": {
+            "title": "Confiado por Profissionais",
+            "subtitle": "Junte-se a 500+ anfitriões que automatizaram sua recepção.",
+            "items": [
+                {
+                    "name": "Jean-Philippe R.",
+                    "role": "Superhost Airbnb (Marrakech)",
+                    "text": "Meus hóspedes sempre perguntavam a senha do WiFi ou como ligar o ar. Com o Maplyo, tudo está no celular deles. Ganhei 2 horas por semana facilmente.",
+                    "result": "-60% mensagens"
+                },
+                {
+                    "name": "Sofia B.",
+                    "role": "Gerente de Conciergerie (Casablanca)",
+                    "text": "O diferencial para nós são os extras. Oferecemos limpeza ou transfer diretamente no guia. Isso aumentou nossa receita.",
+                    "result": "+15% receita"
+                },
+                {
+                    "name": "Karim M.",
+                    "role": "Proprietário de Riad (Fez)",
+                    "text": "Muito profissional. O aspecto bilíngue é impressionante, meus clientes americanos ficam felizes em ter as informações no idioma deles.",
+                    "result": "Avaliações 5⭐"
+                }
+            ]
+        },
+        "faq": {
+            "title": "Perguntas Frequentes",
+            "subtitle": "Tudo o que você precisa saber para começar.",
+            "questions": [
+                {
+                    "q": "Preciso de habilidades técnicas?",
+                    "a": "Nenhuma. É tão simples quanto preencher um perfil no Facebook. Você adiciona suas infos, nós geramos o design."
+                },
+                {
+                    "q": "Como meus hóspedes acessam o guia?",
+                    "a": "Via um simples QR Code que você coloca no imóvel, ou um link enviado antes da chegada."
+                },
+                {
+                    "q": "Posso modificar o guia após imprimir o QR Code?",
+                    "a": "Sim! Essa é a magia do digital. Atualize suas infos e o QR Code continua o mesmo."
+                },
+                {
+                    "q": "Existe fidelidade?",
+                    "a": "Não, é sem compromisso. Você pode parar quando quiser."
+                }
+            ]
+        },
+        "contact": {
+            "title": "Contate-nos",
+            "subtitle": "Tem uma pergunta? Nossa equipe está aqui para ajudar.",
+            "email": "Email",
+            "emailValue": "contact@maplyo.com",
+            "whatsapp": "WhatsApp",
+            "whatsappValue": "+33769502017",
+            "button": "Enviar mensagem"
+        },
+        "footer": {
+            "product": "Produto",
+            "support": "Suporte",
+            "legal": "Jurídico",
+            "desc": "Maplyo ajuda anfitriões e conciergeries a oferecer uma experiência 5 estrelas com guias digitais inteligentes.",
+            "email": "contact@maplyo.com",
+            "links": {
+                "features": "Funcionalidades",
+                "pricing": "Preços",
+                "testimonials": "Depoimentos",
+                "roadmap": "Roadmap",
+                "help": "Ajuda",
+                "contact": "Contato",
+                "privacy": "Privacidade",
+                "terms": "Termos",
+                "legal": "Avisos Legais"
+            },
+            "securePayment": "Pagamento Seguro",
+            "rights": "Todos os direitos reservados."
+        },
+        "cta": {
+            "title": "Pronto para impressionar?",
+            "subtitle": "Crie seu guia hoje mesmo.",
+            "button": "Criar meu guia",
+            "subtext": "Sem cartão."
+        },
+        "guide": {
+            "accessCode": "Códigos de Acesso",
+            "locked": "Protegido por código.",
+            "enterCode": "Código de Acesso",
+            "confirm": "Confirmar",
+            "apartmentDoor": "Porta Apto:",
+            "buildingDoor": "Prédio:",
+            "gate": "Portão:",
+            "notes": "Notas"
+        },
+        "guideBlocks": {
+            "checkIn": {
+                "title": "Check-in"
+            },
+            "location": {
+                "notSet": "Não definido",
+                "address": "Endereço",
+                "openInMaps": "Abrir",
+                "copyAddress": "Copiar",
+                "viewOnMap": "Ver no mapa"
+            },
+            "contact": {
+                "host": "Anfitrião",
+                "yourHost": "Seu Anfitrião",
+                "phone": "Telefone",
+                "openConversation": "Abrir"
+            },
+            "rules": {
+                "noRules": "Sem regras"
+            },
+            "amenities": {
+                "noAmenities": "Sem comodidades"
+            },
+            "faq": {
+                "noFaq": "Sem FAQ",
+                "question": "Pergunta",
+                "answer": "Resposta"
+            },
+            "trash": {
+                "title": "Lixo",
+                "items": "Lixo",
+                "recycling": "Reciclagem"
+            },
+            "breakfast": {
+                "title": "Café da manhã",
+                "menu": "Menu"
+            },
+            "transport": {
+                "noInfo": "Sem info",
+                "call": "Ligar"
+            }
+        },
+        "editor": {
+            "common": {
+                "title": "Título",
+                "description": "Descrição",
+                "uploadImage": "Imagem",
+                "save": "Salvar",
+                "cancel": "Cancelar",
+                "delete": "Excluir",
+                "edit": "Editar",
+                "add": "Adicionar",
+                "moving": "Movendo...",
+                "reorder": "Reordenar"
+            },
+            "sidebar": {
+                "blocks": "Blocos",
+                "theme": "Tema",
+                "settings": "Configurações",
+                "preview": "Prévia"
+            },
+            "blocks": {
+                "addBlock": "Adicionar Bloco",
+                "selectType": "Selecionar Tipo",
+                "types": {
+                    "text": "Texto",
+                    "wifi": "WiFi",
+                    "location": "Localização",
+                    "contact": "Contato",
+                    "checkin": "Check-in",
+                    "checkout": "Check-out",
+                    "rules": "Regras",
+                    "amenities": "Comodidades",
+                    "faq": "FAQ",
+                    "trash": "Lixo",
+                    "breakfast": "Café da manhã",
+                    "transport": "Transporte"
+                }
+            }
+        },
+        "dashboard": {
+            "title": "Meus Guias",
+            "subtitle": "Gerencie seus livretos de boas-vindas",
+            "newGuide": "Novo Guia",
+            "emptyTitle": "Nenhum guia ainda",
+            "emptyDesc": "Crie seu primeiro guia para impressionar seus hóspedes.",
+            "tryAi": "Testar IA",
+            "sortRecent": "Recentes",
+            "sortName": "Nome",
+            "logout": "Sair",
+            "aiModal": {
+                "title": "Gerar com IA",
+                "subtitle": "Crie um guia completo em segundos"
+            }
+        },
+        "settings": {
+            "title": "Configurações",
+            "profile": "Perfil",
+            "subscription": "Assinatura",
+            "danger": "Zona de Perigo"
+        },
+        "pricingPage": {
+            "hero": {
+                "badge": "Preços",
+                "title1": "Escolha o plano",
+                "title2": "ideal para você",
+                "subtitle": "Pague apenas pelo que precisa. Sem taxas escondidas."
+            },
+            "popular": "Popular",
+            "compare": {
+                "title": "Compare os planos",
+                "subtitle": "Detalhes de cada oferta",
+                "features": {
+                    "unlimited": "Blocos ilimitados",
+                    "maps": "Integração Google Maps",
+                    "translation": "Idiomas",
+                    "domain": "Domínio personalizado",
+                    "support": "Suporte",
+                    "whiteLabel": "White Label",
+                    "analytics": "Estatísticas"
+                },
+                "values": {
+                    "oneLang": "1 Idioma",
+                    "unlimited": "Ilimitado",
+                    "emailSupport": "Email",
+                    "whatsappSupport": "WhatsApp"
+                }
+            },
+            "faqSection": {
+                "title": "Dúvidas?",
+                "subtitle": "Nós respondemos"
+            },
+            "trust": "Confiado por"
+        },
+        "demo": {
+            "title": "Exemplos",
+            "subtitle": "Inspire-se",
+            "example1": {
+                "type": "Apartamento",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Excelente"
+            },
+            "example2": {
+                "type": "Vila",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Top"
+            },
+            "example3": {
+                "type": "Riad",
+                "stat1": "1",
+                "stat2": "2",
+                "stat3": "3",
+                "review": "Super"
+            }
+        },
+        "guideLock": {
+            "title": "Acesso Seguro",
+            "desc": "Desbloqueie para ver os códigos.",
+            "demoCode": "Código Demo"
+        },
+        "auth": {
+            "login": {
+                "title": "Entrar",
+                "subtitle": "Bem-vindo",
+                "email": "Email",
+                "password": "Senha",
+                "forgot": "Esqueceu?",
+                "error": "Erro",
+                "submit": "Entrar",
+                "noAccount": "Sem conta?",
+                "createFree": "Criar",
+                "resetLink": "Resetar"
+            },
+            "signup": {
+                "title": "Cadastrar",
+                "subtitle": "Grátis",
+                "successTitle": "Sucesso",
+                "successMsg": "Verifique seus emails",
+                "successDesc": "Link enviado",
+                "backToLogin": "Voltar",
+                "firstName": "Nome",
+                "lastName": "Sobrenome",
+                "businessEmail": "Email Profissional",
+                "businessName": "Empresa",
+                "phone": "Telefone",
+                "passwordLabel": "Senha",
+                "passwordHint": "6+ caracteres",
+                "submit": "Cadastrar",
+                "hasAccount": "Já tem conta?",
+                "signIn": "Entrar"
             }
         }
     }

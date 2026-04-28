@@ -17,6 +17,7 @@ const LANGUAGES: LangOption[] = [
     { code: "ar", label: "العربية", flag: "🇲🇦" },
     { code: "nl", label: "Nederlands", flag: "🇳🇱" },
     { code: "zh", label: "中文", flag: "🇨🇳" },
+    { code: "pt", label: "Português", flag: "🇵🇹" },
 ];
 
 interface LanguageSwitcherProps {

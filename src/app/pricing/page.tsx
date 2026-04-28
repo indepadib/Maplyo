@@ -385,7 +385,7 @@ export default function PricingPage() {
                                     {t.pricing.enterprise.cta}
                                 </Button>
                             </a>
-                            <a href="https://wa.me/212661000000" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                            <a href={`https://wa.me/${t.contact.whatsappValue.replace('+', '')}`} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
                                 <Button variant="secondary" className="w-full h-14 px-8 bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-bold hover:bg-emerald-500/20 flex items-center justify-center gap-2">
                                     <MessageCircle className="w-5 h-5" />
                                     WhatsApp Support

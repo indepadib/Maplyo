@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { User, CreditCard, Settings, ChevronLeft, Upload, Package, ShoppingBag, Sparkles, Check, ShieldCheck } from "lucide-react";
+import { User, CreditCard, Settings, ChevronLeft, Upload, Package, ShoppingBag, Sparkles, Check, ShieldCheck, Link2, Key, Calendar } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { supabase } from "@/lib/supabase";
 import { FileUploader } from "@/components/ui/FileUploader";
@@ -13,7 +13,7 @@ import { useTranslation } from "@/components/providers/LanguageProvider";
 export default function SettingsPage() {
     const { t } = useTranslation();
     const { user } = useAuth();
-    const [activeTab, setActiveTab] = useState<"profile" | "plan" | "shop">("profile");
+    const [activeTab, setActiveTab] = useState<"profile" | "plan" | "shop" | "integrations">("profile");
     const [loading, setLoading] = useState(false);
     const [subscription, setSubscription] = useState<any>(null);
     const [avatarUrl, setAvatarUrl] = useState("");
@@ -115,16 +115,65 @@ export default function SettingsPage() {
                         </button>
                         <button
                             onClick={() => setActiveTab("shop")}
-                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${activeTab === "shop" ? "bg-rose-600 text-white shadow-lg shadow-rose-600/20" : "bg-white/5 hover:bg-white/10 text-zinc-400"
-                                }`}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === "shop" ? "bg-rose-600 text-white shadow-lg shadow-rose-600/20" : "text-zinc-400 hover:bg-white/5"}`}
                         >
-                            <ShoppingBag size={18} />
-                            {t.settings.tabShop}
+                            <ShoppingBag className="w-5 h-5" />
+                            <span className="font-medium">Maplyo Shop</span>
+                        </button>
+                        <button
+                            onClick={() => setActiveTab("integrations")}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === "integrations" ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20" : "text-zinc-400 hover:bg-white/5"}`}
+                        >
+                            <Link2 className="w-5 h-5" />
+                            <span className="font-medium">Integrations</span>
                         </button>
                     </div>
 
                     {/* Content */}
-                    <div className="bg-slate-900/50 backdrop-blur-sm border border-white/5 rounded-3xl p-8">
+                    <div className="bg-slate-900/50 backdrop-blur-sm border border-white/5 rounded-3xl p-8 overflow-hidden">
+                        {activeTab === "integrations" && (
+                            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                                    <Link2 className="w-5 h-5 text-indigo-400" />
+                                    External Integrations
+                                </h2>
+                                
+                                <div className="grid gap-4">
+                                    {/* Tuya Smart Lock */}
+                                    <div className="p-6 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:border-indigo-500/30 transition-all">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+                                                <Key className="w-6 h-6" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold">Tuya Smart Lock</h4>
+                                                <p className="text-sm text-zinc-500">Generate guest codes automatically.</p>
+                                            </div>
+                                        </div>
+                                        <button className="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 px-4 py-2 rounded-lg font-bold transition-all">
+                                            Connect
+                                        </button>
+                                    </div>
+
+                                    {/* Airbnb iCal */}
+                                    <div className="p-6 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:border-rose-500/30 transition-all">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-400">
+                                                <Calendar className="w-6 h-6" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold">Airbnb Calendar</h4>
+                                                <p className="text-sm text-zinc-500">Sync guest stays via iCal.</p>
+                                            </div>
+                                        </div>
+                                        <button className="bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 px-4 py-2 rounded-lg font-bold transition-all">
+                                            Sync
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {activeTab === "profile" && (
                             <div className="space-y-6">
                                 <h2 className="text-xl font-bold mb-4">{t.settings.personalInfo}</h2>
