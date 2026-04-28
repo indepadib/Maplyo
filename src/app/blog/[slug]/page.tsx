@@ -137,10 +137,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </article>
 
                 <div className="mt-24 pt-12 border-t border-gray-200 text-center">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-4">Prêt à digitaliser votre accueil ?</h3>
-                    <p className="text-gray-600 mb-8 max-w-md mx-auto">Offrez une expérience 5 étoiles à vos voyageurs, réduisez les messages répétitifs et obtenez plus de bons avis.</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                        {lang === 'fr' ? 'Prêt à digitaliser votre accueil ?' : lang === 'es' ? '¿Listo para digitalizar tu bienvenida?' : lang === 'ar' ? 'هل أنت مستعد لرقمنة استقبالك؟' : lang === 'nl' ? 'Klaar om uw ontvangst te digitaliseren?' : lang === 'zh' ? '准备好将您的接待数字化了吗？' : 'Ready to digitalize your welcome?'}
+                    </h3>
+                    <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                        {lang === 'fr' ? 'Offrez une expérience 5 étoiles à vos voyageurs, réduisez les messages répétitifs et obtenez plus de bons avis.' : lang === 'es' ? 'Ofrezca una experiencia 5 estrellas a sus viajeros, reduzca mensajes repetitivos y obtenga más reseñas positivas.' : lang === 'ar' ? 'قدّم تجربة 5 نجوم لمسافريك، قلل الرسائل المتكررة واحصل على تقييمات إيجابية أكثر.' : lang === 'nl' ? 'Bied uw reizigers een 5-sterrenervaring, verminder herhalende berichten en krijg meer positieve beoordelingen.' : lang === 'zh' ? '为旅客提供五星级体验，减少重复消息，获得更多好评。' : 'Offer a 5-star experience to your guests, reduce repetitive messages, and get more positive reviews.'}
+                    </p>
                     <Link href="/signup" className="inline-block px-8 py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20">
-                        Créer mon livret gratuit
+                        {lang === 'fr' ? 'Créer mon livret gratuit' : lang === 'es' ? 'Crear mi guía gratis' : lang === 'ar' ? 'إنشاء دليلي المجاني' : lang === 'nl' ? 'Mijn gratis gids maken' : lang === 'zh' ? '创建免费指南' : 'Create my free guide'}
                     </Link>
                 </div>
             </main>

@@ -563,10 +563,10 @@ function DashboardContent() {
                     <div className="space-y-6">
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-bold text-zinc-700 mb-2">Ville ou Lieu</label>
+                                <label className="block text-sm font-bold text-zinc-700 mb-2">{t.dashboard.aiModal.city}</label>
                                 <input
                                     className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-purple-500 outline-none transition-all"
-                                    placeholder="Ex: Marrakech, Quartier Guéliz"
+                                    placeholder={t.dashboard.aiModal.cityPlaceholder}
                                     value={aiPrompt.city}
                                     onChange={e => setAiPrompt({ ...aiPrompt, city: e.target.value })}
                                 />
@@ -574,28 +574,28 @@ function DashboardContent() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-bold text-zinc-700 mb-2">Type</label>
+                                    <label className="block text-sm font-bold text-zinc-700 mb-2">{t.dashboard.aiModal.type}</label>
                                     <select
                                         className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 outline-none"
                                         value={aiPrompt.type}
                                         onChange={e => setAiPrompt({ ...aiPrompt, type: e.target.value as any })}
                                     >
-                                        <option value="airbnb">Airbnb / Appartement</option>
-                                        <option value="hotel">Hôtel / Riad</option>
-                                        <option value="guest_house">Maison d'hôtes</option>
+                                        <option value="airbnb">{t.dashboard.aiModal.typeAirbnb}</option>
+                                        <option value="hotel">{t.dashboard.aiModal.typeHotel}</option>
+                                        <option value="guest_house">{t.dashboard.aiModal.typeGuesthouse}</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-bold text-zinc-700 mb-2">Voyageurs</label>
+                                    <label className="block text-sm font-bold text-zinc-700 mb-2">{t.dashboard.aiModal.audience}</label>
                                     <select
                                         className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 outline-none"
                                         value={aiPrompt.targetAudience}
                                         onChange={e => setAiPrompt({ ...aiPrompt, targetAudience: e.target.value as any })}
                                     >
-                                        <option value="families">Familles</option>
-                                        <option value="couples">Couples</option>
-                                        <option value="remote_workers">Télétravailleurs</option>
-                                        <option value="groups">Groupes</option>
+                                        <option value="families">{t.dashboard.aiModal.audienceFamilies}</option>
+                                        <option value="couples">{t.dashboard.aiModal.audienceCouples}</option>
+                                        <option value="remote_workers">{t.dashboard.aiModal.audienceRemote}</option>
+                                        <option value="groups">{t.dashboard.aiModal.audienceGroups}</option>
                                     </select>
                                 </div>
                             </div>
@@ -606,7 +606,7 @@ function DashboardContent() {
                             disabled={!aiPrompt.city}
                             className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-lg shadow-xl shadow-purple-500/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Générer mon guide
+                            {t.dashboard.aiModal.generate}
                         </button>
                     </div>
                 ) : (
@@ -616,8 +616,8 @@ function DashboardContent() {
                             <div className="absolute inset-0 rounded-full border-4 border-t-purple-600 animate-spin"></div>
                             <div className="absolute inset-0 flex items-center justify-center text-3xl animate-pulse">✨</div>
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">L'IA rédige votre guide...</h3>
-                        <p className="text-gray-500">Création des recommandations pour {aiPrompt.city}</p>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">{t.dashboard.aiModal.generating}</h3>
+                        <p className="text-gray-500">{t.dashboard.aiModal.generatingDesc} {aiPrompt.city}</p>
                     </div>
                 )}
             </Modal>
@@ -633,13 +633,13 @@ function DashboardContent() {
                 <form onSubmit={handleCreateGuide} className="space-y-6">
                     <div>
                         <label className="block text-sm font-bold text-zinc-700 mb-2">
-                            Nom du guide
+                            {t.dashboard.createModal.nameLabel}
                         </label>
                         <input
                             type="text"
                             value={newGuideTitle}
                             onChange={(e) => setNewGuideTitle(e.target.value)}
-                            placeholder="Ex: Riad des Lumières"
+                            placeholder={t.dashboard.createModal.namePlaceholder}
                             className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-lg font-medium placeholder:text-gray-400"
                             autoFocus
                             required
@@ -652,13 +652,13 @@ function DashboardContent() {
                             onClick={() => setIsCreateModalOpen(false)}
                             className="px-6 py-3.5 rounded-xl border border-gray-200 text-gray-600 font-bold hover:bg-gray-50 transition-colors"
                         >
-                            Annuler
+                            {t.dashboard.createModal.cancel}
                         </button>
                         <button
                             type="submit"
                             className="px-8 py-3.5 rounded-xl bg-gray-900 text-white font-bold hover:bg-black shadow-xl shadow-black/10 active:scale-95 transition-all"
                         >
-                            Créer le guide
+                            {t.dashboard.createModal.create}
                         </button>
                     </div>
                 </form>

@@ -74,10 +74,10 @@ export default function SettingsPage() {
                 updated_at: new Date().toISOString(),
             });
             if (error) throw error;
-            showModal(t.settings.success, <div className="text-center p-4">Votre profil a été mis à jour avec succès ! 🎉</div>, "✅");
+            showModal(t.settings.success, <div className="text-center p-4">{t.settings.profileUpdated}</div>, "✅");
         } catch (e) {
             console.error(e);
-            showModal(t.settings.error, <div className="text-center p-4 text-red-600">Une erreur est survenue lors de la mise à jour.</div>, "⚠️");
+            showModal(t.settings.error, <div className="text-center p-4 text-red-600">{t.settings.updateError}</div>, "⚠️");
         } finally {
             setLoading(false);
         }
@@ -138,7 +138,7 @@ export default function SettingsPage() {
                                         )}
                                     </div>
                                     <div className="flex-1">
-                                        <label className="block text-sm font-bold mb-2">Avatar URL</label>
+                                        <label className="block text-sm font-bold mb-2">{t.settings.avatarLabel}</label>
                                         <FileUploader
                                             value={avatarUrl}
                                             onUpload={setAvatarUrl}
@@ -152,7 +152,7 @@ export default function SettingsPage() {
                                         value={fullName}
                                         onChange={(e) => setFullName(e.target.value)}
                                         className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-rose-500 transition-colors"
-                                        placeholder="Votre nom"
+                                        placeholder={t.settings.namePlaceholder}
                                     />
                                 </div>
 
@@ -376,32 +376,32 @@ export default function SettingsPage() {
                                     <div className="relative p-6 rounded-3xl bg-slate-900 border border-white/5 flex flex-col transition-all duration-500 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10">
                                         {subscription?.addons?.themes && (
                                             <div className="absolute top-4 right-4 bg-green-500 text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
-                                                <Check size={10} /> POSSÉDÉ
+                                                <Check size={10} /> {t.settings.owned}
                                             </div>
                                         )}
                                         <div className="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 text-purple-400">
                                             <Sparkles className="w-8 h-8" />
                                         </div>
-                                        <h3 className="font-bold text-xl mb-2 text-white">Pack Ultimate Themes</h3>
+                                        <h3 className="font-bold text-xl mb-2 text-white">{t.settings.themePack}</h3>
                                         <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
-                                            Débloquez instantanément 20 thèmes premium créés par des designers pour sublimer vos guides.
+                                            {t.settings.themePackDesc}
                                         </p>
                                         <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
-                                            <span className="text-2xl font-bold text-white">15 DH <span className="text-xs text-zinc-500 font-normal">/mois</span></span>
+                                            <span className="text-2xl font-bold text-white">15 DH <span className="text-xs text-zinc-500 font-normal">{t.settings.perMonth}</span></span>
 
                                             {subscription?.planId === 'pro' || subscription?.addons?.themes ? (
                                                 <button disabled className="bg-green-500/20 text-green-400 px-6 py-3 rounded-xl text-sm font-bold cursor-not-allowed">
-                                                    Déjà Inclus
+                                                    {t.settings.alreadyIncluded}
                                                 </button>
                                             ) : (
                                                 <button
                                                     onClick={async () => {
                                                         showModal(
-                                                            "Confirmer l'achat",
+                                                            t.settings.confirmPurchase,
                                                             <div className="text-center p-4">
-                                                                <p className="mb-6">Voulez-vous débloquer tous les thèmes pour 15 DH/mois ?</p>
+                                                                <p className="mb-6">{t.settings.themeConfirmDesc}</p>
                                                                 <div className="flex justify-center gap-4">
-                                                                    <button onClick={closeModal} className="px-4 py-2 rounded-xl bg-gray-100 font-bold hover:bg-gray-200">Annuler</button>
+                                                                    <button onClick={closeModal} className="px-4 py-2 rounded-xl bg-gray-100 font-bold hover:bg-gray-200">{t.settings.cancel}</button>
                                                                     <button onClick={async () => {
                                                                         closeModal();
                                                                         setLoading(true);
@@ -412,17 +412,17 @@ export default function SettingsPage() {
                                                                             });
                                                                             const data = await res.json();
                                                                             if (data.success) {
-                                                                                showModal("Félicitations ! 🎨", <p className="text-center p-4">Les thèmes sont débloqués. Profitez-en !</p>, "🎉");
+                                                                                showModal(t.settings.themesUnlockedTitle, <p className="text-center p-4">{t.settings.themesUnlockedMsg}</p>, "🎉");
                                                                                 setTimeout(() => window.location.reload(), 2000);
                                                                             } else {
-                                                                                showModal("Erreur", <p className="text-center text-red-500 p-4">{data.error}</p>, "⚠️");
+                                                                                showModal(t.settings.error, <p className="text-center text-red-500 p-4">{data.error}</p>, "⚠️");
                                                                             }
                                                                         } catch (e) {
                                                                             console.error(e);
-                                                                            showModal("Erreur", <p className="text-center text-red-500 p-4">Erreur serveur.</p>, "⚠️");
+                                                                            showModal(t.settings.error, <p className="text-center text-red-500 p-4">{t.settings.serverError}</p>, "⚠️");
                                                                         }
                                                                         setLoading(false);
-                                                                    }} className="px-4 py-2 rounded-xl bg-rose-600 text-white font-bold hover:bg-rose-700">Confirmer</button>
+                                                                    }} className="px-4 py-2 rounded-xl bg-rose-600 text-white font-bold hover:bg-rose-700">{t.settings.confirm}</button>
                                                                 </div>
                                                             </div>,
                                                             "🛍️"
@@ -431,7 +431,7 @@ export default function SettingsPage() {
                                                     disabled={loading}
                                                     className="bg-white text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-zinc-200 transition-colors shadow-lg active:scale-95"
                                                 >
-                                                    {loading ? "..." : "Acheter"}
+                                                    {loading ? "..." : t.settings.buy}
                                                 </button>
                                             )}
                                         </div>
