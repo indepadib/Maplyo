@@ -61,7 +61,8 @@ export function BookingsDashboard({ guideId }: { guideId?: string }) {
         fetchBookings();
     }, [guideId]);
 
-    if (loading && bookings.length === 0) return null;
+    // Remove early return to always show header
+    // if (loading && bookings.length === 0) return null;
 
     return (
         <div className="mt-12">
@@ -88,7 +89,12 @@ export function BookingsDashboard({ guideId }: { guideId?: string }) {
             </div>
 
             <div className="grid gap-4">
-                {bookings.length === 0 ? (
+                {loading ? (
+                    <div className="p-8 rounded-3xl bg-white/[0.02] border border-white/5 text-center">
+                        <RefreshCw size={24} className="mx-auto mb-2 text-indigo-400 animate-spin" />
+                        <p className="text-zinc-500 text-sm">Chargement des réservations...</p>
+                    </div>
+                ) : bookings.length === 0 ? (
                     <div className="p-8 rounded-3xl bg-white/[0.02] border border-dashed border-white/10 text-center">
                         <p className="text-zinc-500 text-sm">Aucune réservation trouvée. Connectez votre iCal dans les paramètres.</p>
                     </div>

@@ -790,7 +790,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                     <SelectedDef.Traveler
                         title={selectedBlock.title}
                         data={selectedBlock.data}
-                        ctx={{ mode: "traveler", unlocked, lang }}
+                        ctx={{ mode: "traveler", unlocked, lang, guideId: guide.id }}
                         visibility={selectedBlock.visibility}
                     />
                 )}

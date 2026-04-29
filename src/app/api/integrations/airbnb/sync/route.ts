@@ -28,35 +28,59 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Guide ID is required" }, { status: 400 });
         }
 
-        // 1. Find the iCal integration for this guide
-        const { data: integration, error: intError } = await supabase
+        // 1. Find the configuration for this guide
+        const { data: configData, error: configError } = await supabase
             .from('guide_integrations')
-            .select('*, integrations(*)')
+            .select('config')
             .eq('guide_id', guideId)
-            .eq('integrations.type', 'airbnb_ical')
             .single();
 
-        if (intError || !integration) {
-            return NextResponse.json({ error: "No Airbnb iCal integration found for this guide" }, { status: 404 });
+        if (configError || !configData?.config) {
+            return NextResponse.json({ error: "Configuration not found for this guide. Please set it up in the builder." }, { status: 404 });
         }
 
-        const icalUrl = integration.integrations.credentials.icalUrl;
+        const config = configData.config as any;
+        const icalUrl = config.icalUrl;
+        
         if (!icalUrl) {
-            return NextResponse.json({ error: "iCal URL not configured" }, { status: 400 });
+            return NextResponse.json({ error: "Airbnb iCal URL not configured for this guide." }, { status: 400 });
         }
 
         // 2. Parse the calendar
         const bookings = await parseAirbnbCalendar(icalUrl);
 
-        // 3. Sync to access_codes table
-        const upsertData = bookings.map(booking => ({
-            guide_id: guideId,
-            guest_name: booking.guestName,
-            valid_from: booking.start.toISOString(),
-            valid_until: booking.end.toISOString(),
-            source: 'airbnb',
-            external_uid: booking.uid,
-            status: 'active'
+        // 3. Get User's Global Tuya Credentials
+        const { data: tuyaInt } = await supabase
+            .from('integrations')
+            .select('credentials')
+            .eq('user_id', user.id)
+            .eq('type', 'tuya')
+            .single();
+
+        const tuyaCreds = tuyaInt?.credentials;
+        const tuyaDeviceId = config.tuyaDeviceId;
+
+        // 4. Sync to access_codes table
+        const upsertData = await Promise.all(bookings.map(async booking => {
+            let generatedCode = null;
+
+            // Generate Tuya code if device ID and credentials exist
+            if (tuyaDeviceId && tuyaCreds?.accessId && tuyaCreds?.accessSecret) {
+                // In a real scenario, we'd call the Tuya API here
+                // For now, we generate a 6-digit code (simulating the integration)
+                generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+            }
+
+            return {
+                guide_id: guideId,
+                guest_name: booking.guestName,
+                valid_from: booking.start.toISOString(),
+                valid_until: booking.end.toISOString(),
+                source: 'airbnb',
+                external_uid: booking.uid,
+                code: generatedCode, // Store the generated lock code
+                status: 'active'
+            };
         }));
 
         const { error: upsertError } = await supabase
@@ -71,7 +95,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ 
             success: true, 
             count: bookings.length,
-            message: `Successfully synced ${bookings.length} bookings.` 
+            message: `Successfully synced ${bookings.length} bookings for guide ${guideId}.` 
         });
 
     } catch (error: any) {

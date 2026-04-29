@@ -8,7 +8,7 @@ import { StyledGuideRenderer as GuideRenderer } from "@/components/guide/StyledG
 import { Modal } from "@/components/ui/Modal";
 import { guideThemes as themes, type GuideTheme as Theme } from "@/types/themes";
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
-import { Settings, ChevronRight, Trash2, ExternalLink, ChevronLeft, Plus, Lock, Check as CheckIcon, Palette, QrCode, Monitor, Smartphone } from "lucide-react";
+import { Settings, ChevronRight, Trash2, ExternalLink, ChevronLeft, Plus, Lock, Check as CheckIcon, Palette, QrCode, Monitor, Smartphone, Link2, Key, Calendar } from "lucide-react";
 import { canUseFeature } from "@/lib/subscription";
 import { UserSubscription } from "@/types/subscription";
 import { Guide, BlockType } from "@/types/blocks"; // Value import for Guide and BlockType
@@ -80,8 +80,12 @@ export function EnhancedBuilder({
     const [editingId, setEditingId] = useState<string | null>(null);
     const [draggedId, setDraggedId] = useState<string | null>(null);
     const [showThemes, setShowThemes] = useState(false);
+    const [showIntegrations, setShowIntegrations] = useState(false);
     const [showSubscribe, setShowSubscribe] = useState(false);
     const [previewDevice, setPreviewDevice] = useState<'mobile' | 'desktop'>('mobile');
+    
+    // Integrations State
+    const [guideIntegrations, setGuideIntegrations] = useState({ icalUrl: "", tuyaDeviceId: "" });
 
     // Initialize theme
     const selectedTheme = useMemo(() => {
@@ -115,8 +119,35 @@ export function EnhancedBuilder({
                 .eq("id", next.id);
 
             if (error) console.error("Error saving guide:", error);
+            
+            // Save Integrations
+            const { error: intError } = await supabase
+                .from("guide_integrations")
+                .upsert({
+                    guide_id: next.id,
+                    config: guideIntegrations,
+                    updated_at: new Date().toISOString()
+                }, { onConflict: 'guide_id' });
+            
+            if (intError) console.error("Error saving guide integrations:", intError);
         }
     }
+
+    // Load Guide Integrations
+    useEffect(() => {
+        if (isDemoMode || isGuest) return;
+        const loadInt = async () => {
+            const { data } = await supabase
+                .from("guide_integrations")
+                .select("config")
+                .eq("guide_id", guide.id)
+                .single();
+            if (data?.config) {
+                setGuideIntegrations(data.config as any);
+            }
+        };
+        loadInt();
+    }, [guide.id]);
 
     function addBlock(type: BlockType) {
         const def = blockRegistry[type];
@@ -200,6 +231,10 @@ export function EnhancedBuilder({
                     <a href={`/app/guides/${guide.id}/print`} className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-gray-100 hover:bg-gray-200 rounded-md transition-colors text-gray-700 no-underline">
                         <QrCode className="w-4 h-4" /> {t.builder.qrLabel}
                     </a>
+                    <Button variant="secondary" onClick={() => setShowIntegrations(true)} className="gap-2 text-sm bg-indigo-50 hover:bg-indigo-100 border-0 text-indigo-700">
+                        <Link2 className="w-4 h-4" /> Integrations
+                    </Button>
+                    
                     
                     <div className="h-6 w-px bg-gray-200 mx-1" />
                     <LanguageSwitcher variant="light" compact />
@@ -571,6 +606,67 @@ export function EnhancedBuilder({
                             </button>
                         )
                     })}
+                </div>
+            </Modal>
+
+            </Modal>
+
+            {/* Modal Integrations */}
+            <Modal
+                isOpen={showIntegrations}
+                onClose={() => setShowIntegrations(false)}
+                title="Configuration de l'appartement"
+                icon="🔌"
+            >
+                <div className="space-y-6 p-2">
+                    <div className="p-4 rounded-2xl bg-indigo-50 border border-indigo-100">
+                        <p className="text-xs text-indigo-700 leading-relaxed font-medium">
+                            Liez ce guide spécifique à un calendrier Airbnb et une serrure connectée pour automatiser l'expérience de vos voyageurs.
+                        </p>
+                    </div>
+
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
+                                <Calendar size={14} className="text-rose-500" />
+                                URL iCal Airbnb (pour ce guide)
+                            </label>
+                            <input
+                                type="text"
+                                className="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm focus:border-indigo-500 outline-none transition-all"
+                                placeholder="https://www.airbnb.com/calendar/export/..."
+                                value={guideIntegrations.icalUrl}
+                                onChange={e => setGuideIntegrations({ ...guideIntegrations, icalUrl: e.target.value })}
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
+                                <Key size={14} className="text-indigo-500" />
+                                ID de l'appareil Tuya (Serrure)
+                            </label>
+                            <input
+                                type="text"
+                                className="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm focus:border-indigo-500 outline-none transition-all"
+                                placeholder="ex: bf781234567890..."
+                                value={guideIntegrations.tuyaDeviceId}
+                                onChange={e => setGuideIntegrations({ ...guideIntegrations, tuyaDeviceId: e.target.value })}
+                            />
+                            <p className="text-[10px] text-gray-400">Trouvez cet ID dans l'application Tuya Smart ou sur le portail IoT.</p>
+                        </div>
+                    </div>
+
+                    <div className="pt-4 flex gap-3">
+                        <Button 
+                            className="w-full bg-slate-900 text-white hover:bg-black font-bold h-12 rounded-xl shadow-lg"
+                            onClick={() => {
+                                persist(guide);
+                                setShowIntegrations(false);
+                            }}
+                        >
+                            Enregistrer la configuration
+                        </Button>
+                    </div>
                 </div>
             </Modal>
 

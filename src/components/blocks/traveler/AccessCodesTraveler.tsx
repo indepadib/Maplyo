@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import type { VisibilityRule } from "@/types/blocks";
 import { Lock, Unlock } from "lucide-react";
@@ -10,13 +11,34 @@ export function AccessCodesTraveler({
 }: {
   title?: string;
   data: any;
-  ctx: { unlocked: boolean };
+  ctx: { unlocked: boolean; guideId?: string };
   visibility?: VisibilityRule;
 }) {
+  const guideId = ctx.guideId;
   const { t } = useTranslation();
   const [localUnlock, setLocalUnlock] = useState(false);
   const [code, setCode] = useState("");
   const [error, setError] = useState(false);
+  const [dynamicCode, setDynamicCode] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!guideId || isLocked) return;
+    const fetchDynamicCode = async () => {
+      const now = new Date().toISOString();
+      const { data: booking } = await supabase
+        .from('access_codes')
+        .select('code')
+        .eq('guide_id', guideId)
+        .lte('valid_from', now)
+        .gte('valid_until', now)
+        .single();
+      
+      if (booking?.code) {
+        setDynamicCode(booking.code);
+      }
+    };
+    fetchDynamicCode();
+  }, [guideId, ctx.unlocked, localUnlock]);
 
   // Effective unlock: either Global (ctx.unlocked) OR Local (localUnlock)
   const mode = visibility?.mode ?? "always";
@@ -67,7 +89,16 @@ export function AccessCodesTraveler({
             {apt ? <div><span className="font-medium">{t.guide.apartmentDoor}</span> {apt}</div> : null}
             {building ? <div><span className="font-medium">{t.guide.buildingDoor}</span> {building}</div> : null}
             {gate ? <div><span className="font-medium">{t.guide.gate}</span> {gate}</div> : null}
-            {!apt && !building && !gate ? <div className="text-zinc-500">—</div> : null}
+            
+            {dynamicCode && (
+              <div className="mt-4 p-4 rounded-xl bg-indigo-50 border border-indigo-100 flex flex-col items-center gap-2">
+                <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Votre code de serrure personnel</span>
+                <span className="text-3xl font-black text-indigo-900 tracking-widest">{dynamicCode}</span>
+                <span className="text-[10px] text-indigo-500 font-medium">Généré automatiquement par Maplyo</span>
+              </div>
+            )}
+
+            {!apt && !building && !gate && !dynamicCode ? <div className="text-zinc-500">—</div> : null}
           </div>
         )}
         {(notes && !isLocked) ? <div className="text-sm text-zinc-600 border-t pt-2 mt-2">{notes}</div> : null}

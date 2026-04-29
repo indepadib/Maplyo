@@ -18,6 +18,10 @@ export default function SettingsPage() {
     const [subscription, setSubscription] = useState<any>(null);
     const [avatarUrl, setAvatarUrl] = useState("");
     const [fullName, setFullName] = useState("");
+    
+    // Integrations State
+    const [tuyaConfig, setTuyaConfig] = useState({ accessId: "", accessSecret: "", region: "eu" });
+    const [airbnbConfig, setAirbnbConfig] = useState({ icalUrl: "" });
 
     useEffect(() => {
         if (!user) {
@@ -44,12 +48,42 @@ export default function SettingsPage() {
                     setAvatarUrl(data.avatar_url || "");
                     setFullName(data.full_name || "");
                 }
+
+                // Load Integrations
+                const { data: intData } = await supabase.from('integrations').select('*').eq('user_id', user.id);
+                if (intData) {
+                    const tuya = intData.find(i => i.type === 'tuya');
+                    if (tuya) setTuyaConfig(tuya.credentials);
+                    const airbnb = intData.find(i => i.type === 'airbnb_ical');
+                    if (airbnb) setAirbnbConfig(airbnb.credentials);
+                }
             } catch (e) {
                 console.error("Settings load catch", e);
             }
         };
         load();
     }, [user]);
+
+    const saveIntegration = async (type: string, credentials: any) => {
+        if (!user) return;
+        setLoading(true);
+        try {
+            const { error } = await supabase.from('integrations').upsert({
+                user_id: user.id,
+                type,
+                credentials,
+                updated_at: new Date().toISOString(),
+            }, { onConflict: 'user_id,type' });
+            
+            if (error) throw error;
+            showModal("Succès", <div className="text-center p-4">Intégration mise à jour avec succès !</div>, "✅");
+        } catch (e) {
+            console.error(e);
+            showModal("Erreur", <div className="text-center p-4 text-red-600">Erreur lors de la sauvegarde.</div>, "⚠️");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const [modal, setModal] = useState<{ isOpen: boolean; title: string; content: React.ReactNode; icon?: string }>({
         isOpen: false,
@@ -138,36 +172,80 @@ export default function SettingsPage() {
                                     External Integrations
                                 </h2>
                                 
-                                <div className="grid gap-4">
+                                <div className="grid gap-6">
                                     {/* Tuya Smart Lock */}
-                                    <div className="p-6 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:border-indigo-500/30 transition-all">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+                                    <div className="p-8 rounded-3xl bg-white/[0.03] border border-white/5 space-y-6">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400">
                                                 <Key className="w-6 h-6" />
                                             </div>
                                             <div>
-                                                <h4 className="font-bold">Tuya Smart Lock</h4>
-                                                <p className="text-sm text-zinc-500">Generate guest codes automatically.</p>
+                                                <h4 className="font-bold text-lg">Tuya Smart Lock</h4>
+                                                <p className="text-sm text-zinc-500">Générez des codes invités automatiquement.</p>
                                             </div>
                                         </div>
-                                        <button className="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 px-4 py-2 rounded-lg font-bold transition-all">
-                                            Connect
+                                        
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-zinc-500 uppercase">Access ID</label>
+                                                <input 
+                                                    type="text"
+                                                    value={tuyaConfig.accessId}
+                                                    onChange={e => setTuyaConfig({...tuyaConfig, accessId: e.target.value})}
+                                                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-indigo-500 outline-none"
+                                                    placeholder="Votre Access ID Tuya"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-zinc-500 uppercase">Access Secret</label>
+                                                <input 
+                                                    type="password"
+                                                    value={tuyaConfig.accessSecret}
+                                                    onChange={e => setTuyaConfig({...tuyaConfig, accessSecret: e.target.value})}
+                                                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-indigo-500 outline-none"
+                                                    placeholder="••••••••••••••••"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <button 
+                                            onClick={() => saveIntegration('tuya', tuyaConfig)}
+                                            disabled={loading}
+                                            className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-600/20"
+                                        >
+                                            {loading ? 'Enregistrement...' : 'Enregistrer la configuration Tuya'}
                                         </button>
                                     </div>
 
                                     {/* Airbnb iCal */}
-                                    <div className="p-6 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:border-rose-500/30 transition-all">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-400">
+                                    <div className="p-8 rounded-3xl bg-white/[0.03] border border-white/5 space-y-6">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className="w-12 h-12 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-400">
                                                 <Calendar className="w-6 h-6" />
                                             </div>
                                             <div>
-                                                <h4 className="font-bold">Airbnb Calendar</h4>
-                                                <p className="text-sm text-zinc-500">Sync guest stays via iCal.</p>
+                                                <h4 className="font-bold text-lg">Airbnb Calendar</h4>
+                                                <p className="text-sm text-zinc-500">Synchronisez vos séjours via flux iCal.</p>
                                             </div>
                                         </div>
-                                        <button className="bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 px-4 py-2 rounded-lg font-bold transition-all">
-                                            Sync
+
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold text-zinc-500 uppercase">URL iCal Airbnb</label>
+                                            <input 
+                                                type="text"
+                                                value={airbnbConfig.icalUrl}
+                                                onChange={e => setAirbnbConfig({...airbnbConfig, icalUrl: e.target.value})}
+                                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-rose-500 outline-none"
+                                                placeholder="https://www.airbnb.com/calendar/export/..."
+                                            />
+                                        </div>
+
+                                        <button 
+                                            onClick={() => saveIntegration('airbnb_ical', airbnbConfig)}
+                                            disabled={loading}
+                                            className="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-rose-600/20"
+                                        >
+                                            {loading ? 'Enregistrement...' : 'Enregistrer et Synchroniser Airbnb'}
                                         </button>
                                     </div>
                                 </div>
