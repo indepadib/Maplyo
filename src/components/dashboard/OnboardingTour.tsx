@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import type { Step, CallBackProps } from 'react-joyride';
+import type { Step, CallbackProps } from 'react-joyride';
 import { STATUS } from 'react-joyride';
 import { useTranslation } from '@/components/providers/LanguageProvider';
 
@@ -67,7 +67,7 @@ export function OnboardingTour() {
         }
     ];
 
-    const handleJoyrideCallback = (data: CallBackProps) => {
+    const handleJoyrideCallback = (data: CallbackProps) => {
         const { status } = data;
         const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
