@@ -609,8 +609,6 @@ export function EnhancedBuilder({
                 </div>
             </Modal>
 
-            </Modal>
-
             {/* Modal Integrations */}
             <Modal
                 isOpen={showIntegrations}
