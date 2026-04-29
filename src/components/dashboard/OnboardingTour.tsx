@@ -105,7 +105,7 @@ export function OnboardingTour() {
                 buttonSkip: {
                     color: '#94a3b8',
                 }
-            }}
+            } as any}
             locale={{
                 back: t.common.back || 'Retour',
                 close: t.common.close || 'Fermer',
