@@ -1,10 +1,11 @@
 export const runtime = 'nodejs';
 
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import type { CookieOptions } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
+    const { createServerClient } = await import("@supabase/ssr");
+    const { cookies } = await import("next/headers");
     const requestUrl = new URL(request.url);
     const code = requestUrl.searchParams.get("code");
 

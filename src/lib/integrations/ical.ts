@@ -1,5 +1,3 @@
-import ical from 'node-ical';
-
 export interface BookingEvent {
     summary: string;
     start: Date;
@@ -15,6 +13,7 @@ export interface BookingEvent {
  */
 export async function parseAirbnbCalendar(url: string): Promise<BookingEvent[]> {
     try {
+        const ical = await import('node-ical');
         const events = await ical.async.fromURL(url);
         
         return Object.values(events)
