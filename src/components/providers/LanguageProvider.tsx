@@ -6,7 +6,7 @@ import { DICTIONARY, Language, DictionaryShape } from '@/lib/i18n/dictionary';
 type LanguageContextType = {
     lang: Language;
     setLang: (lang: Language) => void;
-    t: DictionaryShape;
+    t: any; // Allow flexible dictionary shape during transitions
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
