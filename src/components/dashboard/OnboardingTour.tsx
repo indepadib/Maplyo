@@ -6,8 +6,8 @@ import type { Step, Props as ReactJoyrideProps } from 'react-joyride';
 import { STATUS } from 'react-joyride';
 import { useTranslation } from '@/components/providers/LanguageProvider';
 
-// Dynamically import Joyride with SSR disabled and explicit typing
-const Joyride = dynamic<ReactJoyrideProps>(() => import('react-joyride').then(mod => {
+// Dynamically import Joyride with SSR disabled and cast to any to bypass strict type checks in build env
+const Joyride = dynamic<any>(() => import('react-joyride').then(mod => {
     return (mod as any).default || (mod as any).Joyride || mod;
 }), { ssr: false });
 
