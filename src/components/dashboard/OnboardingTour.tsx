@@ -107,11 +107,11 @@ export function OnboardingTour() {
                 }
             } as any}
             locale={{
-                back: t.common.back || 'Retour',
-                close: t.common.close || 'Fermer',
-                last: t.common.finish || 'Terminer',
-                next: t.common.next || 'Suivant',
-                skip: t.common.skip || 'Passer',
+                back: (t.common as any).back || 'Retour',
+                close: (t.common as any).close || 'Fermer',
+                last: (t.common as any).finish || 'Terminer',
+                next: (t.common as any).next || 'Suivant',
+                skip: (t.common as any).skip || 'Passer',
             }}
         />
     );
