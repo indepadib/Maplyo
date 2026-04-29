@@ -19,7 +19,7 @@ export async function parseAirbnbCalendar(url: string): Promise<BookingEvent[]> 
         
         return Object.values(events)
             .filter(event => event && event.type === 'VEVENT' && event.start && event.end)
-            .map(event => {
+            .map((event: any) => {
                 const summary = (event.summary as string) || '';
                 // Airbnb format: "Reserved - Name" or "Airbnb (Not available)"
                 let guestName = 'Guest';
