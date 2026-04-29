@@ -120,23 +120,24 @@ export function EnhancedBuilder({
 
             if (error) console.error("Error saving guide:", error);
             
-        // Save Integrations
-        if (!isGuest && next.id !== 'demo') {
-            const { error: intError } = await supabase
-                .from("guide_integrations")
-                .upsert({
-                    guide_id: next.id,
-                    config: guideIntegrations,
-                }, { onConflict: 'guide_id' });
-            
-            if (intError) {
-                console.error("Error saving guide integrations:", intError);
-                // If upsert fails due to missing constraint, try a manual check/insert
-                if (intError.message.includes('unique constraint')) {
-                    await supabase
-                        .from("guide_integrations")
-                        .update({ config: guideIntegrations })
-                        .eq('guide_id', next.id);
+            // Save Integrations
+            if (next.id !== 'demo') {
+                const { error: intError } = await supabase
+                    .from("guide_integrations")
+                    .upsert({
+                        guide_id: next.id,
+                        config: guideIntegrations,
+                    }, { onConflict: 'guide_id' });
+                
+                if (intError) {
+                    console.error("Error saving guide integrations:", intError);
+                    // If upsert fails due to missing constraint, try a manual check/insert
+                    if (intError.message.includes('unique constraint')) {
+                        await supabase
+                            .from("guide_integrations")
+                            .update({ config: guideIntegrations })
+                            .eq('guide_id', next.id);
+                    }
                 }
             }
         }
