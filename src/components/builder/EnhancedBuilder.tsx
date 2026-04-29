@@ -120,30 +120,44 @@ export function EnhancedBuilder({
 
             if (error) console.error("Error saving guide:", error);
             
-            // Save Integrations
+        // Save Integrations
+        if (!isGuest && next.id !== 'demo') {
             const { error: intError } = await supabase
                 .from("guide_integrations")
                 .upsert({
                     guide_id: next.id,
                     config: guideIntegrations,
-                    updated_at: new Date().toISOString()
                 }, { onConflict: 'guide_id' });
             
-            if (intError) console.error("Error saving guide integrations:", intError);
+            if (intError) {
+                console.error("Error saving guide integrations:", intError);
+                // If upsert fails due to missing constraint, try a manual check/insert
+                if (intError.message.includes('unique constraint')) {
+                    await supabase
+                        .from("guide_integrations")
+                        .update({ config: guideIntegrations })
+                        .eq('guide_id', next.id);
+                }
+            }
         }
     }
 
     // Load Guide Integrations
     useEffect(() => {
-        if (isDemoMode || isGuest) return;
+        if (isDemoMode || isGuest || guide.id === 'demo') return;
         const loadInt = async () => {
-            const { data } = await supabase
-                .from("guide_integrations")
-                .select("config")
-                .eq("guide_id", guide.id)
-                .single();
-            if (data?.config) {
-                setGuideIntegrations(data.config as any);
+            try {
+                const { data, error } = await supabase
+                    .from("guide_integrations")
+                    .select("config")
+                    .eq("guide_id", guide.id)
+                    .maybeSingle(); // Use maybeSingle to avoid error if not found
+                
+                if (data?.config) {
+                    setGuideIntegrations(data.config as any);
+                }
+            } catch (err) {
+                console.error("Failed to load integrations:", err);
             }
         };
         loadInt();

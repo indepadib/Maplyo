@@ -14,6 +14,7 @@ const Joyride = dynamic<any>(() => import('react-joyride').then(mod => {
 export function OnboardingTour() {
     const { t } = useTranslation();
     const [run, setRun] = useState(false);
+    const [hasChecked, setHasChecked] = useState(false);
 
     useEffect(() => {
         // Run tour only once for new users
@@ -21,7 +22,11 @@ export function OnboardingTour() {
         if (!hasSeenTour) {
             setRun(true);
         }
+        setHasChecked(true);
     }, []);
+
+    if (!hasChecked) return null;
+    if (!run && localStorage.getItem('maplyo_tour_seen')) return null;
 
     const steps: Step[] = [
         {
@@ -67,10 +72,10 @@ export function OnboardingTour() {
     ];
 
     const handleJoyrideCallback = (data: any) => {
-        const { status } = data;
+        const { status, type } = data;
         const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
-        if (finishedStatuses.includes(status)) {
+        if (finishedStatuses.includes(status) || status === 'finished' || status === 'skipped') {
             setRun(false);
             localStorage.setItem('maplyo_tour_seen', 'true');
         }
