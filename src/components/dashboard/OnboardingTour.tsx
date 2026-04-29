@@ -2,13 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import type { Step } from 'react-joyride';
+import type { Step, Props as ReactJoyrideProps } from 'react-joyride';
 import { STATUS } from 'react-joyride';
 import { useTranslation } from '@/components/providers/LanguageProvider';
 
-// Dynamically import Joyride with SSR disabled and robust export handling
-const Joyride = dynamic(() => import('react-joyride').then(mod => {
-    // Handle both default and named exports just in case
+// Dynamically import Joyride with SSR disabled and explicit typing
+const Joyride = dynamic<ReactJoyrideProps>(() => import('react-joyride').then(mod => {
     return (mod as any).default || (mod as any).Joyride || mod;
 }), { ssr: false });
 
