@@ -29,8 +29,8 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = fa
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    // Get translations
-    const t = DICTIONARY[lang].ai;
+    // Get translations safely
+    const t = (DICTIONARY[lang] as any)?.ai || (DICTIONARY['fr'] as any).ai;
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
