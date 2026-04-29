@@ -1,8 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Joyride, { Step, CallBackProps, STATUS } from 'react-joyride';
+import dynamic from 'next/dynamic';
+import type { Step, CallBackProps } from 'react-joyride';
+import { STATUS } from 'react-joyride';
 import { useTranslation } from '@/components/providers/LanguageProvider';
+
+// Dynamically import Joyride with SSR disabled and robust export handling
+const Joyride = dynamic(() => import('react-joyride').then(mod => {
+    // Handle both default and named exports just in case
+    return (mod as any).default || (mod as any).Joyride || mod;
+}), { ssr: false });
 
 export function OnboardingTour() {
     const { t } = useTranslation();
