@@ -621,7 +621,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                     <div className={`flex flex-wrap items-center gap-3 mt-2 ${isResponsive ? 'justify-center md:justify-start' : (forceDesktop ? 'justify-start' : 'justify-center')}`}>
                                         <div className="flex items-center gap-2 px-5 py-2 bg-rose-600 text-white rounded-2xl text-sm font-black shadow-xl transform hover:scale-105 transition-all ring-4 ring-white/10">
                                             <MapPin className="w-4 h-4 fill-white" />
-                                            {city}
+                                            <TranslatedText text={city} lang={lang} />
                                         </div>
                                         {/* Display Badges from Hero Data if available */}
                                         {(heroBlock.data as any).badges?.map((badge: string, i: number) => (
