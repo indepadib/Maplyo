@@ -14,19 +14,16 @@ const Joyride = dynamic<any>(() => import('react-joyride').then(mod => {
 export function OnboardingTour() {
     const { t } = useTranslation();
     const [run, setRun] = useState(false);
-    const [hasChecked, setHasChecked] = useState(false);
 
     useEffect(() => {
-        // Run tour only once for new users
         const hasSeenTour = localStorage.getItem('maplyo_tour_seen');
         if (!hasSeenTour) {
-            setRun(true);
+            const timer = setTimeout(() => setRun(true), 1000);
+            return () => clearTimeout(timer);
         }
-        setHasChecked(true);
     }, []);
 
-    if (!hasChecked) return null;
-    if (!run && localStorage.getItem('maplyo_tour_seen')) return null;
+    if (!run) return null;
 
     const steps: Step[] = [
         {

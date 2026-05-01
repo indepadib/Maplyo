@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { useTranslation } from "@/components/providers/LanguageProvider";
 
 function wifiQrString(ssid: string, pass: string) {
   return `WIFI:T:WPA;S:${ssid};P:${pass};;`;
@@ -8,8 +9,12 @@ export function WifiTraveler({ title, data, ctx }: { title?: string; data: any; 
   const ssid = String(data?.networkName ?? "");
   const pass = String(data?.password ?? "");
   const notes = data?.notes ? String(data.notes) : "";
-  const { t } = ctx;
-  const tw = t.guideBlocks.wifi;
+  const { t } = useTranslation();
+  const tw = t?.guideBlocks?.wifi || {
+    network: "Réseau",
+    password: "Mot de passe",
+    scan: "Scannez pour vous connecter"
+  };
 
   return (
     <Card>

@@ -122,22 +122,24 @@ export function EnhancedBuilder({
             
             // Save Integrations
             if (next.id !== 'demo') {
-                const { error: intError } = await supabase
-                    .from("guide_integrations")
-                    .upsert({
-                        guide_id: next.id,
-                        config: guideIntegrations,
-                    }, { onConflict: 'guide_id' });
-                
-                if (intError) {
-                    console.error("Error saving guide integrations:", intError);
-                    // If upsert fails due to missing constraint, try a manual check/insert
-                    if (intError.message.includes('unique constraint')) {
+                try {
+                    const { error: intError } = await supabase
+                        .from("guide_integrations")
+                        .upsert({
+                            guide_id: next.id,
+                            config: guideIntegrations,
+                        }, { onConflict: 'guide_id' });
+                    
+                    if (intError) {
+                        console.error("Error saving guide integrations (upsert):", intError);
+                        // Fallback: try update if upsert fails
                         await supabase
                             .from("guide_integrations")
                             .update({ config: guideIntegrations })
                             .eq('guide_id', next.id);
                     }
+                } catch (e) {
+                    console.error("Critical error in integrations persist:", e);
                 }
             }
         }
@@ -148,14 +150,17 @@ export function EnhancedBuilder({
         if (isDemoMode || isGuest || guide.id === 'demo') return;
         const loadInt = async () => {
             try {
-                const { data, error } = await supabase
+                const { data } = await supabase
                     .from("guide_integrations")
                     .select("config")
                     .eq("guide_id", guide.id)
-                    .maybeSingle(); // Use maybeSingle to avoid error if not found
+                    .maybeSingle();
                 
                 if (data?.config) {
-                    setGuideIntegrations(data.config as any);
+                    setGuideIntegrations({
+                        icalUrl: (data.config as any).icalUrl || "",
+                        tuyaDeviceId: (data.config as any).tuyaDeviceId || ""
+                    });
                 }
             } catch (err) {
                 console.error("Failed to load integrations:", err);

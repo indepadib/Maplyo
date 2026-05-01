@@ -23,7 +23,10 @@ export async function POST(req: Request) {
             messages: [
                 {
                     role: "system",
-                    content: `You are a professional translator for a luxury travel guidebook. Translate the following text into ${targetLang}. Keep the tone professional, welcoming, and concise. Preserve any formatting or special characters.`
+                    content: `You are a professional translator for a luxury travel guidebook. Translate the following text into ${targetLang}. 
+                    CRITICAL: Return ONLY the translated text. No explanations, no conversational filler, no "Here is the translation". 
+                    If the input is a single word or short phrase, keep it as a single word or short phrase. 
+                    Keep the tone professional and welcoming.`
                 },
                 {
                     role: "user",
