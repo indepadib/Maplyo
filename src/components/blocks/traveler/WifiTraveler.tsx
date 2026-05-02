@@ -1,5 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Card, CardContent } from "@/components/ui/Card";
 import { useTranslation } from "@/components/providers/LanguageProvider";
+import { QRCodeSVG } from "qrcode.react";
 
 function wifiQrString(ssid: string, pass: string) {
   return `WIFI:T:WPA;S:${ssid};P:${pass};;`;
@@ -17,20 +18,45 @@ export function WifiTraveler({ title, data, ctx }: { title?: string; data: any; 
   };
 
   return (
-    <Card>
-      <CardHeader><CardTitle>{title ?? "Wi‑Fi"}</CardTitle></CardHeader>
-      <CardContent className="space-y-3">
-        <div className="grid gap-2 text-sm">
-          <div><span className="font-medium">{tw.network} :</span> {ssid || "—"}</div>
-          <div><span className="font-medium">{tw.password} :</span> {pass || "—"}</div>
+    <Card className="border-none shadow-none bg-transparent">
+      <CardContent className="space-y-6 px-0">
+        <div className="grid gap-3 p-4 bg-zinc-50 rounded-2xl border border-zinc-100">
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">{tw.network}</span>
+            <span className="text-sm font-bold text-zinc-900">{ssid || "—"}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">{tw.password}</span>
+            <span className="text-sm font-mono font-bold text-zinc-900">{pass || "—"}</span>
+          </div>
         </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs text-zinc-700">
-          <div className="font-medium text-zinc-900 mb-1">{tw.scan}</div>
-          <div className="break-all font-mono opacity-80">{ssid && pass ? wifiQrString(ssid, pass) : "—"}</div>
+        <div className="flex flex-col items-center justify-center p-8 bg-white rounded-[32px] border border-zinc-100 shadow-xl shadow-zinc-200/50">
+          {ssid && pass ? (
+            <>
+              <div className="p-4 bg-white rounded-2xl shadow-inner border border-zinc-50 ring-1 ring-zinc-100">
+                <QRCodeSVG 
+                  value={wifiQrString(ssid, pass)} 
+                  size={200}
+                  level="M"
+                  includeMargin={false}
+                />
+              </div>
+              <div className="mt-6 text-center">
+                <p className="text-sm font-bold text-zinc-900 mb-1">{tw.scan}</p>
+                <p className="text-xs text-zinc-500">Automatique et sécurisé</p>
+              </div>
+            </>
+          ) : (
+            <div className="text-zinc-400 italic text-sm">Configurez le WiFi pour générer le QR Code</div>
+          )}
         </div>
 
-        {notes ? <div className="text-sm text-zinc-600">{notes}</div> : null}
+        {notes ? (
+          <div className="p-4 bg-blue-50/50 border border-blue-100 rounded-2xl">
+            <p className="text-sm text-blue-700 leading-relaxed italic">{notes}</p>
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   );
