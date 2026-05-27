@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: "%s | Maplyo"
   },
   description: "Créez des livrets d'accueil numériques irrésistibles. Partagez codes Wi-Fi, digicodes et bonnes adresses par QR Code. Gratuit pour démarrer.",
-  keywords: ["livret d'accueil numérique", "airbnb guide", "guide voyageur", "qr code wifi", "gestion locative", "conciergerie", "location saisonnière"],
+  keywords: ["livret d'accueil numérique", "livret d'accueil numérique airbnb", "guide numérique gîte", "livret d'accueil hôte", "airbnb guide", "guide voyageur", "qr code wifi", "gestion locative", "conciergerie", "location saisonnière"],
   alternates: {
     canonical: '/',
     languages: {
@@ -108,7 +108,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             })
           }}
         />
-        <LanguageProvider>
+        <LanguageProvider defaultLang={lang as any}>
           <AuthProvider>{children}</AuthProvider>
         </LanguageProvider>
       </body>

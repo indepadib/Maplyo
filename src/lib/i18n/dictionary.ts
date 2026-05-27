@@ -76,8 +76,8 @@ export const DICTIONARY = {
         },
         "hero": {
             "tag": "POUR LES HÔTES ET CONCIERGERIES",
-            "title": "Ne répétez plus jamais le code WiFi.",
-            "subtitle": "Digitalisez votre livret d'accueil. Offrez une expérience 5 étoiles, réduisez les messages de 50%, et augmentez vos avis positifs.",
+            "title": "Générez des revenus extras et automatisez l'accueil de vos voyageurs.",
+            "subtitle": "Créez un livret d'accueil numérique Airbnb & guide numérique gîte interactif. Partagez vos codes Wi-Fi, digicodes et adresses par QR Code. Gratuit à vie pour 1 guide.",
             "cta": "Créer mon guide gratuit",
             "demo": "Voir un exemple",
             "noCreditCard": "Pas de carte requise",
@@ -940,8 +940,8 @@ export const DICTIONARY = {
         },
         "hero": {
             "tag": "FOR HOSTS & PROPERTY MANAGERS",
-            "title": "Never repeat the WiFi code again.",
-            "subtitle": "Digitalize your welcome book. Offer a 5-star experience, reduce messages by 50%, and boost your positive reviews.",
+            "title": "Generate extra revenue and automate your guest check-ins.",
+            "subtitle": "Create a digital welcome book for your Airbnb, gite, or rental. Share Wi-Fi codes, keybox codes, and local tips via QR Code. Free forever for 1 guide.",
             "cta": "Create my free guide",
             "demo": "See an example",
             "noCreditCard": "No credit card required",

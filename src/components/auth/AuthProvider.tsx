@@ -57,9 +57,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         window.location.href = "/api/auth/signout";
     };
 
+    const isProtectedRoute = pathname?.startsWith('/dashboard') || 
+                           pathname?.startsWith('/onboarding') ||
+                           pathname?.startsWith('/create') ||
+                           pathname?.startsWith('/app/guides');
+
     return (
         <AuthContext.Provider value={{ user, session, loading, signOut }}>
-            {!loading ? children : (
+            {(!loading || !isProtectedRoute) ? children : (
                 <div className="min-h-screen bg-slate-950 flex items-center justify-center">
                     <div className="flex flex-col items-center gap-4">
                         <div className="w-10 h-10 border-2 border-rose-500 border-t-transparent rounded-full animate-spin" />

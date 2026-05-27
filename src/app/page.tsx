@@ -187,8 +187,231 @@ const ScrollProgress = () => {
   );
 };
 
+const HowItWorks = () => {
+  const [activeStep, setActiveStep] = useState(0);
+
+  const steps = [
+    {
+      title: "1. Transférez votre e-mail Airbnb",
+      desc: "Envoyez simplement votre e-mail de confirmation ou réservation Airbnb à guide@maplyo.com. Notre IA configure automatiquement l'adresse, la structure et les photos du guide en 10 secondes.",
+      badge: "Auto-Génération",
+      icon: Mail,
+    },
+    {
+      title: "2. Personnalisez vos services & Extras",
+      desc: "Ajoutez vos codes Wifi, consignes de départ et configurez vos Upsells (départ tardif, petits-déjeuners, navettes) pour générer des revenus automatiques pendant le séjour.",
+      badge: "Monétisation",
+      icon: Sparkles,
+    },
+    {
+      title: "3. Vos voyageurs scannent et profitent",
+      desc: "Placez le QR Code dans le logement. Vos voyageurs se connectent instantanément au Wi-Fi, accèdent aux consignes de sécurité et commandent vos services sans télécharger d'application.",
+      badge: "100% Autopilote",
+      icon: Smartphone,
+    }
+  ];
+
+  return (
+    <section className="py-32 px-6 relative overflow-hidden bg-slate-900/30 border-y border-white/5">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-20">
+          <span className="text-rose-500 font-bold uppercase tracking-widest text-sm">Tour du produit</span>
+          <h2 className="text-4xl md:text-6xl font-bold text-white mt-4 mb-6">
+            Créez votre guide en <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-500">10 secondes</span>
+          </h2>
+          <p className="text-zinc-400 max-w-2xl mx-auto text-lg">
+            Découvrez comment Maplyo automatise la gestion locative et multiplie vos avis 5 étoiles.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-12 gap-12 items-center">
+          {/* Steps selector */}
+          <div className="lg:col-span-5 space-y-6">
+            {steps.map((step, idx) => {
+              const Icon = step.icon;
+              const isActive = activeStep === idx;
+              return (
+                <div
+                  key={idx}
+                  onClick={() => setActiveStep(idx)}
+                  className={`p-6 rounded-3xl border transition-all duration-300 cursor-pointer text-left ${
+                    isActive
+                      ? "bg-gradient-to-r from-rose-500/10 to-purple-600/10 border-rose-500/30 shadow-[0_0_30px_rgba(239,68,68,0.05)]"
+                      : "bg-white/[0.01] border-white/5 hover:bg-white/[0.03] hover:border-white/10"
+                  }`}
+                >
+                  <div className="flex gap-4">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border ${
+                      isActive ? "bg-rose-500 text-white border-rose-400 shadow-md shadow-rose-500/20" : "bg-white/5 text-zinc-400 border-white/10"
+                    }`}>
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md border ${
+                        isActive ? "bg-rose-500/20 text-rose-300 border-rose-500/30" : "bg-white/5 text-zinc-500 border-white/10"
+                      } mb-2 inline-block`}>
+                        {step.badge}
+                      </span>
+                      <h3 className={`text-xl font-bold mb-2 transition-colors ${isActive ? "text-white" : "text-zinc-300"}`}>
+                        {step.title}
+                      </h3>
+                      <p className="text-sm text-zinc-400 leading-relaxed">
+                        {step.desc}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Interactive Mockups container */}
+          <div className="lg:col-span-7 relative flex justify-center items-center">
+            {/* Ambient glows behind the mockup */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-rose-500/5 to-purple-600/5 rounded-full blur-[80px] -z-10" />
+
+            <div className="w-full max-w-[550px] aspect-[4/3] bg-slate-950/80 border border-white/10 rounded-[2.5rem] p-6 shadow-2xl backdrop-blur-xl relative overflow-hidden flex flex-col justify-between">
+              <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-4">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 rounded-full bg-rose-500/60" />
+                  <div className="w-3 h-3 rounded-full bg-amber-500/60" />
+                  <div className="w-3 h-3 rounded-full bg-green-500/60" />
+                </div>
+                <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+                  Maplyo Interactive Preview
+                </div>
+              </div>
+
+              <div className="flex-1 flex flex-col justify-center items-center">
+                {activeStep === 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="w-full text-left space-y-4"
+                  >
+                    <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
+                      <div className="flex justify-between text-xs text-zinc-500 mb-2">
+                        <span>De: hote-airbnb@gmail.com</span>
+                        <span>À: guide@maplyo.com</span>
+                      </div>
+                      <div className="text-sm font-bold text-white">Objet: Confirmation de réservation - Riad Marrakech</div>
+                      <div className="text-xs text-zinc-400 mt-2 border-t border-white/5 pt-2 line-clamp-3">
+                        Félicitations ! Votre réservation pour le Riad Atlas à Marrakech est confirmée. Adresse: 12 Derb Jdid, Médina. Wifi: RiadAtlas_Guest / code: 123456. Arrivée à partir de 15:00...
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs font-bold">✓</div>
+                      <div>
+                        <div className="text-xs font-bold text-white">Analyse de l'e-mail par l'IA...</div>
+                        <div className="w-[200px] h-1.5 bg-white/10 rounded-full mt-1 overflow-hidden">
+                          <div className="h-full bg-gradient-to-r from-rose-500 to-purple-600 rounded-full w-[75%]" />
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {activeStep === 1 && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="w-full text-left space-y-4"
+                  >
+                    <div className="text-sm font-bold text-white mb-2">Éditeur de Blocs Maplyo</div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="bg-white/5 p-3 rounded-xl border border-white/5 flex items-center gap-2">
+                        <span className="text-rose-400">📶</span>
+                        <div className="text-xs">
+                          <div className="font-bold text-white">Code Wi-Fi</div>
+                          <div className="text-zinc-500 font-mono">Configuré</div>
+                        </div>
+                      </div>
+                      <div className="bg-white/5 p-3 rounded-xl border border-white/5 flex items-center gap-2">
+                        <span className="text-emerald-400">🔑</span>
+                        <div className="text-xs">
+                          <div className="font-bold text-white">Codes d'accès</div>
+                          <div className="text-zinc-500">Par code déverrouillé</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-white/5 p-4 rounded-xl border border-rose-500/30 bg-rose-500/5">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs font-bold text-white">Ajouter un service payant (Upsell)</span>
+                        <span className="text-[9px] bg-rose-500/20 text-rose-400 px-2 py-0.5 rounded font-bold">Nouveau</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          readOnly
+                          value="Départ Tardif (Late Checkout)"
+                          className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-zinc-300 flex-1 outline-none"
+                        />
+                        <input
+                          type="text"
+                          readOnly
+                          value="20 €"
+                          className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-zinc-300 w-16 text-center outline-none"
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {activeStep === 2 && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="w-[260px] bg-slate-900 border border-white/10 rounded-[2rem] p-4 shadow-xl flex flex-col gap-3 relative"
+                  >
+                    {/* Mock Traveler Phone view */}
+                    <div className="w-16 h-4 bg-black rounded-full mx-auto mb-1 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-white/20" />
+                    </div>
+                    <div className="flex items-center gap-2 border-b border-white/5 pb-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-rose-500 to-purple-600 flex items-center justify-center font-bold text-white text-xs">M</div>
+                      <div>
+                        <div className="text-xs font-bold text-white">Riad Atlas Marrakech</div>
+                        <div className="text-[9px] text-zinc-500 font-medium">Bienvenue • Welcome</div>
+                      </div>
+                    </div>
+
+                    <div className="bg-rose-500/10 border border-rose-500/20 p-2.5 rounded-xl text-center">
+                      <div className="text-[10px] text-zinc-400 font-medium">📶 Besoin de Wi-Fi ?</div>
+                      <button className="mt-1 bg-white text-slate-950 font-bold text-[10px] py-1 px-3 rounded-lg shadow w-full">
+                        Se connecter en 1 clic
+                      </button>
+                    </div>
+
+                    <div className="bg-white/5 border border-white/5 p-2.5 rounded-xl flex items-center justify-between">
+                      <div>
+                        <div className="text-[10px] font-bold text-white">Service Extra: Départ Tardif</div>
+                        <div className="text-[8px] text-zinc-500">Profitez jusqu'à 15:00</div>
+                      </div>
+                      <button className="bg-rose-500 text-white font-bold text-[9px] py-1 px-2.5 rounded-lg shadow-lg shadow-rose-500/20">
+                        20 € • Commander
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+
+              <div className="flex justify-between items-center text-[10px] text-zinc-600 font-mono border-t border-white/5 pt-4 mt-4">
+                <span>Next.js Static Render</span>
+                <span>Active Preview {activeStep + 1}/3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 export default function LandingPage() {
   const { t } = useTranslation();
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -389,6 +612,9 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* --- How It Works --- */}
+        <HowItWorks />
+
         {/* --- Guide Showcase (Examples) --- */}
         <GuideShowcase />
 
@@ -480,9 +706,12 @@ export default function LandingPage() {
                     Talk to an Expert
                   </Button>
                 </div>
-                <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black/40 backdrop-blur-sm shadow-2xl">
+                <div 
+                  onClick={() => setIsVideoOpen(true)}
+                  className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black/40 backdrop-blur-sm shadow-2xl cursor-pointer group"
+                >
                    {/* Placeholder for Video Sales Letter (VSL) */}
-                   <div className="absolute inset-0 flex items-center justify-center group/play cursor-pointer">
+                   <div className="absolute inset-0 flex items-center justify-center group/play">
                       <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center group-hover/play:scale-110 transition-transform">
                         <Play className="w-8 h-8 text-white fill-white" />
                       </div>
@@ -657,6 +886,40 @@ export default function LandingPage() {
             </div>
           </div>
         </footer>
+      <AnimatePresence>
+        {isVideoOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-md p-6"
+            onClick={() => setIsVideoOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-4xl aspect-video bg-slate-950 border border-white/10 rounded-3xl overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setIsVideoOpen(false)}
+                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center border border-white/10 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                title="Maplyo Demo Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full border-0"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       </main>
 
       <style jsx global>{`

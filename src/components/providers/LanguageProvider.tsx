@@ -11,19 +11,21 @@ type LanguageContextType = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-    const [lang, setLangState] = useState<Language>('fr');
+export function LanguageProvider({ children, defaultLang = 'fr' }: { children: React.ReactNode, defaultLang?: Language }) {
+    const [lang, setLangState] = useState<Language>(defaultLang);
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         // Load saved language or default to 'fr'
         const savedCodes = localStorage.getItem('maplyo-lang');
-        const validLanguages: Language[] = ['fr', 'en', 'es', 'ar', 'nl', 'zh'];
+        const validLanguages: Language[] = ['fr', 'en', 'es', 'ar', 'nl', 'zh', 'pt'];
         if (savedCodes && validLanguages.includes(savedCodes as Language)) {
             setLangState(savedCodes as Language);
+        } else {
+            localStorage.setItem('maplyo-lang', defaultLang);
         }
         setMounted(true);
-    }, []);
+    }, [defaultLang]);
 
     // Sync DIR and Cookie when language changes
     useEffect(() => {

@@ -3,11 +3,28 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getCurrencyByCountry, PRICING_BY_CURRENCY, CurrencyCode } from "@/lib/pricing/currencies";
 
 export async function updateSession(request: NextRequest) {
-    let response = NextResponse.next({
-        request: {
-            headers: request.headers,
-        },
-    });
+    const pathname = request.nextUrl.pathname;
+    const supportedLocales = ['fr', 'en', 'es', 'ar', 'nl', 'zh', 'pt'];
+    
+    let localeDetected = '';
+    const parts = pathname.split('/');
+    if (parts.length > 1 && supportedLocales.includes(parts[1])) {
+        localeDetected = parts[1];
+        request.nextUrl.pathname = '/' + parts.slice(2).join('/');
+        request.cookies.set('maplyo-lang', localeDetected);
+    }
+
+    let response = localeDetected 
+        ? NextResponse.rewrite(request.nextUrl, { request: { headers: request.headers } })
+        : NextResponse.next({
+            request: {
+                headers: request.headers,
+            },
+        });
+
+    if (localeDetected) {
+        response.cookies.set('maplyo-lang', localeDetected, { path: '/', maxAge: 31536000, sameSite: 'lax' });
+    }
 
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -21,9 +38,11 @@ export async function updateSession(request: NextRequest) {
                     cookiesToSet.forEach(({ name, value }) =>
                         request.cookies.set(name, value)
                     );
-                    response = NextResponse.next({
-                        request,
-                    });
+                    response = localeDetected
+                        ? NextResponse.rewrite(request.nextUrl, { request })
+                        : NextResponse.next({
+                            request,
+                        });
                     cookiesToSet.forEach(({ name, value, options }) =>
                         response.cookies.set(name, value, {
                             ...options,
@@ -109,6 +128,7 @@ export async function updateSession(request: NextRequest) {
                 else if (acceptLang.includes('ar')) detectedLang = 'ar';
             }
             response.cookies.set('maplyo-lang', detectedLang);
+            request.cookies.set('maplyo-lang', detectedLang);
         }
 
         if (!hasCurrencyCookie) {
