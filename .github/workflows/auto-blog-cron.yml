@@ -42,22 +42,20 @@ jobs:
         if: ${{ github.event.inputs.action != 'seed-static' }}
         id: topic
         run: |
-          # Use provided topic or rotate through predefined list
           PROVIDED="${{ github.event.inputs.topic }}"
           if [ -n "$PROVIDED" ]; then
             echo "topic=$PROVIDED" >> $GITHUB_OUTPUT
           else
-            # Rotate based on week number
             WEEK=$(date +%V)
             TOPICS=(
-              "Comment photographier son logement Airbnb pour maximiser les réservations"
-              "Tarification dynamique Airbnb : stratégies pour optimiser ses revenus selon la saison"
-              "Accueil des voyageurs avec animaux de compagnie : bonnes pratiques pour hôtes Airbnb"
-              "Comment répondre aux avis négatifs sur Airbnb et transformer les critiques en opportunités"
-              "Location meublée courte durée : obligations légales et fiscalité pour hôtes en France"
-              "Décoration intérieure low-cost pour Airbnb : les tendances qui font la différence"
-              "Gestion des check-outs Airbnb : instructions claires pour éviter les litiges"
-              "Comment devenir Superhost Airbnb en 90 jours : le plan d'action complet"
+              "Comment photographier son logement Airbnb pour maximiser les reservations"
+              "Tarification dynamique Airbnb strategies pour optimiser ses revenus selon la saison"
+              "Accueil des voyageurs avec animaux de compagnie bonnes pratiques pour hotes Airbnb"
+              "Comment repondre aux avis negatifs sur Airbnb et transformer les critiques"
+              "Location meublee courte duree obligations legales et fiscalite pour hotes en France"
+              "Decoration interieure low-cost pour Airbnb les tendances qui font la difference"
+              "Gestion des check-outs Airbnb instructions claires pour eviter les litiges"
+              "Comment devenir Superhost Airbnb en 90 jours le plan action complet"
             )
             INDEX=$((WEEK % ${#TOPICS[@]}))
             echo "topic=${TOPICS[$INDEX]}" >> $GITHUB_OUTPUT
@@ -90,14 +88,4 @@ jobs:
           fi
 
           echo "Blog post generated successfully!"
-          echo "$body" | python3 -c "
-import sys, json
-try:
-    data = json.load(sys.stdin)
-    post = data.get('post', {})
-    print(f\"Title: {post.get('title', 'N/A')}\")
-    print(f\"Slug: {post.get('slug', 'N/A')}\")
-    print(f\"Published: {post.get('published_at', 'N/A')}\")
-except:
-    print('Could not parse response')
-" 2>/dev/null || true
+          echo "$body" | jq -r '"Slug: \(.post.slug // "N/A")"' 2>/dev/null || echo "Done."
