@@ -14,14 +14,84 @@ export interface GuidePrompt {
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 
+async function fetchAirbnbListing(url: string): Promise<string> {
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 seconds timeout
+
+        const response = await fetch(url, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'fr-FR,fr;q=0.8'
+            },
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (response.ok) {
+            return await response.text();
+        }
+    } catch (e) {
+        console.error("Failed to fetch Airbnb page:", e);
+    }
+    return "";
+}
+
+function extractAirbnbMetadata(html: string): string {
+    if (!html) return "";
+    let dataText = "";
+
+    // 1. Extract title
+    const titleMatch = html.match(/<title>([^<]+)<\/title>/i);
+    if (titleMatch) {
+        dataText += `Title: ${titleMatch[1]}\n`;
+    }
+
+    // 2. Extract meta tags
+    const metaRegex = /<meta\s+[^>]*name=["'](description|keywords)["'][^>]*content=["']([^"']+)["']/gi;
+    let match;
+    while ((match = metaRegex.exec(html)) !== null) {
+        dataText += `Meta ${match[1]}: ${match[2]}\n`;
+    }
+
+    const metaPropertyRegex = /<meta\s+[^>]*property=["']og:(title|description)["'][^>]*content=["']([^"']+)["']/gi;
+    while ((match = metaPropertyRegex.exec(html)) !== null) {
+        dataText += `Meta og:${match[1]}: ${match[2]}\n`;
+    }
+
+    // 3. Extract JSON-LD scripts
+    const jsonLdRegex = /<script\s+[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
+    let ldMatch;
+    let count = 0;
+    while ((ldMatch = jsonLdRegex.exec(html)) !== null && count < 3) {
+        try {
+            const cleanJson = ldMatch[1].trim();
+            dataText += `JSON-LD Data:\n${cleanJson}\n`;
+            count++;
+        } catch (e) {
+            // ignore
+        }
+    }
+
+    return dataText.slice(0, 10000); // limit to 10k chars
+}
+
 export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     const { city, airbnbUrl, type = "airbnb", targetAudience = "everyone", language, mood } = prompt;
 
     let targetLocation = city || "Paris";
     let listingName = "Mon Airbnb";
+    let scrapedInfo = "";
 
     if (airbnbUrl) {
         try {
+            // Fetch Airbnb page metadata
+            const html = await fetchAirbnbListing(airbnbUrl);
+            if (html) {
+                scrapedInfo = extractAirbnbMetadata(html);
+            }
+
             const urlObj = new URL(airbnbUrl);
             const pathParts = urlObj.pathname.split('/');
             // Path is usually "/rooms/name-id" or "/rooms/id"
@@ -59,9 +129,13 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     - Suggested Location / City: ${targetLocation}
     - Language: ${language} (Strictly output content in this language)
     - URL Reference: ${airbnbUrl || 'N/A'}
+    ${scrapedInfo ? `\n- Real Scraped Airbnb Listing Metadata:\n${scrapedInfo}\n` : ''}
 
     Location Inferences Instruction:
-    Determine the actual city/location of this listing. If the Listing Name or URL Reference slug contains a specific city (e.g. "mohammedia" in "sublime-villa-mohammedia", "bordeaux" in "loft-bordeaux"), use that city as the guide location/city and output it in the root-level "location" field of the JSON. If not, use the Suggested Location/City.
+    Determine the actual city/location of this listing. If the Listing Name, URL Reference slug, or Real Scraped Airbnb Listing Metadata contains a specific city (e.g. "mohammedia" in "sublime-villa-mohammedia", "bordeaux" in "loft-bordeaux"), use that city as the guide location/city and output it in the root-level "location" field of the JSON. If not, use the Suggested Location/City.
+
+    Details Extraction:
+    If "Real Scraped Airbnb Listing Metadata" is provided above, read it carefully and extract the real listing title, description, amenities, and rules to build the guide. Do not use generic placeholders if real data is available. If wifi or check-in codes are not in the metadata, generate plausible default values.
 
     Required Blocks (in order):
     1. hero (Essential! Title of the guide, subtitle, and an appealing cover image URL)
