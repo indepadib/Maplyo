@@ -11,6 +11,38 @@ type LanguageContextType = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+function createFallbackProxy(target: any, fallback: any): any {
+    if (typeof target !== 'object' || target === null) {
+        return target ?? fallback;
+    }
+    return new Proxy(target, {
+        get(obj, prop) {
+            if (typeof prop === 'symbol') {
+                return obj[prop];
+            }
+            if (typeof prop === 'string' && (prop.startsWith('$$') || prop === 'then' || prop === 'toJSON')) {
+                return obj[prop];
+            }
+            const val = obj[prop];
+            const fallbackVal = fallback ? fallback[prop] : undefined;
+
+            if (val === undefined) {
+                if (typeof fallbackVal === 'object' && fallbackVal !== null) {
+                    const fallbackEmpty = Array.isArray(fallbackVal) ? [] : {};
+                    return createFallbackProxy(fallbackEmpty, fallbackVal);
+                }
+                return fallbackVal;
+            }
+
+            if (typeof val === 'object' && val !== null) {
+                return createFallbackProxy(val, fallbackVal);
+            }
+
+            return val;
+        }
+    });
+}
+
 export function LanguageProvider({ children, defaultLang = 'fr' }: { children: React.ReactNode, defaultLang?: Language }) {
     const [lang, setLangState] = useState<Language>(defaultLang);
     const [mounted, setMounted] = useState(false);
@@ -45,10 +77,16 @@ export function LanguageProvider({ children, defaultLang = 'fr' }: { children: R
         localStorage.setItem('maplyo-lang', newLang);
     };
 
+    const t = React.useMemo(() => {
+        const targetDict = DICTIONARY[lang] || {};
+        const fallbackDict = DICTIONARY['fr'] || {};
+        return createFallbackProxy(targetDict, fallbackDict);
+    }, [lang]);
+
     const value = {
         lang,
         setLang,
-        t: DICTIONARY[lang]
+        t
     };
 
     return (
