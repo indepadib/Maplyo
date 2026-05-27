@@ -76,44 +76,81 @@ export const DICTIONARY = {
         },
         "hero": {
             "tag": "POUR LES HÔTES ET CONCIERGERIES",
-            "title": "Générez des revenus extras et automatisez l'accueil de vos voyageurs.",
-            "subtitle": "Créez un livret d'accueil numérique Airbnb & guide numérique gîte interactif. Partagez vos codes Wi-Fi, digicodes et adresses par QR Code. Gratuit à vie pour 1 guide.",
-            "cta": "Créer mon guide gratuit",
-            "demo": "Voir un exemple",
+            "title": "Votre lien Airbnb devient un guide intelligent en 10 secondes.",
+            "subtitle": "Ne perdez plus de temps. Collez votre annonce, l'IA génère votre livret d'accueil interactif avec vos codes d'accès, vend vos services (upsells) sans commission, et s'impose comme le compagnon de voyage ultime.",
+            "cta": "Créer mon guide (Gratuit)",
+            "demo": "Voir la magie",
             "noCreditCard": "Pas de carte requise",
-            "setupTime": "Configuré en 2 min"
+            "setupTime": "Configuré en 10s chrono"
         },
         "features": {
-            "title": "Tout ce dont vous avez besoin.",
-            "subtitle": "Rien de superflu.",
-            "description": "Des outils puissants pour automatiser votre accueil.",
+            "title": "Une technologie unique au monde.",
+            "subtitle": "Nous faisons ce que les autres ne font pas.",
+            "description": "Transformez chaque séjour en expérience 5 étoiles tout en générant des revenus passifs. Maplyo est le seul compagnon de voyage intelligent dont vos visiteurs auront besoin.",
             "badge": "Fonctionnalités",
             "items": {
-                "mobileFirst": {
-                    "title": "100% Mobile First",
-                    "desc": "Pas d'application à télécharger."
+                "magicAI": {
+                    "title": "Génération IA Instantanée",
+                    "desc": "Collez votre lien Airbnb ou Booking, notre IA extrait photos, adresses et descriptions pour créer votre guide en 10 secondes."
                 },
-                "secure": {
-                    "title": "Codes Sécurisés",
-                    "desc": "WiFi et boîtes à clés protégés."
+                "upsells": {
+                    "title": "Upsells sans Commission",
+                    "desc": "Vendez automatiquement des départs tardifs, navettes ou petits-déjeuners. Vous gardez 100% des revenus générés."
                 },
-                "map": {
-                    "title": "Carte Interactive",
-                    "desc": "Intégrez vos lieux favoris."
+                "companion": {
+                    "title": "Compagnon de Voyage IA",
+                    "desc": "Conseils du jour, événements en temps réel, restaurants recommandés... Offrez un concierge digital personnel."
                 },
-                "live": {
-                    "title": "Modifications Live",
-                    "desc": "Mise à jour instantanée."
+                "smartHome": {
+                    "title": "Smart Home Intégré",
+                    "desc": "Connectez vos équipements Tuya pour piloter clim et serrures connectées directement depuis le guide (Bêta)."
+                },
+                "noApp": {
+                    "title": "Zéro App à télécharger",
+                    "desc": "Un simple scan du QR Code ou clic sur votre lien, et vos voyageurs accèdent à tout instantanément (100% Web)."
                 },
                 "translate": {
-                    "title": "Traduction Auto",
-                    "desc": "Détecte la langue du visiteur."
-                },
-                "checklist": {
-                    "title": "Check-lists",
-                    "desc": "Instructions claires arrivée/départ."
+                    "title": "Traduction Native IA",
+                    "desc": "Fini Google Translate approximatif. Votre guide s'adapte automatiquement dans la langue maternelle du visiteur."
                 }
             }
+        },
+        "howItWorks": {
+            "badge": "Tour du produit",
+            "title": "La magie opère en",
+            "titleHighlight": "10 secondes",
+            "subtitle": "Découvrez comment Maplyo propulse votre gestion locative dans le futur et multiplie vos revenus.",
+            "steps": [
+                {
+                    "title": "1. Importez via Airbnb / Booking",
+                    "desc": "Insérez simplement le lien de votre annonce. Notre intelligence artificielle s'occupe de tout le reste : textes, photos, localisation et équipements.",
+                    "badge": "Auto-Génération"
+                },
+                {
+                    "title": "2. Activez vos revenus (Upsells)",
+                    "desc": "Configurez vos prix pour le check-out tardif, la consigne bagage ou les petits-déjeuners. L'argent tombe sur votre compte sans effort.",
+                    "badge": "Monétisation"
+                },
+                {
+                    "title": "3. Scannez et profitez",
+                    "desc": "Vos voyageurs se connectent au WiFi, lisent le conseil du jour, et commandent vos services en 1 clic. L'expérience 5 étoiles ultime.",
+                    "badge": "100% Autopilote"
+                }
+            ]
+        },
+        "enterpriseSection": {
+            "badge": "Qualité Professionnelle",
+            "title": "Conçu pour les",
+            "titleHighlight": "Hôtels & Conciergeries",
+            "desc": "Maplyo équipe les plus grands. Notre infrastructure gère les portfolios de centaines de biens avec une fluidité absolue.",
+            "bulletPoints": [
+                "Tableau de Bord Multi-Propriétés",
+                "Upselling Digital en Chambre (Room Service)",
+                "Marque Blanche (Votre logo, votre domaine)",
+                "Messagerie Voyageur Automatisée (WhatsApp)"
+            ],
+            "cta": "Parler à un Expert",
+            "demo": "Voir la Démo"
         },
         "pricing": {
             "title": "Tarification Transparente",
@@ -940,44 +977,81 @@ export const DICTIONARY = {
         },
         "hero": {
             "tag": "FOR HOSTS & PROPERTY MANAGERS",
-            "title": "Generate extra revenue and automate your guest check-ins.",
-            "subtitle": "Create a digital welcome book for your Airbnb, gite, or rental. Share Wi-Fi codes, keybox codes, and local tips via QR Code. Free forever for 1 guide.",
-            "cta": "Create my free guide",
-            "demo": "See an example",
+            "title": "Your Airbnb link becomes a smart guide in 10 seconds.",
+            "subtitle": "Stop wasting time. Paste your listing, and our AI generates your interactive welcome book with access codes, sells your services (upsells) commission-free, and acts as the ultimate travel companion.",
+            "cta": "Create my guide (Free)",
+            "demo": "See the magic",
             "noCreditCard": "No credit card required",
-            "setupTime": "Set up in 2 min"
+            "setupTime": "Set up in 10s flat"
         },
         "features": {
-            "title": "Everything you need.",
-            "subtitle": "Nothing superfluous.",
-            "description": "Powerful tools to automate your welcoming.",
+            "title": "Technology unlike anything else.",
+            "subtitle": "We do what others don't.",
+            "description": "Transform every stay into a 5-star experience while generating passive income. Maplyo is the only smart travel companion your guests will ever need.",
             "badge": "Features",
             "items": {
-                "mobileFirst": {
-                    "title": "100% Mobile First",
-                    "desc": "No app to download."
+                "magicAI": {
+                    "title": "Instant AI Generation",
+                    "desc": "Paste your Airbnb or Booking link, and our AI extracts photos, addresses, and descriptions to build your guide in 10 seconds."
                 },
-                "secure": {
-                    "title": "Secure Codes",
-                    "desc": "WiFi and lockboxes protected."
+                "upsells": {
+                    "title": "Commission-free Upsells",
+                    "desc": "Automatically sell late check-outs, shuttles, or breakfasts. You keep 100% of the generated revenue."
                 },
-                "map": {
-                    "title": "Interactive Map",
-                    "desc": "Integrate your favorite places."
+                "companion": {
+                    "title": "AI Travel Companion",
+                    "desc": "Tip of the day, real-time events, recommended restaurants... Provide a personal digital concierge."
                 },
-                "live": {
-                    "title": "Live Edits",
-                    "desc": "Instant updates."
+                "smartHome": {
+                    "title": "Integrated Smart Home",
+                    "desc": "Connect your Tuya devices to control AC and smart locks directly from the guide (Beta)."
+                },
+                "noApp": {
+                    "title": "No App to Download",
+                    "desc": "A simple QR Code scan or link click gives your guests instant access to everything (100% Web)."
                 },
                 "translate": {
-                    "title": "Auto Translation",
-                    "desc": "Detects visitor's language."
-                },
-                "checklist": {
-                    "title": "Checklists",
-                    "desc": "Clear check-in/out instructions."
+                    "title": "Native AI Translation",
+                    "desc": "Forget rough Google Translates. Your guide automatically adapts to the guest's native language."
                 }
             }
+        },
+        "howItWorks": {
+            "badge": "Product Tour",
+            "title": "The magic happens in",
+            "titleHighlight": "10 seconds",
+            "subtitle": "Discover how Maplyo propels your rental management into the future and multiplies your revenue.",
+            "steps": [
+                {
+                    "title": "1. Import via Airbnb / Booking",
+                    "desc": "Just paste the link to your listing. Our artificial intelligence handles the rest: text, photos, location, and amenities.",
+                    "badge": "Auto-Generation"
+                },
+                {
+                    "title": "2. Activate your revenue (Upsells)",
+                    "desc": "Set your prices for late check-out, luggage storage, or breakfast. The money drops into your account effortlessly.",
+                    "badge": "Monetization"
+                },
+                {
+                    "title": "3. Scan and enjoy",
+                    "desc": "Your guests connect to WiFi, read the tip of the day, and order your services in 1 click. The ultimate 5-star experience.",
+                    "badge": "100% Autopilot"
+                }
+            ]
+        },
+        "enterpriseSection": {
+            "badge": "Professional Grade",
+            "title": "Designed for",
+            "titleHighlight": "Hotels & Concierges",
+            "desc": "Maplyo powers the biggest players. Our infrastructure seamlessly manages portfolios of hundreds of properties.",
+            "bulletPoints": [
+                "Multi-Property Dashboard",
+                "Digital In-Room Upselling (Room Service)",
+                "White Label (Your logo, your domain)",
+                "Automated Guest Messaging (WhatsApp)"
+            ],
+            "cta": "Talk to an Expert",
+            "demo": "Watch the Demo"
         },
         "pricing": {
             "title": "Transparent Pricing",

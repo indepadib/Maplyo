@@ -189,25 +189,26 @@ const ScrollProgress = () => {
 };
 
 const HowItWorks = () => {
+  const { t } = useTranslation();
   const [activeStep, setActiveStep] = useState(0);
 
   const steps = [
     {
-      title: "1. Transférez votre e-mail Airbnb",
-      desc: "Envoyez simplement votre e-mail de confirmation ou réservation Airbnb à guide@maplyo.com. Notre IA configure automatiquement l'adresse, la structure et les photos du guide en 10 secondes.",
-      badge: "Auto-Génération",
+      title: t.howItWorks.steps[0].title,
+      desc: t.howItWorks.steps[0].desc,
+      badge: t.howItWorks.steps[0].badge,
       icon: Mail,
     },
     {
-      title: "2. Personnalisez vos services & Extras",
-      desc: "Ajoutez vos codes Wifi, consignes de départ et configurez vos Upsells (départ tardif, petits-déjeuners, navettes) pour générer des revenus automatiques pendant le séjour.",
-      badge: "Monétisation",
+      title: t.howItWorks.steps[1].title,
+      desc: t.howItWorks.steps[1].desc,
+      badge: t.howItWorks.steps[1].badge,
       icon: Sparkles,
     },
     {
-      title: "3. Vos voyageurs scannent et profitent",
-      desc: "Placez le QR Code dans le logement. Vos voyageurs se connectent instantanément au Wi-Fi, accèdent aux consignes de sécurité et commandent vos services sans télécharger d'application.",
-      badge: "100% Autopilote",
+      title: t.howItWorks.steps[2].title,
+      desc: t.howItWorks.steps[2].desc,
+      badge: t.howItWorks.steps[2].badge,
       icon: Smartphone,
     }
   ];
@@ -216,12 +217,12 @@ const HowItWorks = () => {
     <section className="py-32 px-6 relative overflow-hidden bg-slate-900/30 border-y border-white/5">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
-          <span className="text-rose-500 font-bold uppercase tracking-widest text-sm">Tour du produit</span>
+          <span className="text-rose-500 font-bold uppercase tracking-widest text-sm">{t.howItWorks.badge}</span>
           <h2 className="text-4xl md:text-6xl font-bold text-white mt-4 mb-6">
-            Créez votre guide en <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-500">10 secondes</span>
+            {t.howItWorks.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-500">{t.howItWorks.titleHighlight}</span>
           </h2>
           <p className="text-zinc-400 max-w-2xl mx-auto text-lg">
-            Découvrez comment Maplyo automatise la gestion locative et multiplie vos avis 5 étoiles.
+            {t.howItWorks.subtitle}
           </p>
         </div>
 
@@ -642,34 +643,34 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 {
-                  icon: Smartphone,
-                  title: t.features.items.mobileFirst.title,
-                  desc: t.features.items.mobileFirst.desc
-                },
-                {
-                  icon: Lock,
-                  title: t.features.items.secure.title,
-                  desc: t.features.items.secure.desc
-                },
-                {
-                  icon: MapIcon,
-                  title: t.features.items.map.title,
-                  desc: t.features.items.map.desc
+                  icon: Sparkles,
+                  title: t.features.items.magicAI.title,
+                  desc: t.features.items.magicAI.desc
                 },
                 {
                   icon: Zap,
-                  title: t.features.items.live.title,
-                  desc: t.features.items.live.desc
+                  title: t.features.items.upsells.title,
+                  desc: t.features.items.upsells.desc
+                },
+                {
+                  icon: MapIcon,
+                  title: t.features.items.companion.title,
+                  desc: t.features.items.companion.desc
+                },
+                {
+                  icon: Lock,
+                  title: t.features.items.smartHome.title,
+                  desc: t.features.items.smartHome.desc
+                },
+                {
+                  icon: Smartphone,
+                  title: t.features.items.noApp.title,
+                  desc: t.features.items.noApp.desc
                 },
                 {
                   icon: Globe,
                   title: t.features.items.translate.title,
                   desc: t.features.items.translate.desc
-                },
-                {
-                  icon: Check,
-                  title: t.features.items.checklist.title,
-                  desc: t.features.items.checklist.desc
                 }
               ].map((f, i) => (
                 <FeatureCard key={i} {...f} index={i} delay={i * 0.1} />
@@ -682,21 +683,16 @@ export default function LandingPage() {
               <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-widest mb-6">
-                    Professional Grade
+                    {t.enterpriseSection.badge}
                   </div>
                   <h3 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
-                    Dedicated to <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-rose-400">Hotels & Large Portfolios</span>
+                    {t.enterpriseSection.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-rose-400">{t.enterpriseSection.titleHighlight}</span>
                   </h3>
                   <p className="text-lg text-zinc-400 mb-8 leading-relaxed">
-                    Maplyo isn't just for Airbnbs. Our enterprise-grade infrastructure supports hotels, riads, and concierge services with hundreds of units.
+                    {t.enterpriseSection.desc}
                   </p>
                   <ul className="space-y-4 mb-10">
-                    {[
-                      "Digital Room Service & Upselling",
-                      "Multi-unit Dashboard & Centralized Management",
-                      "Automated Guest Messaging via WhatsApp",
-                      "White-label Branding (Your Domain, Your Brand)"
-                    ].map((item, i) => (
+                    {t.enterpriseSection.bulletPoints.map((item, i) => (
                       <li key={i} className="flex items-center gap-3 text-zinc-300">
                         <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-[10px]">✓</div>
                         {item}
@@ -704,7 +700,7 @@ export default function LandingPage() {
                     ))}
                   </ul>
                   <Button className="bg-indigo-600 hover:bg-indigo-500 text-white border-0 h-14 px-8 rounded-2xl shadow-xl shadow-indigo-600/20 font-bold">
-                    Talk to an Expert
+                    {t.enterpriseSection.cta}
                   </Button>
                 </div>
                 <div 
@@ -716,7 +712,7 @@ export default function LandingPage() {
                       <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center group-hover/play:scale-110 transition-transform">
                         <Play className="w-8 h-8 text-white fill-white" />
                       </div>
-                      <span className="absolute bottom-8 text-sm font-medium text-white/60 tracking-widest uppercase">Watch the Demo</span>
+                      <span className="absolute bottom-8 text-sm font-medium text-white/60 tracking-widest uppercase">{t.enterpriseSection.demo}</span>
                    </div>
                 </div>
               </div>
