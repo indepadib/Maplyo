@@ -2,31 +2,102 @@ name: Generate Weekly Blog
 
 on:
   schedule:
-    # Runs at 09:00 on Monday.
+    # Runs every Monday at 09:00 UTC
     - cron: '0 9 * * 1'
   # Allow manual trigger from GitHub Actions UI
   workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Topic for the blog post (optional - leave empty for auto-selection)'
+        required: false
+        default: ''
+      action:
+        description: 'Action to perform'
+        required: false
+        default: 'generate'
+        type: choice
+        options:
+          - generate
+          - seed-static
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Blog Generation API
+      - name: Seed static blog posts (one-time setup)
+        if: ${{ github.event.inputs.action == 'seed-static' || github.event_name == 'schedule' }}
         run: |
-          # Ensure you have added ADMIN_SECRET_KEY to your GitHub Repository Secrets
-          response=$(curl -s -w "\n%{http_code}" -X POST https://maplyo.com/api/admin/generate-blog \
-          -H "Authorization: Bearer ${{ secrets.ADMIN_SECRET_KEY }}" \
-          -H "Content-Type: application/json" \
-          -d '{}')
-          
-          # Extract body and HTTP status code
+          echo "Seeding static blog posts..."
+          response=$(curl -s -w "\n%{http_code}" -X GET \
+            "https://maplyo.com/api/admin/seed-blog?secret=${{ secrets.ADMIN_SECRET_KEY }}" \
+            -H "Content-Type: application/json")
+
           body=$(echo "$response" | head -n -1)
           status_code=$(echo "$response" | tail -n 1)
-          
+
+          echo "Seed Status: $status_code"
+          echo "Seed Response: $body"
+
+      - name: Select rotating topic
+        if: ${{ github.event.inputs.action != 'seed-static' }}
+        id: topic
+        run: |
+          # Use provided topic or rotate through predefined list
+          PROVIDED="${{ github.event.inputs.topic }}"
+          if [ -n "$PROVIDED" ]; then
+            echo "topic=$PROVIDED" >> $GITHUB_OUTPUT
+          else
+            # Rotate based on week number
+            WEEK=$(date +%V)
+            TOPICS=(
+              "Comment photographier son logement Airbnb pour maximiser les réservations"
+              "Tarification dynamique Airbnb : stratégies pour optimiser ses revenus selon la saison"
+              "Accueil des voyageurs avec animaux de compagnie : bonnes pratiques pour hôtes Airbnb"
+              "Comment répondre aux avis négatifs sur Airbnb et transformer les critiques en opportunités"
+              "Location meublée courte durée : obligations légales et fiscalité pour hôtes en France"
+              "Décoration intérieure low-cost pour Airbnb : les tendances qui font la différence"
+              "Gestion des check-outs Airbnb : instructions claires pour éviter les litiges"
+              "Comment devenir Superhost Airbnb en 90 jours : le plan d'action complet"
+            )
+            INDEX=$((WEEK % ${#TOPICS[@]}))
+            echo "topic=${TOPICS[$INDEX]}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate AI blog post
+        if: ${{ github.event.inputs.action != 'seed-static' }}
+        run: |
+          TOPIC="${{ steps.topic.outputs.topic }}"
+          echo "Generating blog post for topic: $TOPIC"
+
+          PAYLOAD=$(printf '{"topic": "%s"}' "$TOPIC")
+
+          response=$(curl -s -w "\n%{http_code}" -X POST https://maplyo.com/api/admin/generate-blog \
+            -H "Authorization: Bearer ${{ secrets.ADMIN_SECRET_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD" \
+            --max-time 90)
+
+          body=$(echo "$response" | head -n -1)
+          status_code=$(echo "$response" | tail -n 1)
+
           echo "Status Code: $status_code"
           echo "Response Body: $body"
-          
+
           if [ "$status_code" -ne 200 ]; then
-            echo "Failed to generate blog post."
+            echo "::error::Failed to generate blog post (HTTP $status_code)"
+            echo "::error::Response: $body"
             exit 1
           fi
+
+          echo "Blog post generated successfully!"
+          echo "$body" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    post = data.get('post', {})
+    print(f\"Title: {post.get('title', 'N/A')}\")
+    print(f\"Slug: {post.get('slug', 'N/A')}\")
+    print(f\"Published: {post.get('published_at', 'N/A')}\")
+except:
+    print('Could not parse response')
+" 2>/dev/null || true
