@@ -79,12 +79,14 @@ Return ONLY this exact JSON structure, nothing else:
             zh: blogData.zh
         };
 
+        const uniqueSlug = `${blogData.slug}-${Math.random().toString(36).substring(2, 8)}`;
+
         // Insert into Supabase
         const { data, error } = await supabase
             .from("blog_posts")
             .insert({
                 title: blogData.fr.title,
-                slug: blogData.slug,
+                slug: uniqueSlug,
                 excerpt: blogData.fr.excerpt,
                 content: blogData.fr.content,
                 seo_keywords: blogData.seo_keywords,
