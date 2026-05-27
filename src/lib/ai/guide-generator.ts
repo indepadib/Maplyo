@@ -17,11 +17,11 @@ function uid() { return Math.random().toString(36).slice(2, 10); }
 async function fetchAirbnbListing(url: string): Promise<string> {
     try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 seconds timeout
+        const timeoutId = setTimeout(() => controller.abort(), 6000); // 6 seconds timeout
 
         const response = await fetch(url, {
             headers: {
-                'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+                'User-Agent': 'Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                 'Accept-Language': 'fr-FR,fr;q=0.8'
             },
