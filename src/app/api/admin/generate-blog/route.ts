@@ -36,35 +36,34 @@ export async function POST(req: Request) {
         const openai = getOpenAIClient();
         const supabase = getSupabaseAdmin();
 
-        const prompt = `
-        You are an expert SEO copywriter and Airbnb superhost consultant.
-        Write a highly engaging, SEO-optimized blog post about ${customTopic ? `"${customTopic}"` : "a relevant topic for short-term rental hosts (e.g., maximizing revenue, creating digital welcome books, improving guest experience, local SEO for Airbnb, smart home tech for hosts)"}.
-        
-        The target audience is Airbnb hosts, property managers, and conciergeries.
-        
-        You must generate the article in French (fr) and English (en).
-        For each of these two languages, provide the 'title', 'excerpt' (2-3 sentences), and 'content' (the full blog post written in clean, semantic HTML formatting using <h2>, <h3>, <p>, <ul>, <li>, and <strong>. Do NOT use markdown code blocks like \`\`\`html).
-        Each article should be around 500-800 words.
-        
-        For the other languages (Spanish (es), Arabic (ar), Dutch (nl), Chinese (zh)), provide a translated 'title' and 'excerpt' only, and for 'content', simply copy the English 'content' value. This is critical to save API tokens and avoid gateway timeouts.
+        const prompt = `You are an SEO copywriter for Airbnb hosts. Write a blog post about: "${customTopic || "a relevant topic for short-term rental hosts (maximizing revenue, digital welcome books, improving guest experience, QR codes for Airbnb, smart automation for hosts)"}".
 
-        Return the result EXACTLY as a JSON object with the following structure, and nothing else:
-        {
-            "slug": "a-clean-url-slug-in-french-without-special-chars",
-            "seo_keywords": ["keyword1", "keyword2", "keyword3"],
-            "fr": { "title": "...", "excerpt": "...", "content": "..." },
-            "en": { "title": "...", "excerpt": "...", "content": "..." },
-            "es": { "title": "...", "excerpt": "...", "content": "..." },
-            "ar": { "title": "...", "excerpt": "...", "content": "..." },
-            "nl": { "title": "...", "excerpt": "...", "content": "..." },
-            "zh": { "title": "...", "excerpt": "...", "content": "..." }
-        }`;
+Target audience: Airbnb hosts, property managers, conciergeries.
+
+Rules:
+- Write the full article ONLY in French (fr) and English (en). Each article: 350-450 words max, using semantic HTML tags (h2, h3, p, ul, li, strong). NO markdown code blocks.
+- For Spanish (es), Arabic (ar), Dutch (nl), Chinese (zh): provide ONLY "title" and "excerpt" (2 sentences). Set "content" to "".
+- The slug must be lowercase French, no accents, no special chars, hyphens only.
+- Include 3-4 relevant SEO keywords.
+
+Return ONLY this exact JSON structure, nothing else:
+{
+  "slug": "french-slug-here",
+  "seo_keywords": ["keyword1", "keyword2", "keyword3"],
+  "fr": { "title": "...", "excerpt": "...", "content": "<h2>...</h2><p>...</p>" },
+  "en": { "title": "...", "excerpt": "...", "content": "<h2>...</h2><p>...</p>" },
+  "es": { "title": "...", "excerpt": "...", "content": "" },
+  "ar": { "title": "...", "excerpt": "...", "content": "" },
+  "nl": { "title": "...", "excerpt": "...", "content": "" },
+  "zh": { "title": "...", "excerpt": "...", "content": "" }
+}`;
 
         const response = await openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: [{ role: "user", content: prompt }],
             response_format: { type: "json_object" },
             temperature: 0.7,
+            max_tokens: 3000,
         });
 
         const resultText = response.choices[0].message.content;

@@ -4,3 +4,10 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[functions]
+  # Max timeout for serverless functions (26s is the max on Pro plan)
+  node_bundler = "esbuild"
+
+[functions."api/admin/generate-blog"]
+  timeout = 26
