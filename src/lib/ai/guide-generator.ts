@@ -3,9 +3,10 @@ import { guideThemes } from "@/types/themes";
 import { createOpenAIClient, cleanAIJSON } from "./openai";
 
 export interface GuidePrompt {
-    city: string;
-    type: "airbnb" | "hotel" | "guest_house" | "other";
-    targetAudience: "families" | "couples" | "remote_workers" | "groups" | "everyone";
+    city?: string;
+    airbnbUrl?: string;
+    type?: "airbnb" | "hotel" | "guest_house" | "other";
+    targetAudience?: "families" | "couples" | "remote_workers" | "groups" | "everyone";
     language: "fr" | "en";
     mood?: "relax" | "adventure" | "romantic" | "business";
     amenities?: string[];
@@ -14,12 +15,36 @@ export interface GuidePrompt {
 function uid() { return Math.random().toString(36).slice(2, 10); }
 
 export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
-    const { city, type, targetAudience, language, mood } = prompt;
+    const { city, airbnbUrl, type = "airbnb", targetAudience = "everyone", language, mood } = prompt;
 
-    // Fallbck if no API key
+    let targetLocation = city || "Paris";
+    let listingName = "Mon Airbnb";
+
+    if (airbnbUrl) {
+        try {
+            const urlObj = new URL(airbnbUrl);
+            const pathParts = urlObj.pathname.split('/');
+            // Path is usually "/rooms/name-id" or "/rooms/id"
+            const roomPart = pathParts.find(p => p && p !== 'rooms');
+            if (roomPart) {
+                const nameWithoutId = roomPart.replace(/-\d+$/, '').replace(/-/g, ' ');
+                listingName = nameWithoutId.charAt(0).toUpperCase() + nameWithoutId.slice(1);
+                
+                // Try to find a city in the listing name
+                const lowerName = nameWithoutId.toLowerCase();
+                const cities = ['paris', 'marrakech', 'london', 'barcelona', 'rome', 'new york', 'tokyo', 'casablanca', 'rabat', 'nice', 'lyon', 'marseille'];
+                const foundCity = cities.find(c => lowerName.includes(c));
+                if (foundCity) {
+                    targetLocation = foundCity.charAt(0).toUpperCase() + foundCity.slice(1);
+                }
+            }
+        } catch (e) {
+            // ignore
+        }
+    }
+
     const openai = createOpenAIClient();
 
-    // Fallbck if no API key
     if (!openai) {
         console.warn("Missing OPENAI_API_KEY, returning mock data.");
         return generateMockGuide(prompt);
@@ -27,13 +52,13 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
 
     const systemPrompt = `
     You are an expert travel guide creator. 
-    Create a complete JSON guide for a short-term rental in "${city}".
+    Create a complete JSON guide for a short-term rental.
     
     Context:
-    - Type: ${type}
-    - Audience: ${targetAudience}
+    - Listing Name: ${listingName}
+    - Location / City: ${targetLocation}
     - Language: ${language} (Strictly output content in this language)
-    - Mood: ${mood || "welcoming"}
+    - URL Reference: ${airbnbUrl || 'N/A'}
 
     Required Blocks (in order):
     1. hero (Essential! Title of the guide, subtitle, and an appealing cover image URL)
@@ -42,7 +67,7 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     4. rules (Appropriate for audience)
     5. amenities (Mention 5 key amenities)
     6. places (3 best LOCAL restaurants/cafes with real names & approximate addresses if known)
-    7. events (2 fictional or seasonal events typcial for the city)
+    7. events (2 fictional or seasonal events typical for the city)
     8. transport (How to get around)
     
     Output strictly valid JSON matching this TypeScript structure:
@@ -66,7 +91,7 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
             model: "gpt-4o",
             messages: [
                 { role: "system", content: systemPrompt },
-                { role: "user", content: `Generate a guide for ${city}.` }
+                { role: "user", content: `Generate a guide for ${listingName} in ${targetLocation}.` }
             ],
             temperature: 0.7,
         });
@@ -76,29 +101,27 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
 
         // Post-processing: Add IDs and visibility
         const matchedTheme = guideThemes.find(t =>
-            t.name.toLowerCase().includes(city.toLowerCase()) ||
-            t.id.includes(city.toLowerCase())
+            t.name.toLowerCase().includes(targetLocation.toLowerCase()) ||
+            t.id.includes(targetLocation.toLowerCase())
         ) || guideThemes[0];
 
         const blocks = (json.blocks || []).map((b: any) => ({
             ...b,
             id: uid(),
             visibility: { mode: "always" },
-            // Ensure data integrity
             data: b.data || {}
         }));
 
-        // Fallback: Ensure Hero exists if AI forgot it
+        // Fallback: Ensure Hero exists
         let heroBlock = blocks.find((b: any) => b.type === "hero");
         if (!heroBlock) {
-            // Create default Hero from Welcome or scratch
             heroBlock = {
                 id: uid(),
                 type: "hero",
                 title: "Hero",
                 visibility: { mode: "always" },
                 data: {
-                    title: json.title || `Guide ${city}`,
+                    title: json.title || listingName,
                     subtitle: "Bienvenue dans votre guide personnel",
                     coverImageUrl: matchedTheme.bgImage,
                     badges: ["Wi-Fi", "Piscine"]
@@ -111,8 +134,8 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
 
         return {
             id: uid(),
-            slug: `${city.toLowerCase().replace(/\s+/g, '-')}-${uid()}`,
-            title: json.title || `Guide ${city}`,
+            slug: `${targetLocation.toLowerCase().replace(/\s+/g, '-')}-${uid()}`,
+            title: json.title || listingName,
             theme: { themeId: matchedTheme.id },
             blocks: blocks,
             updatedAt: new Date().toISOString()

@@ -42,9 +42,11 @@ export async function POST(req: Request) {
         
         The target audience is Airbnb hosts, property managers, and conciergeries.
         
-        You must generate the exact same article translated perfectly into 6 languages: French (fr), English (en), Spanish (es), Arabic (ar), Dutch (nl), and Chinese (zh).
-        For each language, provide the 'title', 'excerpt' (2-3 sentences), and 'content' (the full blog post written in clean, semantic HTML formatting using <h2>, <h3>, <p>, <ul>, <li>, and <strong>. Do NOT use markdown code blocks like \`\`\`html).
+        You must generate the article in French (fr) and English (en).
+        For each of these two languages, provide the 'title', 'excerpt' (2-3 sentences), and 'content' (the full blog post written in clean, semantic HTML formatting using <h2>, <h3>, <p>, <ul>, <li>, and <strong>. Do NOT use markdown code blocks like \`\`\`html).
         Each article should be around 500-800 words.
+        
+        For the other languages (Spanish (es), Arabic (ar), Dutch (nl), Chinese (zh)), provide a translated 'title' and 'excerpt' only, and for 'content', simply copy the English 'content' value. This is critical to save API tokens and avoid gateway timeouts.
 
         Return the result EXACTLY as a JSON object with the following structure, and nothing else:
         {

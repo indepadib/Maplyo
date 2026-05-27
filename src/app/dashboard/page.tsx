@@ -59,19 +59,11 @@ function DashboardContent() {
     // AI State
     const [isAiModalOpen, setIsAiModalOpen] = useState(false);
     const [aiPrompt, setAiPrompt] = useState<{
-        city: string;
-        type: "airbnb" | "hotel" | "guest_house";
-        targetAudience: "families" | "couples" | "remote_workers" | "groups";
+        airbnbUrl: string;
         language: "fr" | "en";
-        mood?: "relax" | "adventure" | "romantic" | "business";
-        amenities: string[];
     }>({
-        city: "",
-        type: "airbnb",
-        targetAudience: "families",
-        language: "fr",
-        mood: "relax",
-        amenities: []
+        airbnbUrl: "",
+        language: "fr"
     });
     const [isGenerating, setIsGenerating] = useState(false);
     const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
@@ -571,61 +563,47 @@ function DashboardContent() {
                     <div className="space-y-6">
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-bold text-zinc-700 mb-2">{t.dashboard.aiModal.city}</label>
+                                <label className="block text-sm font-bold text-zinc-300 mb-2">Lien de l'annonce Airbnb</label>
                                 <input
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-purple-500 outline-none transition-all"
-                                    placeholder={t.dashboard.aiModal.cityPlaceholder}
-                                    value={aiPrompt.city}
-                                    onChange={e => setAiPrompt({ ...aiPrompt, city: e.target.value })}
+                                    type="url"
+                                    required
+                                    className="w-full px-5 py-4 rounded-2xl border border-white/10 bg-white/5 text-white placeholder:text-zinc-500 focus:bg-white/10 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 outline-none transition-all text-sm font-medium"
+                                    placeholder="https://www.airbnb.com/rooms/12345678"
+                                    value={aiPrompt.airbnbUrl}
+                                    onChange={e => setAiPrompt({ ...aiPrompt, airbnbUrl: e.target.value })}
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-bold text-zinc-700 mb-2">{t.dashboard.aiModal.type}</label>
-                                    <select
-                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 outline-none"
-                                        value={aiPrompt.type}
-                                        onChange={e => setAiPrompt({ ...aiPrompt, type: e.target.value as any })}
-                                    >
-                                        <option value="airbnb">{t.dashboard.aiModal.typeAirbnb}</option>
-                                        <option value="hotel">{t.dashboard.aiModal.typeHotel}</option>
-                                        <option value="guest_house">{t.dashboard.aiModal.typeGuesthouse}</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-bold text-zinc-700 mb-2">{t.dashboard.aiModal.audience}</label>
-                                    <select
-                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 outline-none"
-                                        value={aiPrompt.targetAudience}
-                                        onChange={e => setAiPrompt({ ...aiPrompt, targetAudience: e.target.value as any })}
-                                    >
-                                        <option value="families">{t.dashboard.aiModal.audienceFamilies}</option>
-                                        <option value="couples">{t.dashboard.aiModal.audienceCouples}</option>
-                                        <option value="remote_workers">{t.dashboard.aiModal.audienceRemote}</option>
-                                        <option value="groups">{t.dashboard.aiModal.audienceGroups}</option>
-                                    </select>
-                                </div>
+                            <div>
+                                <label className="block text-sm font-bold text-zinc-300 mb-2">Langue du guide</label>
+                                <select
+                                    className="w-full px-5 py-4 rounded-2xl border border-white/10 bg-white/5 text-white focus:bg-slate-900 focus:border-rose-500 outline-none transition-all text-sm font-medium"
+                                    value={aiPrompt.language}
+                                    onChange={e => setAiPrompt({ ...aiPrompt, language: e.target.value as any })}
+                                >
+                                    <option value="fr" className="bg-slate-900 text-white">Français (fr)</option>
+                                    <option value="en" className="bg-slate-900 text-white">English (en)</option>
+                                </select>
                             </div>
                         </div>
 
                         <button
                             onClick={handleAiGenerate}
-                            disabled={!aiPrompt.city}
-                            className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-lg shadow-xl shadow-purple-500/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={!aiPrompt.airbnbUrl}
+                            className="w-full py-4 rounded-2xl bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-bold text-lg shadow-xl shadow-rose-600/25 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {t.dashboard.aiModal.generate}
+                            Générer mon guide par l'IA
                         </button>
                     </div>
                 ) : (
                     <div className="py-12 flex flex-col items-center justify-center text-center">
                         <div className="w-24 h-24 mb-6 relative">
-                            <div className="absolute inset-0 rounded-full border-4 border-purple-100"></div>
-                            <div className="absolute inset-0 rounded-full border-4 border-t-purple-600 animate-spin"></div>
-                            <div className="absolute inset-0 flex items-center justify-center text-3xl animate-pulse">✨</div>
+                            <div className="absolute inset-0 rounded-full border-4 border-white/5"></div>
+                            <div className="absolute inset-0 rounded-full border-4 border-t-rose-500 animate-spin"></div>
+                            <div className="absolute inset-0 flex items-center justify-center text-3xl animate-pulse">🤖</div>
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">{t.dashboard.aiModal.generating}</h3>
-                        <p className="text-gray-500">{t.dashboard.aiModal.generatingDesc} {aiPrompt.city}</p>
+                        <h3 className="text-xl font-bold text-white mb-2">Génération en cours...</h3>
+                        <p className="text-zinc-500 text-sm">Extraction des informations et création de vos blocs de séjour par l'IA.</p>
                     </div>
                 )}
             </Modal>
@@ -640,7 +618,7 @@ function DashboardContent() {
             >
                 <form onSubmit={handleCreateGuide} className="space-y-6">
                     <div>
-                        <label className="block text-sm font-bold text-zinc-700 mb-2">
+                        <label className="block text-sm font-bold text-zinc-300 mb-2">
                             {t.dashboard.createModal.nameLabel}
                         </label>
                         <input
@@ -648,23 +626,23 @@ function DashboardContent() {
                             value={newGuideTitle}
                             onChange={(e) => setNewGuideTitle(e.target.value)}
                             placeholder={t.dashboard.createModal.namePlaceholder}
-                            className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-lg font-medium placeholder:text-gray-400"
+                            className="w-full px-5 py-4 rounded-2xl border border-white/10 bg-white/5 text-white placeholder:text-zinc-500 focus:bg-white/10 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 outline-none transition-all text-lg font-medium"
                             autoFocus
                             required
                         />
                     </div>
 
-                    <div className="flex justify-end gap-3 pt-6 border-t border-gray-100">
+                    <div className="flex justify-end gap-3 pt-6 border-t border-white/5">
                         <button
                             type="button"
                             onClick={() => setIsCreateModalOpen(false)}
-                            className="px-6 py-3.5 rounded-xl border border-gray-200 text-gray-600 font-bold hover:bg-gray-50 transition-colors"
+                            className="px-6 py-3.5 rounded-2xl border border-white/10 text-zinc-400 font-bold hover:bg-white/5 hover:text-white transition-all"
                         >
                             {t.dashboard.createModal.cancel}
                         </button>
                         <button
                             type="submit"
-                            className="px-8 py-3.5 rounded-xl bg-gray-900 text-white font-bold hover:bg-black shadow-xl shadow-black/10 active:scale-95 transition-all"
+                            className="px-8 py-3.5 rounded-2xl bg-white text-slate-950 font-bold hover:bg-zinc-200 shadow-xl shadow-white/5 active:scale-95 transition-all"
                         >
                             {t.dashboard.createModal.create}
                         </button>

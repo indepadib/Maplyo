@@ -7,8 +7,8 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const prompt: GuidePrompt = body.prompt;
 
-        if (!prompt || !prompt.city) {
-            return NextResponse.json({ error: "City is required" }, { status: 400 });
+        if (!prompt || (!prompt.city && !prompt.airbnbUrl)) {
+            return NextResponse.json({ error: "City or Airbnb URL is required" }, { status: 400 });
         }
 
         // Validate User & Check Limits
