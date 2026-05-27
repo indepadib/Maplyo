@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { blockLibrary, blockRegistry } from "@/components/blocks/registry";
 import { Button } from "@/components/ui/Button";
 import type { Guide, BlockType } from "@/types/blocks";
