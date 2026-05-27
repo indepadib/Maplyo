@@ -26,13 +26,13 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
             const pathParts = urlObj.pathname.split('/');
             // Path is usually "/rooms/name-id" or "/rooms/id"
             const roomPart = pathParts.find(p => p && p !== 'rooms');
-            if (roomPart) {
+            if (roomPart && !/^\d+$/.test(roomPart)) {
                 const nameWithoutId = roomPart.replace(/-\d+$/, '').replace(/-/g, ' ');
                 listingName = nameWithoutId.charAt(0).toUpperCase() + nameWithoutId.slice(1);
                 
                 // Try to find a city in the listing name
                 const lowerName = nameWithoutId.toLowerCase();
-                const cities = ['paris', 'marrakech', 'london', 'barcelona', 'rome', 'new york', 'tokyo', 'casablanca', 'rabat', 'nice', 'lyon', 'marseille'];
+                const cities = ['paris', 'marrakech', 'london', 'barcelona', 'rome', 'new york', 'tokyo', 'casablanca', 'rabat', 'nice', 'lyon', 'marseille', 'mohammedia', 'agadir', 'tangier', 'fes'];
                 const foundCity = cities.find(c => lowerName.includes(c));
                 if (foundCity) {
                     targetLocation = foundCity.charAt(0).toUpperCase() + foundCity.slice(1);
@@ -56,9 +56,12 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     
     Context:
     - Listing Name: ${listingName}
-    - Location / City: ${targetLocation}
+    - Suggested Location / City: ${targetLocation}
     - Language: ${language} (Strictly output content in this language)
     - URL Reference: ${airbnbUrl || 'N/A'}
+
+    Location Inferences Instruction:
+    Determine the actual city/location of this listing. If the Listing Name or URL Reference slug contains a specific city (e.g. "mohammedia" in "sublime-villa-mohammedia", "bordeaux" in "loft-bordeaux"), use that city as the guide location/city and output it in the root-level "location" field of the JSON. If not, use the Suggested Location/City.
 
     Required Blocks (in order):
     1. hero (Essential! Title of the guide, subtitle, and an appealing cover image URL)
@@ -66,13 +69,14 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     3. checkin (Standard 3PM, mock code)
     4. rules (Appropriate for audience)
     5. amenities (Mention 5 key amenities)
-    6. places (3 best LOCAL restaurants/cafes with real names & approximate addresses if known)
+    6. places (3 best LOCAL restaurants/cafes with real names & approximate addresses in the actual city/location if known)
     7. events (2 fictional or seasonal events typical for the city)
     8. transport (How to get around)
     
     Output strictly valid JSON matching this TypeScript structure:
     {
       "title": "string",
+      "location": "string",
       "blocks": [
         { "type": "hero", "title": "string", "data": { "title": "string", "subtitle": "string", "coverImageUrl": "url_string", "badges": ["string"] } },
         { "type": "wifi", "title": "string", "data": { "networkName": "string", "password": "string" } },
@@ -98,11 +102,13 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
 
         const content = response.choices[0]?.message?.content || "{}";
         const json = cleanAIJSON(content);
+        
+        const finalLocation = json.location || targetLocation || "Paris";
 
         // Post-processing: Add IDs and visibility
         const matchedTheme = guideThemes.find(t =>
-            t.name.toLowerCase().includes(targetLocation.toLowerCase()) ||
-            t.id.includes(targetLocation.toLowerCase())
+            t.name.toLowerCase().includes(finalLocation.toLowerCase()) ||
+            t.id.includes(finalLocation.toLowerCase())
         ) || guideThemes[0];
 
         const blocks = (json.blocks || []).map((b: any) => ({
@@ -132,9 +138,14 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
             heroBlock.data.coverImageUrl = matchedTheme.bgImage;
         }
 
+        const sanitizedLocation = finalLocation.toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove accents
+            .replace(/[^a-z0-9]+/g, '-')                      // replace non-alphanumeric with hyphens
+            .replace(/^-+|-+$/g, '');                         // trim hyphens
+
         return {
             id: uid(),
-            slug: `${targetLocation.toLowerCase().replace(/\s+/g, '-')}-${uid()}`,
+            slug: `${sanitizedLocation}-${uid()}`,
             title: json.title || listingName,
             theme: { themeId: matchedTheme.id },
             blocks: blocks,
