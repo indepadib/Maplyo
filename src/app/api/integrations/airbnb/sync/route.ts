@@ -4,6 +4,7 @@ export const revalidate = 0;
 
 import { NextResponse } from "next/server";
 import { parseAirbnbCalendar } from "@/lib/integrations/ical";
+import { TuyaConnector } from "@/lib/integrations/tuya";
 
 export async function POST(request: Request) {
     const { createServerClient } = await import("@supabase/ssr");
@@ -66,18 +67,51 @@ export async function POST(request: Request) {
         const tuyaCreds = tuyaInt?.credentials;
         const tuyaDeviceId = config.tuyaDeviceId;
 
+        let tuyaConnector: TuyaConnector | null = null;
+        if (tuyaDeviceId && tuyaCreds?.accessId && tuyaCreds?.accessSecret) {
+            tuyaConnector = new TuyaConnector(tuyaCreds.accessId, tuyaCreds.accessSecret, tuyaCreds.region || 'eu');
+        }
+
         // 4. Sync to access_codes table
-        const upsertData = await Promise.all(bookings.map(async booking => {
+        const upsertData = [];
+        
+        for (const booking of bookings) {
             let generatedCode = null;
 
             // Generate Tuya code if device ID and credentials exist
-            if (tuyaDeviceId && tuyaCreds?.accessId && tuyaCreds?.accessSecret) {
-                // In a real scenario, we'd call the Tuya API here
-                // For now, we generate a 6-digit code (simulating the integration)
-                generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+            if (tuyaConnector) {
+                try {
+                    // Check if code already exists for this booking
+                    const { data: existingCode } = await supabase
+                        .from('access_codes')
+                        .select('code')
+                        .eq('guide_id', guideId)
+                        .eq('external_uid', booking.uid)
+                        .single();
+
+                    if (existingCode && existingCode.code) {
+                        generatedCode = existingCode.code;
+                    } else {
+                        // Generate a new 6-digit code for Tuya
+                        const pwd = Math.floor(100000 + Math.random() * 900000).toString();
+                        
+                        // We use TuyaConnector to create the password
+                        await tuyaConnector.generateTempCode(
+                            tuyaDeviceId,
+                            pwd,
+                            booking.guestName || 'Guest',
+                            booking.start,
+                            booking.end
+                        );
+                        generatedCode = pwd;
+                    }
+                } catch (e) {
+                    console.error('[Sync] Failed to generate Tuya code for booking', booking.uid, e);
+                    // Continue without code on error
+                }
             }
 
-            return {
+            upsertData.push({
                 guide_id: guideId,
                 guest_name: booking.guestName,
                 valid_from: booking.start.toISOString(),
@@ -86,8 +120,8 @@ export async function POST(request: Request) {
                 external_uid: booking.uid,
                 code: generatedCode, // Store the generated lock code
                 status: 'active'
-            };
-        }));
+            });
+        }
 
         const { error: upsertError } = await supabase
             .from('access_codes')

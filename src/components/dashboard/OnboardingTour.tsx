@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import type { Step, Props as ReactJoyrideProps } from 'react-joyride';
 import { STATUS } from 'react-joyride';
 import { useTranslation } from '@/components/providers/LanguageProvider';
+import { Sparkles, Bot, Edit2, Settings } from 'lucide-react';
 
 // Dynamically import Joyride with SSR disabled and cast to any to bypass strict type checks in build env
 const Joyride = dynamic<any>(() => import('react-joyride').then(mod => {
@@ -30,7 +31,7 @@ export function OnboardingTour() {
             target: 'body',
             content: (
                 <div className="p-2">
-                    <h3 className="text-xl font-bold mb-2 text-slate-900">Bienvenue sur Maplyo ! 👋</h3>
+                    <h3 className="text-xl font-bold mb-2 text-slate-900 flex items-center gap-2"><Sparkles className="w-5 h-5 text-rose-500" /> Bienvenue sur Maplyo !</h3>
                     <p className="text-zinc-600">Laissez-nous vous guider pour créer votre premier guide digital en quelques secondes.</p>
                 </div>
             ),
@@ -40,7 +41,7 @@ export function OnboardingTour() {
             target: '[data-tour="ai-button"]',
             content: (
                 <div className="p-1">
-                    <h4 className="font-bold mb-1 text-slate-900">Génération par IA 🤖</h4>
+                    <h4 className="font-bold mb-1 text-slate-900 flex items-center gap-2"><Bot className="w-4 h-4 text-rose-500" /> Génération par IA</h4>
                     <p className="text-sm text-zinc-600">Le moyen le plus rapide. Donnez une ville et un type de logement, l'IA s'occupe de tout.</p>
                 </div>
             ),
@@ -50,7 +51,7 @@ export function OnboardingTour() {
             target: '[data-tour="manual-button"]',
             content: (
                 <div className="p-1">
-                    <h4 className="font-bold mb-1 text-slate-900">Création manuelle ✍️</h4>
+                    <h4 className="font-bold mb-1 text-slate-900 flex items-center gap-2"><Edit2 className="w-4 h-4 text-emerald-500" /> Création manuelle</h4>
                     <p className="text-sm text-zinc-600">Si vous préférez tout contrôler dès le début.</p>
                 </div>
             ),
@@ -60,7 +61,7 @@ export function OnboardingTour() {
             target: '[data-tour="settings-button"]',
             content: (
                 <div className="p-1">
-                    <h4 className="font-bold mb-1 text-slate-900">Paramètres & Intégrations ⚙️</h4>
+                    <h4 className="font-bold mb-1 text-slate-900 flex items-center gap-2"><Settings className="w-4 h-4 text-indigo-500" /> Paramètres & Intégrations</h4>
                     <p className="text-sm text-zinc-600">C'est ici que vous connectez votre Airbnb (iCal) et vos serrures connectées.</p>
                 </div>
             ),

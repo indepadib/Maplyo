@@ -12,6 +12,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { Wifi, Key, X, ExternalLink, Search, Globe, ChevronRight, CheckCircle2, MapPin, Sun, Moon, Coffee, Utensils, Music, Camera } from "lucide-react";
 import { GuideChatbot } from "./GuideChatbot";
 import { TipModal } from "./TipModal";
+import { DailyDashboard } from "./DailyDashboard";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { Language } from "@/lib/i18n/dictionary";
 import { TranslatedText } from "@/components/ui/TranslatedText";
@@ -635,6 +636,20 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                         </div>
                     </motion.div>
                 </div>
+
+                {/* PREMIUM DAILY DASHBOARD */}
+                {!searchQuery && (
+                    <div className={`relative max-w-5xl mx-auto px-4 ${isResponsive ? 'md:px-12' : (forceDesktop ? 'px-12' : '')} z-20`}>
+                        <motion.div
+                            initial={{ y: 50, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.3, duration: 0.6 }}
+                            style={{ y: gridY }}
+                        >
+                            <DailyDashboard location={city} />
+                        </motion.div>
+                    </div>
+                )}
 
                 {/* BENTO GRID */}
                 <motion.div

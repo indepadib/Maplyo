@@ -3,8 +3,10 @@
 import { useState } from "react";
 import type { BlockType } from "@/types/blocks";
 
+import { Home, Wifi, Key, User, Phone, DoorOpen, MapPin, ScrollText, Sparkles, LogOut, HelpCircle, Map, Calendar, FileText, Gift, Image as ImageIcon, Trash2, ParkingCircle, Coffee, Bus } from "lucide-react";
+
 interface AccordionSectionProps {
-    icon: string;
+    icon: React.ReactNode;
     title: string;
     isOpen: boolean;
     onToggle: () => void;
@@ -90,25 +92,25 @@ export function AccordionSection({ icon, title, isOpen, onToggle, children, them
 }
 
 // Icônes pour chaque type de bloc
-export const BLOCK_ICONS: Record<BlockType, string> = {
-    hero: "🏠",
-    wifi: "📶",
-    access_codes: "🔐",
-    welcome: "👋",
-    contact: "📞",
-    checkin: "🚪",
-    location: "📍",
-    rules: "📜",
-    amenities: "✨",
-    checkout: "👋",
-    faq: "❓",
-    places: "🗺️",
-    events: "📅",
-    documents: "📄",
-    upsells: "🎁",
-    embed: "🖼️",
-    trash: "🗑️",
-    parking: "🅿️",
-    breakfast: "🥐",
-    transport: "🚌",
+export const BLOCK_ICONS: Record<BlockType, React.ReactNode> = {
+    hero: <Home className="w-7 h-7 text-white" />,
+    wifi: <Wifi className="w-7 h-7 text-white" />,
+    access_codes: <Key className="w-7 h-7 text-white" />,
+    welcome: <User className="w-7 h-7 text-white" />,
+    contact: <Phone className="w-7 h-7 text-white" />,
+    checkin: <DoorOpen className="w-7 h-7 text-white" />,
+    location: <MapPin className="w-7 h-7 text-white" />,
+    rules: <ScrollText className="w-7 h-7 text-white" />,
+    amenities: <Sparkles className="w-7 h-7 text-white" />,
+    checkout: <LogOut className="w-7 h-7 text-white" />,
+    faq: <HelpCircle className="w-7 h-7 text-white" />,
+    places: <Map className="w-7 h-7 text-white" />,
+    events: <Calendar className="w-7 h-7 text-white" />,
+    documents: <FileText className="w-7 h-7 text-white" />,
+    upsells: <Gift className="w-7 h-7 text-white" />,
+    embed: <ImageIcon className="w-7 h-7 text-white" />,
+    trash: <Trash2 className="w-7 h-7 text-white" />,
+    parking: <ParkingCircle className="w-7 h-7 text-white" />,
+    breakfast: <Coffee className="w-7 h-7 text-white" />,
+    transport: <Bus className="w-7 h-7 text-white" />,
 };

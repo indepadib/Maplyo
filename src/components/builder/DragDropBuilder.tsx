@@ -7,8 +7,8 @@ import { StyledGuideRenderer } from "@/components/guide/StyledGuideRenderer";
 import { guideThemes } from "@/types/themes";
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
 import { useReactToPrint } from "react-to-print";
-import { useRef } from "react";
 import { useTranslation } from "@/components/providers/LanguageProvider";
+import { Sparkles, Printer } from "lucide-react";
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 const STORAGE_KEY = "eguidehq_demo_guide_v1";
@@ -190,7 +190,7 @@ export function DragDropBuilder({ initialGuide }: { initialGuide: Guide }) {
                                 className="h-9 border-2"
                                 style={{ borderColor: currentTheme.primary + "40" }}
                             >
-                                🖨️ A4
+                                <Printer className="w-4 h-4 mr-1" /> A4
                             </Button>
                         </div>
                     </div>
@@ -269,7 +269,7 @@ export function DragDropBuilder({ initialGuide }: { initialGuide: Guide }) {
                             <div className="p-6 flex-1 bg-gray-50/30">
                                 {blockCount === 0 ? (
                                     <div className="h-full flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-gray-200 rounded-xl">
-                                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-3xl">✨</div>
+                                        <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4"><Sparkles className="w-8 h-8" /></div>
                                         <h3 className="text-lg font-bold text-gray-900 mb-2">{t.builder.startHere}</h3>
                                         <p className="text-gray-500 text-sm max-w-xs">
                                             {t.builder.selectBlocks}

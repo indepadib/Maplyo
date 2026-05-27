@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2 } from "lucide-react";
+import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2, Bot } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { guideThemes } from "@/types/themes";
 import { Modal } from "@/components/ui/Modal";
@@ -557,7 +557,7 @@ function DashboardContent() {
                 isOpen={isAiModalOpen}
                 onClose={() => setIsAiModalOpen(false)}
                 title={t.dashboard.aiModal.title}
-                icon="🤖"
+                icon={<Bot className="w-8 h-8 text-rose-500" />}
             >
                 {!isGenerating ? (
                     <div className="space-y-6">
@@ -600,7 +600,7 @@ function DashboardContent() {
                         <div className="w-24 h-24 mb-6 relative">
                             <div className="absolute inset-0 rounded-full border-4 border-gray-100"></div>
                             <div className="absolute inset-0 rounded-full border-4 border-t-rose-500 animate-spin"></div>
-                            <div className="absolute inset-0 flex items-center justify-center text-3xl animate-pulse">🤖</div>
+                            <div className="absolute inset-0 flex items-center justify-center animate-pulse"><Bot className="w-8 h-8 text-rose-500" /></div>
                         </div>
                         <h3 className="text-xl font-bold text-gray-900 mb-2">Génération en cours...</h3>
                         <p className="text-gray-500 text-sm">Extraction des informations et création de vos blocs de séjour par l'IA.</p>
@@ -614,7 +614,7 @@ function DashboardContent() {
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
                 title={t.dashboard.createModal.title}
-                icon="✨"
+                icon={<Sparkles className="w-8 h-8 text-rose-500" />}
             >
                 <form onSubmit={handleCreateGuide} className="space-y-6">
                     <div>

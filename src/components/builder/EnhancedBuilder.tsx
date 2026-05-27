@@ -8,7 +8,7 @@ import { StyledGuideRenderer as GuideRenderer } from "@/components/guide/StyledG
 import { Modal } from "@/components/ui/Modal";
 import { guideThemes as themes, type GuideTheme as Theme } from "@/types/themes";
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
-import { Settings, ChevronRight, Trash2, ExternalLink, ChevronLeft, Plus, Lock, Check as CheckIcon, Palette, QrCode, Monitor, Smartphone, Link2, Key, Calendar } from "lucide-react";
+import { Settings, ChevronRight, Trash2, ExternalLink, ChevronLeft, Plus, Lock, Check as CheckIcon, Palette, QrCode, Monitor, Smartphone, Link2, Key, Calendar, Sparkles, Save } from "lucide-react";
 import { canUseFeature } from "@/lib/subscription";
 import { UserSubscription } from "@/types/subscription";
 import { Guide, BlockType } from "@/types/blocks"; // Value import for Guide and BlockType
@@ -265,7 +265,7 @@ export function EnhancedBuilder({
                     {isGuest ? (
                         <div className="flex items-center gap-2">
                             <a href="/signup" className="flex items-center gap-2 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors text-sm font-bold shadow-lg shadow-rose-200">
-                                🚀 {t.builder.createAccount}
+                                <ExternalLink size={16} /> {t.builder.createAccount}
                             </a>
                         </div>
                     ) : isDemoMode ? (
@@ -274,7 +274,7 @@ export function EnhancedBuilder({
                                 onClick={() => onSave?.(guide)}
                                 className="flex items-center gap-2 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors text-sm font-bold shadow-lg shadow-rose-200"
                             >
-                                💾 {t.builder.saveCreateAccount}
+                                <Save size={16} /> {t.builder.saveCreateAccount}
                             </button>
                         </div>
                     ) : (guide.isPublished ? (
@@ -319,7 +319,7 @@ export function EnhancedBuilder({
                             }}
                             className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-black transition-colors text-sm font-bold shadow-xl"
                         >
-                            🚀 {t.builder.publish}
+                            <ExternalLink size={16} /> {t.builder.publish}
                         </button>
                     ))}
                 </div>
@@ -362,7 +362,7 @@ export function EnhancedBuilder({
                 <main className="flex-1 bg-gray-100/50 overflow-y-auto p-8 flex justify-center">
                     <div className="w-full max-w-xl pb-20">
                         <div className="lg:hidden p-4 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-xl mb-6 text-sm flex items-start gap-3">
-                            <span className="text-xl">💻</span>
+                            <Monitor className="text-yellow-800 w-6 h-6" />
                             <div>
                                 <p className="font-bold">{t.builder.mobileMode}</p>
                             </div>
@@ -375,7 +375,7 @@ export function EnhancedBuilder({
 
                         {guide.blocks.length === 0 ? (
                             <div className="border-2 border-dashed border-gray-300 rounded-3xl p-12 text-center h-96 flex flex-col items-center justify-center bg-white/50">
-                                <span className="text-6xl mb-4 opacity-30">✨</span>
+                                <Sparkles className="w-16 h-16 text-indigo-400 opacity-30 mb-4" />
                                 <h3 className="text-xl font-bold text-gray-900 mb-2">{t.builder.emptyGuide}</h3>
                                 <p className="text-gray-500 mb-6">{t.builder.selectBlock}</p>
                             </div>
@@ -563,11 +563,11 @@ export function EnhancedBuilder({
                 isOpen={showThemes}
                 onClose={() => setShowThemes(false)}
                 title={t.builder.designTheme}
-                icon="🎨"
+                icon={<Palette className="w-6 h-6 text-rose-500" />}
             >
                 {!unlockedThemes && (
                     <div className="mb-4 p-3 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100 rounded-xl flex items-center gap-3 text-amber-800 text-xs font-medium">
-                        <span className="p-1.5 bg-amber-100 rounded-lg">👑</span>
+                        <span className="p-1.5 bg-amber-100 rounded-lg"><Lock className="w-4 h-4" /></span>
                         {t.builder.upgradePro}
                     </div>
                 )}
@@ -634,7 +634,7 @@ export function EnhancedBuilder({
                 isOpen={showIntegrations}
                 onClose={() => setShowIntegrations(false)}
                 title="Configuration de l'appartement"
-                icon="🔌"
+                icon={<Link2 className="w-6 h-6 text-rose-500" />}
             >
                 <div className="space-y-6 p-2">
                     <div className="p-4 rounded-2xl bg-indigo-50 border border-indigo-100">
@@ -693,7 +693,7 @@ export function EnhancedBuilder({
                 isOpen={showSubscribe}
                 onClose={() => setShowSubscribe(false)}
                 title={t.builder.unlockPublish}
-                icon="🚀"
+                icon={<ExternalLink className="w-6 h-6 text-rose-500" />}
             >
                 <div className="text-center p-4">
                     <p className="text-gray-600 mb-6">

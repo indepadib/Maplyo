@@ -318,7 +318,7 @@ export default function OnboardingPage() {
                         ) : (
                             <>
                                 <Sparkles className="w-5 h-5" />
-                                Générer mon guide magique ✨
+                                Générer mon guide magique
                             </>
                         )}
                     </button>

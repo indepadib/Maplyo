@@ -1,4 +1,4 @@
-export type Language = 'fr' | 'en' | 'es' | 'ar' | 'nl' | 'zh' | 'pt';
+﻿export type Language = 'fr' | 'en' | 'es' | 'ar' | 'nl' | 'zh' | 'pt';
 
 export const DICTIONARY = {
     "fr": {
@@ -516,7 +516,7 @@ export const DICTIONARY = {
             "delete": "Supprimer",
             "emptyTitle": "Aucun guide",
             "emptyDesc": "Créez votre premier guide.",
-            "tryAi": "✨ IA",
+            "tryAi": "IA",
             "createManual": "Manuel",
             "published": "En ligne",
             "draft": "Brouillon",
@@ -526,7 +526,7 @@ export const DICTIONARY = {
             "confirmDelete": "Supprimer ?",
             "deleteError": "Erreur",
             "aiModal": {
-                "title": "Magie ✨",
+                "title": "Magie",
                 "city": "Ville",
                 "cityPlaceholder": "Marrakech",
                 "type": "Type",
@@ -1417,7 +1417,7 @@ export const DICTIONARY = {
             "delete": "Delete",
             "emptyTitle": "No guide",
             "emptyDesc": "Create your first guide.",
-            "tryAi": "✨ AI",
+            "tryAi": "AI",
             "createManual": "Manual",
             "published": "Online",
             "draft": "Draft",
@@ -1427,7 +1427,7 @@ export const DICTIONARY = {
             "confirmDelete": "Delete?",
             "deleteError": "Error",
             "aiModal": {
-                "title": "Magic ✨",
+                "title": "Magic",
                 "city": "City",
                 "cityPlaceholder": "Marrakech",
                 "type": "Type",
@@ -2276,7 +2276,7 @@ export const DICTIONARY = {
             "delete": "Delete",
             "emptyTitle": "No guide",
             "emptyDesc": "Create your first guide.",
-            "tryAi": "✨ AI",
+            "tryAi": "AI",
             "createManual": "Manual",
             "published": "Online",
             "draft": "Draft",
@@ -2286,7 +2286,7 @@ export const DICTIONARY = {
             "confirmDelete": "Delete?",
             "deleteError": "Error",
             "aiModal": {
-                "title": "Magic ✨",
+                "title": "Magic",
                 "city": "City",
                 "cityPlaceholder": "Marrakech",
                 "type": "Type",
@@ -3140,7 +3140,7 @@ export const DICTIONARY = {
             "delete": "Delete",
             "emptyTitle": "No guide",
             "emptyDesc": "Create your first guide.",
-            "tryAi": "✨ AI",
+            "tryAi": "AI",
             "createManual": "Manual",
             "published": "Online",
             "draft": "Draft",
@@ -3150,7 +3150,7 @@ export const DICTIONARY = {
             "confirmDelete": "Delete?",
             "deleteError": "Error",
             "aiModal": {
-                "title": "Magic ✨",
+                "title": "Magic",
                 "city": "City",
                 "cityPlaceholder": "Marrakech",
                 "type": "Type",
@@ -3988,7 +3988,7 @@ export const DICTIONARY = {
             "delete": "Delete",
             "emptyTitle": "No guide",
             "emptyDesc": "Create your first guide.",
-            "tryAi": "✨ AI",
+            "tryAi": "AI",
             "createManual": "Manual",
             "published": "Online",
             "draft": "Draft",
@@ -3998,7 +3998,7 @@ export const DICTIONARY = {
             "confirmDelete": "Delete?",
             "deleteError": "Error",
             "aiModal": {
-                "title": "Magic ✨",
+                "title": "Magic",
                 "city": "City",
                 "cityPlaceholder": "Marrakech",
                 "type": "Type",
@@ -4836,7 +4836,7 @@ export const DICTIONARY = {
             "delete": "Delete",
             "emptyTitle": "No guide",
             "emptyDesc": "Create your first guide.",
-            "tryAi": "✨ AI",
+            "tryAi": "AI",
             "createManual": "Manual",
             "published": "Online",
             "draft": "Draft",
@@ -4846,7 +4846,7 @@ export const DICTIONARY = {
             "confirmDelete": "Delete?",
             "deleteError": "Error",
             "aiModal": {
-                "title": "Magic ✨",
+                "title": "Magic",
                 "city": "City",
                 "cityPlaceholder": "Marrakech",
                 "type": "Type",

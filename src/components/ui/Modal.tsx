@@ -6,7 +6,7 @@ interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
     title: string;
-    icon?: string;
+    icon?: React.ReactNode;
     children: React.ReactNode;
 }
 

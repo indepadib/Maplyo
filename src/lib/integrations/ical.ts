@@ -16,8 +16,11 @@ export async function parseAirbnbCalendar(url: string): Promise<BookingEvent[]> 
         const ical = await import('node-ical');
         const events = await ical.async.fromURL(url);
         
+        const now = new Date();
+        
         return Object.values(events)
             .filter(event => event && event.type === 'VEVENT' && event.start && event.end)
+            .filter((event: any) => new Date(event.end) > now)
             .map((event: any) => {
                 const summary = (event.summary as string) || '';
                 // Airbnb format: "Reserved - Name" or "Airbnb (Not available)"

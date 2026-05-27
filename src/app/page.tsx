@@ -23,7 +23,9 @@ import {
   Play,
   Mail,
   MessageCircle,
-  Sparkles
+  Sparkles,
+  Wifi,
+  Key
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import dynamic from 'next/dynamic';
@@ -303,7 +305,9 @@ const HowItWorks = () => {
                     </div>
                     
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs font-bold">✓</div>
+                      <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        <Check className="w-4 h-4" />
+                      </div>
                       <div>
                         <div className="text-xs font-bold text-white">Analyse de l'e-mail par l'IA...</div>
                         <div className="w-[200px] h-1.5 bg-white/10 rounded-full mt-1 overflow-hidden">
@@ -323,14 +327,14 @@ const HowItWorks = () => {
                     <div className="text-sm font-bold text-white mb-2">Éditeur de Blocs Maplyo</div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="bg-white/5 p-3 rounded-xl border border-white/5 flex items-center gap-2">
-                        <span className="text-rose-400">📶</span>
+                        <Wifi className="w-4 h-4 text-rose-400" />
                         <div className="text-xs">
                           <div className="font-bold text-white">Code Wi-Fi</div>
                           <div className="text-zinc-500 font-mono">Configuré</div>
                         </div>
                       </div>
                       <div className="bg-white/5 p-3 rounded-xl border border-white/5 flex items-center gap-2">
-                        <span className="text-emerald-400">🔑</span>
+                        <Key className="w-4 h-4 text-emerald-400" />
                         <div className="text-xs">
                           <div className="font-bold text-white">Codes d'accès</div>
                           <div className="text-zinc-500">Par code déverrouillé</div>
@@ -380,7 +384,7 @@ const HowItWorks = () => {
                     </div>
 
                     <div className="bg-rose-500/10 border border-rose-500/20 p-2.5 rounded-xl text-center">
-                      <div className="text-[10px] text-zinc-400 font-medium">📶 Besoin de Wi-Fi ?</div>
+                      <div className="flex items-center gap-1 text-[10px] text-zinc-400 font-medium"><Wifi className="w-3 h-3" /> Besoin de Wi-Fi ?</div>
                       <button className="mt-1 bg-white text-slate-950 font-bold text-[10px] py-1 px-3 rounded-lg shadow w-full">
                         Se connecter en 1 clic
                       </button>
@@ -561,7 +565,9 @@ export default function LandingPage() {
                 className="absolute top-20 right-10 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl max-w-[200px]"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 text-xs font-bold">✓</div>
+                  <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400">
+                    <Check className="w-4 h-4" />
+                  </div>
                   <span className="text-white text-sm font-bold">{t.socialProof.autoTranslate.title}</span>
                 </div>
                 <p className="text-xs text-zinc-400">{t.socialProof.autoTranslate.desc}</p>
@@ -692,9 +698,11 @@ export default function LandingPage() {
                     {t.enterpriseSection.desc}
                   </p>
                   <ul className="space-y-4 mb-10">
-                    {t.enterpriseSection.bulletPoints.map((item, i) => (
+                    {t.enterpriseSection.bulletPoints.map((item: string, i: number) => (
                       <li key={i} className="flex items-center gap-3 text-zinc-300">
-                        <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-[10px]">✓</div>
+                        <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                          <Check className="w-3 h-3" />
+                        </div>
                         {item}
                       </li>
                     ))}
