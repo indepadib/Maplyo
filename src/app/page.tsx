@@ -22,7 +22,8 @@ import {
   X,
   Play,
   Mail,
-  MessageCircle
+  MessageCircle,
+  Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import dynamic from 'next/dynamic';
