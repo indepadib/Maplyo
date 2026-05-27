@@ -38,14 +38,27 @@ async function fetchAirbnbListing(url: string): Promise<string> {
     return "";
 }
 
-function extractAirbnbMetadata(html: string): string {
-    if (!html) return "";
-    let dataText = "";
+interface AirbnbExtracted {
+    dataText: string;
+    listingName?: string;
+    city?: string;
+}
 
-    // 1. Extract title
+function extractAirbnbMetadata(html: string): AirbnbExtracted {
+    if (!html) return { dataText: "" };
+    let dataText = "";
+    let listingName: string | undefined;
+    let city: string | undefined;
+
+    // 1. Extract title tag
     const titleMatch = html.match(/<title>([^<]+)<\/title>/i);
     if (titleMatch) {
         dataText += `Title: ${titleMatch[1]}\n`;
+        // Try to extract city from title patterns like "... à Mohammedia, ..." or "... in Mohammedia, ..."
+        const cityFromTitle = titleMatch[1].match(/[àin]+\s+([A-ZÀ-Ö][a-zA-ZÀ-ÿ\-\s]+?)(?:,|\s+-\s+Airbnb)/i);
+        if (cityFromTitle) {
+            city = cityFromTitle[1].trim();
+        }
     }
 
     // 2. Extract meta tags
@@ -60,7 +73,7 @@ function extractAirbnbMetadata(html: string): string {
         dataText += `Meta og:${match[1]}: ${match[2]}\n`;
     }
 
-    // 3. Extract JSON-LD scripts
+    // 3. Extract JSON-LD scripts and parse name + address
     const jsonLdRegex = /<script\s+[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
     let ldMatch;
     let count = 0;
@@ -68,50 +81,78 @@ function extractAirbnbMetadata(html: string): string {
         try {
             const cleanJson = ldMatch[1].trim();
             dataText += `JSON-LD Data:\n${cleanJson}\n`;
+            // Parse for name and addressLocality
+            const parsed = JSON.parse(cleanJson);
+            // Helper to recursively find first matching key in object/array
+            const findKey = (obj: any, key: string): string | undefined => {
+                if (!obj || typeof obj !== 'object') return undefined;
+                if (Array.isArray(obj)) {
+                    for (const item of obj) { const v = findKey(item, key); if (v) return v; }
+                    return undefined;
+                }
+                if (key in obj && typeof obj[key] === 'string') return obj[key];
+                for (const k of Object.keys(obj)) { const v = findKey(obj[k], key); if (v) return v; }
+                return undefined;
+            };
+            if (!listingName) listingName = findKey(parsed, 'name');
+            if (!city) city = findKey(parsed, 'addressLocality');
             count++;
         } catch (e) {
-            // ignore
+            // ignore parse errors
         }
     }
 
-    return dataText.slice(0, 10000); // limit to 10k chars
+    return { dataText: dataText.slice(0, 10000), listingName, city };
 }
 
 export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     const { city, airbnbUrl, type = "airbnb", targetAudience = "everyone", language, mood } = prompt;
 
-    let targetLocation = city || "Paris";
-    let listingName = "Mon Airbnb";
+    // Default values - will be overridden by scraping or slug parsing
+    let targetLocation = city || "";
+    let listingName = "";
     let scrapedInfo = "";
 
     if (airbnbUrl) {
         try {
-            // Fetch Airbnb page metadata
+            // 1. Fetch Airbnb page HTML
             const html = await fetchAirbnbListing(airbnbUrl);
             if (html) {
-                scrapedInfo = extractAirbnbMetadata(html);
+                // 2. Extract metadata + name/city directly from HTML (JSON-LD + title)
+                const extracted = extractAirbnbMetadata(html);
+                scrapedInfo = extracted.dataText;
+
+                // Prefer JSON-LD extracted values (most reliable)
+                if (extracted.listingName) listingName = extracted.listingName;
+                if (extracted.city) targetLocation = extracted.city;
             }
 
-            const urlObj = new URL(airbnbUrl);
-            const pathParts = urlObj.pathname.split('/');
-            // Path is usually "/rooms/name-id" or "/rooms/id"
-            const roomPart = pathParts.find(p => p && p !== 'rooms');
-            if (roomPart && !/^\d+$/.test(roomPart)) {
-                const nameWithoutId = roomPart.replace(/-\d+$/, '').replace(/-/g, ' ');
-                listingName = nameWithoutId.charAt(0).toUpperCase() + nameWithoutId.slice(1);
-                
-                // Try to find a city in the listing name
-                const lowerName = nameWithoutId.toLowerCase();
-                const cities = ['paris', 'marrakech', 'london', 'barcelona', 'rome', 'new york', 'tokyo', 'casablanca', 'rabat', 'nice', 'lyon', 'marseille', 'mohammedia', 'agadir', 'tangier', 'fes'];
-                const foundCity = cities.find(c => lowerName.includes(c));
-                if (foundCity) {
-                    targetLocation = foundCity.charAt(0).toUpperCase() + foundCity.slice(1);
+            // 3. Fallback: parse URL slug if JSON-LD didn't give us a name
+            if (!listingName || !targetLocation) {
+                const urlObj = new URL(airbnbUrl);
+                const pathParts = urlObj.pathname.split('/');
+                const roomPart = pathParts.find(p => p && p !== 'rooms');
+                if (roomPart && !/^\d+$/.test(roomPart)) {
+                    const nameWithoutId = roomPart.replace(/-\d+$/, '').replace(/-/g, ' ');
+                    if (!listingName) {
+                        listingName = nameWithoutId.charAt(0).toUpperCase() + nameWithoutId.slice(1);
+                    }
+                    if (!targetLocation) {
+                        const lowerName = nameWithoutId.toLowerCase();
+                        const knownCities = ['paris', 'marrakech', 'london', 'barcelona', 'rome', 'new york', 'tokyo', 'casablanca', 'rabat', 'nice', 'lyon', 'marseille', 'mohammedia', 'agadir', 'tangier', 'fes', 'essaouira', 'meknes', 'tetouan', 'safi', 'el jadida'];
+                        const foundCity = knownCities.find(c => lowerName.includes(c));
+                        if (foundCity) targetLocation = foundCity.charAt(0).toUpperCase() + foundCity.slice(1);
+                    }
                 }
             }
         } catch (e) {
-            // ignore
+            console.error("Scraping error:", e);
         }
     }
+
+    // Final fallbacks
+    if (!listingName) listingName = city ? `Mon Airbnb - ${city}` : "Mon Airbnb";
+    if (!targetLocation) targetLocation = city || "Paris";
 
     const openai = createOpenAIClient();
 
@@ -169,7 +210,7 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
             model: "gpt-4o",
             messages: [
                 { role: "system", content: systemPrompt },
-                { role: "user", content: `Generate a guide for ${listingName} in ${targetLocation}.` }
+                { role: "user", content: `Generate a complete, personalized welcome guide using the listing details and location provided in the context above. The guide MUST be for the exact location specified (${targetLocation || "the listing's actual city"}) — do NOT invent a different city or use Paris as a default.` }
             ],
             temperature: 0.7,
         });
@@ -180,10 +221,13 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
         const finalLocation = json.location || targetLocation || "Paris";
 
         // Post-processing: Add IDs and visibility
+        // Smart theme matching: try exact city name, then coastal/beach for Moroccan coastal cities
+        const coastalCities = ['mohammedia', 'mohammédia', 'el jadida', 'essaouira', 'agadir', 'safi'];
+        const isCoastal = coastalCities.some(c => finalLocation.toLowerCase().includes(c));
         const matchedTheme = guideThemes.find(t =>
             t.name.toLowerCase().includes(finalLocation.toLowerCase()) ||
-            t.id.includes(finalLocation.toLowerCase())
-        ) || guideThemes[0];
+            t.id.toLowerCase().includes(finalLocation.toLowerCase())
+        ) || (isCoastal ? guideThemes.find(t => t.id === 'beach') : null) || guideThemes[0];
 
         const blocks = (json.blocks || []).map((b: any) => ({
             ...b,
