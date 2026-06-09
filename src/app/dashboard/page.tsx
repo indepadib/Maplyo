@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2, Bot } from "lucide-react";
+import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2, Bot, ShoppingCart } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { guideThemes } from "@/types/themes";
 import { Modal } from "@/components/ui/Modal";
@@ -390,6 +390,13 @@ function DashboardContent() {
                             title={t.settings.title}
                         >
                             <Settings className="w-4 h-4" />
+                        </Link>
+                        <Link
+                            href="/dashboard/shop"
+                            className="w-10 h-10 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 hover:bg-blue-600/30 hover:text-white transition-all hover:scale-105"
+                            title="Boutique Pro (Plaques QR)"
+                        >
+                            <ShoppingCart className="w-4 h-4" />
                         </Link>
                     </div>
                 </div>

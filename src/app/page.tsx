@@ -37,7 +37,8 @@ import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { Language } from "@/lib/i18n/dictionary";
 import { GuideShowcase } from "@/components/landing/GuideShowcase";
-import { Testimonials } from "@/components/landing/Testimonials";
+import { WallOfLove } from "@/components/landing/WallOfLove";
+import { UseCases } from "@/components/landing/UseCases";
 import { QrCodeWall } from "@/components/landing/QrCodeWall";
 import { FAQ } from "@/components/landing/FAQ";
 import { CurrencyCode, PRICING_BY_CURRENCY } from "@/lib/pricing/currencies";
@@ -521,9 +522,9 @@ export default function LandingPage() {
                     {t.common.getStarted}
                   </Button>
                 </Link>
-                <Link href="/demo">
-                  <Button variant="secondary" className="h-14 px-8 text-lg bg-white/5 text-white border-white/10 hover:bg-white/10 backdrop-blur-sm rounded-full">
-                    <Play className="w-5 h-5 mr-2 fill-current" />
+                <Link href="/g/demo" target="_blank">
+                  <Button variant="secondary" className="h-14 px-8 text-lg bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-md rounded-full shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] transform hover:scale-105 transition-all duration-300">
+                    <Play className="w-5 h-5 mr-2 fill-white" />
                     {t.hero.demo}
                   </Button>
                 </Link>
@@ -626,8 +627,11 @@ export default function LandingPage() {
         {/* --- Guide Showcase (Examples) --- */}
         <GuideShowcase />
 
-        {/* --- Testimonials --- */}
-        <Testimonials />
+        {/* --- Use Cases --- */}
+        <UseCases />
+
+        {/* --- Wall Of Love (Testimonials) --- */}
+        <WallOfLove />
 
         {/* --- Features Section --- */}
         <section id="features" className="py-32 px-6 relative">
