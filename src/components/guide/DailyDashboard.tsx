@@ -47,27 +47,26 @@ export function DailyDashboard({ guestName, location }: DailyDashboardProps) {
     if (!weather) return null;
 
     return (
-        <div className="w-full max-w-2xl mx-auto mb-8 relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 text-white shadow-2xl border border-white/10">
+        <div className="w-full max-w-2xl mx-auto mb-8 relative overflow-hidden rounded-3xl bg-white/20 backdrop-blur-2xl p-6 text-white shadow-xl border border-white/40 ring-1 ring-white/10">
             {/* Elegant glassmorphism background effect */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-rose-500/10 rounded-full blur-2xl translate-y-1/3 -translate-x-1/4"></div>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
             
             <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div>
-                    <p className="text-white/60 text-sm font-medium tracking-wider uppercase mb-1">{dateString}</p>
-                    <h2 className="text-3xl font-light tracking-tight mb-2">
+                    <p className="text-white/80 text-sm font-bold tracking-widest uppercase mb-1 drop-shadow-sm">{dateString}</p>
+                    <h2 className="text-3xl font-black tracking-tight mb-2 drop-shadow-md">
                         {greeting},
                     </h2>
-                    <p className="text-white/80 font-medium">
+                    <p className="text-white/90 font-medium drop-shadow-sm">
                         C'est une belle journée pour découvrir {location || "les environs"}.
                     </p>
                 </div>
 
-                <div className="flex items-center gap-4 bg-white/5 backdrop-blur-md px-5 py-4 rounded-2xl border border-white/10">
+                <div className="flex items-center gap-4 bg-white/30 backdrop-blur-md px-5 py-4 rounded-2xl border border-white/40 shadow-sm">
                     {weather.icon}
                     <div>
-                        <div className="text-3xl font-light tracking-tight">{weather.temp}°</div>
-                        <div className="text-white/60 text-sm font-medium">{weather.condition}</div>
+                        <div className="text-3xl font-black tracking-tight drop-shadow-md">{weather.temp}°</div>
+                        <div className="text-white/90 text-sm font-bold drop-shadow-sm">{weather.condition}</div>
                     </div>
                 </div>
             </div>

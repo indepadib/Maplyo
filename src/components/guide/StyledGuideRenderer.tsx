@@ -584,14 +584,8 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                 </div>
                             </div>
 
-                            {/* TIP ALERT - Floating Notification Style */}
                             <AnimatePresence>
-                                {!searchQuery && showTip && (
-                                    <DailyRecommendation city={city} lang={lang} onClose={() => setShowTip(false)} />
-                                )}
-
-
-                                {/* GUIDE AI ASSISTANT WIDGET */}
+                                {/* Guide AI Assistant Widget */}
                                 <GuideChatbot guide={guide} primaryColor={currentTheme.primary} forceMobile={forceMobile} lang={lang} />
                             </AnimatePresence>
                         </div>
@@ -602,7 +596,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ duration: 0.8 }}
                             >
-                                <h1 className={`font-black mb-4 text-white tracking-tight leading-[1.05] drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] ${isResponsive ? 'text-4xl md:text-8xl md:mb-6' : (forceDesktop ? 'text-8xl mb-6' : 'text-3xl')}`}>
+                                <h1 className={`font-black mb-3 text-white tracking-tight leading-[1.1] drop-shadow-md ${isResponsive ? 'text-3xl md:text-5xl lg:text-6xl md:mb-4' : (forceDesktop ? 'text-5xl lg:text-6xl mb-4' : 'text-3xl')}`}>
                                     <TranslatedText text={(heroBlock?.data as any)?.title || guide.title} lang={lang} />
                                 </h1>
                             </motion.div>
@@ -612,9 +606,9 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                     initial={{ y: 30, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.2, duration: 0.8 }}
-                                    className={`flex flex-col gap-6 items-center ${isResponsive ? 'md:items-start' : (forceDesktop ? 'items-start' : '')}`}
+                                    className={`flex flex-col gap-4 items-center ${isResponsive ? 'md:items-start' : (forceDesktop ? 'items-start' : '')}`}
                                 >
-                                    <p className={`text-white/95 max-w-xl font-bold leading-relaxed drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] ${isResponsive ? 'text-lg md:text-2xl' : (forceDesktop ? 'text-2xl' : 'text-base')}`}>
+                                    <p className={`text-white/90 max-w-2xl font-medium leading-relaxed drop-shadow-sm ${isResponsive ? 'text-base md:text-lg' : (forceDesktop ? 'text-lg' : 'text-base')}`}>
                                         <TranslatedText text={(heroBlock.data as any).subtitle} lang={lang} />
                                     </p>
 
@@ -639,15 +633,28 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
 
                 {/* PREMIUM DAILY DASHBOARD */}
                 {!searchQuery && (
-                    <div className={`relative max-w-5xl mx-auto px-4 ${isResponsive ? 'md:px-12' : (forceDesktop ? 'px-12' : '')} z-20`}>
+                    <div className={`relative max-w-5xl mx-auto px-4 ${isResponsive ? 'md:px-12' : (forceDesktop ? 'px-12' : '')} z-30 -mt-16 mb-6`}>
                         <motion.div
-                            initial={{ y: 50, opacity: 0 }}
+                            initial={{ y: 30, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.3, duration: 0.6 }}
-                            style={{ y: gridY }}
                         >
                             <DailyDashboard location={city} />
                         </motion.div>
+                        
+                        {/* Daily Recommendation integrated below dashboard rather than floating modally */}
+                        <AnimatePresence>
+                            {showTip && (
+                                <motion.div 
+                                    initial={{ opacity: 0, height: 0, marginTop: 0 }} 
+                                    animate={{ opacity: 1, height: 'auto', marginTop: 16 }} 
+                                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                                    className="overflow-hidden"
+                                >
+                                    <DailyRecommendation city={city} lang={lang} onClose={() => setShowTip(false)} />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 )}
 
@@ -659,7 +666,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                     style={{ y: gridY }}
                     className={`relative max-w-5xl mx-auto px-4 ${isResponsive ? 'md:px-12' : (forceDesktop ? 'px-12' : '')}`}
                 >
-                    <div className={`bg-white/5 backdrop-blur-2xl border border-white/10 rounded-t-[32px] md:rounded-[48px] shadow-2xl min-h-[50vh] ${paddingClass}`}>
+                    <div className={`bg-white/40 backdrop-blur-3xl border border-white/60 rounded-t-[32px] md:rounded-[48px] shadow-[0_-20px_60px_-15px_rgba(0,0,0,0.1)] min-h-[50vh] ${paddingClass}`}>
 
                         {/* 
                             GRID REFINEMENT: 
@@ -721,7 +728,7 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                                     lang: lang
                                 };
 
-                                const wrapperClass = `${colSpan} ${aspect} relative group overflow-hidden rounded-3xl backdrop-blur-xl bg-white/70 border border-white/40 shadow-sm transition-all duration-300 hover:shadow-lg`;
+                                const wrapperClass = `${colSpan} ${aspect} relative group overflow-hidden rounded-3xl backdrop-blur-2xl bg-white/80 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-1`;
 
                                 if (isRichBlock) {
                                     if (b.type === "location") return <div key={b.id} className={wrapperClass}><LocationCard {...cardProps} /></div>;
