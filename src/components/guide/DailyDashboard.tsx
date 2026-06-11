@@ -12,37 +12,74 @@ interface WeatherData {
 interface DailyDashboardProps {
     guestName?: string;
     location?: string;
+    lang?: string;
 }
 
-export function DailyDashboard({ guestName, location }: DailyDashboardProps) {
+const translations = {
+    fr: {
+        morning: "Bonjour",
+        evening: "Bonsoir",
+        subtitle: "C'est une belle journée pour découvrir",
+        environs: "les environs",
+        sunny: "Ensoleillé",
+        cloudy: "Partiellement nuageux",
+        clear: "Ciel dégagé"
+    },
+    en: {
+        morning: "Good morning",
+        evening: "Good evening",
+        subtitle: "It's a beautiful day to explore",
+        environs: "the surroundings",
+        sunny: "Sunny",
+        cloudy: "Partly cloudy",
+        clear: "Clear sky"
+    },
+    es: {
+        morning: "Buenos días",
+        evening: "Buenas tardes",
+        subtitle: "Es un hermoso día para descubrir",
+        environs: "los alrededores",
+        sunny: "Soleado",
+        cloudy: "Parcialmente nublado",
+        clear: "Cielo despejado"
+    }
+} as any;
+
+export function DailyDashboard({ guestName, location, lang = 'fr' }: DailyDashboardProps) {
     const [weather, setWeather] = useState<WeatherData | null>(null);
     const [greeting, setGreeting] = useState("");
     const [dateString, setDateString] = useState("");
+    const t = translations[lang] || translations.fr;
 
     useEffect(() => {
         // Set date and greeting
         const now = new Date();
         const hour = now.getHours();
         
-        let timeGreeting = "Bonjour";
-        if (hour >= 18) timeGreeting = "Bonsoir";
+        let timeGreeting = t.morning;
+        if (hour >= 18) timeGreeting = t.evening;
         
         setGreeting(`${timeGreeting}${guestName ? ` ${guestName}` : ""}`);
         
         const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
-        setDateString(now.toLocaleDateString('fr-FR', options).replace(/^\w/, (c) => c.toUpperCase()));
+        // Date formatting based on language
+        let locale = 'fr-FR';
+        if (lang === 'en') locale = 'en-US';
+        if (lang === 'es') locale = 'es-ES';
+        
+        setDateString(now.toLocaleDateString(locale, options).replace(/^\w/, (c) => c.toUpperCase()));
 
         // Simulate weather fetch based on location or default
         // In a real scenario, this would call an API like OpenMeteo based on lat/lng
         // For the demo and elegant UI, we'll randomize a bit or set a nice default
         const conditions = [
-            { temp: 24, condition: "Ensoleillé", icon: <Sun className="w-8 h-8 text-amber-400" /> },
-            { temp: 22, condition: "Partiellement nuageux", icon: <Cloud className="w-8 h-8 text-slate-400" /> },
-            { temp: 26, condition: "Ciel dégagé", icon: <Sun className="w-8 h-8 text-amber-500" /> }
+            { temp: 24, condition: t.sunny, icon: <Sun className="w-8 h-8 text-amber-400" /> },
+            { temp: 22, condition: t.cloudy, icon: <Cloud className="w-8 h-8 text-slate-400" /> },
+            { temp: 26, condition: t.clear, icon: <Sun className="w-8 h-8 text-amber-500" /> }
         ];
         
         setWeather(conditions[Math.floor(Math.random() * conditions.length)]);
-    }, [guestName, location]);
+    }, [guestName, location, lang, t]);
 
     if (!weather) return null;
 
@@ -58,7 +95,7 @@ export function DailyDashboard({ guestName, location }: DailyDashboardProps) {
                         {greeting},
                     </h2>
                     <p className="text-white/90 font-medium drop-shadow-sm">
-                        C'est une belle journée pour découvrir {location || "les environs"}.
+                        {t.subtitle} {location || t.environs}.
                     </p>
                 </div>
 

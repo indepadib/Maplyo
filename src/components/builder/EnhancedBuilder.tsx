@@ -132,11 +132,13 @@ export function EnhancedBuilder({
                     
                     if (intError) {
                         console.error("Error saving guide integrations (upsert):", intError);
-                        // Fallback: try update if upsert fails
-                        await supabase
-                            .from("guide_integrations")
-                            .update({ config: guideIntegrations })
-                            .eq('guide_id', next.id);
+                        // Fallback: safe check
+                        const { data: existing } = await supabase.from("guide_integrations").select("id").eq("guide_id", next.id).maybeSingle();
+                        if (existing) {
+                            await supabase.from("guide_integrations").update({ config: guideIntegrations }).eq("guide_id", next.id);
+                        } else {
+                            await supabase.from("guide_integrations").insert({ guide_id: next.id, config: guideIntegrations });
+                        }
                     }
                 } catch (e) {
                     console.error("Critical error in integrations persist:", e);
