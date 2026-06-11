@@ -491,8 +491,10 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
     const accessBlock = guide.blocks.find(b => b.type === "access_codes");
     const locationBlock = guide.blocks.find(b => b.type === "location");
 
-    // Extract full address for Smart Recommendations
-    const city = (locationBlock && (locationBlock.data as any).address) || "Destination";
+    // Extract full address for Smart Recommendations. Fallback to guide title if no location block exists.
+    const city = (locationBlock && (locationBlock.data as any).address) 
+                 ? (locationBlock.data as any).address 
+                 : guide.title || "la région";
 
     // Intelligent Filter logic
     const gridBlocks = useMemo(() => {

@@ -11,8 +11,9 @@ export async function POST(request: NextRequest) {
         }
 
         const prompt = `
-        You are a local expert for ${city || "this city"}.
-        Generate a "Tip of the Day" for a visitor.
+        You are a local expert. The user is staying at or near: "${city || "this region"}".
+        Extract the likely city or region from that string (e.g. if it says "Appartement à Fuengirola", the city is Fuengirola).
+        Generate a "Tip of the Day" for a visitor in that specific city/region.
         Context:
         - Date: ${new Date().toLocaleDateString()}
         - Weather: ${weather || "Normal"}
