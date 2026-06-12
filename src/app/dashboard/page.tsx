@@ -341,7 +341,7 @@ function DashboardContent() {
             </div>
 
             {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
+            <header className="fixed top-0 left-0 right-0 z-50 bg-slate-950/40 backdrop-blur-3xl border-b border-white/10 shadow-sm shadow-white/5">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                     <a href="https://maplyo.com" className="flex items-center gap-3 group">
                         <div className="w-10 h-10 bg-gradient-to-br from-rose-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-rose-500/20 group-hover:scale-105 transition-transform duration-300">
@@ -468,7 +468,7 @@ function DashboardContent() {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: idx * 0.05 }}
-                                        className="group bg-slate-900/50 backdrop-blur-sm rounded-[2rem] border border-white/5 overflow-hidden hover:border-rose-500/30 transition-all duration-500 hover:-translate-y-1 flex flex-col shadow-2xl shadow-black/20"
+                                        className="group bg-white/5 backdrop-blur-2xl rounded-[2rem] border border-white/10 overflow-hidden hover:border-white/30 transition-all duration-500 hover:-translate-y-1 flex flex-col shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(225,29,72,0.15)] ring-1 ring-white/5 hover:ring-white/20"
                                     >
                                         {/* Preview Banner */}
                                         <div className="h-48 bg-slate-800 relative overflow-hidden">

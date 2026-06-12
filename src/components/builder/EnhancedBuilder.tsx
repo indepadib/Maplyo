@@ -458,17 +458,42 @@ export function EnhancedBuilder({
                             </div>
                         </div>
 
-                        <div className={`flex-1 overflow-y-auto overflow-x-hidden p-6 flex justify-center items-start ${previewDevice === 'desktop' ? 'bg-gray-100' : ''}`}>
-                            <div
-                                className={`
-                                    ${previewDevice === 'desktop'
-                                        ? 'w-[1280px] min-w-[1280px] h-[800px] scale-[0.45] origin-top rounded-xl border border-gray-200/50 shrink-0'
-                                        : 'w-[320px] min-w-[320px] min-h-[600px] scale-90 origin-top rounded-[3rem] border-[8px] border-gray-900 shrink-0'} 
-                                    bg-white shadow-2xl overflow-hidden relative transition-all duration-300
-                                `}
-                            >
-                                {/* Mobile Notch */}
-                                {previewDevice === 'mobile' && <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-900 rounded-b-2xl z-20"></div>}
+                        <div className={`flex-1 overflow-y-auto overflow-x-hidden p-6 flex justify-center items-start ${previewDevice === 'desktop' ? 'bg-gray-100' : 'bg-slate-50'}`}>
+                            {/* iPhone Hardware Frame Wrapper */}
+                            <div className={`relative ${previewDevice === 'mobile' ? 'scale-[0.80] origin-top' : 'scale-[0.45] origin-top'} transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]`}>
+                                
+                                {/* Hardware Buttons (Only on mobile) */}
+                                {previewDevice === 'mobile' && (
+                                    <>
+                                        {/* Silent Switch */}
+                                        <div className="absolute top-[100px] -left-[14px] w-[6px] h-[26px] bg-slate-300 border border-slate-400/50 rounded-l-md z-0 shadow-[-2px_0_5px_rgba(0,0,0,0.1)]"></div>
+                                        {/* Volume Up */}
+                                        <div className="absolute top-[150px] -left-[14px] w-[6px] h-[50px] bg-slate-300 border border-slate-400/50 rounded-l-md z-0 shadow-[-2px_0_5px_rgba(0,0,0,0.1)]"></div>
+                                        {/* Volume Down */}
+                                        <div className="absolute top-[215px] -left-[14px] w-[6px] h-[50px] bg-slate-300 border border-slate-400/50 rounded-l-md z-0 shadow-[-2px_0_5px_rgba(0,0,0,0.1)]"></div>
+                                        {/* Power Button */}
+                                        <div className="absolute top-[170px] -right-[14px] w-[6px] h-[75px] bg-slate-300 border border-slate-400/50 rounded-r-md z-0 shadow-[2px_0_5px_rgba(0,0,0,0.1)]"></div>
+                                    </>
+                                )}
+
+                                <div
+                                    className={`
+                                        ${previewDevice === 'desktop'
+                                            ? 'w-[1280px] min-w-[1280px] h-[800px] rounded-xl border border-gray-200/50'
+                                            : 'w-[375px] min-w-[375px] h-[812px] rounded-[3.5rem] border-[12px] border-slate-800 ring-2 ring-slate-800/10 shadow-[0_0_0_2px_#334155,0_20px_40px_rgba(0,0,0,0.15)] bg-black'} 
+                                        bg-white overflow-hidden relative z-10 shrink-0
+                                    `}
+                                >
+                                    {/* Mobile Dynamic Island */}
+                                    {previewDevice === 'mobile' && (
+                                        <div className="absolute top-3 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-full z-50 flex items-center justify-between px-3">
+                                            {/* Camera lens reflection */}
+                                            <div className="w-3 h-3 rounded-full bg-[#111] shadow-inner relative overflow-hidden">
+                                                <div className="absolute top-0 right-0 w-1.5 h-1.5 bg-blue-500/20 rounded-full blur-[1px]"></div>
+                                            </div>
+                                            <div className="w-1.5 h-1.5 rounded-full bg-green-500/50"></div>
+                                        </div>
+                                    )}
 
                                 {/* Desktop Browser Header */}
                                 {previewDevice === 'desktop' && (
@@ -485,13 +510,11 @@ export function EnhancedBuilder({
                                     </div>
                                 )}
 
-                                <div className="h-full overflow-y-auto no-scrollbar bg-white" style={{ backgroundColor: selectedTheme.background }}>
-                                    <GuideRenderer
-                                        guide={guide}
-                                        unlocked={true}
-                                        forceMobile={previewDevice === 'mobile'}
-                                        forceDesktop={previewDevice === 'desktop'}
-                                    />
+                                    <div className={`w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar ${previewDevice === 'mobile' ? 'pt-8 bg-black' : ''}`}>
+                                        <div className={`w-full min-h-full bg-white relative ${previewDevice === 'mobile' ? 'rounded-[2.5rem] overflow-hidden' : ''}`}>
+                                            <StyledGuideRenderer guide={guide} unlocked={true} forceDesktop={previewDevice === 'desktop'} forceMobile={previewDevice === 'mobile'} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
