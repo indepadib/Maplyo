@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MessageCircle, X, Send, CheckCircle2 } from "lucide-react";
 
 const categories = [
@@ -27,6 +27,28 @@ export function GuestRequestWidget({ guideId }: { guideId: string }) {
     guestEmail: "",
     guestPhone: "",
   });
+
+  useEffect(() => {
+    const openFromEscalation = (event: Event) => {
+      const custom = event as CustomEvent<{
+        category?: string;
+        title?: string;
+        message?: string;
+      }>;
+
+      setForm((current) => ({
+        ...current,
+        category: custom.detail?.category || current.category,
+        title: custom.detail?.title || current.title,
+        message: custom.detail?.message || current.message,
+      }));
+      setSent(false);
+      setOpen(true);
+    };
+
+    window.addEventListener("maplyo:open-support", openFromEscalation as EventListener);
+    return () => window.removeEventListener("maplyo:open-support", openFromEscalation as EventListener);
+  }, []);
 
   const submit = async () => {
     if (!form.title || !form.guestName || (!form.guestEmail && !form.guestPhone)) return;
