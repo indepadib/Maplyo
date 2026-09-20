@@ -8,7 +8,14 @@ export async function POST(request: NextRequest) {
         const prompt: GuidePrompt = body.prompt;
 
         if (!prompt || (!prompt.city && !prompt.airbnbUrl)) {
-            return NextResponse.json({ error: "City or Airbnb URL is required" }, { status: 400 });
+            return NextResponse.json({ error: "City or property source is required" }, { status: 400 });
+        }
+
+        if (prompt.airbnbUrl && !prompt.sourceOwnerConfirmed) {
+            return NextResponse.json({
+                error: "Listing authorization confirmation required",
+                message: "Confirm that you own, manage, or are authorized to use the listing information before importing it."
+            }, { status: 400 });
         }
 
         // Validate User & Check Limits
