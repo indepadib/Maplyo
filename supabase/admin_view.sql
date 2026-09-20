@@ -21,4 +21,5 @@ ORDER BY
     p.created_at DESC;
 
 -- Grant access to the dashboard users (if you want to fetch this in an admin app later)
-REVOKE ALL ON public.admin_users_stats FROM anon, authenticated;\nGRANT SELECT ON public.admin_users_stats TO service_role;
+REVOKE ALL ON public.admin_users_stats FROM anon, authenticated;
+GRANT SELECT ON public.admin_users_stats TO service_role;
