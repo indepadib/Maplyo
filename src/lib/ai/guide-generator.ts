@@ -2,10 +2,12 @@ import { Guide, BlockType } from "@/types/blocks";
 import { guideThemes } from "@/types/themes";
 import { createOpenAIClient, cleanAIJSON } from "./openai";
 import { importAirbnbListing } from "@/lib/importers/airbnb";
+import { importPropertyWebsite } from "@/lib/importers/website";
 
 export interface GuidePrompt {
     city?: string;
     airbnbUrl?: string;
+    propertyUrl?: string;
     type?: "airbnb" | "hotel" | "guest_house" | "other";
     targetAudience?: "families" | "couples" | "remote_workers" | "groups" | "everyone";
     language: "fr" | "en";
@@ -17,7 +19,7 @@ export interface GuidePrompt {
 function uid() { return Math.random().toString(36).slice(2, 10); }
 
 export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
-    const { city, airbnbUrl, sourceOwnerConfirmed = false, type = "airbnb", targetAudience = "everyone", language, mood } = prompt;
+    const { city, airbnbUrl, propertyUrl, sourceOwnerConfirmed = false, type = "airbnb", targetAudience = "everyone", language, mood } = prompt;
 
     // Default values — will be overridden by scraping
     let targetLocation = city || "";
@@ -55,11 +57,31 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
                 // URL validation is handled by the importer.
             }
         }
+    } else if (propertyUrl) {
+        const imported = await importPropertyWebsite(propertyUrl, sourceOwnerConfirmed);
+        scrapedInfo = imported.dataText;
+
+        if (imported.propertyName) listingName = imported.propertyName;
+        if (imported.city) targetLocation = imported.city;
+        if (imported.coverImageUrl) realCoverImageUrl = imported.coverImageUrl;
+        if (imported.description) realDescription = imported.description;
+        if (imported.amenities?.length) realAmenities = imported.amenities;
+
+        if (imported.warning) {
+            console.warn(`[guide-generator] Website import warning: ${imported.warning}`);
+        }
     }
 
     // Final fallbacks
-    if (!listingName) listingName = city ? `Mon Airbnb - ${city}` : "Mon Airbnb";
-    if (!targetLocation) targetLocation = city || "Paris";
+    const propertyLabel = type === "hotel"
+        ? "Hotel"
+        : type === "guest_house"
+            ? "Guest House"
+            : type === "airbnb"
+                ? "Vacation Rental"
+                : "Property";
+    if (!listingName) listingName = city ? `${propertyLabel} - ${city}` : `My ${propertyLabel}`;
+    if (!targetLocation) targetLocation = city || "Destination";
 
     const openai = createOpenAIClient();
 
@@ -69,13 +91,14 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     }
 
     const systemPrompt = `
-You are an expert travel guide creator. Create a complete, personalized JSON welcome guide for a short-term rental based on the real listing data below.
+You are an expert hospitality guest-experience designer. Create a complete, personalized JSON guest experience for the property based on the verified/imported data below.
 
 === REAL LISTING DATA (provided/imported from the host listing source) ===
 - Listing Title: ${listingName}
 - Exact City / Location: ${targetLocation}
+- Property type: ${type}
 - Language to use: ${language} (ALL output text must be in this language)
-- Airbnb URL: ${airbnbUrl || 'N/A'}
+- Source URL: ${airbnbUrl || propertyUrl || 'N/A'}
 ${realDescription ? `- Real Listing Description: ${realDescription}` : ''}
 ${realAmenities.length > 0 ? `- Real Amenities from listing: ${realAmenities.join(', ')}` : ''}
 ${scrapedInfo ? `\n=== IMPORTED LISTING METADATA ===\n${scrapedInfo}` : ''}
@@ -83,13 +106,14 @@ ${scrapedInfo ? `\n=== IMPORTED LISTING METADATA ===\n${scrapedInfo}` : ''}
 === CRITICAL INSTRUCTIONS ===
 1. LOCATION: The guide location is "${targetLocation}". Use ONLY this city for local recommendations (places, events, transport). NEVER use Paris or any other city.
 2. HERO IMAGE: Set "coverImageUrl" to "__USE_REAL_PHOTO__" — it will be replaced with the actual listing photo automatically.
-3. LISTING DETAILS: Use the real listing title, description, and amenities above to fill in the blocks. Do NOT invent generic data when real data is provided.
+3. PROPERTY DETAILS: Use the real property title, description, and amenities above to fill in the blocks. Do NOT invent generic property facts when real data is provided.
 4. PLACES: List 3 real restaurants or cafes that genuinely exist in ${targetLocation}. Use your knowledge of the city.
 5. AMENITIES: Use the real amenities list above. If unavailable, infer from the description.
-6. RULES: Extract from the description if available, otherwise generate plausible rules for this type of property.
-7. Wi-Fi and check-in codes: Generate plausible mock values (the host will update them manually).
+6. RULES: Extract from the description if available; otherwise provide only clearly editable suggestions appropriate to this property type.
+7. Wi-Fi and access data: Use obvious editable placeholders. Never present invented access credentials as real.
+8. REVENUE SERVICES: If the source explicitly mentions services such as breakfast, spa, transfers, restaurant or experiences, add an upsells block using those real service names. Never invent a price; use an empty price when none is provided.
 
-Required blocks (in order): hero, wifi, checkin, rules, amenities, places, events, transport
+Required blocks (in order): hero, welcome, wifi, checkin, amenities, places, transport. Add rules and upsells only when appropriate.
 
 Output STRICTLY valid JSON:
 {
@@ -99,11 +123,13 @@ Output STRICTLY valid JSON:
     { "type": "hero", "title": "string", "data": { "title": "string", "subtitle": "string", "coverImageUrl": "__USE_REAL_PHOTO__", "badges": ["string"] } },
     { "type": "wifi", "title": "string", "data": { "networkName": "string", "password": "string" } },
     { "type": "checkin", "title": "string", "data": { "time": "15:00", "instruction": "string" } },
+    { "type": "welcome", "title": "string", "data": { "title": "string", "content": "string" } },
     { "type": "rules", "title": "string", "data": { "items": [{ "text": "string" }] } },
     { "type": "amenities", "title": "string", "data": { "items": [{ "text": "string" }] } },
     { "type": "places", "title": "string", "data": { "items": [{ "name": "string", "description": "string", "address": "string" }] } },
     { "type": "events", "title": "string", "data": { "items": [{ "title": "string", "month": "JAN", "day": 1, "description": "string" }] } },
-    { "type": "transport", "title": "string", "data": { "options": [{ "type": "taxi|bus|train", "name": "string", "description": "string" }] } }
+    { "type": "transport", "title": "string", "data": { "options": [{ "type": "taxi|bus|train", "name": "string", "description": "string" }] } },
+    { "type": "upsells", "title": "string", "data": { "items": [{ "title": "string", "category": "breakfast|spa|transfer|food_beverage|experience|other", "description": "string", "priceAmount": "", "currency": "MAD", "pricingType": "quote", "cta": "Request this service" }] } }
   ]
 }
 `;
@@ -113,7 +139,7 @@ Output STRICTLY valid JSON:
             model: "gpt-4o",
             messages: [
                 { role: "system", content: systemPrompt },
-                { role: "user", content: `Generate a complete, personalized welcome guide using the listing details and location provided in the context above. The guide MUST be for the exact location specified (${targetLocation || "the listing's actual city"}) — do NOT invent a different city or use Paris as a default.` }
+                { role: "user", content: `Generate a complete, personalized welcome guide using the listing details and location provided in the context above. The experience MUST be for the exact location specified (${targetLocation || "the property's actual city"}) — do NOT invent a different city.` }
             ],
             temperature: 0.7,
         });
@@ -121,7 +147,7 @@ Output STRICTLY valid JSON:
         const content = response.choices[0]?.message?.content || "{}";
         const json = cleanAIJSON(content);
         
-        const finalLocation = json.location || targetLocation || "Paris";
+        const finalLocation = json.location || targetLocation || "Destination";
 
         // Post-processing: Add IDs and visibility
         // Smart theme matching: try exact city name, then coastal/beach for Moroccan coastal cities
