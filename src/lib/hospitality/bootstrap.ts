@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { DEFAULT_JOURNEY_RULES } from "@/lib/journey/templates";
 
 type BootstrapInput = {
   userId: string;
@@ -100,6 +101,32 @@ export async function bootstrapHospitalityWorkspace(
     if (guideError) {
       console.warn("[hospitality-bootstrap] Property created but guide link failed", guideError);
       return { organizationId, propertyId: property.id, migrated: false };
+    }
+
+    // Seed a useful guest journey automatically when the journey migration is available.
+    try {
+      const { count } = await supabase
+        .from("journey_rules")
+        .select("*", { count: "exact", head: true })
+        .eq("property_id", property.id);
+
+      if ((count || 0) === 0) {
+        await supabase.from("journey_rules").insert(
+          DEFAULT_JOURNEY_RULES.map((rule) => ({
+            organization_id: organizationId,
+            property_id: property.id,
+            name: rule.name,
+            anchor: rule.anchor,
+            offset_minutes: rule.offsetMinutes,
+            channel: "email",
+            subject_template: rule.subjectTemplate,
+            body_template: rule.bodyTemplate,
+            status: "active",
+          }))
+        );
+      }
+    } catch {
+      // Journey automation remains optional until its migration is applied.
     }
 
     return {
