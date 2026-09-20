@@ -35,6 +35,21 @@ const STAGES = [
 
 type Stage = typeof STAGES[number];
 
+type Inquiry = {
+  id: string;
+  contact_name: string;
+  contact_email: string;
+  contact_phone?: string | null;
+  property_name?: string | null;
+  website_url?: string | null;
+  city?: string | null;
+  property_type: string;
+  estimated_units?: number | null;
+  message?: string | null;
+  source: string;
+  created_at: string;
+};
+
 type Prospect = {
   id: string;
   property_name: string;
@@ -78,7 +93,9 @@ const ACTIVE_STAGES: Stage[] = ["new", "demo_ready", "contacted", "engaged", "me
 export default function ProspectsPage() {
   const { user } = useAuth();
   const [prospects, setProspects] = useState<Prospect[]>([]);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [convertingInquiry, setConvertingInquiry] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [creating, setCreating] = useState(false);
@@ -111,12 +128,23 @@ export default function ProspectsPage() {
     setError(null);
     try {
       const token = await getToken();
-      const res = await fetch("/api/internal/prospects", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || data.error || "Could not load prospects");
-      setProspects(data.prospects || []);
+      const [prospectRes, inquiryRes] = await Promise.all([
+        fetch("/api/internal/prospects", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch("/api/internal/inquiries", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+
+      const prospectData = await prospectRes.json();
+      const inquiryData = await inquiryRes.json();
+
+      if (!prospectRes.ok) throw new Error(prospectData.detail || prospectData.error || "Could not load prospects");
+      setProspects(prospectData.prospects || []);
+
+      // Inquiries are additive: keep the sales cockpit usable while its migration rolls out.
+      if (inquiryRes.ok) setInquiries(inquiryData.inquiries || []);
     } catch (e: any) {
       setError(e?.message || "Could not load prospects");
     } finally {
@@ -218,6 +246,30 @@ export default function ProspectsPage() {
     setOutreach(null);
   };
 
+  const convertInquiry = async (inquiryId: string) => {
+    setConvertingInquiry(inquiryId);
+    setError(null);
+    try {
+      const token = await getToken();
+      const res = await fetch("/api/internal/inquiries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ inquiryId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Could not convert inquiry");
+      setInquiries((current) => current.filter((item) => item.id !== inquiryId));
+      await load();
+    } catch (e: any) {
+      setError(e?.message || "Could not convert inquiry");
+    } finally {
+      setConvertingInquiry(null);
+    }
+  };
+
   const stats = useMemo(() => {
     const active = prospects.filter((p) => p.stage !== "lost");
     const viewed = prospects.filter((p) => (p.magic_demo?.view_count || 0) > 0);
@@ -225,11 +277,12 @@ export default function ProspectsPage() {
     const paid = prospects.filter((p) => p.stage === "paid");
     return {
       active: active.length,
+      inbound: inquiries.length,
       viewed: viewed.length,
       highIntent: highIntent.length,
       paid: paid.length,
     };
-  }, [prospects]);
+  }, [prospects, inquiries.length]);
 
   const grouped = useMemo(() => {
     const map = new Map<Stage, Prospect[]>();
@@ -273,8 +326,9 @@ export default function ProspectsPage() {
           </p>
         </div>
 
-        <section className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <section className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-5">
           {[
+            { label: "Inbound", value: stats.inbound, icon: Mail },
             { label: "Active pipeline", value: stats.active, icon: Target },
             { label: "Demos viewed", value: stats.viewed, icon: Eye },
             { label: "High intent", value: stats.highIntent, icon: Flame },
@@ -289,6 +343,48 @@ export default function ProspectsPage() {
             </div>
           ))}
         </section>
+
+        {inquiries.length > 0 && (
+          <section className="mt-6 rounded-3xl border border-emerald-500/15 bg-emerald-500/[0.05] p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-300">Inbound demand</div>
+                <h2 className="mt-1 text-xl font-bold">New business inquiries</h2>
+                <p className="mt-1 text-sm text-zinc-500">Convert qualified form submissions into the active prospect pipeline.</p>
+              </div>
+              <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-bold text-emerald-300">{inquiries.length} waiting</span>
+            </div>
+
+            <div className="mt-5 grid gap-3 lg:grid-cols-2">
+              {inquiries.slice(0, 8).map((inquiry) => (
+                <article key={inquiry.id} className="rounded-2xl border border-white/10 bg-black/10 p-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <div className="font-bold">{inquiry.property_name || inquiry.contact_name}</div>
+                      <div className="mt-1 text-xs text-zinc-500">
+                        {inquiry.contact_name} · {inquiry.contact_email}
+                      </div>
+                      <div className="mt-2 flex flex-wrap gap-2 text-[10px] font-semibold text-zinc-400">
+                        <span className="rounded-full bg-white/5 px-2 py-1">{inquiry.property_type.replaceAll("_", " ")}</span>
+                        {inquiry.estimated_units ? <span className="rounded-full bg-white/5 px-2 py-1">{inquiry.estimated_units} units</span> : null}
+                        {inquiry.city ? <span className="rounded-full bg-white/5 px-2 py-1">{inquiry.city}</span> : null}
+                        <span className="rounded-full bg-white/5 px-2 py-1">{inquiry.source}</span>
+                      </div>
+                      {inquiry.message && <p className="mt-3 line-clamp-2 text-xs leading-5 text-zinc-500">{inquiry.message}</p>}
+                    </div>
+                    <button
+                      onClick={() => convertInquiry(inquiry.id)}
+                      disabled={convertingInquiry === inquiry.id}
+                      className="shrink-0 rounded-xl bg-emerald-300 px-3 py-2 text-xs font-bold text-slate-950 disabled:opacity-50"
+                    >
+                      {convertingInquiry === inquiry.id ? "Converting…" : "Convert"}
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
 
         {showCreate && (
           <section className="mt-6 rounded-3xl border border-white/10 bg-white/[0.035] p-6">
