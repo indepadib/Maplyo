@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   metadataBase: new URL('https://maplyo.com'),
   title: {
-    default: "Maplyo — Le Guide Numérique pour Hôtes Airbnb & Gîtes",
+    default: "Maplyo — AI Guest Experience & Revenue Platform",
     template: "%s | Maplyo"
   },
   description: "Créez des livrets d'accueil numériques irrésistibles. Partagez codes Wi-Fi, digicodes et bonnes adresses par QR Code. Gratuit pour démarrer.",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: "Maplyo — Votre Livret d'Accueil 2.0",
-    description: "Fini les PDF moches. Passez au guide web interactif que vos voyageurs vont adorer.",
+    description: "Centralisez l’accueil, le concierge digital et les revenus additionnels de chaque séjour.",
     creator: '@maplyo_app',
   },
   robots: {
