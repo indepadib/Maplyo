@@ -63,6 +63,24 @@ export default function MagicDemoStudioPage() {
     if (user) loadDemos();
   }, [user, loadDemos]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const qs = new URLSearchParams(window.location.search);
+    const url = qs.get("url");
+    const name = qs.get("name");
+    const email = qs.get("email");
+    const cityValue = qs.get("city");
+    const type = qs.get("type");
+
+    if (url) setSourceUrl(url);
+    if (name) setProspectName(name);
+    if (email) setProspectEmail(email);
+    if (cityValue) setCity(cityValue);
+    if (type === "hotel" || type === "guest_house" || type === "other") {
+      setPropertyType(type);
+    }
+  }, []);
+
   const createDemo = async () => {
     if (!sourceUrl || !authorized) return;
     setLoading(true);
