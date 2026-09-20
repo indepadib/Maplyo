@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   Building2,
   CalendarClock,
+  Copy,
   Eye,
   ExternalLink,
   Flame,
@@ -15,6 +16,7 @@ import {
   Sparkles,
   Target,
   WandSparkles,
+  X,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -80,6 +82,14 @@ export default function ProspectsPage() {
   const [error, setError] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [outreachLoading, setOutreachLoading] = useState<string | null>(null);
+  const [outreach, setOutreach] = useState<{
+    prospectId: string;
+    propertyName: string;
+    email?: string | null;
+    subject: string;
+    body: string;
+  } | null>(null);
   const [form, setForm] = useState({
     propertyName: "",
     contactName: "",
@@ -165,6 +175,47 @@ export default function ProspectsPage() {
     } finally {
       setCreating(false);
     }
+  };
+
+  const generateOutreach = async (prospect: Prospect) => {
+    if (!prospect.magic_demo) return;
+    setOutreachLoading(prospect.id);
+    setError(null);
+
+    try {
+      const token = await getToken();
+      const res = await fetch("/api/internal/prospects/outreach", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          prospectId: prospect.id,
+          language: "fr",
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Could not generate outreach");
+
+      setOutreach({
+        prospectId: prospect.id,
+        propertyName: prospect.property_name,
+        email: prospect.contact_email,
+        subject: data.outreach.subject,
+        body: data.outreach.body,
+      });
+    } catch (e: any) {
+      setError(e?.message || "Could not generate outreach");
+    } finally {
+      setOutreachLoading(null);
+    }
+  };
+
+  const markContacted = async () => {
+    if (!outreach) return;
+    await updateProspect(outreach.prospectId, { stage: "contacted" });
+    setOutreach(null);
   };
 
   const stats = useMemo(() => {
@@ -308,9 +359,20 @@ export default function ProspectsPage() {
                               {p.magic_demo.last_viewed_at && (
                                 <div className="mt-1 text-[10px] text-zinc-500">Last seen {new Date(p.magic_demo.last_viewed_at).toLocaleString()}</div>
                               )}
-                              <a href={`/m/${p.magic_demo.slug}`} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-white">
-                                Open demo <ExternalLink className="h-3 w-3" />
-                              </a>
+                              <div className="mt-3 flex flex-wrap gap-2">
+                                <a href={`/m/${p.magic_demo.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg bg-white/5 px-2.5 py-2 text-xs font-bold text-white">
+                                  Open demo <ExternalLink className="h-3 w-3" />
+                                </a>
+                                <button
+                                  type="button"
+                                  onClick={() => generateOutreach(p)}
+                                  disabled={outreachLoading === p.id}
+                                  className="inline-flex items-center gap-1 rounded-lg bg-violet-500/15 px-2.5 py-2 text-xs font-bold text-violet-200 disabled:opacity-50"
+                                >
+                                  {outreachLoading === p.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                                  AI outreach
+                                </button>
+                              </div>
                             </div>
                           ) : (
                             <Link href={magicStudioUrl(p)} className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-dashed border-violet-400/20 px-3 py-2.5 text-xs font-bold text-violet-300">
@@ -345,6 +407,54 @@ export default function ProspectsPage() {
                   </section>
                 );
               })}
+            </div>
+          </div>
+        )}
+        {outreach && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+            <div className="w-full max-w-2xl rounded-3xl border border-white/10 bg-slate-900 p-6 shadow-2xl">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="text-xs font-bold uppercase tracking-[0.18em] text-violet-300">Personalized outreach</div>
+                  <h2 className="mt-2 text-2xl font-bold">{outreach.propertyName}</h2>
+                  <p className="mt-1 text-sm text-zinc-500">{outreach.email || "No prospect email saved"}</p>
+                </div>
+                <button onClick={() => setOutreach(null)} className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-zinc-400 hover:text-white">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="mt-6 space-y-4">
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <div className="mb-2 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Subject</div>
+                  <div className="flex items-start gap-3">
+                    <div className="flex-1 font-semibold">{outreach.subject}</div>
+                    <button onClick={() => navigator.clipboard.writeText(outreach.subject)} className="rounded-lg border border-white/10 p-2 text-zinc-400 hover:text-white"><Copy className="h-4 w-4" /></button>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <div className="mb-2 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Message</div>
+                  <div className="whitespace-pre-wrap text-sm leading-6 text-zinc-300">{outreach.body}</div>
+                  <button onClick={() => navigator.clipboard.writeText(outreach.body)} className="mt-4 inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs font-bold text-zinc-300 hover:text-white">
+                    <Copy className="h-3.5 w-3.5" /> Copy message
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                {outreach.email && (
+                  <a
+                    href={`mailto:${outreach.email}?subject=${encodeURIComponent(outreach.subject)}&body=${encodeURIComponent(outreach.body)}`}
+                    className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-slate-950"
+                  >
+                    <Mail className="h-4 w-4" /> Open email
+                  </a>
+                )}
+                <button onClick={markContacted} className="rounded-xl bg-cyan-300 px-4 py-3 text-sm font-bold text-slate-950">
+                  Mark as contacted
+                </button>
+              </div>
             </div>
           </div>
         )}
