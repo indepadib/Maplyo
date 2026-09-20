@@ -81,7 +81,7 @@ export async function bootstrapHospitalityWorkspace(
         property_type: mapPropertyType(input.propertyType),
         status: "active",
         city: input.city || null,
-        source_type: input.sourceUrl ? "airbnb" : "manual",
+        source_type: input.sourceUrl ? (input.propertyType === "airbnb" ? "airbnb" : "website") : "manual",
         source_url: input.sourceUrl || null,
       }])
       .select("id")
