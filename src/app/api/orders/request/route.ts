@@ -101,6 +101,32 @@ export async function POST(req: Request) {
 
     const amount = Number(input.priceAmount || 0);
 
+    let paymentMode = "request_only";
+    let paymentProvider = "none";
+    let settlementModel = "property_direct";
+    let commissionRate = 0;
+
+    try {
+      const { data: paymentSettings } = await admin
+        .from("property_payment_settings")
+        .select("payment_mode, provider, settlement_model, platform_commission_rate")
+        .eq("property_id", propertyId)
+        .maybeSingle();
+
+      if (paymentSettings) {
+        paymentMode = paymentSettings.payment_mode || paymentMode;
+        paymentProvider = paymentSettings.provider || paymentProvider;
+        settlementModel = paymentSettings.settlement_model || settlementModel;
+        commissionRate = Number(paymentSettings.platform_commission_rate || 0);
+      }
+    } catch {
+      // Payment orchestration migration may not be active yet.
+    }
+
+    const commissionAmount = amount > 0
+      ? Math.round((amount * commissionRate / 100) * 100) / 100
+      : 0;
+
     const orderResult = await admin
       .from("orders")
       .insert([{
@@ -109,7 +135,7 @@ export async function POST(req: Request) {
         guest_id: guestResult.data.id,
         status: "pending",
         subtotal_amount: amount,
-        commission_amount: 0,
+        commission_amount: commissionAmount,
         total_amount: amount,
         currency: input.currency,
         metadata: {
@@ -118,6 +144,10 @@ export async function POST(req: Request) {
           notes: input.notes || null,
           service_key: input.serviceKey,
           service_title: input.title,
+          payment_mode: paymentMode,
+          payment_provider: paymentProvider,
+          settlement_model: settlementModel,
+          commission_rate: commissionRate,
         },
       }])
       .select("id")
@@ -135,7 +165,7 @@ export async function POST(req: Request) {
       quantity: 1,
       unit_price: amount,
       total_amount: amount,
-      commission_amount: 0,
+      commission_amount: commissionAmount,
       metadata: { service_key: input.serviceKey },
     }]);
 
