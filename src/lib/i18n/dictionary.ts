@@ -159,7 +159,7 @@ export const DICTIONARY = {
             "addon": "+20 DH / guide supplémentaire",
             "enterprise": {
                 "title": "Besoin d'une solution Enterprise ?",
-                "desc": "Pour les gestionnaires de plus de 50 propriétés, nous proposons des tarifs dégressifs et une intégration PMS.",
+                "desc": "Pour les portfolios plus importants, contactez-nous pour un onboarding adapté, une tarification volume et la planification des intégrations.",
                 "cta": "Contacter l'équipe commerciale"
             },
             "plans": {
@@ -207,12 +207,12 @@ export const DICTIONARY = {
                         "Guides Illimités",
                         "Tableau de Bord Multi-Propriétés",
                         "Marque Blanche (Sans logo Maplyo)",
-                        "Intégration PMS & Channel Mgr",
+                        "Planification des intégrations avec votre stack existante",
                         "Facturation Centralisée"
                     ]
                 }
             },
-            "trust": "Garantie Satisfait ou Remboursé (30 jours) • Paiement Sécurisé SSL"
+            "trust": "Paiements sécurisés via Stripe"
         },
         "testimonials": {
             "title": "Approuvé par les Pros",
@@ -976,8 +976,8 @@ export const DICTIONARY = {
             }
         },
         "hero": {
-            "tag": "FOR HOSTS & PROPERTY MANAGERS",
-            "title": "Your Airbnb link becomes a smart guide in 10 seconds.",
+            "tag": "FOR HOSTS, PROPERTY MANAGERS, RIADS & HOTELS",
+            "title": "Your entire guest experience. One link.",
             "subtitle": "Turn your property information into a multilingual guest experience that answers questions, centralizes useful information and surfaces your services — without a guest app to install.",
             "cta": "Create my guest experience",
             "demo": "See the live demo",
@@ -985,14 +985,14 @@ export const DICTIONARY = {
             "setupTime": "Fast setup, no guest app"
         },
         "features": {
-            "title": "Technology unlike anything else.",
-            "subtitle": "We do what others don't.",
-            "description": "Transform every stay into a 5-star experience while generating passive income. Maplyo is the only smart travel companion your guests will ever need.",
+            "title": "Inform less. Serve better. Sell more.",
+            "subtitle": "A guest-experience layer for modern hospitality.",
+            "description": "Bring property information, guest assistance and service requests into one mobile-first experience that complements your existing operations.",
             "badge": "Features",
             "items": {
                 "magicAI": {
-                    "title": "Instant AI Generation",
-                    "desc": "Paste your Airbnb or Booking link, and our AI extracts photos, addresses, and descriptions to build your guide in 10 seconds."
+                    "title": "AI-assisted setup",
+                    "desc": "Import information from your Airbnb listing or property website, then let Maplyo structure an editable guest experience from the information you provide."
                 },
                 "upsells": {
                     "title": "Guest services & ancillary revenue",
@@ -1000,7 +1000,7 @@ export const DICTIONARY = {
                 },
                 "companion": {
                     "title": "AI Guest Concierge",
-                    "desc": "Tip of the day, real-time events, recommended restaurants... Provide a personal digital concierge."
+                    "desc": "Answer common guest questions from the property information you choose to publish, without inventing policies, prices or access details."
                 },
                 "smartHome": {
                     "title": "Integrated Smart Home",
@@ -1018,24 +1018,24 @@ export const DICTIONARY = {
         },
         "howItWorks": {
             "badge": "Product Tour",
-            "title": "The magic happens in",
-            "titleHighlight": "10 seconds",
-            "subtitle": "Discover how Maplyo propels your rental management into the future and multiplies your revenue.",
+            "title": "From property information to",
+            "titleHighlight": "a ready guest experience",
+            "subtitle": "Create, refine and share one mobile guest experience for a rental, riad or hotel.",
             "steps": [
                 {
-                    "title": "1. Import via Airbnb / Booking",
-                    "desc": "Just paste the link to your listing. Our artificial intelligence handles the rest: text, photos, location, and amenities.",
+                    "title": "1. Import your property",
+                    "desc": "Use your Airbnb listing, property website or manual details as a starting point. Maplyo structures the information into editable guest blocks.",
                     "badge": "Auto-Generation"
                 },
                 {
                     "title": "2. Activate your revenue (Upsells)",
-                    "desc": "Set your prices for late check-out, luggage storage, or breakfast. The money drops into your account effortlessly.",
+                    "desc": "Add late checkout, transfers, breakfast or other services and centralize guest interest and service requests in Maplyo.",
                     "badge": "Monetization"
                 },
                 {
-                    "title": "3. Scan and enjoy",
-                    "desc": "Your guests connect to WiFi, read the tip of the day, and order your services in 1 click. The ultimate 5-star experience.",
-                    "badge": "100% Autopilot"
+                    "title": "3. Share at the right moment",
+                    "desc": "Share by QR code or web link so guests can find useful information and request services without downloading an app.",
+                    "badge": "Guest Access"
                 }
             ]
         },
@@ -1043,11 +1043,11 @@ export const DICTIONARY = {
             "badge": "Professional Grade",
             "title": "Designed for",
             "titleHighlight": "Hotels & Concierges",
-            "desc": "Maplyo powers the biggest players. Our infrastructure seamlessly manages portfolios of hundreds of properties.",
+            "desc": "Manage multiple property experiences from one workspace and standardize the guest journey while keeping each property editable.",
             "bulletPoints": [
                 "Multi-Property Dashboard",
-                "Digital In-Room Upselling (Room Service)",
-                "White Label (Your logo, your domain)",
+                "Guest service requests & in-stay upselling",
+                "Custom guest-experience branding",
                 "Property-level guest journeys and services"
             ],
             "cta": "Talk to an Expert",
@@ -1060,7 +1060,7 @@ export const DICTIONARY = {
             "addon": "+20 DH / additional guide",
             "enterprise": {
                 "title": "Need an Enterprise solution?",
-                "desc": "For managers with 50+ properties, we offer volume discounts and PMS integration.",
+                "desc": "For larger portfolios, contact us for tailored onboarding, volume pricing and integration planning.",
                 "cta": "Contact Sales Team"
             },
             "plans": {
