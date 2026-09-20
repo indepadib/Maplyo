@@ -1,0 +1,59 @@
+name: Compatible Dependency Security Fix
+
+on:
+  push:
+    branches:
+      - "rebuild/guest-experience-os"
+    paths:
+      - ".github/workflows/audit-fix-compatible.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+      OPENAI_API_KEY: ""
+      NEXT_PUBLIC_GA_MEASUREMENT_ID: ""
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_placeholder
+      STRIPE_SECRET_KEY: sk_test_placeholder
+      STRIPE_WEBHOOK_SECRET: whsec_placeholder
+      STRIPE_PRO_PRICE_ID: price_placeholder_pro
+      STRIPE_BASIC_PRICE_ID: price_placeholder_basic
+      STRIPE_ADDON_PRICE_ID: price_placeholder_addon
+      STRIPE_THEMES_PRICE_ID: price_placeholder_themes
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rebuild/guest-experience-os
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Apply compatible audit fixes only
+        run: npm audit fix
+
+      - name: Verify production build after fixes
+        run: npm run build
+
+      - name: Show remaining runtime advisories
+        run: npm audit --omit=dev || true
+
+      - name: Commit compatible security fixes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git diff --cached --quiet && exit 0
+          git commit -m "security: apply compatible dependency audit fixes"
+          git push origin HEAD:rebuild/guest-experience-os
