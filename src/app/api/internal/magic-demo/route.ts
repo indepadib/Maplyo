@@ -66,6 +66,30 @@ export async function POST(req: Request) {
       language: input.language,
     });
 
+    let prospectId: string | null = null;
+
+    const prospectResult = await admin
+      .from("sales_prospects")
+      .insert([{
+        created_by: access.user.id,
+        property_name: guide.title || input.prospectName || "Hospitality Property",
+        contact_name: input.prospectName || null,
+        contact_email: input.prospectEmail || null,
+        website_url: input.sourceUrl,
+        city: input.city || null,
+        property_type: input.propertyType,
+        source: "magic_demo",
+        score: 70,
+        stage: "demo_ready",
+        last_activity_at: new Date().toISOString(),
+      }])
+      .select("id")
+      .single();
+
+    if (!prospectResult.error && prospectResult.data) {
+      prospectId = prospectResult.data.id;
+    }
+
     const token = randomBytes(5).toString("hex");
     const baseSlug = slugify(guide.title || input.prospectName || "property").slice(0, 70) || "property";
     const slug = `${baseSlug}-${token}`;
@@ -85,16 +109,32 @@ export async function POST(req: Request) {
         theme_id: guide.theme.themeId,
         content: { blocks: guide.blocks },
         status: "active",
+        prospect_id: prospectId,
         expires_at: expiresAt,
       }])
       .select("id, slug, property_name, status, expires_at")
       .single();
 
     if (error || !data) {
+      if (prospectId) await admin.from("sales_prospects").delete().eq("id", prospectId);
       return NextResponse.json({
         error: "Magic Demo storage is not active yet",
         detail: error?.message,
       }, { status: 503 });
+    }
+
+    if (prospectId) {
+      await admin.from("sales_activities").insert([{
+        prospect_id: prospectId,
+        created_by: access.user.id,
+        activity_type: "demo_created",
+        channel: "maplyo",
+        metadata: {
+          magic_demo_id: data.id,
+          magic_demo_slug: data.slug,
+          source_url: input.sourceUrl,
+        },
+      }]).then(() => undefined, () => undefined);
     }
 
     const origin = new URL(req.url).origin;
