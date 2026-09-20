@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ArrowRight, Building2, Home, Hotel, Link2, Loader2, Sparkles } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { bootstrapHospitalityWorkspace } from "@/lib/hospitality/bootstrap";
 
 type PropertyType = "airbnb" | "hotel" | "guest_house" | "other";
 
@@ -68,6 +69,16 @@ export default function OnboardingPage() {
         .single();
 
       if (saveError || !saved) throw new Error(saveError?.message || "Could not save the experience");
+
+      await bootstrapHospitalityWorkspace(supabase, {
+        userId: user.id,
+        guideId: saved.id,
+        propertyName: data.guide.title || city.trim() || "My Property",
+        propertyType,
+        city: city.trim() || undefined,
+        sourceUrl: isAirbnb && airbnbUrl.trim() ? airbnbUrl.trim() : undefined,
+      });
+
       window.location.href = `/app/guides/${saved.id}/builder`;
     } catch (e: any) {
       setError(e?.message || "Something went wrong");
