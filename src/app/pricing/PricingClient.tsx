@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, X, ShieldCheck, Lock, Sparkles, Zap, Home, Hand, ChevronDown, ChevronUp, Star, HelpCircle, Mail, MessageCircle } from "lucide-react";
+import { CheckCircle2, X, ShieldCheck, Lock, Sparkles, Zap, Home, Hand, ChevronDown, ChevronUp, Star, HelpCircle, Mail, MessageCircle, Building2, ArrowRight } from "lucide-react";
 import { PLANS } from "@/types/subscription";
 import { Button } from "@/components/ui/Button";
 import { useState } from "react";
@@ -179,7 +179,7 @@ export default function PricingClient() {
                         </motion.p>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-8 items-stretch mb-32">
+                    <div className="grid md:grid-cols-3 gap-8 items-stretch mb-10">
                         <motion.div
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -294,6 +294,45 @@ export default function PricingClient() {
                         </motion.div>
                     </div>
 
+                    <motion.section
+                        initial={{ opacity: 0, y: 24 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.55 }}
+                        className="mb-32 overflow-hidden rounded-[2rem] border border-violet-400/20 bg-gradient-to-br from-violet-500/10 via-white/[0.03] to-rose-500/10 p-8 md:p-10"
+                    >
+                        <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+                            <div>
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+                                        <Building2 className="h-6 w-6" />
+                                    </div>
+                                    <div>
+                                        <div className="text-xs font-bold uppercase tracking-[0.18em] text-violet-300">Portfolio / Hotel</div>
+                                        <h3 className="mt-1 text-2xl font-bold text-white">For multi-property operators, riads and hotels</h3>
+                                    </div>
+                                </div>
+                                <p className="mt-5 max-w-3xl text-sm leading-7 text-zinc-400">
+                                    Keep the self-service plans for smaller operations, then scope larger deployments around property count, rooms, guest services and the integrations you actually need.
+                                </p>
+                                <div className="mt-5 flex flex-wrap gap-2">
+                                    {["Multi-property rollout", "AI guest concierge", "Revenue Center", "Service requests", "Tailored onboarding", "Integration planning"].map((item) => (
+                                        <span key={item} className="rounded-full border border-white/10 bg-black/10 px-3 py-2 text-xs font-semibold text-zinc-300">{item}</span>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="min-w-[220px] lg:text-right">
+                                <div className="text-sm font-semibold text-zinc-500">Volume pricing</div>
+                                <div className="mt-1 text-3xl font-black text-white">Custom</div>
+                                <Button
+                                    onClick={() => router.push('/contact-sales?source=pricing&type=property_manager')}
+                                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 font-bold text-slate-950 hover:bg-zinc-200 lg:w-auto"
+                                >
+                                    Talk to sales <ArrowRight className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        </div>
+                    </motion.section>
+
                     <div className="mb-32">
                         <div className="text-center mb-16">
                             <h2 className="text-3xl font-bold text-white mb-4">{t.pricingPage.compare.title}</h2>
@@ -312,13 +351,14 @@ export default function PricingClient() {
                                 </thead>
                                 <tbody className="text-sm">
                                     {[
-                                        { feature: t.pricingPage.compare.features.unlimited, demo: false, basic: true, pro: true },
-                                        { feature: t.pricingPage.compare.features.maps, demo: true, basic: true, pro: true },
-                                        { feature: t.pricingPage.compare.features.translation, demo: t.pricingPage.compare.values.oneLang, basic: t.pricingPage.compare.values.unlimited, pro: t.pricingPage.compare.values.unlimited },
-                                        { feature: t.pricingPage.compare.features.domain, demo: false, basic: false, pro: true },
-                                        { feature: t.pricingPage.compare.features.support, demo: false, basic: t.pricingPage.compare.values.emailSupport, pro: t.pricingPage.compare.values.whatsappSupport },
-                                        { feature: t.pricingPage.compare.features.whiteLabel, demo: false, basic: false, pro: true },
-                                        { feature: t.pricingPage.compare.features.analytics, demo: false, basic: true, pro: true },
+                                        { feature: "Published properties", demo: "Preview only", basic: `${PLANS.basic.limits.guides}`, pro: `${PLANS.pro.limits.guides} + add-ons` },
+                                        { feature: "QR / web guest access", demo: true, basic: true, pro: true },
+                                        { feature: "Guest information blocks", demo: true, basic: true, pro: true },
+                                        { feature: "Guest service requests", demo: false, basic: true, pro: true },
+                                        { feature: "Guest-view analytics", demo: false, basic: true, pro: true },
+                                        { feature: "AI guest concierge", demo: false, basic: PLANS.basic.limits.ai, pro: PLANS.pro.limits.ai },
+                                        { feature: "All premium themes", demo: false, basic: PLANS.basic.limits.themes, pro: PLANS.pro.limits.themes },
+                                        { feature: "Support", demo: false, basic: "Standard", pro: "Priority" },
                                     ].map((row, i) => (
                                         <tr key={i} className="hover:bg-white/[0.02]">
                                             <td className="p-6 border-b border-white/5 text-zinc-300 font-medium">{row.feature}</td>
