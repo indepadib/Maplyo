@@ -18,11 +18,18 @@ export default function SignupPage() {
     setLoading(true);
     setError(null);
 
+    const next = typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("next")
+      : null;
+    const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : "/onboarding";
+    const callbackUrl = new URL("/auth/callback", typeof window !== "undefined" ? window.location.origin : "https://maplyo.com");
+    callbackUrl.searchParams.set("next", safeNext);
+
     const { error, data } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${typeof window !== "undefined" ? window.location.origin : "https://maplyo.com"}/auth/callback`,
+        emailRedirectTo: callbackUrl.toString(),
       },
     });
 
@@ -33,7 +40,7 @@ export default function SignupPage() {
     }
 
     if (data.session) {
-      window.location.href = "/onboarding";
+      window.location.href = safeNext;
       return;
     }
 
@@ -74,7 +81,12 @@ export default function SignupPage() {
               <p className="mt-3 text-sm leading-6 text-zinc-400">
                 We sent a confirmation link to <strong className="text-white">{email}</strong>. After confirming, you will go straight to property setup.
               </p>
-              <Link href="/login" className="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-950">
+              <Link
+                href={typeof window !== "undefined" && new URLSearchParams(window.location.search).get("next")
+                  ? `/login?next=${encodeURIComponent(new URLSearchParams(window.location.search).get("next") || "/onboarding")}`
+                  : "/login"}
+                className="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-950"
+              >
                 Continue to login <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -125,7 +137,12 @@ export default function SignupPage() {
         </div>
 
         <p className="mt-6 text-center text-sm text-zinc-500">
-          Already have an account? <Link href="/login" className="font-semibold text-white">Sign in</Link>
+          Already have an account? <Link
+            href={typeof window !== "undefined" && new URLSearchParams(window.location.search).get("next")
+              ? `/login?next=${encodeURIComponent(new URLSearchParams(window.location.search).get("next") || "/dashboard")}`
+              : "/login"}
+            className="font-semibold text-white"
+          >Sign in</Link>
         </p>
       </motion.div>
     </main>
