@@ -37,8 +37,10 @@ export default function LoginPage() {
                 setError(error.message);
                 setLoading(false);
             } else {
+                const next = new URLSearchParams(window.location.search).get("next");
+                const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : "/dashboard";
                 const timer = setTimeout(() => {
-                    window.location.href = "/dashboard";
+                    window.location.href = safeNext;
                 }, 800);
                 return () => clearTimeout(timer);
             }
@@ -144,7 +146,12 @@ export default function LoginPage() {
                 <div className="mt-8 space-y-4 text-center">
                     <p className="text-zinc-500 text-sm">
                         {t.auth.login.noAccount}{" "}
-                        <Link href="/signup" className="text-white font-medium hover:text-rose-300 transition-colors">
+                        <Link
+                            href={typeof window !== "undefined" && new URLSearchParams(window.location.search).get("next")
+                                ? `/signup?next=${encodeURIComponent(new URLSearchParams(window.location.search).get("next") || "/dashboard")}`
+                                : "/signup"}
+                            className="text-white font-medium hover:text-rose-300 transition-colors"
+                        >
                             {t.auth.login.createFree}
                         </Link>
                     </p>
