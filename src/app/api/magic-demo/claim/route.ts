@@ -37,7 +37,7 @@ export async function POST(req: Request) {
 
     const { data: demo, error } = await admin
       .from("magic_demos")
-      .select("id, slug, property_name, property_type, source_url, city, theme_id, content, status, expires_at, claimed_by, claimed_guide_id")
+      .select("id, slug, property_name, property_type, source_url, city, theme_id, content, status, expires_at, claimed_by, claimed_guide_id, prospect_id")
       .eq("slug", parsed.data.slug)
       .maybeSingle();
 
@@ -125,6 +125,29 @@ export async function POST(req: Request) {
       console.error("[magic-claim] claim marker failed", claimError);
       await admin.from("guides").delete().eq("id", guide.id);
       return NextResponse.json({ error: "Could not finalize claim" }, { status: 409 });
+    }
+
+    if (demo.prospect_id) {
+      const claimedAt = new Date().toISOString();
+      await admin
+        .from("sales_prospects")
+        .update({
+          stage: "claimed",
+          last_activity_at: claimedAt,
+          updated_at: claimedAt,
+        })
+        .eq("id", demo.prospect_id);
+
+      await admin.from("sales_activities").insert([{
+        prospect_id: demo.prospect_id,
+        activity_type: "claimed",
+        channel: "magic_demo",
+        metadata: {
+          user_id: user.id,
+          guide_id: guide.id,
+          magic_demo_id: demo.id,
+        },
+      }]).then(() => undefined, () => undefined);
     }
 
     // Best-effort activation event.
