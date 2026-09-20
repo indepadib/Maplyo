@@ -1,11 +1,31 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { Sparkles, ArrowRight } from "lucide-react";
 import type { Guide } from "@/types/blocks";
 import { StyledGuideRenderer } from "@/components/guide/StyledGuideRenderer";
 
 export function MagicDemoClient({ guide, propertyType }: { guide: Guide; propertyType: string }) {
+  useEffect(() => {
+    const key = `maplyo_magic_demo_session_${guide.slug}`;
+    let sessionId = window.sessionStorage.getItem(key);
+
+    if (!sessionId) {
+      sessionId = typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `md_${Date.now().toString(36)}_${Math.random().toString(36).slice(2)}`;
+      window.sessionStorage.setItem(key, sessionId);
+    }
+
+    fetch("/api/magic-demo/view", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug: guide.slug, sessionId }),
+      keepalive: true,
+    }).catch(() => undefined);
+  }, [guide.slug]);
+
   return (
     <main className="min-h-screen bg-slate-950">
       <div className="fixed inset-x-0 top-0 z-[70] border-b border-white/10 bg-slate-950/95 text-white backdrop-blur-xl">
