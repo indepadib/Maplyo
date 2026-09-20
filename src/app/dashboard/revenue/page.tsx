@@ -182,9 +182,14 @@ export default function RevenuePage() {
             <h1 className="mt-3 text-4xl font-bold md:text-5xl">Turn guest attention into revenue.</h1>
             <p className="mt-3 max-w-2xl text-zinc-400">Measure which services guests want, then connect demand to orders and payments.</p>
           </div>
-          <Link href="/dashboard" className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-bold hover:bg-white/10">
-            Manage properties
-          </Link>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/dashboard/revenue/settings" className="rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-5 py-3 text-sm font-bold text-emerald-200 hover:bg-emerald-400/15">
+              Payment settings
+            </Link>
+            <Link href="/dashboard" className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-bold hover:bg-white/10">
+              Manage properties
+            </Link>
+          </div>
         </div>
 
         {!revenueCoreActive && !loading && (
