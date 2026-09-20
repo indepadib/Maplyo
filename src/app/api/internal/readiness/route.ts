@@ -94,6 +94,16 @@ export async function GET(req: Request) {
       blocking: true,
     },
     {
+      key: "resend",
+      label: "Sales email notifications",
+      group: "environment",
+      ok: configured(process.env.RESEND_API_KEY, ["placeholder", "mock"]),
+      detail: configured(process.env.RESEND_API_KEY, ["placeholder", "mock"])
+        ? "Resend configured"
+        : "Optional: inquiries are still stored in the Sales Engine without email notification",
+      blocking: false,
+    },
+    {
       key: "ai_rate_salt",
       label: "AI abuse protection salt",
       group: "ai",
@@ -153,6 +163,8 @@ export async function GET(req: Request) {
     tableCheck(admin, "magic_demos", "Growth · Magic Demos"),
     tableCheck(admin, "sales_prospects", "Growth · sales prospects"),
     tableCheck(admin, "sales_activities", "Growth · sales activities"),
+    tableCheck(admin, "sales_inquiries", "Growth · inbound sales inquiries"),
+    tableCheck(admin, "magic_demo_views", "Growth · human Magic Demo views"),
     tableCheck(admin, "ai_chat_usage", "AI · concierge usage"),
   ]);
 
