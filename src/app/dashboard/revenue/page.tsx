@@ -138,9 +138,29 @@ export default function RevenuePage() {
   const activeRequests = orders.filter((order) => ["pending", "confirmed"].includes(order.status));
 
   const updateOrderStatus = async (orderId: string, status: "confirmed" | "fulfilled" | "cancelled") => {
-    const { error } = await supabase.from("orders").update({ status }).eq("id", orderId);
-    if (!error) {
+    try {
+      const { data } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
+      if (!token) return;
+
+      const res = await fetch("/api/orders/status", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ orderId, status }),
+      });
+
+      const result = await res.json();
+      if (!res.ok) {
+        console.error("Order status update failed", result);
+        return;
+      }
+
       setOrders((current) => current.map((order) => order.id === orderId ? { ...order, status } : order));
+    } catch (error) {
+      console.error("Order status update failed", error);
     }
   };
 
