@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
+import { sendGuestSupportNotification } from "@/lib/order-email";
 
 const BodySchema = z.object({
   guideId: z.string().uuid(),
@@ -104,6 +105,61 @@ export async function POST(req: Request) {
     if (error || !requestRow) {
       console.error("[guest-request] insert failed", error);
       return NextResponse.json({ error: "Could not create request" }, { status: 500 });
+    }
+
+    try {
+      const recipients = new Set<string>();
+
+      const { data: propertyContact } = await admin
+        .from("properties")
+        .select("email")
+        .eq("id", property.id)
+        .maybeSingle();
+
+      if (propertyContact?.email) recipients.add(propertyContact.email);
+
+      const { data: organization } = await admin
+        .from("organizations")
+        .select("billing_email")
+        .eq("id", property.organization_id)
+        .maybeSingle();
+
+      if (organization?.billing_email) recipients.add(organization.billing_email);
+
+      const { data: operatorMembers } = await admin
+        .from("organization_members")
+        .select("user_id")
+        .eq("organization_id", property.organization_id)
+        .in("role", ["owner", "admin", "manager"]);
+
+      const memberIds = (operatorMembers || []).map((member: any) => member.user_id).filter(Boolean);
+      if (memberIds.length) {
+        const { data: profiles } = await admin
+          .from("profiles")
+          .select("email")
+          .in("id", memberIds);
+
+        for (const profile of profiles || []) {
+          if (profile.email) recipients.add(profile.email);
+        }
+      }
+
+      if (recipients.size) {
+        await sendGuestSupportNotification({
+          to: [...recipients],
+          propertyName: property.name || "Property",
+          requestTitle: input.title,
+          category: input.category,
+          priority: input.priority,
+          guestName: input.guestName,
+          guestEmail: input.guestEmail || null,
+          guestPhone: input.guestPhone || null,
+          message: input.message || null,
+          requestId: requestRow.id,
+        });
+      }
+    } catch (notificationError) {
+      console.info("[guest-request] operator notification unavailable", notificationError);
     }
 
     return NextResponse.json({
