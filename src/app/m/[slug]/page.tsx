@@ -58,9 +58,15 @@ export default async function MagicDemoPage({ params }: { params: Promise<{ slug
       .maybeSingle();
 
     if (prospect && ["new", "demo_ready", "contacted"].includes(prospect.stage)) {
+      const followUpAt = new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString();
       await admin
         .from("sales_prospects")
-        .update({ stage: "engaged", last_activity_at: viewedAt, updated_at: viewedAt })
+        .update({
+          stage: "engaged",
+          last_activity_at: viewedAt,
+          next_action_at: followUpAt,
+          updated_at: viewedAt,
+        })
         .eq("id", demo.prospect_id);
     } else {
       await admin
