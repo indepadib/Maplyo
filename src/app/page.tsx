@@ -192,7 +192,7 @@ const ScrollProgress = () => {
 };
 
 const HowItWorks = () => {
-  const { t, lang, setLang } = useTranslation();
+  const { t } = useTranslation();
   const [activeStep, setActiveStep] = useState(0);
 
   const steps = [
@@ -417,7 +417,7 @@ const HowItWorks = () => {
 };
 
 export default function LandingPage() {
-  const { t } = useTranslation();
+  const { t, lang, setLang } = useTranslation();
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
