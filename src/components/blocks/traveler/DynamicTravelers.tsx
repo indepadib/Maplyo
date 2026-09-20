@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { ExternalLink, Calendar, MapPin, FileText, Download, ShoppingBag } from "lucide-react";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { TranslatedText } from "@/components/ui/TranslatedText";
@@ -203,6 +204,10 @@ function servicePrice(item: any) {
 export function UpsellsTraveler({ data, ctx }: { data: any; ctx?: { guideId?: string } }) {
     const { lang } = useTranslation();
     const items = Array.isArray(data.items) ? data.items : [];
+    const [selected, setSelected] = useState<{ item: any; index: number } | null>(null);
+    const [requestForm, setRequestForm] = useState({ name: "", email: "", phone: "", notes: "" });
+    const [submitting, setSubmitting] = useState(false);
+    const [requestStatus, setRequestStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
     if (items.length === 0) return <div className="text-center p-8 text-gray-400">Aucun service disponible</div>;
 
@@ -218,7 +223,7 @@ export function UpsellsTraveler({ data, ctx }: { data: any; ctx?: { guideId?: st
                 category: item.category || "other",
                 priceAmount: item.priceAmount ?? null,
                 currency: item.currency || null,
-                destinationType: item.url ? "external" : "request",
+                destinationType: item.url ? "external" : "native_request",
             },
         });
 
@@ -227,74 +232,181 @@ export function UpsellsTraveler({ data, ctx }: { data: any; ctx?: { guideId?: st
             return;
         }
 
-        // Native ordering is introduced progressively. Until then, record high-intent demand
-        // without pretending an order has been placed.
-        trackGuestEvent({
-            guideId: ctx?.guideId,
-            eventName: "service_request",
-            serviceKey: key,
-            serviceId: item.serviceId,
-            metadata: { title: item.title || "Service" },
-        });
+        setRequestStatus(null);
+        setSelected({ item, index: i });
+    };
+
+    const submitRequest = async () => {
+        if (!selected || !ctx?.guideId || !requestForm.name || (!requestForm.email && !requestForm.phone)) return;
+
+        setSubmitting(true);
+        setRequestStatus(null);
+
+        const item = selected.item;
+        const key = serviceKey(item, selected.index);
+
+        try {
+            const res = await fetch("/api/orders/request", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    guideId: ctx.guideId,
+                    serviceId: item.serviceId || undefined,
+                    serviceKey: key,
+                    title: item.title || "Service",
+                    priceAmount: item.priceAmount === "" || item.priceAmount === undefined ? undefined : Number(item.priceAmount),
+                    currency: item.currency || "MAD",
+                    guestName: requestForm.name,
+                    guestEmail: requestForm.email || undefined,
+                    guestPhone: requestForm.phone || undefined,
+                    notes: requestForm.notes || undefined,
+                }),
+            });
+
+            const result = await res.json();
+
+            if (!res.ok) {
+                if (result.code === "ORDERING_NOT_ACTIVE") {
+                    setRequestStatus({
+                        type: "error",
+                        message: "Direct requests are not enabled for this property yet. Please contact your host to confirm this service."
+                    });
+                    return;
+                }
+                throw new Error(result.error || "Could not send your request");
+            }
+
+            setRequestStatus({
+                type: "success",
+                message: "Request sent. Your host can now confirm availability and next steps."
+            });
+            setRequestForm({ name: "", email: "", phone: "", notes: "" });
+        } catch (error: any) {
+            setRequestStatus({ type: "error", message: error?.message || "Could not send your request" });
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
-        <div className="space-y-6 bg-[#FAF9F6] -m-5 md:-m-6 p-5 md:p-6 min-h-full">
-            <div className="text-center mb-6">
-                <h3 className="text-sm font-bold tracking-[0.2em] text-amber-700 uppercase mb-2">Enhance your stay</h3>
-                <p className="text-xs text-gray-500">Services selected by your host</p>
-                <div className="w-8 h-0.5 bg-amber-200 mx-auto mt-3"></div>
+        <>
+            <div className="space-y-6 bg-[#FAF9F6] -m-5 md:-m-6 p-5 md:p-6 min-h-full">
+                <div className="text-center mb-6">
+                    <h3 className="text-sm font-bold tracking-[0.2em] text-amber-700 uppercase mb-2">Enhance your stay</h3>
+                    <p className="text-xs text-gray-500">Services selected by your host</p>
+                    <div className="w-8 h-0.5 bg-amber-200 mx-auto mt-3"></div>
+                </div>
+
+                {items.map((item: any, i: number) => {
+                    const price = servicePrice(item);
+                    return (
+                        <div key={serviceKey(item, i)} className="group bg-white rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all border border-gray-100 flex flex-col md:flex-row">
+                            {item.imageUrl && (
+                                <div className="h-48 md:h-auto md:w-2/5 overflow-hidden relative">
+                                    <Image src={item.imageUrl} alt={item.title || "Service"} fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 33vw" />
+                                    {price && (
+                                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-gray-900 font-bold px-4 py-1.5 rounded-full text-sm shadow-lg">
+                                            {price}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                            <div className="p-6 md:p-8 flex-1 flex flex-col justify-center">
+                                <div className="flex justify-between items-start mb-3 gap-3">
+                                    <div>
+                                        {item.category && (
+                                            <div className="text-[10px] font-bold uppercase tracking-wider text-amber-700 mb-1">{String(item.category).replaceAll("_", " ")}</div>
+                                        )}
+                                        <h4 className="text-xl font-medium text-gray-900 tracking-tight">
+                                            <TranslatedText text={item.title || "Service"} lang={lang} />
+                                        </h4>
+                                    </div>
+                                    {!item.imageUrl && price && (
+                                        <span className="bg-gray-100 text-gray-900 font-bold px-3 py-1 rounded-full text-sm whitespace-nowrap">
+                                            {price}
+                                        </span>
+                                    )}
+                                </div>
+                                {item.description && (
+                                    <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+                                        <TranslatedText text={item.description} lang={lang} />
+                                    </p>
+                                )}
+
+                                <button
+                                    type="button"
+                                    onClick={() => openService(item, i)}
+                                    className="inline-flex items-center justify-center w-full md:w-auto px-6 py-3 bg-[#111] text-white rounded-lg font-medium text-sm hover:bg-gray-800 transition-colors mt-auto"
+                                >
+                                    <ShoppingBag className="w-4 h-4 mr-2" />
+                                    <TranslatedText text={item.cta || (item.url ? "Book this service" : "Request this service")} lang={lang} />
+                                </button>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
 
-            {items.map((item: any, i: number) => {
-                const price = servicePrice(item);
-                return (
-                    <div key={serviceKey(item, i)} className="group bg-white rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all border border-gray-100 flex flex-col md:flex-row">
-                        {item.imageUrl && (
-                            <div className="h-48 md:h-auto md:w-2/5 overflow-hidden relative">
-                                <Image src={item.imageUrl} alt={item.title || "Service"} fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 33vw" />
-                                {price && (
-                                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-gray-900 font-bold px-4 py-1.5 rounded-full text-sm shadow-lg">
-                                        {price}
-                                    </div>
-                                )}
+            {selected && (
+                <div className="fixed inset-0 z-[120] flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm p-0 md:p-5">
+                    <div className="w-full max-w-lg rounded-t-[28px] md:rounded-[28px] bg-white p-6 text-gray-900 shadow-2xl max-h-[90vh] overflow-y-auto">
+                        <div className="flex items-start justify-between gap-4">
+                            <div>
+                                <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-amber-700">Service request</div>
+                                <h3 className="mt-2 text-2xl font-bold">{selected.item.title || "Service"}</h3>
+                                <p className="mt-1 text-sm text-gray-500">{servicePrice(selected.item) || "Price on request"}</p>
                             </div>
-                        )}
-                        <div className="p-6 md:p-8 flex-1 flex flex-col justify-center">
-                            <div className="flex justify-between items-start mb-3 gap-3">
-                                <div>
-                                    {item.category && (
-                                        <div className="text-[10px] font-bold uppercase tracking-wider text-amber-700 mb-1">{String(item.category).replaceAll("_", " ")}</div>
-                                    )}
-                                    <h4 className="text-xl font-medium text-gray-900 tracking-tight">
-                                        <TranslatedText text={item.title || "Service"} lang={lang} />
-                                    </h4>
-                                </div>
-                                {!item.imageUrl && price && (
-                                    <span className="bg-gray-100 text-gray-900 font-bold px-3 py-1 rounded-full text-sm whitespace-nowrap">
-                                        {price}
-                                    </span>
-                                )}
-                            </div>
-                            {item.description && (
-                                <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-                                    <TranslatedText text={item.description} lang={lang} />
-                                </p>
-                            )}
-
-                            <button
-                                type="button"
-                                onClick={() => openService(item, i)}
-                                className="inline-flex items-center justify-center w-full md:w-auto px-6 py-3 bg-[#111] text-white rounded-lg font-medium text-sm hover:bg-gray-800 transition-colors mt-auto"
-                            >
-                                <ShoppingBag className="w-4 h-4 mr-2" />
-                                <TranslatedText text={item.cta || (item.url ? "Book this service" : "I'm interested")} lang={lang} />
-                            </button>
+                            <button type="button" onClick={() => { setSelected(null); setRequestStatus(null); }} className="h-10 w-10 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200">✕</button>
                         </div>
+
+                        {requestStatus?.type === "success" ? (
+                            <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+                                <div className="font-bold text-emerald-800">Request received</div>
+                                <p className="mt-2 text-sm leading-6 text-emerald-700">{requestStatus.message}</p>
+                                <button type="button" onClick={() => { setSelected(null); setRequestStatus(null); }} className="mt-4 rounded-xl bg-emerald-700 px-4 py-2 text-sm font-bold text-white">Done</button>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="mt-6 space-y-4">
+                                    <div>
+                                        <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-gray-500">Your name</label>
+                                        <input value={requestForm.name} onChange={(e) => setRequestForm({ ...requestForm, name: e.target.value })} className="h-12 w-full rounded-xl border border-gray-200 px-4 outline-none focus:border-gray-400" placeholder="Sarah" />
+                                    </div>
+                                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                        <div>
+                                            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-gray-500">Email</label>
+                                            <input type="email" value={requestForm.email} onChange={(e) => setRequestForm({ ...requestForm, email: e.target.value })} className="h-12 w-full rounded-xl border border-gray-200 px-4 outline-none focus:border-gray-400" placeholder="sarah@email.com" />
+                                        </div>
+                                        <div>
+                                            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-gray-500">Phone</label>
+                                            <input value={requestForm.phone} onChange={(e) => setRequestForm({ ...requestForm, phone: e.target.value })} className="h-12 w-full rounded-xl border border-gray-200 px-4 outline-none focus:border-gray-400" placeholder="+212..." />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-gray-500">Note (optional)</label>
+                                        <textarea value={requestForm.notes} onChange={(e) => setRequestForm({ ...requestForm, notes: e.target.value })} className="min-h-24 w-full rounded-xl border border-gray-200 p-4 outline-none focus:border-gray-400" placeholder="Preferred time, number of guests…" />
+                                    </div>
+                                </div>
+
+                                {requestStatus?.type === "error" && (
+                                    <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm leading-5 text-amber-800">{requestStatus.message}</div>
+                                )}
+
+                                <button
+                                    type="button"
+                                    onClick={submitRequest}
+                                    disabled={submitting || !requestForm.name || (!requestForm.email && !requestForm.phone)}
+                                    className="mt-6 w-full rounded-xl bg-gray-950 px-5 py-3.5 font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
+                                >
+                                    {submitting ? "Sending…" : "Send request"}
+                                </button>
+                                <p className="mt-3 text-center text-[11px] leading-5 text-gray-400">This sends a service request to the property. It is not a confirmed booking until the host accepts it.</p>
+                            </>
+                        )}
                     </div>
-                );
-            })}
-        </div>
+                </div>
+            )}
+        </>
     );
 }
 
