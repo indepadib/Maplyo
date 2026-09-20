@@ -48,7 +48,7 @@ export function GuestRequestWidget({ guideId }: { guideId: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-24 right-4 z-[95] flex items-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-bold text-slate-950 shadow-2xl ring-1 ring-black/5 md:bottom-6 md:right-6"
+        className="fixed bottom-24 right-4 z-[95] flex items-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-bold text-slate-950 shadow-2xl ring-1 ring-black/5 md:bottom-10 md:right-28"
       >
         <MessageCircle className="h-4 w-4" /> Need help?
       </button>
