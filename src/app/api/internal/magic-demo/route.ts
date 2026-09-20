@@ -15,6 +15,40 @@ const CreateSchema = z.object({
   authorized: z.literal(true),
 });
 
+function scoreGeneratedDemo(input: {
+  guide: Awaited<ReturnType<typeof generateGuide>>;
+  propertyType: "hotel" | "guest_house" | "other";
+  sourceUrl: string;
+  city?: string;
+  prospectEmail?: string;
+}) {
+  const blocks = Array.isArray(input.guide.blocks) ? input.guide.blocks : [];
+  const blockTypes = new Set(blocks.map((block: any) => block.type));
+  const upsellItems = blocks
+    .filter((block: any) => block.type === "upsells")
+    .flatMap((block: any) => Array.isArray(block.data?.items) ? block.data.items : []);
+  const amenities = blocks
+    .filter((block: any) => block.type === "amenities")
+    .flatMap((block: any) => Array.isArray(block.data?.items) ? block.data.items : []);
+
+  let score = 35;
+  if (input.propertyType === "hotel") score += 15;
+  else if (input.propertyType === "guest_house") score += 12;
+  else score += 7;
+
+  score += Math.min(15, blocks.length * 2);
+  score += Math.min(16, upsellItems.length * 4);
+  score += Math.min(8, Math.ceil(amenities.length / 2));
+  if (blockTypes.has("contact")) score += 3;
+  if (blockTypes.has("breakfast")) score += 3;
+  if (blockTypes.has("transport")) score += 2;
+  if (input.sourceUrl) score += 4;
+  if (input.city) score += 2;
+  if (input.prospectEmail) score += 5;
+
+  return Math.max(0, Math.min(95, score));
+}
+
 export async function GET(req: Request) {
   const access = await requireInternalUser(req.headers.get("authorization"));
   if (!access.ok) {
@@ -67,6 +101,13 @@ export async function POST(req: Request) {
     });
 
     let prospectId: string | null = null;
+    const fitScore = scoreGeneratedDemo({
+      guide,
+      propertyType: input.propertyType,
+      sourceUrl: input.sourceUrl,
+      city: input.city,
+      prospectEmail: input.prospectEmail || undefined,
+    });
 
     const prospectResult = await admin
       .from("sales_prospects")
@@ -79,7 +120,7 @@ export async function POST(req: Request) {
         city: input.city || null,
         property_type: input.propertyType,
         source: "magic_demo",
-        score: 70,
+        score: fitScore,
         stage: "demo_ready",
         last_activity_at: new Date().toISOString(),
       }])
@@ -133,6 +174,7 @@ export async function POST(req: Request) {
           magic_demo_id: data.id,
           magic_demo_slug: data.slug,
           source_url: input.sourceUrl,
+          fit_score: fitScore,
         },
       }]).then(() => undefined, () => undefined);
     }
