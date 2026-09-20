@@ -1,6 +1,7 @@
 import { Guide, BlockType } from "@/types/blocks";
 import { guideThemes } from "@/types/themes";
 import { createOpenAIClient, cleanAIJSON } from "./openai";
+import { importAirbnbListing } from "@/lib/importers/airbnb";
 
 export interface GuidePrompt {
     city?: string;
@@ -10,169 +11,13 @@ export interface GuidePrompt {
     language: "fr" | "en";
     mood?: "relax" | "adventure" | "romantic" | "business";
     amenities?: string[];
+    sourceOwnerConfirmed?: boolean;
 }
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 
-async function fetchAirbnbListing(url: string): Promise<string> {
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 6000); // 6 seconds timeout
-
-        const response = await fetch(url, {
-            headers: {
-                'User-Agent': 'Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Accept-Language': 'fr-FR,fr;q=0.8'
-            },
-            signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-
-        if (response.ok) {
-            return await response.text();
-        }
-    } catch (e) {
-        console.error("Failed to fetch Airbnb page:", e);
-    }
-    return "";
-}
-
-interface AirbnbExtracted {
-    dataText: string;        // Raw text sent to LLM
-    listingName?: string;   // Listing title from JSON-LD name field
-    city?: string;          // City from addressLocality
-    description?: string;   // Full description
-    coverImageUrl?: string; // First real listing photo
-    latitude?: string;
-    longitude?: string;
-    amenities?: string[];   // Extracted amenities list
-}
-
-function extractAirbnbMetadata(html: string): AirbnbExtracted {
-    if (!html) return { dataText: "" };
-    let dataText = "";
-    let listingName: string | undefined;
-    let city: string | undefined;
-    let description: string | undefined;
-    let coverImageUrl: string | undefined;
-    let latitude: string | undefined;
-    let longitude: string | undefined;
-    let amenities: string[] = [];
-
-    // 1. Extract <title> tag — also try to infer city from it
-    const titleMatch = html.match(/<title>([^<]+)<\/title>/i);
-    if (titleMatch) {
-        dataText += `Title: ${titleMatch[1]}\n`;
-        const cityFromTitle = titleMatch[1].match(/[àin]+\s+([A-ZÀ-Ö][a-zA-ZÀ-ÿ\-\s]+?)(?:,|\s+-\s+Airbnb)/i);
-        if (cityFromTitle) city = cityFromTitle[1].trim();
-    }
-
-    // 2. Extract og:image meta (fallback photo source)
-    const ogImageMatch = html.match(/<meta\s+[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i);
-    if (ogImageMatch) coverImageUrl = ogImageMatch[1];
-
-    // 3. Extract meta description
-    const metaDescMatch = html.match(/<meta\s+[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i);
-    if (metaDescMatch) {
-        description = metaDescMatch[1];
-        dataText += `Meta description: ${description}\n`;
-    }
-
-    const metaPropertyRegex = /<meta\s+[^>]*property=["']og:(title|description)["'][^>]*content=["']([^"']+)["']/gi;
-    let match;
-    while ((match = metaPropertyRegex.exec(html)) !== null) {
-        dataText += `Meta og:${match[1]}: ${match[2]}\n`;
-    }
-
-    // 4. Extract JSON-LD scripts — parse all useful fields
-    const jsonLdRegex = /<script\s+[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
-    let ldMatch;
-    let count = 0;
-    while ((ldMatch = jsonLdRegex.exec(html)) !== null && count < 5) {
-        try {
-            const parsed = JSON.parse(ldMatch[1].trim());
-
-            // Recursive key finder for string values
-            const findStr = (obj: any, key: string): string | undefined => {
-                if (!obj || typeof obj !== 'object') return undefined;
-                if (Array.isArray(obj)) {
-                    for (const item of obj) { const v = findStr(item, key); if (v) return v; }
-                    return undefined;
-                }
-                if (key in obj && typeof obj[key] === 'string' && obj[key].trim()) return obj[key].trim();
-                for (const k of Object.keys(obj)) { const v = findStr(obj[k], key); if (v) return v; }
-                return undefined;
-            };
-
-            // Extract core fields
-            if (!listingName) listingName = findStr(parsed, 'name');
-            if (!city) city = findStr(parsed, 'addressLocality');
-            if (!description && parsed.description) description = parsed.description.slice(0, 600);
-            if (!latitude) latitude = findStr(parsed, 'latitude');
-            if (!longitude) longitude = findStr(parsed, 'longitude');
-
-            // Extract real photos from JSON-LD image field
-            if (!coverImageUrl && parsed.image) {
-                if (typeof parsed.image === 'string' && parsed.image.startsWith('http')) {
-                    coverImageUrl = parsed.image;
-                } else if (Array.isArray(parsed.image)) {
-                    const firstImg = parsed.image.find((img: any) =>
-                        typeof img === 'string' ? img.startsWith('http') :
-                        (img?.url?.startsWith('http') || img?.contentUrl?.startsWith('http'))
-                    );
-                    if (firstImg) {
-                        coverImageUrl = typeof firstImg === 'string' ? firstImg : (firstImg.url || firstImg.contentUrl);
-                    }
-                }
-            }
-
-            // Extract amenities from containsPlace or amenityFeature
-            const extractAmenities = (obj: any): string[] => {
-                const items: string[] = [];
-                if (!obj) return items;
-                if (Array.isArray(obj)) {
-                    for (const item of obj) items.push(...extractAmenities(item));
-                } else if (typeof obj === 'object') {
-                    if (obj.name && typeof obj.name === 'string') items.push(obj.name);
-                    if (obj.amenityFeature) items.push(...extractAmenities(obj.amenityFeature));
-                    if (obj.containsPlace) items.push(...extractAmenities(obj.containsPlace));
-                }
-                return items;
-            };
-            const foundAmenities = extractAmenities(parsed.amenityFeature || parsed.containsPlace);
-            if (foundAmenities.length > 0) amenities.push(...foundAmenities);
-
-            // Append compact summary to dataText (avoid bloat)
-            const summary: Record<string, any> = {};
-            if (parsed.name) summary.name = parsed.name;
-            if (parsed.description) summary.description = parsed.description.slice(0, 400);
-            if (parsed.address) summary.address = parsed.address;
-            if (parsed.latitude) summary.latitude = parsed.latitude;
-            if (parsed.longitude) summary.longitude = parsed.longitude;
-            if (amenities.length > 0) summary.amenities = amenities.slice(0, 15);
-            dataText += `JSON-LD Summary:\n${JSON.stringify(summary, null, 2)}\n`;
-
-            count++;
-        } catch (e) {
-            // ignore parse errors
-        }
-    }
-
-    return {
-        dataText: dataText.slice(0, 12000),
-        listingName,
-        city,
-        description,
-        coverImageUrl,
-        latitude,
-        longitude,
-        amenities: [...new Set(amenities)].slice(0, 15) // deduplicate
-    };
-}
-
 export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
-    const { city, airbnbUrl, type = "airbnb", targetAudience = "everyone", language, mood } = prompt;
+    const { city, airbnbUrl, sourceOwnerConfirmed = false, type = "airbnb", targetAudience = "everyone", language, mood } = prompt;
 
     // Default values — will be overridden by scraping
     let targetLocation = city || "";
@@ -183,42 +28,32 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     let realAmenities: string[] = [];
 
     if (airbnbUrl) {
-        try {
-            // 1. Fetch the full Airbnb listing HTML
-            const html = await fetchAirbnbListing(airbnbUrl);
-            if (html) {
-                // 2. Extract all structured data from JSON-LD + meta tags
-                const extracted = extractAirbnbMetadata(html);
-                scrapedInfo = extracted.dataText;
+        const imported = await importAirbnbListing(airbnbUrl, sourceOwnerConfirmed);
+        scrapedInfo = imported.dataText;
 
-                // Use extracted structured values (most reliable — direct from JSON-LD)
-                if (extracted.listingName) listingName = extracted.listingName;
-                if (extracted.city) targetLocation = extracted.city;
-                if (extracted.coverImageUrl) realCoverImageUrl = extracted.coverImageUrl;
-                if (extracted.description) realDescription = extracted.description;
-                if (extracted.amenities?.length) realAmenities = extracted.amenities;
+        if (imported.listingName) listingName = imported.listingName;
+        if (imported.city) targetLocation = imported.city;
+        if (imported.coverImageUrl) realCoverImageUrl = imported.coverImageUrl;
+        if (imported.description) realDescription = imported.description;
+        if (imported.amenities?.length) realAmenities = imported.amenities;
 
-                console.log(`[guide-generator] Scraped: name="${listingName}" city="${targetLocation}" photo=${realCoverImageUrl ? 'YES' : 'NO'} amenities=${realAmenities.length}`);
-            }
+        if (imported.warning) {
+            console.warn(`[guide-generator] Airbnb import warning: ${imported.warning}`);
+        }
 
-            // 3. Fallback: parse URL slug if JSON-LD didn't give us a name/city
-            if (!listingName || !targetLocation) {
+        // Safe fallback: infer only from the URL path itself, never by bypassing platform controls.
+        if (!listingName || !targetLocation) {
+            try {
                 const urlObj = new URL(airbnbUrl);
                 const pathParts = urlObj.pathname.split('/');
                 const roomPart = pathParts.find(p => p && p !== 'rooms');
                 if (roomPart && !/^\d+$/.test(roomPart)) {
                     const nameWithoutId = roomPart.replace(/-\d+$/, '').replace(/-/g, ' ');
                     if (!listingName) listingName = nameWithoutId.charAt(0).toUpperCase() + nameWithoutId.slice(1);
-                    if (!targetLocation) {
-                        const lowerName = nameWithoutId.toLowerCase();
-                        const knownCities = ['paris', 'marrakech', 'london', 'barcelona', 'rome', 'new york', 'tokyo', 'casablanca', 'rabat', 'nice', 'lyon', 'marseille', 'mohammedia', 'agadir', 'tangier', 'fes', 'essaouira', 'meknes', 'tetouan', 'safi', 'el jadida'];
-                        const foundCity = knownCities.find(c => lowerName.includes(c));
-                        if (foundCity) targetLocation = foundCity.charAt(0).toUpperCase() + foundCity.slice(1);
-                    }
                 }
+            } catch {
+                // URL validation is handled by the importer.
             }
-        } catch (e) {
-            console.error("Scraping error:", e);
         }
     }
 
@@ -236,14 +71,14 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     const systemPrompt = `
 You are an expert travel guide creator. Create a complete, personalized JSON welcome guide for a short-term rental based on the real listing data below.
 
-=== REAL LISTING DATA (extracted directly from Airbnb) ===
+=== REAL LISTING DATA (provided/imported from the host listing source) ===
 - Listing Title: ${listingName}
 - Exact City / Location: ${targetLocation}
 - Language to use: ${language} (ALL output text must be in this language)
 - Airbnb URL: ${airbnbUrl || 'N/A'}
 ${realDescription ? `- Real Listing Description: ${realDescription}` : ''}
 ${realAmenities.length > 0 ? `- Real Amenities from listing: ${realAmenities.join(', ')}` : ''}
-${scrapedInfo ? `\n=== FULL SCRAPED METADATA ===\n${scrapedInfo}` : ''}
+${scrapedInfo ? `\n=== IMPORTED LISTING METADATA ===\n${scrapedInfo}` : ''}
 
 === CRITICAL INSTRUCTIONS ===
 1. LOCATION: The guide location is "${targetLocation}". Use ONLY this city for local recommendations (places, events, transport). NEVER use Paris or any other city.
@@ -304,7 +139,7 @@ Output STRICTLY valid JSON:
             data: b.data || {}
         }));
 
-        // Resolve hero cover image: prioritize real Airbnb photo > theme bg > nothing
+        // Resolve hero cover image: prioritize imported listing photo > theme bg > nothing
         const resolvedCoverImage = realCoverImageUrl || matchedTheme.bgImage || null;
 
         // Ensure Hero block exists and has a real cover image
