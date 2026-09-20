@@ -22,20 +22,53 @@ export default async function MagicDemoPage({ params }: { params: Promise<{ slug
 
   const { data: demo, error } = await admin
     .from("magic_demos")
-    .select("id, slug, property_name, property_type, theme_id, content, status, expires_at, view_count")
+    .select("id, slug, property_name, property_type, theme_id, content, status, expires_at, view_count, prospect_id")
     .eq("slug", slug)
     .maybeSingle();
 
   if (error || !demo || demo.status !== "active") notFound();
   if (demo.expires_at && new Date(demo.expires_at).getTime() < Date.now()) notFound();
 
+  const viewedAt = new Date().toISOString();
+
   await admin
     .from("magic_demos")
     .update({
       view_count: Number(demo.view_count || 0) + 1,
-      last_viewed_at: new Date().toISOString(),
+      last_viewed_at: viewedAt,
     })
     .eq("id", demo.id);
+
+  if (demo.prospect_id) {
+    await admin.from("sales_activities").insert([{
+      prospect_id: demo.prospect_id,
+      activity_type: "demo_viewed",
+      channel: "magic_demo",
+      metadata: {
+        magic_demo_id: demo.id,
+        magic_demo_slug: demo.slug,
+        view_number: Number(demo.view_count || 0) + 1,
+      },
+    }]).then(() => undefined, () => undefined);
+
+    const { data: prospect } = await admin
+      .from("sales_prospects")
+      .select("stage")
+      .eq("id", demo.prospect_id)
+      .maybeSingle();
+
+    if (prospect && ["new", "demo_ready", "contacted"].includes(prospect.stage)) {
+      await admin
+        .from("sales_prospects")
+        .update({ stage: "engaged", last_activity_at: viewedAt, updated_at: viewedAt })
+        .eq("id", demo.prospect_id);
+    } else {
+      await admin
+        .from("sales_prospects")
+        .update({ last_activity_at: viewedAt, updated_at: viewedAt })
+        .eq("id", demo.prospect_id);
+    }
+  }
 
   const guide: Guide = {
     id: demo.id,
