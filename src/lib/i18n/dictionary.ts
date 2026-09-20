@@ -94,8 +94,8 @@ export const DICTIONARY = {
                     "desc": "Importez les informations de votre établissement depuis des sources que vous contrôlez, puis laissez l'IA structurer votre expérience voyageur."
                 },
                 "upsells": {
-                    "title": "Upsells sans Commission",
-                    "desc": "Vendez automatiquement des départs tardifs, navettes ou petits-déjeuners. Vous gardez 100% des revenus générés."
+                    "title": "Services & revenus additionnels",
+                    "desc": "Présentez départs tardifs, navettes, petits-déjeuners et autres services directement dans le parcours voyageur, puis suivez l'intérêt et les demandes."
                 },
                 "companion": {
                     "title": "Concierge IA Voyageur",
@@ -128,7 +128,7 @@ export const DICTIONARY = {
                 },
                 {
                     "title": "2. Activez vos revenus (Upsells)",
-                    "desc": "Configurez vos prix pour le check-out tardif, la consigne bagage ou les petits-déjeuners. L'argent tombe sur votre compte sans effort.",
+                    "desc": "Configurez vos services comme le check-out tardif, les transferts ou les petits-déjeuners et centralisez les demandes voyageurs dans Maplyo.",
                     "badge": "Monétisation"
                 },
                 {
@@ -147,7 +147,7 @@ export const DICTIONARY = {
                 "Tableau de Bord Multi-Propriétés",
                 "Upselling Digital en Chambre (Room Service)",
                 "Marque Blanche (Votre logo, votre domaine)",
-                "Messagerie Voyageur Automatisée (WhatsApp)"
+                "Parcours voyageur et services par propriété"
             ],
             "cta": "Parler à un Expert",
             "demo": "Voir la Démo"
@@ -155,7 +155,7 @@ export const DICTIONARY = {
         "pricing": {
             "title": "Tarification Transparente",
             "subtitle": "Commencez gratuitement. Évoluez quand vous voulez.",
-            "bestOffer": "La meilleure offre du monde :",
+            "bestOffer": "Choisissez l'offre adaptée à votre activité :",
             "addon": "+20 DH / guide supplémentaire",
             "enterprise": {
                 "title": "Besoin d'une solution Enterprise ?",
@@ -978,11 +978,11 @@ export const DICTIONARY = {
         "hero": {
             "tag": "FOR HOSTS & PROPERTY MANAGERS",
             "title": "Your Airbnb link becomes a smart guide in 10 seconds.",
-            "subtitle": "Stop wasting time. Paste your listing, and our AI generates your interactive welcome book with access codes, sells your services (upsells) commission-free, and acts as the ultimate travel companion.",
-            "cta": "Create my guide (Free)",
-            "demo": "See the magic",
+            "subtitle": "Turn your property information into a multilingual guest experience that answers questions, centralizes useful information and surfaces your services — without a guest app to install.",
+            "cta": "Create my guest experience",
+            "demo": "See the live demo",
             "noCreditCard": "No credit card required",
-            "setupTime": "Set up in 10s flat"
+            "setupTime": "Fast setup, no guest app"
         },
         "features": {
             "title": "Technology unlike anything else.",
@@ -995,11 +995,11 @@ export const DICTIONARY = {
                     "desc": "Paste your Airbnb or Booking link, and our AI extracts photos, addresses, and descriptions to build your guide in 10 seconds."
                 },
                 "upsells": {
-                    "title": "Commission-free Upsells",
-                    "desc": "Automatically sell late check-outs, shuttles, or breakfasts. You keep 100% of the generated revenue."
+                    "title": "Guest services & ancillary revenue",
+                    "desc": "Surface late checkout, transfers, breakfast and other services in the guest journey, then track interest and native service requests."
                 },
                 "companion": {
-                    "title": "AI Travel Companion",
+                    "title": "AI Guest Concierge",
                     "desc": "Tip of the day, real-time events, recommended restaurants... Provide a personal digital concierge."
                 },
                 "smartHome": {
@@ -1048,7 +1048,7 @@ export const DICTIONARY = {
                 "Multi-Property Dashboard",
                 "Digital In-Room Upselling (Room Service)",
                 "White Label (Your logo, your domain)",
-                "Automated Guest Messaging (WhatsApp)"
+                "Property-level guest journeys and services"
             ],
             "cta": "Talk to an Expert",
             "demo": "Watch the Demo"
@@ -1056,7 +1056,7 @@ export const DICTIONARY = {
         "pricing": {
             "title": "Transparent Pricing",
             "subtitle": "Start for free. Scale when you want.",
-            "bestOffer": "The best offer in the world:",
+            "bestOffer": "Choose the plan that fits your operation:",
             "addon": "+20 DH / additional guide",
             "enterprise": {
                 "title": "Need an Enterprise solution?",
