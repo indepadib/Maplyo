@@ -15,6 +15,7 @@ import { Guide, BlockType } from "@/types/blocks"; // Value import for Guide and
 import { slugify } from "@/lib/utils/slugify";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { trackProductEvent } from "@/lib/analytics/product-events";
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 const STORAGE_KEY = "eguidehq_demo_guide_v1";
@@ -313,6 +314,7 @@ export function EnhancedBuilder({
                                 const { error } = await supabase.from("guides").update({ is_published: true }).eq("id", guide.id);
                                 if (!error) {
                                     setGuide({ ...guide, isPublished: true });
+                                    trackProductEvent("experience_published", { guideId: guide.id });
                                     alert(t.builder.publishSuccess);
                                 } else {
                                     console.error("Publish error:", error);
