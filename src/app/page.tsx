@@ -192,7 +192,7 @@ const ScrollProgress = () => {
 };
 
 const HowItWorks = () => {
-  const { t } = useTranslation();
+  const { t, lang, setLang } = useTranslation();
   const [activeStep, setActiveStep] = useState(0);
 
   const steps = [
@@ -425,6 +425,10 @@ export default function LandingPage() {
   });
 
   const [currency, setCurrency] = useState<CurrencyCode>('MAD');
+
+  useEffect(() => {
+    if (lang !== "fr" && lang !== "en") setLang("en");
+  }, [lang, setLang]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
