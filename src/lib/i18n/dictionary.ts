@@ -63,8 +63,8 @@ export const DICTIONARY = {
             "secureAccessDesc": "Entrez le code fourni par votre hôte."
         },
         "socialProof": {
-            "trustpilot": "4.9/5 par 500+ Hôtes",
-            "usedBy": "Utilisé par les meilleures conciergeries",
+            "trustpilot": "Pensé pour l'hospitalité moderne",
+            "usedBy": "Locations, conciergeries, riads & hôtels",
             "autoTranslate": {
                 "title": "Auto-Traduit",
                 "desc": "Vos guides parlent la langue de vos invités."
@@ -75,31 +75,31 @@ export const DICTIONARY = {
             }
         },
         "hero": {
-            "tag": "POUR LES HÔTES ET CONCIERGERIES",
-            "title": "Votre lien Airbnb devient un guide intelligent en 10 secondes.",
-            "subtitle": "Ne perdez plus de temps. Collez votre annonce, l'IA génère votre livret d'accueil interactif avec vos codes d'accès, vend vos services (upsells) sans commission, et s'impose comme le compagnon de voyage ultime.",
-            "cta": "Créer mon guide (Gratuit)",
+            "tag": "POUR LES HÔTES, CONCIERGERIES, RIADS & HÔTELS",
+            "title": "Toute votre expérience voyageur. Un seul lien.",
+            "subtitle": "Maplyo transforme les informations de votre établissement en une expérience voyageur multilingue qui répond aux questions, centralise les informations utiles et vend vos services — sans application à télécharger.",
+            "cta": "Créer mon expérience voyageur",
             "demo": "Voir la magie",
             "noCreditCard": "Pas de carte requise",
-            "setupTime": "Configuré en 10s chrono"
+            "setupTime": "Mise en place rapide, sans app"
         },
         "features": {
-            "title": "Une technologie unique au monde.",
-            "subtitle": "Nous faisons ce que les autres ne font pas.",
-            "description": "Transformez chaque séjour en expérience 5 étoiles tout en générant des revenus passifs. Maplyo est le seul compagnon de voyage intelligent dont vos visiteurs auront besoin.",
+            "title": "Informez moins. Servez mieux. Vendez plus.",
+            "subtitle": "Une couche d'expérience voyageur au-dessus de votre PMS, channel manager ou fonctionnement actuel.",
+            "description": "Centralisez l'accueil, les réponses, les recommandations et les services payants dans une interface web personnalisée pour chaque établissement.",
             "badge": "Fonctionnalités",
             "items": {
                 "magicAI": {
-                    "title": "Génération IA Instantanée",
-                    "desc": "Collez votre lien Airbnb ou Booking, notre IA extrait photos, adresses et descriptions pour créer votre guide en 10 secondes."
+                    "title": "Création assistée par IA",
+                    "desc": "Importez les informations de votre établissement depuis des sources que vous contrôlez, puis laissez l'IA structurer votre expérience voyageur."
                 },
                 "upsells": {
                     "title": "Upsells sans Commission",
                     "desc": "Vendez automatiquement des départs tardifs, navettes ou petits-déjeuners. Vous gardez 100% des revenus générés."
                 },
                 "companion": {
-                    "title": "Compagnon de Voyage IA",
-                    "desc": "Conseils du jour, événements en temps réel, restaurants recommandés... Offrez un concierge digital personnel."
+                    "title": "Concierge IA Voyageur",
+                    "desc": "Répondez 24/7 aux questions fréquentes à partir des informations validées de votre établissement, dans la langue du voyageur."
                 },
                 "smartHome": {
                     "title": "Smart Home Intégré",
@@ -117,13 +117,13 @@ export const DICTIONARY = {
         },
         "howItWorks": {
             "badge": "Tour du produit",
-            "title": "La magie opère en",
-            "titleHighlight": "10 secondes",
-            "subtitle": "Découvrez comment Maplyo propulse votre gestion locative dans le futur et multiplie vos revenus.",
+            "title": "De vos informations à une expérience",
+            "titleHighlight": "prête à partager",
+            "subtitle": "Créez, personnalisez et partagez une expérience digitale qui fonctionne pour une location comme pour un hôtel.",
             "steps": [
                 {
-                    "title": "1. Importez via Airbnb / Booking",
-                    "desc": "Insérez simplement le lien de votre annonce. Notre intelligence artificielle s'occupe de tout le reste : textes, photos, localisation et équipements.",
+                    "title": "1. Importez votre établissement",
+                    "desc": "Ajoutez votre site, vos documents ou vos informations existantes. Maplyo les transforme en blocs voyageur structurés et modifiables.",
                     "badge": "Auto-Génération"
                 },
                 {
@@ -132,8 +132,8 @@ export const DICTIONARY = {
                     "badge": "Monétisation"
                 },
                 {
-                    "title": "3. Scannez et profitez",
-                    "desc": "Vos voyageurs se connectent au WiFi, lisent le conseil du jour, et commandent vos services en 1 clic. L'expérience 5 étoiles ultime.",
+                    "title": "3. Partagez au bon moment",
+                    "desc": "QR code, lien web ou message pré-arrivée : vos voyageurs trouvent les informations et services dont ils ont besoin, sans installer d'application.",
                     "badge": "100% Autopilote"
                 }
             ]
@@ -142,7 +142,7 @@ export const DICTIONARY = {
             "badge": "Qualité Professionnelle",
             "title": "Conçu pour les",
             "titleHighlight": "Hôtels & Conciergeries",
-            "desc": "Maplyo équipe les plus grands. Notre infrastructure gère les portfolios de centaines de biens avec une fluidité absolue.",
+            "desc": "Centralisez plusieurs propriétés ou chambres, standardisez l'expérience et conservez la liberté d'adapter chaque établissement.",
             "bulletPoints": [
                 "Tableau de Bord Multi-Propriétés",
                 "Upselling Digital en Chambre (Room Service)",
@@ -191,7 +191,7 @@ export const DICTIONARY = {
                     "desc": "Pour maximiser vos revenus & avis.",
                     "button": "Passer en Croissance",
                     "features": [
-                        "Guides Illimités (+20 DH/supp.)",
+                        "2 Guides Inclus, puis +20 DH / guide",
                         "Thèmes Premium INCLUS",
                         "Traduction Automatique (IA)",
                         "Assistant Voyageur 24/7 (IA)",
@@ -216,7 +216,7 @@ export const DICTIONARY = {
         },
         "testimonials": {
             "title": "Approuvé par les Pros",
-            "subtitle": "Rejoignez plus de 500 hôtes qui ont automatisé leur accueil.",
+            "subtitle": "Découvrez comment les opérateurs utilisent Maplyo pour simplifier l'accueil et développer leurs revenus.",
             "items": [
                 {
                     "name": "Jean-Philippe R.",
