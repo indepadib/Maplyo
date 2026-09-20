@@ -101,6 +101,7 @@ export async function POST(req: Request) {
           guide_id: input.guideId,
           notes: input.notes || null,
           service_key: input.serviceKey,
+          service_title: input.title,
         },
       }])
       .select("id")
