@@ -29,6 +29,9 @@ type OrderRow = {
   commission_amount: number | string | null;
   currency: string | null;
   created_at: string;
+  metadata?: Record<string, any> | null;
+  guests?: { first_name?: string | null; email?: string | null; phone?: string | null } | Array<{ first_name?: string | null; email?: string | null; phone?: string | null }> | null;
+  order_items?: Array<{ title?: string | null }> | null;
 };
 
 function legacyKey(item: any, index: number) {
@@ -99,7 +102,7 @@ export default function RevenuePage() {
 
       const ordersResult = await supabase
         .from("orders")
-        .select("id, status, total_amount, commission_amount, currency, created_at")
+        .select("id, status, total_amount, commission_amount, currency, created_at, metadata, guests(first_name,email,phone), order_items(title)")
         .order("created_at", { ascending: false })
         .limit(500);
 
@@ -132,6 +135,19 @@ export default function RevenuePage() {
   const grossRevenue = paidOrders.reduce((sum, order) => sum + Number(order.total_amount || 0), 0);
   const commissionRevenue = paidOrders.reduce((sum, order) => sum + Number(order.commission_amount || 0), 0);
   const mainCurrency = paidOrders.find((order) => order.currency)?.currency || "MAD";
+  const activeRequests = orders.filter((order) => ["pending", "confirmed"].includes(order.status));
+
+  const updateOrderStatus = async (orderId: string, status: "confirmed" | "fulfilled" | "cancelled") => {
+    const { error } = await supabase.from("orders").update({ status }).eq("id", orderId);
+    if (!error) {
+      setOrders((current) => current.map((order) => order.id === orderId ? { ...order, status } : order));
+    }
+  };
+
+  const guestFor = (order: OrderRow) => {
+    if (Array.isArray(order.guests)) return order.guests[0] || {};
+    return order.guests || {};
+  };
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
@@ -174,6 +190,54 @@ export default function RevenuePage() {
             </article>
           ))}
         </section>
+
+        {revenueCoreActive && (
+          <section className="mt-10 rounded-3xl border border-white/10 bg-white/[0.025] p-6">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-3">
+                  <PackageOpen className="h-5 w-5 text-amber-300" />
+                  <h2 className="text-xl font-bold">Guest service requests</h2>
+                </div>
+                <p className="mt-2 text-sm text-zinc-500">Confirm, fulfill or decline native Maplyo requests.</p>
+              </div>
+              <div className="rounded-full bg-amber-400/10 px-3 py-1 text-xs font-bold text-amber-300">{activeRequests.length} active</div>
+            </div>
+
+            <div className="mt-6 grid gap-3">
+              {activeRequests.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-white/10 p-8 text-center text-sm text-zinc-500">No active requests.</div>
+              ) : activeRequests.map((order) => {
+                const guest = guestFor(order);
+                const title = order.order_items?.[0]?.title || order.metadata?.service_title || "Guest service";
+                return (
+                  <article key={order.id} className="rounded-2xl border border-white/10 bg-black/10 p-5">
+                    <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${order.status === "confirmed" ? "bg-emerald-400/10 text-emerald-300" : "bg-amber-400/10 text-amber-300"}`}>{order.status}</span>
+                          <span className="text-xs text-zinc-600">{new Date(order.created_at).toLocaleString()}</span>
+                        </div>
+                        <h3 className="mt-3 text-lg font-bold">{title}</h3>
+                        <div className="mt-1 text-sm text-zinc-400">{guest.first_name || "Guest"} • {guest.email || guest.phone || "Contact available in guest record"}</div>
+                        <div className="mt-2 text-sm font-bold text-white">{Number(order.total_amount || 0).toFixed(0)} {order.currency || "MAD"}</div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {order.status === "pending" && (
+                          <button onClick={() => updateOrderStatus(order.id, "confirmed")} className="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-bold text-slate-950 hover:bg-emerald-400">Confirm</button>
+                        )}
+                        {order.status === "confirmed" && (
+                          <button onClick={() => updateOrderStatus(order.id, "fulfilled")} className="rounded-xl bg-white px-4 py-2 text-sm font-bold text-slate-950 hover:bg-zinc-200">Mark fulfilled</button>
+                        )}
+                        <button onClick={() => updateOrderStatus(order.id, "cancelled")} className="rounded-xl border border-white/10 px-4 py-2 text-sm font-bold text-zinc-400 hover:bg-white/5 hover:text-white">Decline</button>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         <section className="mt-10 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
           <div className="rounded-3xl border border-white/10 bg-white/[0.025] p-6">
