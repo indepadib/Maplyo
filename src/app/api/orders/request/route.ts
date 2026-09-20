@@ -83,6 +83,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Could not create guest request" }, { status: 500 });
     }
 
+    let resolvedServiceId = input.serviceId || null;
+
+    if (!resolvedServiceId) {
+      const { data: matchedService } = await admin
+        .from("services")
+        .select("id")
+        .eq("property_id", propertyId)
+        .eq("status", "active")
+        .contains("metadata", { source_key: input.serviceKey })
+        .limit(1)
+        .maybeSingle();
+
+      if (matchedService?.id) resolvedServiceId = matchedService.id;
+    }
+
     const amount = Number(input.priceAmount || 0);
 
     const orderResult = await admin
@@ -114,7 +129,7 @@ export async function POST(req: Request) {
 
     const itemResult = await admin.from("order_items").insert([{
       order_id: orderResult.data.id,
-      service_id: input.serviceId || null,
+      service_id: resolvedServiceId,
       title: input.title,
       quantity: 1,
       unit_price: amount,
@@ -132,7 +147,7 @@ export async function POST(req: Request) {
     await admin.from("guest_events").insert([{
       guide_id: input.guideId,
       property_id: propertyId,
-      service_id: input.serviceId || null,
+      service_id: resolvedServiceId,
       service_key: input.serviceKey,
       event_name: "service_request",
       metadata: { order_id: orderResult.data.id, title: input.title },
