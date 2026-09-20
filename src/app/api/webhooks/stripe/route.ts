@@ -135,8 +135,52 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabas
         .update(updateData)
         .eq("id", userId);
 
-    if (error) console.error("❌ Supabase subscription update failed:", error);
-    else console.log(`✅ User ${userId} upgraded to ${planId}`);
+    if (error) {
+        console.error("❌ Supabase subscription update failed:", error);
+        return;
+    }
+
+    console.log(`✅ User ${userId} upgraded to ${planId}`);
+
+    // Close the sales loop automatically for users who came through a Magic Demo.
+    try {
+        const { data: claimedDemo } = await supabase
+            .from("magic_demos")
+            .select("id, prospect_id")
+            .eq("claimed_by", userId)
+            .not("prospect_id", "is", null)
+            .order("updated_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+        if (claimedDemo?.prospect_id) {
+            const paidAt = new Date().toISOString();
+
+            await supabase
+                .from("sales_prospects")
+                .update({
+                    stage: "paid",
+                    last_activity_at: paidAt,
+                    next_action_at: null,
+                    updated_at: paidAt,
+                })
+                .eq("id", claimedDemo.prospect_id);
+
+            await supabase.from("sales_activities").insert([{
+                prospect_id: claimedDemo.prospect_id,
+                activity_type: "paid",
+                channel: "stripe",
+                metadata: {
+                    user_id: userId,
+                    plan_id: planId,
+                    checkout_session_id: session.id,
+                    magic_demo_id: claimedDemo.id,
+                },
+            }]);
+        }
+    } catch (salesError) {
+        console.info("Sales attribution unavailable:", salesError);
+    }
 }
 
 async function handleSubscriptionUpdated(sub: Stripe.Subscription, supabase: any) {
