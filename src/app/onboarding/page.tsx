@@ -20,6 +20,7 @@ export default function OnboardingPage() {
   const { user } = useAuth();
   const [propertyType, setPropertyType] = useState<PropertyType>("airbnb");
   const [airbnbUrl, setAirbnbUrl] = useState("");
+  const [propertyUrl, setPropertyUrl] = useState("");
   const [city, setCity] = useState("");
   const [ownerConfirmed, setOwnerConfirmed] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -30,7 +31,9 @@ export default function OnboardingPage() {
   }, [user]);
 
   const isAirbnb = propertyType === "airbnb";
-  const canGenerate = Boolean(city.trim() || (isAirbnb && airbnbUrl.trim() && ownerConfirmed));
+  const sourceUrl = isAirbnb ? airbnbUrl.trim() : propertyUrl.trim();
+  const sourceKind = isAirbnb ? "airbnb" : (sourceUrl ? "website" : "manual_city");
+  const canGenerate = sourceUrl ? ownerConfirmed : Boolean(city.trim());
 
   const generate = async () => {
     if (!canGenerate || !user) return;
@@ -40,7 +43,7 @@ export default function OnboardingPage() {
     trackProductEvent("generation_started", {
       metadata: {
         propertyType,
-        source: isAirbnb && airbnbUrl.trim() ? "airbnb" : "manual_city",
+        source: sourceKind,
       },
     });
 
@@ -58,7 +61,8 @@ export default function OnboardingPage() {
           prompt: {
             city: city.trim() || undefined,
             airbnbUrl: isAirbnb && airbnbUrl.trim() ? airbnbUrl.trim() : undefined,
-            sourceOwnerConfirmed: isAirbnb ? ownerConfirmed : undefined,
+            propertyUrl: !isAirbnb && propertyUrl.trim() ? propertyUrl.trim() : undefined,
+            sourceOwnerConfirmed: sourceUrl ? ownerConfirmed : undefined,
             type: propertyType,
             targetAudience: "everyone",
             language: "fr",
@@ -72,7 +76,7 @@ export default function OnboardingPage() {
       trackProductEvent("generation_completed", {
         metadata: {
           propertyType,
-          source: isAirbnb && airbnbUrl.trim() ? "airbnb" : "manual_city",
+          source: sourceKind,
         },
       });
 
@@ -95,7 +99,7 @@ export default function OnboardingPage() {
         propertyName: data.guide.title || city.trim() || "My Property",
         propertyType,
         city: city.trim() || undefined,
-        sourceUrl: isAirbnb && airbnbUrl.trim() ? airbnbUrl.trim() : undefined,
+        sourceUrl: sourceUrl || undefined,
       });
 
       trackProductEvent("property_created", {
@@ -164,9 +168,28 @@ export default function OnboardingPage() {
               </div>
             )}
 
+            {!isAirbnb && (
+              <div className="mt-4">
+                <label className="mb-2 block text-sm font-medium text-zinc-300">Property website</label>
+                <div className="relative">
+                  <Link2 className="absolute left-4 top-3.5 h-5 w-5 text-zinc-500" />
+                  <input
+                    value={propertyUrl}
+                    onChange={(e) => setPropertyUrl(e.target.value)}
+                    placeholder="https://www.yourhotel.com"
+                    className="h-12 w-full rounded-xl border border-white/10 bg-black/20 pl-11 pr-4 outline-none focus:border-rose-400/50"
+                  />
+                </div>
+                <label className="mt-3 flex cursor-pointer items-start gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3 text-xs leading-5 text-zinc-400">
+                  <input type="checkbox" checked={ownerConfirmed} onChange={(e) => setOwnerConfirmed(e.target.checked)} className="mt-1" />
+                  <span>I own, manage, or am authorized to use the information from this property website in Maplyo.</span>
+                </label>
+              </div>
+            )}
+
             <div className="mt-4">
               <label className="mb-2 block text-sm font-medium text-zinc-300">
-                {isAirbnb ? "City (recommended fallback)" : "City"}
+                {sourceUrl ? "City (recommended fallback)" : "City"}
               </label>
               <input
                 value={city}
