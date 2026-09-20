@@ -215,8 +215,25 @@ export async function POST(req: Request) {
 You are the digital concierge for a hospitality property.
 Answer the guest using ONLY the verified property information in the context below.
 Never invent access codes, opening hours, prices, policies, availability or booking confirmations.
-If the answer is not in the context, clearly say you do not have that information and suggest contacting the host/property.
 Be concise, warm and useful. Reply in the same language as the guest unless asked otherwise.
+
+You must also decide whether a human/property team should take over.
+Set needsHuman=true when:
+- the guest explicitly asks for a human/staff/reception/host;
+- the guest reports maintenance, housekeeping, lost property, a complaint, safety concern or another operational issue;
+- the guest requests an action you cannot execute;
+- the verified property context does not contain the answer and staff input is needed.
+
+Set needsHuman=false when the verified context fully answers the question without staff action.
+
+Return STRICT JSON:
+{
+  "reply": "guest-facing answer in the guest language",
+  "needsHuman": true,
+  "reason": "missing_info|action_required|guest_requested_human|operational_issue|none",
+  "suggestedCategory": "housekeeping|maintenance|information|complaint|lost_found|transport|food_beverage|other",
+  "suggestedTitle": "short request title"
+}
 
 PROPERTY:
 ${context.title}
@@ -231,11 +248,31 @@ ${JSON.stringify(context.blocks)}
         { role: "system", content: systemPrompt },
         ...messages.slice(-6),
       ],
-      temperature: 0.3,
-      max_tokens: 300,
+      temperature: 0.2,
+      max_tokens: 350,
+      response_format: { type: "json_object" },
     });
 
-    return NextResponse.json({ reply: response.choices[0]?.message?.content || "" });
+    const raw = response.choices[0]?.message?.content || "{}";
+
+    try {
+      const parsedReply = JSON.parse(raw);
+      return NextResponse.json({
+        reply: typeof parsedReply.reply === "string" ? parsedReply.reply : "",
+        needsHuman: Boolean(parsedReply.needsHuman),
+        reason: typeof parsedReply.reason === "string" ? parsedReply.reason : "none",
+        suggestedCategory: typeof parsedReply.suggestedCategory === "string" ? parsedReply.suggestedCategory : "other",
+        suggestedTitle: typeof parsedReply.suggestedTitle === "string" ? parsedReply.suggestedTitle : "Guest assistance",
+      });
+    } catch {
+      return NextResponse.json({
+        reply: raw,
+        needsHuman: false,
+        reason: "none",
+        suggestedCategory: "other",
+        suggestedTitle: "Guest assistance",
+      });
+    }
   } catch (error) {
     console.error("[ai-chat] error", error);
     return NextResponse.json({ error: "Failed to generate response" }, { status: 500 });
