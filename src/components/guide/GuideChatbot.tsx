@@ -15,6 +15,7 @@ import { TranslatedText } from "@/components/ui/TranslatedText";
 // We should preferably import `DICTIONARY` from `@/lib/i18n/dictionary`.
 
 import { DICTIONARY, Language } from "@/lib/i18n/dictionary";
+import { supabase } from "@/lib/supabase";
 
 interface GuideChatbotProps {
     guide: Guide;
@@ -49,19 +50,20 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = fa
         setIsLoading(true);
 
         try {
-            // Prepare context
-            const condensedGuide = {
-                title: guide.title,
-                blocks: guide.blocks.map(b => ({ type: b.type, title: b.title, data: b.data }))
-            };
+            const session = await supabase.auth.getSession();
+            const token = session.data.session?.access_token;
 
             const res = await fetch('/api/ai/chat', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
                 body: JSON.stringify({
                     messages: messages.concat([{ role: 'user', content: userMsg }]),
-                    guideContext: condensedGuide,
-                    lang: lang // Pass lang to backend for better answers
+                    guideId: guide.id,
+                    guideSlug: guide.slug,
+                    lang,
                 })
             });
 
