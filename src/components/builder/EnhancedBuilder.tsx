@@ -119,7 +119,49 @@ export function EnhancedBuilder({
                 })
                 .eq("id", next.id);
 
-            if (error) console.error("Error saving guide:", error);
+            if (error) {
+                console.error("Error saving guide:", error);
+            } else if (next.id !== "demo") {
+                try {
+                    const { data: sessionData } = await supabase.auth.getSession();
+                    const token = sessionData.session?.access_token;
+
+                    if (token) {
+                        const revenueServices = next.blocks
+                            .filter((block) => block.type === "upsells")
+                            .flatMap((block) => {
+                                const items = Array.isArray((block.data as any)?.items) ? (block.data as any).items : [];
+                                return items.map((item: any, index: number) => ({
+                                    key: item.id || item.serviceId || `legacy_${String(item.title || "service").toLowerCase().replace(/[^a-z0-9]+/g, "_")}_${index}`,
+                                    title: item.title || "Service",
+                                    description: item.description || "",
+                                    category: item.category || "other",
+                                    priceAmount: item.priceAmount ?? "",
+                                    currency: item.currency || "MAD",
+                                    pricingType: item.pricingType || "fixed",
+                                    fulfillmentType: item.fulfillmentType || "property",
+                                    providerName: item.providerName || "",
+                                    imageUrl: item.imageUrl || "",
+                                    externalUrl: item.url || "",
+                                }));
+                            });
+
+                        await fetch("/api/services/sync", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`,
+                            },
+                            body: JSON.stringify({
+                                guideId: next.id,
+                                services: revenueServices,
+                            }),
+                        }).catch(() => undefined);
+                    }
+                } catch (syncError) {
+                    console.info("Revenue service sync unavailable:", syncError);
+                }
+            }
             
             // Save Integrations
             if (next.id !== 'demo') {
