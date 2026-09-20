@@ -50,7 +50,7 @@ const Nav = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, lang, setLang } = useTranslation();
   
-  const langs: Language[] = ['fr', 'en', 'es', 'ar', 'nl', 'zh', 'pt'];
+  const langs: Language[] = ['fr', 'en'];
   const nextLang = langs[(langs.indexOf(lang) + 1) % langs.length];
 
   useEffect(() => {
@@ -418,7 +418,6 @@ const HowItWorks = () => {
 
 export default function LandingPage() {
   const { t } = useTranslation();
-  const [isVideoOpen, setIsVideoOpen] = useState(false);
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -522,7 +521,7 @@ export default function LandingPage() {
                     {t.common.getStarted}
                   </Button>
                 </Link>
-                <Link href="/g/demo" target="_blank">
+                <Link href="/demo" target="_blank">
                   <Button variant="secondary" className="h-14 px-8 text-lg bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-md rounded-full shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] transform hover:scale-105 transition-all duration-300">
                     <Play className="w-5 h-5 mr-2 fill-white" />
                     {t.hero.demo}
@@ -534,14 +533,13 @@ export default function LandingPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 1 }}
-                className="mt-12 flex items-center gap-4 text-xs font-medium text-zinc-500"
+                className="mt-12 flex flex-wrap items-center gap-2 text-xs font-semibold text-zinc-300"
               >
-                <span>TRUSTPILOT</span>
-                <div className="flex gap-1 text-green-500">★★★★★</div>
-                <span className="text-zinc-400">{t.socialProof.trustpilot}</span>
-                <div className="w-px h-4 bg-white/10 mx-2" />
-                <span className="text-rose-400 font-bold">12,450+</span>
-                <span className="text-zinc-500 uppercase tracking-tighter text-[10px]">Guides created this month</span>
+                {["No guest app", "AI concierge", "Multilingual", "Revenue services"].map((item) => (
+                  <span key={item} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2">
+                    {item}
+                  </span>
+                ))}
               </motion.div>
             </div>
 
@@ -591,31 +589,15 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* --- Social Proof Marquee --- */}
-        <section className="py-10 border-y border-white/5 bg-black/20 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 mb-6 text-center">
-            <p className="text-sm font-medium text-zinc-500 uppercase tracking-widest">{t.socialProof.usedBy}</p>
-          </div>
-          <div className="relative flex overflow-x-hidden group">
-            <div className="animate-marquee whitespace-nowrap flex space-x-12 items-center">
-              {/* Logos placeholders - duplicated for seamless loop */}
-              {[
-                "HOSTPILOT",
-                "CONCIERGERIE ZENATA",
-                "CONCIERGERIE CABO NEGRO",
-                "BNB MANAGER",
-                "KEY CONCIERGE",
-                "HOSTPILOT",
-                "CONCIERGERIE ZENATA",
-                "CONCIERGERIE CABO NEGRO"
-              ].map((name, i) => (
-                <div key={i} className="flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity duration-300 px-6">
-                  {/* Abstract Geometric Logo for each */}
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center border border-white/10">
-                    <span className="text-xs font-black text-white">{name[0]}</span>
-                  </div>
-                  <span className="text-lg font-bold tracking-widest text-white/80">{name}</span>
-                </div>
+        {/* --- Who Maplyo is built for --- */}
+        <section className="py-10 border-y border-white/5 bg-black/20">
+          <div className="max-w-7xl mx-auto px-6">
+            <p className="text-center text-sm font-medium text-zinc-500 uppercase tracking-widest">Built for modern hospitality</p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              {["Vacation rentals", "Property managers", "Riads & guest houses", "Boutique hotels", "Serviced apartments"].map((name) => (
+                <span key={name} className="rounded-full border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-bold text-zinc-300">
+                  {name}
+                </span>
               ))}
             </div>
           </div>
@@ -715,18 +697,19 @@ export default function LandingPage() {
                     {t.enterpriseSection.cta}
                   </Button>
                 </div>
-                <div 
-                  onClick={() => setIsVideoOpen(true)}
-                  className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black/40 backdrop-blur-sm shadow-2xl cursor-pointer group"
+                <Link
+                  href="/demo"
+                  className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 backdrop-blur-sm shadow-2xl group flex items-center justify-center"
                 >
-                   {/* Placeholder for Video Sales Letter (VSL) */}
-                   <div className="absolute inset-0 flex items-center justify-center group/play">
-                      <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center group-hover/play:scale-110 transition-transform">
-                        <Play className="w-8 h-8 text-white fill-white" />
-                      </div>
-                      <span className="absolute bottom-8 text-sm font-medium text-white/60 tracking-widest uppercase">{t.enterpriseSection.demo}</span>
-                   </div>
-                </div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 to-purple-600/10" />
+                  <div className="relative z-10 flex flex-col items-center text-center px-8">
+                    <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Play className="w-8 h-8 text-white fill-white" />
+                    </div>
+                    <span className="mt-5 text-sm font-bold text-white uppercase tracking-widest">{t.enterpriseSection.demo}</span>
+                    <span className="mt-2 text-xs text-zinc-500">Open the real guest experience demo</span>
+                  </div>
+                </Link>
               </div>
             </div>
           </div>
@@ -895,40 +878,7 @@ export default function LandingPage() {
             </div>
           </div>
         </footer>
-      <AnimatePresence>
-        {isVideoOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-md p-6"
-            onClick={() => setIsVideoOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-4xl aspect-video bg-slate-950 border border-white/10 rounded-3xl overflow-hidden shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => setIsVideoOpen(false)}
-                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center border border-white/10 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              
-              <iframe
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-                title="Maplyo Demo Video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full border-0"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      
       </main>
 
       <style jsx global>{`
