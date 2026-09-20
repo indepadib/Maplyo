@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, Building2, Home, Hotel, Link2, Loader2, Sparkles } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { bootstrapHospitalityWorkspace } from "@/lib/hospitality/bootstrap";
+import { trackProductEvent } from "@/lib/analytics/product-events";
 
 type PropertyType = "airbnb" | "hotel" | "guest_house" | "other";
 
@@ -24,6 +25,10 @@ export default function OnboardingPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (user) trackProductEvent("onboarding_viewed");
+  }, [user]);
+
   const isAirbnb = propertyType === "airbnb";
   const canGenerate = Boolean(city.trim() || (isAirbnb && airbnbUrl.trim() && ownerConfirmed));
 
@@ -31,6 +36,13 @@ export default function OnboardingPage() {
     if (!canGenerate || !user) return;
     setIsGenerating(true);
     setError(null);
+
+    trackProductEvent("generation_started", {
+      metadata: {
+        propertyType,
+        source: isAirbnb && airbnbUrl.trim() ? "airbnb" : "manual_city",
+      },
+    });
 
     try {
       const session = await supabase.auth.getSession();
@@ -57,6 +69,13 @@ export default function OnboardingPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || data.error || "Generation failed");
 
+      trackProductEvent("generation_completed", {
+        metadata: {
+          propertyType,
+          source: isAirbnb && airbnbUrl.trim() ? "airbnb" : "manual_city",
+        },
+      });
+
       const { data: saved, error: saveError } = await supabase
         .from("guides")
         .insert([{
@@ -70,13 +89,22 @@ export default function OnboardingPage() {
 
       if (saveError || !saved) throw new Error(saveError?.message || "Could not save the experience");
 
-      await bootstrapHospitalityWorkspace(supabase, {
+      const workspace = await bootstrapHospitalityWorkspace(supabase, {
         userId: user.id,
         guideId: saved.id,
         propertyName: data.guide.title || city.trim() || "My Property",
         propertyType,
         city: city.trim() || undefined,
         sourceUrl: isAirbnb && airbnbUrl.trim() ? airbnbUrl.trim() : undefined,
+      });
+
+      trackProductEvent("property_created", {
+        guideId: saved.id,
+        propertyId: workspace.propertyId,
+        metadata: {
+          propertyType,
+          hospitalityCoreActive: workspace.migrated,
+        },
       });
 
       window.location.href = `/app/guides/${saved.id}/builder`;
