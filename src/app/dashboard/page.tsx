@@ -18,6 +18,7 @@ import { useTranslation } from "@/components/providers/LanguageProvider";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { OnboardingTour } from "@/components/dashboard/OnboardingTour";
 import { BookingsDashboard } from "@/components/dashboard/BookingsDashboard";
+import { bootstrapHospitalityWorkspace } from "@/lib/hospitality/bootstrap";
 
 type GuideSummary = {
     id: string;
@@ -109,6 +110,13 @@ function DashboardContent() {
                     .single();
 
                 if (saved) {
+                    await bootstrapHospitalityWorkspace(supabase, {
+                        userId: user.id,
+                        guideId: saved.id,
+                        propertyName: data.guide.title || "My Property",
+                        propertyType: "airbnb",
+                        sourceUrl: aiPrompt.airbnbUrl || undefined,
+                    });
                     window.location.href = `/app/guides/${saved.id}/builder`;
                 } else {
                     console.error("Save error", error);
@@ -310,6 +318,12 @@ function DashboardContent() {
             console.error("Error creating guide:", error);
             alert(`Erreur lors de la création : ${error.message || "Problème de base de données"}`);
         } else if (data) {
+            await bootstrapHospitalityWorkspace(supabase, {
+                userId: user.id,
+                guideId: data.id,
+                propertyName: newGuideTitle || "My Property",
+                propertyType: "other",
+            });
             window.location.href = `/app/guides/${data.id}/builder`;
         }
     };
