@@ -1,7 +1,10 @@
+"use client";
+
 import { ExternalLink, Calendar, MapPin, FileText, Download, ShoppingBag } from "lucide-react";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { TranslatedText } from "@/components/ui/TranslatedText";
 import Image from "next/image";
+import { trackGuestEvent } from "@/lib/analytics/guest-events";
 
 // --- WELCOME (Text/Rich Content) ---
 export function WelcomeTraveler({ data }: { data: any }) {
@@ -184,60 +187,113 @@ export function DocumentsTraveler({ data }: { data: any }) {
     );
 }
 
-// --- UPSELLS (Extras) ---
-export function UpsellsTraveler({ data }: { data: any }) {
+// --- UPSELLS (Revenue Services) ---
+function serviceKey(item: any, index: number) {
+    return item.id || item.serviceId || `legacy_${String(item.title || "service").toLowerCase().replace(/[^a-z0-9]+/g, "_")}_${index}`;
+}
+
+function servicePrice(item: any) {
+    if (item.price) return item.price;
+    if (item.priceAmount !== undefined && item.priceAmount !== null && item.priceAmount !== "") {
+        return `${item.priceAmount} ${item.currency || "MAD"}`;
+    }
+    return "";
+}
+
+export function UpsellsTraveler({ data, ctx }: { data: any; ctx?: { guideId?: string } }) {
     const { lang } = useTranslation();
     const items = Array.isArray(data.items) ? data.items : [];
 
-    if (items.length === 0) return <div className="text-center p-8 text-gray-400">Aucune offre</div>;
+    if (items.length === 0) return <div className="text-center p-8 text-gray-400">Aucun service disponible</div>;
+
+    const openService = (item: any, i: number) => {
+        const key = serviceKey(item, i);
+        trackGuestEvent({
+            guideId: ctx?.guideId,
+            eventName: "service_cta",
+            serviceKey: key,
+            serviceId: item.serviceId,
+            metadata: {
+                title: item.title || "Service",
+                category: item.category || "other",
+                priceAmount: item.priceAmount ?? null,
+                currency: item.currency || null,
+                destinationType: item.url ? "external" : "request",
+            },
+        });
+
+        if (item.url) {
+            window.open(item.url, "_blank", "noopener,noreferrer");
+            return;
+        }
+
+        // Native ordering is introduced progressively. Until then, record high-intent demand
+        // without pretending an order has been placed.
+        trackGuestEvent({
+            guideId: ctx?.guideId,
+            eventName: "service_request",
+            serviceKey: key,
+            serviceId: item.serviceId,
+            metadata: { title: item.title || "Service" },
+        });
+    };
 
     return (
         <div className="space-y-6 bg-[#FAF9F6] -m-5 md:-m-6 p-5 md:p-6 min-h-full">
             <div className="text-center mb-6">
-                <h3 className="text-sm font-bold tracking-[0.2em] text-amber-700 uppercase mb-2">Services Exclusifs</h3>
-                <div className="w-8 h-0.5 bg-amber-200 mx-auto"></div>
+                <h3 className="text-sm font-bold tracking-[0.2em] text-amber-700 uppercase mb-2">Enhance your stay</h3>
+                <p className="text-xs text-gray-500">Services selected by your host</p>
+                <div className="w-8 h-0.5 bg-amber-200 mx-auto mt-3"></div>
             </div>
-            
-            {items.map((item: any, i: number) => (
-                <div key={i} className="group bg-white rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all border border-gray-100 flex flex-col md:flex-row">
-                    {item.imageUrl && (
-                        <div className="h-48 md:h-auto md:w-2/5 overflow-hidden relative">
-                            <Image src={item.imageUrl} alt={item.title || "Upsell"} fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 33vw" />
-                            {item.price && (
-                                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-gray-900 font-bold px-4 py-1.5 rounded-full text-sm shadow-lg">
-                                    {item.price}
-                                </div>
-                            )}
-                        </div>
-                    )}
-                    <div className="p-6 md:p-8 flex-1 flex flex-col justify-center">
-                        <div className="flex justify-between items-start mb-3">
-                            <h4 className="text-xl font-medium text-gray-900 tracking-tight">
-                                <TranslatedText text={item.title || "Offre"} lang={lang} />
-                            </h4>
-                            {!item.imageUrl && item.price && (
-                                <span className="bg-gray-100 text-gray-900 font-bold px-3 py-1 rounded-full text-sm">
-                                    {item.price}
-                                </span>
-                            )}
-                        </div>
-                        <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-                            <TranslatedText text={item.description} lang={lang} />
-                        </p>
 
-                        {item.url && (
-                            <a
-                                href={item.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
+            {items.map((item: any, i: number) => {
+                const price = servicePrice(item);
+                return (
+                    <div key={serviceKey(item, i)} className="group bg-white rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all border border-gray-100 flex flex-col md:flex-row">
+                        {item.imageUrl && (
+                            <div className="h-48 md:h-auto md:w-2/5 overflow-hidden relative">
+                                <Image src={item.imageUrl} alt={item.title || "Service"} fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 33vw" />
+                                {price && (
+                                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-gray-900 font-bold px-4 py-1.5 rounded-full text-sm shadow-lg">
+                                        {price}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        <div className="p-6 md:p-8 flex-1 flex flex-col justify-center">
+                            <div className="flex justify-between items-start mb-3 gap-3">
+                                <div>
+                                    {item.category && (
+                                        <div className="text-[10px] font-bold uppercase tracking-wider text-amber-700 mb-1">{String(item.category).replaceAll("_", " ")}</div>
+                                    )}
+                                    <h4 className="text-xl font-medium text-gray-900 tracking-tight">
+                                        <TranslatedText text={item.title || "Service"} lang={lang} />
+                                    </h4>
+                                </div>
+                                {!item.imageUrl && price && (
+                                    <span className="bg-gray-100 text-gray-900 font-bold px-3 py-1 rounded-full text-sm whitespace-nowrap">
+                                        {price}
+                                    </span>
+                                )}
+                            </div>
+                            {item.description && (
+                                <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+                                    <TranslatedText text={item.description} lang={lang} />
+                                </p>
+                            )}
+
+                            <button
+                                type="button"
+                                onClick={() => openService(item, i)}
                                 className="inline-flex items-center justify-center w-full md:w-auto px-6 py-3 bg-[#111] text-white rounded-lg font-medium text-sm hover:bg-gray-800 transition-colors mt-auto"
                             >
-                                <TranslatedText text={item.cta || "Demander ce service"} lang={lang} />
-                            </a>
-                        )}
+                                <ShoppingBag className="w-4 h-4 mr-2" />
+                                <TranslatedText text={item.cta || (item.url ? "Book this service" : "I'm interested")} lang={lang} />
+                            </button>
+                        </div>
                     </div>
-                </div>
-            ))}
+                );
+            })}
         </div>
     );
 }
