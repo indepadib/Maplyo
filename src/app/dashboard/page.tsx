@@ -404,6 +404,13 @@ function DashboardContent() {
                             <Sparkles className="w-4 h-4" />
                         </button>
                         <Link
+                            href="/dashboard/revenue"
+                            className="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-300 hover:bg-emerald-500/20 hover:text-emerald-200 transition-all hover:scale-105"
+                            title="Revenue Center"
+                        >
+                            <CircleDollarSign className="w-4 h-4" />
+                        </Link>
+                        <Link
                             data-tour="settings-button"
                             href="/dashboard/settings"
                             className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-white/10 hover:text-white transition-all hover:scale-105"
