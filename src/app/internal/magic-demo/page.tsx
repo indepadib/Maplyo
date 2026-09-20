@@ -37,10 +37,12 @@ export default function MagicDemoStudioPage() {
   const [copied, setCopied] = useState(false);
   const [demos, setDemos] = useState<DemoRow[]>([]);
 
-  const authHeaders = useCallback(async () => {
+  const authHeaders = useCallback(async (): Promise<Record<string, string>> => {
     const session = await supabase.auth.getSession();
     const token = session.data.session?.access_token;
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    const headers: Record<string, string> = {};
+    if (token) headers.Authorization = `Bearer ${token}`;
+    return headers;
   }, []);
 
   const loadDemos = useCallback(async () => {
