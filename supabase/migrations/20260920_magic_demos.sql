@@ -17,6 +17,7 @@ create table if not exists public.magic_demos (
   view_count integer not null default 0,
   last_viewed_at timestamptz,
   claimed_by uuid references auth.users(id) on delete set null,
+  claimed_guide_id uuid references public.guides(id) on delete set null,
   expires_at timestamptz,
   created_at timestamptz not null default timezone('utc'::text, now()),
   updated_at timestamptz not null default timezone('utc'::text, now())
