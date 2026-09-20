@@ -5,6 +5,7 @@ export const revalidate = 0;
 import { NextResponse } from "next/server";
 import { parseAirbnbCalendar } from "@/lib/integrations/ical";
 import { TuyaConnector } from "@/lib/integrations/tuya";
+import { randomInt } from "node:crypto";
 
 export async function POST(request: Request) {
     const { createServerClient } = await import("@supabase/ssr");
@@ -93,7 +94,7 @@ export async function POST(request: Request) {
                         generatedCode = existingCode.code;
                     } else {
                         // Generate a new 6-digit code for Tuya
-                        const pwd = Math.floor(100000 + Math.random() * 900000).toString();
+                        const pwd = randomInt(100000, 1000000).toString();
                         
                         // We use TuyaConnector to create the password
                         await tuyaConnector.generateTempCode(
