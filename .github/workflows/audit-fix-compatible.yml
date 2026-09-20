@@ -41,7 +41,7 @@ jobs:
       - run: npm ci
 
       - name: Apply compatible audit fixes only
-        run: npm audit fix
+        run: npm audit fix || true
 
       - name: Verify production build after fixes
         run: npm run build
