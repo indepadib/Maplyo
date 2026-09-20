@@ -1,41 +1,41 @@
-
-import { Resend } from 'resend';
-
-// Initialize Resend with API key from environment
-// If no key is present, it will throw an error when trying to send, which we catch.
-const resend = new Resend(process.env.RESEND_API_KEY || 're_mock_key');
+import { Resend } from "resend";
 
 export const sendWelcomeEmail = async (email: string, name: string) => {
-  if (!resend) {
-    console.log(`[MOCK EMAIL] Sending welcome email to ${email} (No API Key found)`);
-    return { success: true, mock: true };
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    return { success: false, error: "Email provider not configured" };
   }
 
   try {
+    const resend = new Resend(apiKey);
     const data = await resend.emails.send({
-      from: 'Maplyo <contact@maplyo.com>',
+      from: "Maplyo <contact@maplyo.com>",
       to: email,
-      subject: 'Bienvenue sur Maplyo ! 🚀',
+      subject: "Bienvenue sur Maplyo",
       html: `
-        <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
-          <h1>Bienvenue chez Maplyo, ${name} !</h1>
-          <p>Nous sommes ravis de vous compter parmi nous. Votre premier guide voyageur est prêt à être créé.</p>
-          <p>Voici quelques conseils pour démarrer :</p>
+        <div style="font-family:Arial,sans-serif;color:#18181b;max-width:600px;margin:0 auto;line-height:1.6">
+          <h1 style="font-size:28px;margin-bottom:12px">Bienvenue sur Maplyo, ${name}.</h1>
+          <p>Votre espace Maplyo est prêt pour construire votre première expérience voyageur.</p>
+          <p>Commencez par l'essentiel&nbsp;:</p>
           <ul>
-            <li>Ajoutez le code Wi-Fi (c'est ce que les voyageurs cherchent en premier !)</li>
-            <li>Recommandez votre boulangerie préférée.</li>
-            <li>Partagez le lien avec vos prochains invités.</li>
+            <li>importez les informations de votre établissement ou de votre location&nbsp;;</li>
+            <li>vérifiez les informations importantes comme le Wi-Fi et l'accès&nbsp;;</li>
+            <li>ajoutez les services que vos voyageurs peuvent demander&nbsp;;</li>
+            <li>publiez puis partagez le lien ou le QR code.</li>
           </ul>
-          <br/>
-          <a href="https://maplyo.com/dashboard" style="background: #e11d48; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px;">
-            Créer mon premier guide
-          </a>
+          <p style="margin-top:28px">
+            <a href="https://maplyo.com/dashboard" style="background:#111827;color:white;padding:12px 22px;text-decoration:none;border-radius:10px;font-weight:700">
+              Ouvrir mon espace Maplyo
+            </a>
+          </p>
         </div>
       `,
     });
+
     return { success: true, data };
   } catch (error) {
-    console.error('Failed to send email:', error);
-    return { success: false, error };
+    console.error("Failed to send welcome email:", error);
+    return { success: false, error: "Email delivery failed" };
   }
 };
