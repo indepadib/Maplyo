@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
+import { sendServiceRequestNotification } from "@/lib/order-email";
 
 const RequestSchema = z.object({
   guideId: z.string().uuid(),
@@ -152,6 +153,62 @@ export async function POST(req: Request) {
       event_name: "service_request",
       metadata: { order_id: orderResult.data.id, title: input.title },
     }]).then(() => undefined, () => undefined);
+
+    // Notify property/organization operators without blocking the guest flow.
+    try {
+      const recipients = new Set<string>();
+
+      const { data: propertyContact } = await admin
+        .from("properties")
+        .select("name, email")
+        .eq("id", propertyId)
+        .single();
+
+      if (propertyContact?.email) recipients.add(propertyContact.email);
+
+      const { data: organization } = await admin
+        .from("organizations")
+        .select("billing_email")
+        .eq("id", organizationId)
+        .single();
+
+      if (organization?.billing_email) recipients.add(organization.billing_email);
+
+      const { data: operatorMembers } = await admin
+        .from("organization_members")
+        .select("user_id")
+        .eq("organization_id", organizationId)
+        .in("role", ["owner", "admin", "manager"]);
+
+      const memberIds = (operatorMembers || []).map((member: any) => member.user_id).filter(Boolean);
+      if (memberIds.length) {
+        const { data: profiles } = await admin
+          .from("profiles")
+          .select("email")
+          .in("id", memberIds);
+
+        for (const profile of profiles || []) {
+          if (profile.email) recipients.add(profile.email);
+        }
+      }
+
+      if (recipients.size) {
+        await sendServiceRequestNotification({
+          to: [...recipients],
+          propertyName: propertyContact?.name || "Your property",
+          serviceTitle: input.title,
+          guestName: input.guestName,
+          guestEmail: input.guestEmail || null,
+          guestPhone: input.guestPhone || null,
+          amount,
+          currency: input.currency,
+          notes: input.notes || null,
+          orderId: orderResult.data.id,
+        });
+      }
+    } catch (notificationError) {
+      console.info("[service-order] host notification unavailable", notificationError);
+    }
 
     return NextResponse.json({
       success: true,
