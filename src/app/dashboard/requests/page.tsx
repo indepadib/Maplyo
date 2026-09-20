@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, CircleAlert, Clock3, Filter, MessageSquareText, Wrench, CheckCircle2, Housekeeping, Search } from "lucide-react";
+import { ArrowLeft, CircleAlert, Clock3, Filter, MessageSquareText, Wrench, CheckCircle2, Search } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/components/auth/AuthProvider";
 
