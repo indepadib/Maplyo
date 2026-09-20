@@ -11,6 +11,7 @@ import { useTranslation } from "@/components/providers/LanguageProvider";
 import { motion, AnimatePresence } from "framer-motion";
 import { PRICING_BY_CURRENCY, CurrencyCode } from "@/lib/pricing/currencies";
 import { useEffect } from "react";
+import { trackProductEvent } from "@/lib/analytics/product-events";
 
 const FaqItem = ({ question, answer }: { question: string, answer: string }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -55,6 +56,8 @@ export default function PricingClient() {
     const [currency, setCurrency] = useState<CurrencyCode>('MAD');
 
     useEffect(() => {
+        if (user) trackProductEvent("pricing_viewed");
+
         const params = new URLSearchParams(window.location.search);
         const debugCurrency = params.get('debug_currency') as CurrencyCode | null;
 
@@ -89,6 +92,7 @@ export default function PricingClient() {
         }
 
         setLoading(planId);
+        trackProductEvent("checkout_started", { metadata: { planId, currency } });
         try {
             const res = await fetch('/api/stripe/checkout', {
                 method: 'POST',
@@ -354,10 +358,10 @@ export default function PricingClient() {
                     </div>
 
                     <div className="text-center pt-20 border-t border-white/10 mb-32">
-                        <p className="text-zinc-500 text-sm font-medium uppercase tracking-widest mb-8">{t.pricingPage.trust}</p>
-                        <div className="flex flex-wrap justify-center gap-12 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                            {['Airbnb', 'Booking.com', 'Expedia', 'TripAdvisor'].map((brand, i) => (
-                                <span key={i} className="text-2xl font-black text-white">{brand}</span>
+                        <p className="text-zinc-500 text-sm font-medium uppercase tracking-widest mb-8">Built for modern hospitality operators</p>
+                        <div className="flex flex-wrap justify-center gap-3">
+                            {['Vacation rentals', 'Riads & guest houses', 'Boutique hotels', 'Property managers', 'Serviced apartments'].map((segment) => (
+                                <span key={segment} className="rounded-full border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-bold text-zinc-300">{segment}</span>
                             ))}
                         </div>
                     </div>
