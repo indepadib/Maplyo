@@ -54,7 +54,7 @@ export const PLANS: Record<PlanId, SubscriptionPlan> = {
         price: 99,
         currency: 'MAD',
         features: [
-            '2 Guides Inclus (+10 DH/guide supp.)',
+            '2 Guides Inclus (+20 DH/guide supp.)',
             'Assistant IA Invités',
             'Tous les Thèmes Premium',
             'Support Prioritaire',
