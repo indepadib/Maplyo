@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2, Bot, Building2, Eye, Activity, CircleDollarSign } from "lucide-react";
+import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2, Bot, Building2, Eye, Activity, CircleDollarSign, MessageSquareText } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { guideThemes } from "@/types/themes";
 import { Modal } from "@/components/ui/Modal";
@@ -403,6 +403,13 @@ function DashboardContent() {
                         >
                             <Sparkles className="w-4 h-4" />
                         </button>
+                        <Link
+                            href="/dashboard/requests"
+                            className="w-10 h-10 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-300 hover:bg-purple-500/20 hover:text-purple-200 transition-all hover:scale-105"
+                            title="Guest Requests"
+                        >
+                            <MessageSquareText className="w-4 h-4" />
+                        </Link>
                         <Link
                             href="/dashboard/revenue"
                             className="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-300 hover:bg-emerald-500/20 hover:text-emerald-200 transition-all hover:scale-105"
