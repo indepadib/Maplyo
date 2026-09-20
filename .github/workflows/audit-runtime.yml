@@ -1,0 +1,23 @@
+name: Inspect Runtime Dependency Audit
+
+on:
+  push:
+    branches:
+      - "rebuild/guest-experience-os"
+    paths:
+      - ".github/workflows/audit-runtime.yml"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Runtime audit report
+        run: npm audit --omit=dev || true
