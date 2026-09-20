@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
-import { createJourneyStayLink } from "@/lib/stays/stay-link";
-import { renderJourneyTemplate } from "@/lib/journey/templates";
+import { createJourneyStayLink } from "../stays/stay-link";
+import { renderJourneyTemplate } from "./templates";
 
 type RuleRow = {
   id: string;
@@ -13,18 +13,6 @@ type RuleRow = {
   subject_template?: string | null;
   body_template: string;
 };
-
-function getAdmin() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return null;
-  return createClient(url, key, { auth: { persistSession: false } });
-}
-
-function getResend() {
-  const key = process.env.RESEND_API_KEY;
-  return key ? new Resend(key) : null;
-}
 
 function escapeHtml(value: string) {
   return value
@@ -39,16 +27,24 @@ function scheduledAt(anchorAt: string, offsetMinutes: number) {
   return new Date(new Date(anchorAt).getTime() + offsetMinutes * 60 * 1000);
 }
 
-export async function runGuestJourneyDispatch(options?: {
+export async function runGuestJourneyDispatch(options: {
+  supabaseUrl: string;
+  serviceRoleKey: string;
+  resendApiKey?: string;
   now?: Date;
   origin?: string;
 }) {
-  const admin = getAdmin();
-  const resend = getResend();
-  if (!admin) return { ok: false, reason: "supabase_not_configured", sent: 0, failed: 0 };
+  if (!options.supabaseUrl || !options.serviceRoleKey) {
+    return { ok: false, reason: "supabase_not_configured", sent: 0, failed: 0 };
+  }
 
-  const now = options?.now || new Date();
-  const origin = options?.origin || process.env.URL || "https://maplyo.com";
+  const admin = createClient(options.supabaseUrl, options.serviceRoleKey, {
+    auth: { persistSession: false },
+  });
+  const resend = options.resendApiKey ? new Resend(options.resendApiKey) : null;
+
+  const now = options.now || new Date();
+  const origin = options.origin || "https://maplyo.com";
   const windowStart = new Date(now.getTime() - 75 * 60 * 1000);
   const windowEnd = new Date(now.getTime() + 5 * 60 * 1000);
 
