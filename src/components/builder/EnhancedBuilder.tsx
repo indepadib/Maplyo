@@ -512,7 +512,7 @@ export function EnhancedBuilder({
 
                                     <div className={`w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar ${previewDevice === 'mobile' ? 'pt-8 bg-black' : ''}`}>
                                         <div className={`w-full min-h-full bg-white relative ${previewDevice === 'mobile' ? 'rounded-[2.5rem] overflow-hidden' : ''}`}>
-                                            <StyledGuideRenderer guide={guide} unlocked={true} forceDesktop={previewDevice === 'desktop'} forceMobile={previewDevice === 'mobile'} />
+                                            <GuideRenderer guide={guide} unlocked={true} forceDesktop={previewDevice === 'desktop'} forceMobile={previewDevice === 'mobile'} />
                                         </div>
                                     </div>
                                 </div>
