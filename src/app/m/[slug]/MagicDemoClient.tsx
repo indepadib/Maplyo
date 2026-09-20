@@ -17,7 +17,7 @@ export function MagicDemoClient({ guide, propertyType }: { guide: Guide; propert
             <div className="truncate text-sm font-bold">{guide.title}</div>
           </div>
           <Link
-            href={`/signup?claim=${encodeURIComponent(guide.slug)}`}
+            href={`/claim/${encodeURIComponent(guide.slug)}`}
             className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-white px-4 py-2 text-xs font-bold text-slate-950 hover:bg-zinc-200"
           >
             Claim this experience <ArrowRight className="h-4 w-4" />
