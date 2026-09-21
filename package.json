@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "check:i18n": "node scripts/check-marketing-i18n.mjs",
     "start": "next start",
     "lint": "next lint"
   },
