@@ -1,4 +1,5 @@
 import { Guide, BlockType } from "@/types/blocks";
+import type { Language } from "@/lib/i18n/dictionary";
 import { guideThemes } from "@/types/themes";
 import { createOpenAIClient, cleanAIJSON } from "./openai";
 import { importAirbnbListing } from "@/lib/importers/airbnb";
@@ -10,7 +11,7 @@ export interface GuidePrompt {
     propertyUrl?: string;
     type?: "airbnb" | "hotel" | "guest_house" | "other";
     targetAudience?: "families" | "couples" | "remote_workers" | "groups" | "everyone";
-    language: "fr" | "en";
+    language: Language;
     mood?: "relax" | "adventure" | "romantic" | "business";
     amenities?: string[];
     sourceOwnerConfirmed?: boolean;
@@ -221,16 +222,39 @@ Output STRICTLY valid JSON:
     }
 }
 
-// Keep the old mock function as fallback
+const MOCK_COPY: Record<Language, {
+    guide: string;
+    welcome: string;
+    subtitle: string;
+    fallback: string;
+    places: string;
+    cafe: string;
+    cafeDesc: string;
+    restaurant: string;
+    restaurantDesc: string;
+    central: string;
+}> = {
+    fr: { guide: "Guide", welcome: "Bienvenue à", subtitle: "Votre expérience voyageur", fallback: "Mode de secours local", places: "À proximité", cafe: "Café local", cafeDesc: "Une adresse à personnaliser.", restaurant: "Restaurant local", restaurantDesc: "Ajoutez ici une recommandation vérifiée.", central: "Central" },
+    en: { guide: "Guide", welcome: "Welcome to", subtitle: "Your guest experience", fallback: "Local fallback mode", places: "Nearby", cafe: "Local café", cafeDesc: "A place to customize.", restaurant: "Local restaurant", restaurantDesc: "Add a verified recommendation here.", central: "Central" },
+    es: { guide: "Guía", welcome: "Bienvenido a", subtitle: "Tu experiencia huésped", fallback: "Modo local de respaldo", places: "Cerca", cafe: "Café local", cafeDesc: "Un lugar para personalizar.", restaurant: "Restaurante local", restaurantDesc: "Añade aquí una recomendación verificada.", central: "Céntrico" },
+    ar: { guide: "دليل", welcome: "مرحباً بك في", subtitle: "تجربة الضيف الخاصة بك", fallback: "وضع احتياطي محلي", places: "بالقرب منك", cafe: "مقهى محلي", cafeDesc: "مكان يمكنك تخصيصه.", restaurant: "مطعم محلي", restaurantDesc: "أضف توصية موثوقة هنا.", central: "مركزي" },
+    nl: { guide: "Gids", welcome: "Welkom in", subtitle: "Je gastervaring", fallback: "Lokale fallbackmodus", places: "In de buurt", cafe: "Lokaal café", cafeDesc: "Een plek om aan te passen.", restaurant: "Lokaal restaurant", restaurantDesc: "Voeg hier een geverifieerde aanbeveling toe.", central: "Centraal" },
+    zh: { guide: "指南", welcome: "欢迎来到", subtitle: "你的住客体验", fallback: "本地备用模式", places: "附近", cafe: "本地咖啡馆", cafeDesc: "可在这里自定义地点。", restaurant: "本地餐厅", restaurantDesc: "在这里添加经过确认的推荐。", central: "市中心" },
+    pt: { guide: "Guia", welcome: "Bem-vindo a", subtitle: "A sua experiência do hóspede", fallback: "Modo local de contingência", places: "Perto", cafe: "Café local", cafeDesc: "Um local para personalizar.", restaurant: "Restaurante local", restaurantDesc: "Adicione aqui uma recomendação verificada.", central: "Central" },
+};
+
+// Keep a localized mock function as fallback.
 async function generateMockGuide(prompt: GuidePrompt): Promise<Guide> {
     const { city, language } = prompt;
     const lang = language;
+    const copy = MOCK_COPY[lang] || MOCK_COPY.en;
     const theme = guideThemes[0];
+    const place = city || "Destination";
 
     return {
         id: uid(),
-        slug: `mock-${city}`,
-        title: `Guide ${city} (Fallback Mode)`,
+        slug: `mock-${String(place).toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+        title: `${copy.guide} ${place} (${copy.fallback})`,
         theme: { themeId: theme.id },
         blocks: [
             {
@@ -239,10 +263,10 @@ async function generateMockGuide(prompt: GuidePrompt): Promise<Guide> {
                 title: "Hero",
                 visibility: { mode: "always" },
                 data: {
-                    title: `Bienvenue à ${city}`,
-                    subtitle: "Ce guide est généré localement (Erreur IA)",
+                    title: `${copy.welcome} ${place}`,
+                    subtitle: copy.subtitle,
                     coverImageUrl: theme.bgImage,
-                    badges: ["4G", "Central"]
+                    badges: ["Wi-Fi", copy.central]
                 }
             },
             {
@@ -250,17 +274,17 @@ async function generateMockGuide(prompt: GuidePrompt): Promise<Guide> {
                 type: "wifi",
                 title: "Wi-Fi",
                 visibility: { mode: "always" },
-                data: { networkName: "MonWifi", password: "password123" }
+                data: { networkName: "Guest_WiFi", password: "EDIT_ME" }
             },
             {
                 id: uid(),
                 type: "places",
-                title: "Lieux",
+                title: copy.places,
                 visibility: { mode: "always" },
                 data: {
                     items: [
-                        { name: "Café de la Place", description: "Le meilleur café du coin.", address: "123 Rue Principale" },
-                        { name: "Bistro le Gourmand", description: "Cuisine locale authentique.", address: "45 Avenue de la Liberté" }
+                        { name: copy.cafe, description: copy.cafeDesc, address: "" },
+                        { name: copy.restaurant, description: copy.restaurantDesc, address: "" }
                     ]
                 }
             }
