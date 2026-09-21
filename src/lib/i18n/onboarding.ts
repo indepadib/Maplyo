@@ -14,6 +14,7 @@ export type OnboardingCopy = {
   authorizationWebsite: string;
   city: string;
   cityFallback: string;
+  languageLabel: string;
   generate: string;
   generating: string;
   generatingSteps: string[];
@@ -41,6 +42,7 @@ export const ONBOARDING_COPY: Record<Language, OnboardingCopy> = {
     authorizationWebsite: "Je possède, gère ou suis autorisé à utiliser les informations de ce site dans Maplyo.",
     city: "Ville",
     cityFallback: "Ville (fallback recommandé)",
+    languageLabel: "Langue du guide",
     generate: "Générer mon Maplyo",
     generating: "Création de votre expérience…",
     generatingSteps: ["Import des informations", "Structuration du guide", "Préparation du concierge IA", "Création des blocs de services"],
@@ -66,6 +68,7 @@ export const ONBOARDING_COPY: Record<Language, OnboardingCopy> = {
     authorizationWebsite: "I own, manage, or am authorized to use this property website information in Maplyo.",
     city: "City",
     cityFallback: "City (recommended fallback)",
+    languageLabel: "Guide language",
     generate: "Generate my Maplyo",
     generating: "Building your guest experience…",
     generatingSteps: ["Importing property information", "Structuring the guest guide", "Preparing the AI concierge", "Creating service blocks"],
@@ -91,6 +94,7 @@ export const ONBOARDING_COPY: Record<Language, OnboardingCopy> = {
     authorizationWebsite: "Soy propietario, gestor o estoy autorizado a usar la información de esta web en Maplyo.",
     city: "Ciudad",
     cityFallback: "Ciudad (fallback recomendado)",
+    languageLabel: "Idioma de la guía",
     generate: "Generar mi Maplyo",
     generating: "Creando tu experiencia…",
     generatingSteps: ["Importando información", "Estructurando la guía", "Preparando el conserje IA", "Creando bloques de servicios"],
@@ -116,6 +120,7 @@ export const ONBOARDING_COPY: Record<Language, OnboardingCopy> = {
     authorizationWebsite: "أنا المالك أو المدير أو مخول باستخدام معلومات هذا الموقع في Maplyo.",
     city: "المدينة",
     cityFallback: "المدينة (خيار احتياطي موصى به)",
+    languageLabel: "لغة الدليل",
     generate: "إنشاء Maplyo الخاص بي",
     generating: "جارٍ إنشاء تجربة الضيف…",
     generatingSteps: ["استيراد المعلومات", "تنظيم دليل الضيف", "إعداد المساعد الذكي", "إنشاء خدمات إضافية"],
@@ -141,6 +146,7 @@ export const ONBOARDING_COPY: Record<Language, OnboardingCopy> = {
     authorizationWebsite: "Ik ben eigenaar, beheerder of bevoegd om de website-informatie in Maplyo te gebruiken.",
     city: "Plaats",
     cityFallback: "Plaats (aanbevolen fallback)",
+    languageLabel: "Taal van de gids",
     generate: "Mijn Maplyo genereren",
     generating: "Je gastervaring wordt gebouwd…",
     generatingSteps: ["Accommodatiegegevens importeren", "Gastgids structureren", "AI-conciërge voorbereiden", "Serviceblokken maken"],
@@ -166,6 +172,7 @@ export const ONBOARDING_COPY: Record<Language, OnboardingCopy> = {
     authorizationWebsite: "我是该网站所有者、管理者或被授权在 Maplyo 中使用这些信息。",
     city: "城市",
     cityFallback: "城市（建议作为备用）",
+    languageLabel: "指南语言",
     generate: "生成我的 Maplyo",
     generating: "正在创建住客体验…",
     generatingSteps: ["导入物业信息", "组织住客指南", "准备 AI 礼宾", "创建服务模块"],
@@ -191,6 +198,7 @@ export const ONBOARDING_COPY: Record<Language, OnboardingCopy> = {
     authorizationWebsite: "Sou proprietário, gestor ou tenho autorização para usar as informações deste site no Maplyo.",
     city: "Cidade",
     cityFallback: "Cidade (fallback recomendado)",
+    languageLabel: "Idioma do guia",
     generate: "Gerar o meu Maplyo",
     generating: "A criar a experiência…",
     generatingSteps: ["A importar informações", "A estruturar o guia", "A preparar o concierge IA", "A criar blocos de serviços"],
