@@ -50,9 +50,19 @@ language sql
 stable
 security definer
 set search_path = public
-as $$
+as $
   select coalesce(public.organization_role(target_organization_id) in ('owner','admin','manager'), false);
-$$;
+$;
+
+create or replace function public.is_organization_owner(target_organization_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $
+  select coalesce(public.organization_role(target_organization_id) = 'owner', false);
+$;
 
 drop policy if exists "Admins can view organization invitations" on public.organization_invitations;
 create policy "Admins can view organization invitations"
@@ -205,6 +215,7 @@ on public.organization_members for insert
 with check (
   public.is_organization_admin(organization_id)
   and role <> 'owner'
+  and (role <> 'admin' or public.is_organization_owner(organization_id))
 );
 
 drop policy if exists "Admins can update non-owner memberships" on public.organization_members;
@@ -213,10 +224,12 @@ on public.organization_members for update
 using (
   public.is_organization_admin(organization_id)
   and role <> 'owner'
+  and (role <> 'admin' or public.is_organization_owner(organization_id))
 )
 with check (
   public.is_organization_admin(organization_id)
   and role <> 'owner'
+  and (role <> 'admin' or public.is_organization_owner(organization_id))
 );
 
 drop policy if exists "Admins can delete non-owner memberships" on public.organization_members;
@@ -225,4 +238,5 @@ on public.organization_members for delete
 using (
   public.is_organization_admin(organization_id)
   and role <> 'owner'
+  and (role <> 'admin' or public.is_organization_owner(organization_id))
 );
