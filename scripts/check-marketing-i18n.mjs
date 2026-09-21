@@ -5,31 +5,24 @@ import { createRequire } from "node:module";
 import ts from "typescript";
 
 const require = createRequire(import.meta.url);
-
-const file = path.resolve("src/lib/i18n/marketing.ts");
-const source = fs.readFileSync(file, "utf8");
-const compiled = ts.transpileModule(source, {
-  compilerOptions: {
-    module: ts.ModuleKind.CommonJS,
-    target: ts.ScriptTarget.ES2020,
-    esModuleInterop: true,
-  },
-}).outputText;
-
-const module = { exports: {} };
-const sandbox = {
-  module,
-  exports: module.exports,
-  require,
-};
-vm.runInNewContext(compiled, sandbox, { filename: file });
-
-const copy = module.exports.MARKETING_COPY;
 const expectedLanguages = ["fr", "en", "es", "ar", "nl", "zh", "pt"];
 const errors = [];
 
-for (const lang of expectedLanguages) {
-  if (!copy?.[lang]) errors.push(`Missing marketing language: ${lang}`);
+function loadTsExport(relativeFile, exportName) {
+  const file = path.resolve(relativeFile);
+  const source = fs.readFileSync(file, "utf8");
+  const compiled = ts.transpileModule(source, {
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2020,
+      esModuleInterop: true,
+    },
+  }).outputText;
+
+  const module = { exports: {} };
+  const sandbox = { module, exports: module.exports, require };
+  vm.runInNewContext(compiled, sandbox, { filename: file });
+  return module.exports[exportName];
 }
 
 function validate(reference, candidate, currentPath, lang) {
@@ -79,16 +72,29 @@ function validate(reference, candidate, currentPath, lang) {
   }
 }
 
-const reference = copy?.en;
-if (!reference) errors.push("English marketing reference missing");
-else {
-  for (const lang of expectedLanguages) validate(reference, copy[lang], "marketing", lang);
+function validateBundle(bundle, name) {
+  for (const lang of expectedLanguages) {
+    if (!bundle?.[lang]) errors.push(`Missing ${name} language: ${lang}`);
+  }
+
+  const reference = bundle?.en;
+  if (!reference) {
+    errors.push(`English ${name} reference missing`);
+    return;
+  }
+
+  for (const lang of expectedLanguages) {
+    validate(reference, bundle[lang], name, lang);
+  }
 }
 
+validateBundle(loadTsExport("src/lib/i18n/marketing.ts", "MARKETING_COPY"), "marketing");
+validateBundle(loadTsExport("src/lib/i18n/auth.ts", "AUTH_COPY"), "auth");
+
 if (errors.length) {
-  console.error("\nMarketing i18n validation failed:\n");
+  console.error("\nI18n validation failed:\n");
   for (const error of errors) console.error("- " + error);
   process.exit(1);
 }
 
-console.log(`Marketing i18n OK: ${expectedLanguages.length} languages, complete structure, no placeholders.`);
+console.log(`I18n OK: marketing + auth complete across ${expectedLanguages.length} languages, no placeholders.`);
