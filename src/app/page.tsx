@@ -163,12 +163,12 @@ export default function LandingPage() {
               <div className="absolute h-[500px] w-[500px] rounded-full bg-gradient-to-br from-rose-500/15 to-purple-500/15 blur-3xl" />
               <PhoneMockup3D />
               <div className="absolute right-0 top-20 rounded-2xl border border-white/10 bg-slate-900/90 p-4 shadow-xl backdrop-blur">
-                <div className="flex items-center gap-2 text-sm font-bold"><Bot className="h-4 w-4 text-rose-300" /> AI concierge</div>
-                <div className="mt-1 text-xs text-zinc-500">Guest questions → verified answers</div>
+                <div className="flex items-center gap-2 text-sm font-bold"><Bot className="h-4 w-4 text-rose-300" /> {t.proof.cards[2].title}</div>
+                <div className="mt-1 max-w-[220px] text-xs text-zinc-500">{t.proof.cards[2].text}</div>
               </div>
               <div className="absolute bottom-28 left-0 rounded-2xl border border-white/10 bg-slate-900/90 p-4 shadow-xl backdrop-blur">
-                <div className="flex items-center gap-2 text-sm font-bold"><CircleDollarSign className="h-4 w-4 text-emerald-300" /> Revenue services</div>
-                <div className="mt-1 text-xs text-zinc-500">Late checkout · transfer · breakfast</div>
+                <div className="flex items-center gap-2 text-sm font-bold"><CircleDollarSign className="h-4 w-4 text-emerald-300" /> {t.proof.cards[3].title}</div>
+                <div className="mt-1 max-w-[220px] text-xs text-zinc-500">{t.proof.cards[3].text}</div>
               </div>
             </div>
           </div>
@@ -309,7 +309,7 @@ export default function LandingPage() {
               </article>
 
               <article className="rounded-3xl border border-white/10 bg-slate-900/50 p-7">
-                <div className="inline-flex rounded-full bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Portfolio / Hotel</div>
+                <div className="inline-flex rounded-full bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t.pricing.business.name}</div>
                 <h3 className="mt-5 text-2xl font-bold">{t.pricing.business.name}</h3>
                 <div className="mt-4 text-4xl font-black">{t.pricing.business.price}</div>
                 <p className="mt-4 min-h-12 text-sm leading-6 text-zinc-500">{t.pricing.business.desc}</p>
@@ -363,8 +363,8 @@ export default function LandingPage() {
           </div>
           <div className="flex flex-wrap gap-5 text-xs text-zinc-500">
             <Link href="/pricing" className="hover:text-white">{t.nav.pricing}</Link>
-            <Link href="/legal/privacy" className="hover:text-white">Privacy</Link>
-            <Link href="/legal/terms" className="hover:text-white">Terms</Link>
+            <Link href="/legal/privacy" className="hover:text-white">{t.signup.privacy}</Link>
+            <Link href="/legal/terms" className="hover:text-white">{t.signup.terms}</Link>
             <Link href="/contact-sales" className="hover:text-white">{t.pricing.business.cta}</Link>
           </div>
         </div>
