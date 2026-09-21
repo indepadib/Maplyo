@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2, Bot, Building2, Eye, Activity, CircleDollarSign, MessageSquareText, CalendarDays, Clock3 } from "lucide-react";
+import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2, Bot, Building2, Eye, Activity, CircleDollarSign, MessageSquareText, CalendarDays, Clock3, UsersRound } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { guideThemes } from "@/types/themes";
 import { Modal } from "@/components/ui/Modal";
@@ -403,6 +403,13 @@ function DashboardContent() {
                         >
                             <Sparkles className="w-4 h-4" />
                         </button>
+                        <Link
+                            href="/dashboard/team"
+                            className="w-10 h-10 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-300 hover:bg-indigo-500/20 hover:text-indigo-200 transition-all hover:scale-105"
+                            title="Team & Roles"
+                        >
+                            <UsersRound className="w-4 h-4" />
+                        </Link>
                         <Link
                             href="/dashboard/journeys"
                             className="w-10 h-10 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-300 hover:bg-cyan-500/20 hover:text-cyan-200 transition-all hover:scale-105"
