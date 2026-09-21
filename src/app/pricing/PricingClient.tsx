@@ -155,7 +155,7 @@ export default function PricingClient() {
 
             <article className="rounded-3xl border border-white/10 bg-white/[0.025] p-7">
               <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
-                <Building2 className="h-3.5 w-3.5" /> Portfolio / Hotel
+                <Building2 className="h-3.5 w-3.5" /> {t.pricing.business.name}
               </div>
               <h2 className="mt-5 text-2xl font-bold">{t.pricing.business.name}</h2>
               <div className="mt-4 text-4xl font-black">{t.pricing.business.price}</div>
