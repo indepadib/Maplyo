@@ -404,6 +404,13 @@ function DashboardContent() {
                             <Sparkles className="w-4 h-4" />
                         </button>
                         <Link
+                            href="/dashboard/portfolio"
+                            className="w-10 h-10 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-300 hover:bg-orange-500/20 hover:text-orange-200 transition-all hover:scale-105"
+                            title="Portfolio Command Center"
+                        >
+                            <Building2 className="w-4 h-4" />
+                        </Link>
+                        <Link
                             href="/dashboard/team"
                             className="w-10 h-10 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-300 hover:bg-indigo-500/20 hover:text-indigo-200 transition-all hover:scale-105"
                             title="Team & Roles"
