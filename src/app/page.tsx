@@ -10,6 +10,7 @@ import {
   Check,
   CircleDollarSign,
   Globe2,
+  Languages,
   Menu,
   MessageSquareText,
   Play,
