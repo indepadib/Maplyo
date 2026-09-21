@@ -344,9 +344,12 @@ export function EnhancedBuilder({
                         <button
                             onClick={async () => {
                                 // 1. CHECK PLAN
-                                // Pro/Basic accounts can publish if active
-                                const canPublish = subscription?.planId !== 'demo' && 
-                                                 (subscription?.status === 'active' || subscription?.status === 'trialing' || subscription?.status === 'free');
+                                // Free accounts can publish their one included guide.
+                                // Reverse-trial accounts expose Pro capabilities with status=trialing.
+                                const canPublish = Boolean(
+                                    subscription &&
+                                    ['active', 'trialing', 'free'].includes(subscription.status)
+                                );
                                 if (!canPublish) {
                                     setShowSubscribe(true);
                                     return;
