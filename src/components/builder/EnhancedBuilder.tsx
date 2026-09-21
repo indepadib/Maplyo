@@ -16,6 +16,7 @@ import { slugify } from "@/lib/utils/slugify";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { trackProductEvent } from "@/lib/analytics/product-events";
+import { BuilderLaunchChecklist } from "@/components/builder/BuilderLaunchChecklist";
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 const STORAGE_KEY = "eguidehq_demo_guide_v1";
@@ -373,6 +374,13 @@ export function EnhancedBuilder({
                     ))}
                 </div>
             </header>
+
+            {!isGuest && !isDemoMode && (
+                <BuilderLaunchChecklist
+                    guide={guide}
+                    onAddService={() => addBlock("upsells")}
+                />
+            )}
 
             <div className="flex-1 flex overflow-hidden">
                 {/* 1. LEFT COLUMN: LIBRARY */}
