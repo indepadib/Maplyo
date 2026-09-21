@@ -57,7 +57,6 @@ export async function POST(req: Request) {
   if (invitation.email.trim().toLowerCase() !== user.email.trim().toLowerCase()) {
     return NextResponse.json({
       error: "Sign in with the email address that received this invitation",
-      expectedEmail: invitation.email,
     }, { status: 403 });
   }
 
