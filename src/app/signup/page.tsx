@@ -88,10 +88,10 @@ export default function SignupPage() {
           <p className="mt-3 text-zinc-400">{s.subtitle}</p>
         </div>
 
-        <div className="mt-6 flex flex-wrap justify-center gap-2 text-[11px] font-bold text-zinc-400">
-          <span className="rounded-full border border-emerald-400/15 bg-emerald-400/10 px-3 py-1.5 text-emerald-200">1 Free guide</span>
-          <span className="rounded-full border border-purple-400/15 bg-purple-400/10 px-3 py-1.5 text-purple-200">30 days Pro</span>
-          <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5">No card</span>
+        <div className="mt-6 flex justify-center">
+          <span className="rounded-full border border-emerald-400/15 bg-emerald-400/10 px-4 py-2 text-center text-[11px] font-bold text-emerald-200">
+            {t.hero.offer}
+          </span>
         </div>
 
         <div className="mt-7 rounded-3xl border border-white/10 bg-white/[0.04] p-7 shadow-2xl backdrop-blur-xl">
@@ -170,8 +170,8 @@ export default function SignupPage() {
           {s.existing} <Link href={loginHref} className="font-semibold text-white">{s.signIn}</Link>
         </p>
 
-        <div className="mt-5 flex items-center justify-center gap-2 text-[11px] text-zinc-600">
-          <Check className="h-3.5 w-3.5 text-emerald-500" /> Maplyo Free remains usable after the Pro trial.
+        <div className="mt-5 flex items-center justify-center gap-2 text-center text-[11px] text-zinc-600">
+          <Check className="h-3.5 w-3.5 shrink-0 text-emerald-500" /> {t.hero.fallback}
         </div>
       </motion.div>
     </main>
