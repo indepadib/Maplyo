@@ -22,6 +22,12 @@ export function AccessCodesTraveler({
   const [dynamicCode, setDynamicCode] = useState<string | null>(null);
 
   useEffect(() => {
+    const personalStayCode = data?.personalStayCode ? String(data.personalStayCode) : "";
+    if (personalStayCode) {
+      setDynamicCode(personalStayCode);
+      return;
+    }
+
     if (!guideId || isLocked) return;
     const fetchDynamicCode = async () => {
       const now = new Date().toISOString();
@@ -38,7 +44,7 @@ export function AccessCodesTraveler({
       }
     };
     fetchDynamicCode();
-  }, [guideId, ctx.unlocked, localUnlock]);
+  }, [guideId, ctx.unlocked, localUnlock, data?.personalStayCode]);
 
   // Effective unlock: either Global (ctx.unlocked) OR Local (localUnlock)
   const mode = visibility?.mode ?? "always";

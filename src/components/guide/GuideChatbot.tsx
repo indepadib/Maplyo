@@ -15,6 +15,7 @@ import { TranslatedText } from "@/components/ui/TranslatedText";
 // We should preferably import `DICTIONARY` from `@/lib/i18n/dictionary`.
 
 import { DICTIONARY, Language } from "@/lib/i18n/dictionary";
+import { supabase } from "@/lib/supabase";
 
 interface GuideChatbotProps {
     guide: Guide;
@@ -27,6 +28,11 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = fa
     const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [escalation, setEscalation] = useState<{
+        category: string;
+        title: string;
+        message: string;
+    } | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     // Get translations safely
@@ -46,22 +52,24 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = fa
         const userMsg = input.trim();
         setInput("");
         setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
+        setEscalation(null);
         setIsLoading(true);
 
         try {
-            // Prepare context
-            const condensedGuide = {
-                title: guide.title,
-                blocks: guide.blocks.map(b => ({ type: b.type, title: b.title, data: b.data }))
-            };
+            const session = await supabase.auth.getSession();
+            const token = session.data.session?.access_token;
 
             const res = await fetch('/api/ai/chat', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
                 body: JSON.stringify({
                     messages: messages.concat([{ role: 'user', content: userMsg }]),
-                    guideContext: condensedGuide,
-                    lang: lang // Pass lang to backend for better answers
+                    guideId: guide.id,
+                    guideSlug: guide.slug,
+                    lang,
                 })
             });
 
@@ -69,6 +77,14 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = fa
 
             const data = await res.json();
             setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+
+            if (data.needsHuman) {
+                setEscalation({
+                    category: data.suggestedCategory || "other",
+                    title: data.suggestedTitle || "Guest assistance",
+                    message: userMsg,
+                });
+            }
         } catch (e) {
             setMessages(prev => [...prev, { role: 'assistant', content: t.error }]);
         } finally {
@@ -150,6 +166,31 @@ export function GuideChatbot({ guide, primaryColor = "#e11d48", forceMobile = fa
                                     <Loader2 className="w-3 h-3 text-gray-400 animate-spin" />
                                     <span className="text-xs text-gray-500">{t.thinking}</span>
                                 </div>
+                            </div>
+                        )}
+
+                        {escalation && (
+                            <div className="rounded-2xl border border-purple-100 bg-purple-50 p-4">
+                                <div className="text-xs font-bold uppercase tracking-wider text-purple-600">
+                                    {lang === "fr" ? "Besoin d’une intervention" : "Human assistance available"}
+                                </div>
+                                <p className="mt-2 text-sm leading-5 text-purple-900">
+                                    {lang === "fr"
+                                        ? "Je peux transmettre cette demande directement à l’équipe de l’établissement."
+                                        : "I can pass this request directly to the property team."}
+                                </p>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        window.dispatchEvent(new CustomEvent("maplyo:open-support", {
+                                            detail: escalation,
+                                        }));
+                                        setIsOpen(false);
+                                    }}
+                                    className="mt-3 rounded-xl bg-purple-600 px-4 py-2 text-sm font-bold text-white hover:bg-purple-700"
+                                >
+                                    {lang === "fr" ? "Contacter l’équipe" : "Contact property team"}
+                                </button>
                             </div>
                         )}
                         <div ref={messagesEndRef} />

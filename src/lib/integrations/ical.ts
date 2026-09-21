@@ -1,3 +1,18 @@
+function isAllowedAirbnbCalendarUrl(rawUrl: string): boolean {
+    try {
+        const url = new URL(rawUrl);
+        if (url.protocol !== 'https:') return false;
+
+        const hostname = url.hostname.toLowerCase().replace(/^www\./, '');
+        const isAirbnbHost = /^airbnb\.(com|[a-z]{2,3}|co\.[a-z]{2}|com\.[a-z]{2})$/.test(hostname);
+        if (!isAirbnbHost) return false;
+
+        return url.pathname.includes('/calendar/ical/') && url.pathname.endsWith('.ics');
+    } catch {
+        return false;
+    }
+}
+
 export interface BookingEvent {
     summary: string;
     start: Date;
@@ -13,6 +28,10 @@ export interface BookingEvent {
  */
 export async function parseAirbnbCalendar(url: string): Promise<BookingEvent[]> {
     try {
+        if (!isAllowedAirbnbCalendarUrl(url)) {
+            throw new Error('Invalid Airbnb calendar URL');
+        }
+
         const ical = await import('node-ical');
         const events = await ical.async.fromURL(url);
         
@@ -43,3 +62,6 @@ export async function parseAirbnbCalendar(url: string): Promise<BookingEvent[]> 
         throw new Error('Failed to parse iCal feed');
     }
 }
+
+
+export { isAllowedAirbnbCalendarUrl };

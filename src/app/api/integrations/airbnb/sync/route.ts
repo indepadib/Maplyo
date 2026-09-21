@@ -5,6 +5,7 @@ export const revalidate = 0;
 import { NextResponse } from "next/server";
 import { parseAirbnbCalendar } from "@/lib/integrations/ical";
 import { TuyaConnector } from "@/lib/integrations/tuya";
+import { randomInt } from "node:crypto";
 
 export async function POST(request: Request) {
     const { createServerClient } = await import("@supabase/ssr");
@@ -56,7 +57,33 @@ export async function POST(request: Request) {
         // 2. Parse the calendar
         const bookings = await parseAirbnbCalendar(icalUrl);
 
-        // 3. Get User's Global Tuya Credentials
+        // 3. Resolve hospitality property context (fail open for legacy environments)
+        let propertyContext: { id: string; organization_id: string } | null = null;
+
+        try {
+            const { data: guideRow } = await supabase
+                .from('guides')
+                .select('property_id, user_id')
+                .eq('id', guideId)
+                .eq('user_id', user.id)
+                .single();
+
+            if (guideRow?.property_id) {
+                const { data: propertyRow } = await supabase
+                    .from('properties')
+                    .select('id, organization_id')
+                    .eq('id', guideRow.property_id)
+                    .single();
+
+                if (propertyRow?.id && propertyRow?.organization_id) {
+                    propertyContext = propertyRow as { id: string; organization_id: string };
+                }
+            }
+        } catch {
+            propertyContext = null;
+        }
+
+        // 4. Get User's Global Tuya Credentials
         const { data: tuyaInt } = await supabase
             .from('integrations')
             .select('credentials')
@@ -72,11 +99,73 @@ export async function POST(request: Request) {
             tuyaConnector = new TuyaConnector(tuyaCreds.accessId, tuyaCreds.accessSecret, tuyaCreds.region || 'eu');
         }
 
-        // 4. Sync to access_codes table
+        // 5. Sync stays + access codes
         const upsertData = [];
         
         for (const booking of bookings) {
             let generatedCode = null;
+
+            // Keep the hospitality stay model synchronized when available.
+            if (propertyContext) {
+                try {
+                    let guestId: string | null = null;
+
+                    if (booking.guestName) {
+                        const { data: existingGuest } = await supabase
+                            .from('guests')
+                            .select('id')
+                            .eq('organization_id', propertyContext.organization_id)
+                            .contains('metadata', { source_booking_uid: booking.uid })
+                            .limit(1)
+                            .maybeSingle();
+
+                        if (existingGuest?.id) {
+                            guestId = existingGuest.id;
+                        } else {
+                            const { data: createdGuest } = await supabase
+                                .from('guests')
+                                .insert([{
+                                    organization_id: propertyContext.organization_id,
+                                    first_name: booking.guestName,
+                                    marketing_consent: false,
+                                    metadata: {
+                                        source: 'airbnb_ical',
+                                        source_booking_uid: booking.uid
+                                    }
+                                }])
+                                .select('id')
+                                .single();
+
+                            guestId = createdGuest?.id || null;
+                        }
+                    }
+
+                    const stayPayload = {
+                        organization_id: propertyContext.organization_id,
+                        property_id: propertyContext.id,
+                        primary_guest_id: guestId,
+                        source: 'airbnb_ical',
+                        external_reservation_id: booking.uid,
+                        check_in_at: booking.start.toISOString(),
+                        check_out_at: booking.end.toISOString(),
+                        status: 'confirmed',
+                        metadata: {
+                            guest_name: booking.guestName || null,
+                            source_guide_id: guideId
+                        }
+                    };
+
+                    const { error: stayError } = await supabase
+                        .from('stays')
+                        .upsert(stayPayload, { onConflict: 'source,external_reservation_id' });
+
+                    if (stayError) {
+                        console.info('[Sync] Hospitality stay sync unavailable:', stayError.message);
+                    }
+                } catch (staySyncError) {
+                    console.info('[Sync] Hospitality stay sync unavailable:', staySyncError);
+                }
+            }
 
             // Generate Tuya code if device ID and credentials exist
             if (tuyaConnector) {
@@ -93,7 +182,7 @@ export async function POST(request: Request) {
                         generatedCode = existingCode.code;
                     } else {
                         // Generate a new 6-digit code for Tuya
-                        const pwd = Math.floor(100000 + Math.random() * 900000).toString();
+                        const pwd = randomInt(100000, 1000000).toString();
                         
                         // We use TuyaConnector to create the password
                         await tuyaConnector.generateTempCode(
@@ -135,6 +224,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ 
             success: true, 
             count: bookings.length,
+            hospitalitySync: Boolean(propertyContext),
             message: `Successfully synced ${bookings.length} bookings for guide ${guideId}.` 
         });
 

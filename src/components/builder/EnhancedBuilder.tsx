@@ -15,6 +15,8 @@ import { Guide, BlockType } from "@/types/blocks"; // Value import for Guide and
 import { slugify } from "@/lib/utils/slugify";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { trackProductEvent } from "@/lib/analytics/product-events";
+import { BuilderLaunchChecklist } from "@/components/builder/BuilderLaunchChecklist";
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 const STORAGE_KEY = "eguidehq_demo_guide_v1";
@@ -118,7 +120,49 @@ export function EnhancedBuilder({
                 })
                 .eq("id", next.id);
 
-            if (error) console.error("Error saving guide:", error);
+            if (error) {
+                console.error("Error saving guide:", error);
+            } else if (next.id !== "demo") {
+                try {
+                    const { data: sessionData } = await supabase.auth.getSession();
+                    const token = sessionData.session?.access_token;
+
+                    if (token) {
+                        const revenueServices = next.blocks
+                            .filter((block) => block.type === "upsells")
+                            .flatMap((block) => {
+                                const items = Array.isArray((block.data as any)?.items) ? (block.data as any).items : [];
+                                return items.map((item: any, index: number) => ({
+                                    key: item.id || item.serviceId || `legacy_${String(item.title || "service").toLowerCase().replace(/[^a-z0-9]+/g, "_")}_${index}`,
+                                    title: item.title || "Service",
+                                    description: item.description || "",
+                                    category: item.category || "other",
+                                    priceAmount: item.priceAmount ?? "",
+                                    currency: item.currency || "MAD",
+                                    pricingType: item.pricingType || "fixed",
+                                    fulfillmentType: item.fulfillmentType || "property",
+                                    providerName: item.providerName || "",
+                                    imageUrl: item.imageUrl || "",
+                                    externalUrl: item.url || "",
+                                }));
+                            });
+
+                        await fetch("/api/services/sync", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`,
+                            },
+                            body: JSON.stringify({
+                                guideId: next.id,
+                                services: revenueServices,
+                            }),
+                        }).catch(() => undefined);
+                    }
+                } catch (syncError) {
+                    console.info("Revenue service sync unavailable:", syncError);
+                }
+            }
             
             // Save Integrations
             if (next.id !== 'demo') {
@@ -301,9 +345,12 @@ export function EnhancedBuilder({
                         <button
                             onClick={async () => {
                                 // 1. CHECK PLAN
-                                // Pro/Basic accounts can publish if active
-                                const canPublish = subscription?.planId !== 'demo' && 
-                                                 (subscription?.status === 'active' || subscription?.status === 'trialing' || subscription?.status === 'free');
+                                // Free accounts can publish their one included guide.
+                                // Reverse-trial accounts expose Pro capabilities with status=trialing.
+                                const canPublish = Boolean(
+                                    subscription &&
+                                    ['active', 'trialing', 'free'].includes(subscription.status)
+                                );
                                 if (!canPublish) {
                                     setShowSubscribe(true);
                                     return;
@@ -313,6 +360,7 @@ export function EnhancedBuilder({
                                 const { error } = await supabase.from("guides").update({ is_published: true }).eq("id", guide.id);
                                 if (!error) {
                                     setGuide({ ...guide, isPublished: true });
+                                    trackProductEvent("experience_published", { guideId: guide.id });
                                     alert(t.builder.publishSuccess);
                                 } else {
                                     console.error("Publish error:", error);
@@ -326,6 +374,13 @@ export function EnhancedBuilder({
                     ))}
                 </div>
             </header>
+
+            {!isGuest && !isDemoMode && (
+                <BuilderLaunchChecklist
+                    guide={guide}
+                    onAddService={() => addBlock("upsells")}
+                />
+            )}
 
             <div className="flex-1 flex overflow-hidden">
                 {/* 1. LEFT COLUMN: LIBRARY */}
@@ -512,7 +567,7 @@ export function EnhancedBuilder({
 
                                     <div className={`w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar ${previewDevice === 'mobile' ? 'pt-8 bg-black' : ''}`}>
                                         <div className={`w-full min-h-full bg-white relative ${previewDevice === 'mobile' ? 'rounded-[2.5rem] overflow-hidden' : ''}`}>
-                                            <StyledGuideRenderer guide={guide} unlocked={true} forceDesktop={previewDevice === 'desktop'} forceMobile={previewDevice === 'mobile'} />
+                                            <GuideRenderer guide={guide} unlocked={true} forceDesktop={previewDevice === 'desktop'} forceMobile={previewDevice === 'mobile'} />
                                         </div>
                                     </div>
                                 </div>

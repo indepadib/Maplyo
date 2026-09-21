@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2, Bot } from "lucide-react";
+import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2, Bot, Building2, Eye, Activity, CircleDollarSign, MessageSquareText, CalendarDays, Clock3, UsersRound } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { guideThemes } from "@/types/themes";
 import { Modal } from "@/components/ui/Modal";
@@ -16,8 +16,13 @@ import { UserSubscription } from "@/types/subscription";
 import { slugify } from "@/lib/utils/slugify";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import type { Language } from "@/lib/i18n/dictionary";
+import { MARKETING_LANGUAGES } from "@/components/marketing/MarketingLanguageSwitcher";
+import { onboardingCopy } from "@/lib/i18n/onboarding";
 import { OnboardingTour } from "@/components/dashboard/OnboardingTour";
 import { BookingsDashboard } from "@/components/dashboard/BookingsDashboard";
+import { bootstrapHospitalityWorkspace } from "@/lib/hospitality/bootstrap";
+import { ReverseTrialBanner } from "@/components/billing/ReverseTrialBanner";
 
 type GuideSummary = {
     id: string;
@@ -44,7 +49,8 @@ export default function DashboardPage() {
 
 function DashboardContent() {
     const { user, signOut } = useAuth();
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
+    const onboardingT = onboardingCopy(lang);
     const searchParams = useSearchParams();
     const router = useRouter();
 
@@ -60,14 +66,20 @@ function DashboardContent() {
     const [isAiModalOpen, setIsAiModalOpen] = useState(false);
     const [aiPrompt, setAiPrompt] = useState<{
         airbnbUrl: string;
-        language: "fr" | "en";
+        language: Language;
+        sourceOwnerConfirmed: boolean;
     }>({
         airbnbUrl: "",
-        language: "fr"
+        language: lang,
+        sourceOwnerConfirmed: false
     });
     const [isGenerating, setIsGenerating] = useState(false);
     const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
     const [isAddonSuccessOpen, setIsAddonSuccessOpen] = useState(false);
+
+    useEffect(() => {
+        setAiPrompt((current) => ({ ...current, language: lang }));
+    }, [lang]);
 
     const handleAiGenerate = async () => {
         setIsGenerating(true);
@@ -107,6 +119,13 @@ function DashboardContent() {
                     .single();
 
                 if (saved) {
+                    await bootstrapHospitalityWorkspace(supabase, {
+                        userId: user.id,
+                        guideId: saved.id,
+                        propertyName: data.guide.title || "My Property",
+                        propertyType: "airbnb",
+                        sourceUrl: aiPrompt.airbnbUrl || undefined,
+                    });
                     window.location.href = `/app/guides/${saved.id}/builder`;
                 } else {
                     console.error("Save error", error);
@@ -240,6 +259,10 @@ function DashboardContent() {
         return b.updatedAt - a.updatedAt;
     });
 
+    const totalViews = guides.reduce((sum, guide) => sum + (guide.views || 0), 0);
+    const publishedCount = guides.filter((guide) => guide.is_published).length;
+    const publicationRate = guides.length ? Math.round((publishedCount / guides.length) * 100) : 0;
+
     const deleteGuide = async (id: string) => {
         if (confirm(t.dashboard.confirmDelete)) {
             const { error } = await supabase.from("guides").delete().eq("id", id);
@@ -304,6 +327,12 @@ function DashboardContent() {
             console.error("Error creating guide:", error);
             alert(`Erreur lors de la création : ${error.message || "Problème de base de données"}`);
         } else if (data) {
+            await bootstrapHospitalityWorkspace(supabase, {
+                userId: user.id,
+                guideId: data.id,
+                propertyName: newGuideTitle || "My Property",
+                propertyType: "other",
+            });
             window.location.href = `/app/guides/${data.id}/builder`;
         }
     };
@@ -384,6 +413,48 @@ function DashboardContent() {
                             <Sparkles className="w-4 h-4" />
                         </button>
                         <Link
+                            href="/dashboard/portfolio"
+                            className="w-10 h-10 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-300 hover:bg-orange-500/20 hover:text-orange-200 transition-all hover:scale-105"
+                            title="Portfolio Command Center"
+                        >
+                            <Building2 className="w-4 h-4" />
+                        </Link>
+                        <Link
+                            href="/dashboard/team"
+                            className="w-10 h-10 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-300 hover:bg-indigo-500/20 hover:text-indigo-200 transition-all hover:scale-105"
+                            title="Team & Roles"
+                        >
+                            <UsersRound className="w-4 h-4" />
+                        </Link>
+                        <Link
+                            href="/dashboard/journeys"
+                            className="w-10 h-10 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-300 hover:bg-cyan-500/20 hover:text-cyan-200 transition-all hover:scale-105"
+                            title="Guest Journey"
+                        >
+                            <Clock3 className="w-4 h-4" />
+                        </Link>
+                        <Link
+                            href="/dashboard/stays"
+                            className="w-10 h-10 rounded-full bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-300 hover:bg-sky-500/20 hover:text-sky-200 transition-all hover:scale-105"
+                            title="Stay Operations"
+                        >
+                            <CalendarDays className="w-4 h-4" />
+                        </Link>
+                        <Link
+                            href="/dashboard/requests"
+                            className="w-10 h-10 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-300 hover:bg-purple-500/20 hover:text-purple-200 transition-all hover:scale-105"
+                            title="Guest Requests"
+                        >
+                            <MessageSquareText className="w-4 h-4" />
+                        </Link>
+                        <Link
+                            href="/dashboard/revenue"
+                            className="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-300 hover:bg-emerald-500/20 hover:text-emerald-200 transition-all hover:scale-105"
+                            title="Revenue Center"
+                        >
+                            <CircleDollarSign className="w-4 h-4" />
+                        </Link>
+                        <Link
                             data-tour="settings-button"
                             href="/dashboard/settings"
                             className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-white/10 hover:text-white transition-all hover:scale-105"
@@ -396,10 +467,12 @@ function DashboardContent() {
             </header>
 
             <main className="max-w-7xl mx-auto px-6 pt-32 pb-20">
+                <ReverseTrialBanner className="mb-8" />
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                     <div>
-                        <h2 className="text-4xl font-bold mb-2 tracking-tight text-white">{t.dashboard.title}</h2>
-                        <p className="text-zinc-500 text-lg">{t.dashboard.subtitle}</p>
+                        <div className="text-xs font-bold uppercase tracking-[0.2em] text-rose-400 mb-3">Guest Experience OS</div>
+                        <h2 className="text-4xl font-bold mb-2 tracking-tight text-white">Your properties</h2>
+                        <p className="text-zinc-500 text-lg">Operate the guest experience, engagement and revenue layer from one place.</p>
                     </div>
                     <div className="flex gap-4">
                         <button
@@ -423,6 +496,26 @@ function DashboardContent() {
                         </button>
                     </div>
                 </div>
+
+                <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+                    {[
+                        { label: "Properties", value: guides.length, icon: Building2, hint: "Experiences in your workspace" },
+                        { label: "Guest views", value: totalViews, icon: Eye, hint: "Recorded guide sessions" },
+                        { label: "Published", value: `${publicationRate}%`, icon: Activity, hint: `${publishedCount} live` },
+                        { label: "Revenue", value: "Soon", icon: CircleDollarSign, hint: "Orders & ancillary revenue" }
+                    ].map(({ label, value, icon: Icon, hint }) => (
+                        <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.035] p-5">
+                            <div className="flex items-center justify-between">
+                                <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">{label}</span>
+                                <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                                    <Icon className="w-4 h-4 text-rose-300" />
+                                </div>
+                            </div>
+                            <div className="mt-4 text-3xl font-bold text-white">{value}</div>
+                            <div className="mt-1 text-xs text-zinc-600">{hint}</div>
+                        </div>
+                    ))}
+                </section>
 
                 <AnimatePresence>
                     {guides.length === 0 && !loading ? (
@@ -518,7 +611,7 @@ function DashboardContent() {
                                                             {guide.is_published ? t.dashboard.published : t.dashboard.draft}
                                                         </span>
                                                     </div>
- streams                                                    <p className="text-xs font-medium text-zinc-600">
+                                                    <p className="text-xs font-medium text-zinc-600">
                                                         {new Date(guide.updatedAt).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long' })}
                                                     </p>
                                                 </div>
@@ -531,7 +624,7 @@ function DashboardContent() {
                                             <div className="flex gap-3 pt-2">
                                                 <Link href={`/app/guides/${guide.id}/builder`} className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-white text-slate-950 font-bold hover:bg-zinc-200 transition-colors shadow-lg">
                                                     <Edit2 size={18} />
-                                                    {t.dashboard.edit}
+                                                    Edit experience
                                                 </Link>
                                                 <button
                                                     onClick={() => deleteGuide(guide.id)}
@@ -572,27 +665,39 @@ function DashboardContent() {
                                     value={aiPrompt.airbnbUrl}
                                     onChange={e => setAiPrompt({ ...aiPrompt, airbnbUrl: e.target.value })}
                                 />
+                                <label className="mt-3 flex items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 p-3 text-xs leading-5 text-gray-600 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={aiPrompt.sourceOwnerConfirmed}
+                                        onChange={e => setAiPrompt({ ...aiPrompt, sourceOwnerConfirmed: e.target.checked })}
+                                        className="mt-1"
+                                    />
+                                    <span>{onboardingT.authorizationAirbnb}</span>
+                                </label>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">Langue du guide</label>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">{onboardingT.languageLabel}</label>
                                 <select
                                     className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 outline-none transition-all text-sm font-medium"
                                     value={aiPrompt.language}
                                     onChange={e => setAiPrompt({ ...aiPrompt, language: e.target.value as any })}
                                 >
-                                    <option value="fr" className="bg-white text-gray-900">Français (fr)</option>
-                                    <option value="en" className="bg-white text-gray-900">English (en)</option>
+                                    {MARKETING_LANGUAGES.map((item) => (
+                                        <option key={item.code} value={item.code} className="bg-white text-gray-900">
+                                            {item.native} ({item.label.toLowerCase()})
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                         </div>
 
                         <button
                             onClick={handleAiGenerate}
-                            disabled={!aiPrompt.airbnbUrl}
+                            disabled={!aiPrompt.airbnbUrl || !aiPrompt.sourceOwnerConfirmed}
                             className="w-full py-4 rounded-2xl bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-bold text-lg shadow-xl shadow-rose-600/25 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Générer mon guide par l'IA
+                            {isGenerating ? onboardingT.generating : onboardingT.generate}
                         </button>
                     </div>
                 ) : (

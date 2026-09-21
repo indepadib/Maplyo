@@ -69,25 +69,118 @@ export async function POST(req: Request) {
 
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabase: any) {
     const userId = session.metadata?.userId;
-    const planId = session.metadata?.planId || 'pro'; // You should pass this in metadata
+    const checkoutType = session.metadata?.type;
+    const planId = session.metadata?.planId;
 
-    if (!userId) {
-        console.error("❌ No userId in session metadata:", session.id);
+    // Guest-service payments will be routed by order metadata when native
+    // marketplace payments are enabled. Never treat them as SaaS upgrades.
+    if (session.metadata?.orderId || checkoutType === "guest_service") {
+        const orderId = session.metadata?.orderId;
+        if (orderId) {
+            const { error } = await supabase
+                .from("orders")
+                .update({
+                    status: "paid",
+                    payment_provider: "stripe",
+                    payment_reference: session.payment_intent as string,
+                })
+                .eq("id", orderId);
+
+            if (error) console.error("❌ Guest order payment update failed:", error);
+        }
         return;
     }
 
-    // Update Profile
+    if (!userId) {
+        console.error("❌ No userId in checkout metadata:", session.id);
+        return;
+    }
+
+    if (checkoutType === "addon_guide") {
+        const { data: profile, error: readError } = await supabase
+            .from("profiles")
+            .select("extra_guides")
+            .eq("id", userId)
+            .single();
+
+        if (readError) {
+            console.error("❌ Could not load profile for guide addon:", readError);
+            return;
+        }
+
+        const { error } = await supabase
+            .from("profiles")
+            .update({ extra_guides: Number(profile?.extra_guides || 0) + 1 })
+            .eq("id", userId);
+
+        if (error) console.error("❌ Guide addon update failed:", error);
+        else console.log(`✅ Added one extra guide for ${userId}`);
+        return;
+    }
+
+    if (planId !== "basic" && planId !== "pro") {
+        console.warn("⚠️ Ignoring checkout with unknown SaaS metadata:", session.id, session.metadata);
+        return;
+    }
+
+    const updateData: Record<string, unknown> = {
+        subscription_status: "active",
+        plan_variant: planId,
+    };
+
+    if (session.customer) updateData.stripe_customer_id = session.customer as string;
+
     const { error } = await supabase
         .from("profiles")
-        .update({
-            subscription_status: "active",
-            plan_variant: planId,
-            stripe_customer_id: session.customer as string,
-        })
+        .update(updateData)
         .eq("id", userId);
 
-    if (error) console.error("❌ Supabase update failed:", error);
-    else console.log(`✅ User ${userId} upgraded to ${planId}`);
+    if (error) {
+        console.error("❌ Supabase subscription update failed:", error);
+        return;
+    }
+
+    console.log(`✅ User ${userId} upgraded to ${planId}`);
+
+    // Close the sales loop automatically for users who came through a Magic Demo.
+    try {
+        const { data: claimedDemo } = await supabase
+            .from("magic_demos")
+            .select("id, prospect_id")
+            .eq("claimed_by", userId)
+            .not("prospect_id", "is", null)
+            .order("updated_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+        if (claimedDemo?.prospect_id) {
+            const paidAt = new Date().toISOString();
+
+            await supabase
+                .from("sales_prospects")
+                .update({
+                    stage: "paid",
+                    last_activity_at: paidAt,
+                    next_action_at: null,
+                    updated_at: paidAt,
+                })
+                .eq("id", claimedDemo.prospect_id);
+
+            await supabase.from("sales_activities").insert([{
+                prospect_id: claimedDemo.prospect_id,
+                activity_type: "paid",
+                channel: "stripe",
+                metadata: {
+                    user_id: userId,
+                    plan_id: planId,
+                    checkout_session_id: session.id,
+                    magic_demo_id: claimedDemo.id,
+                },
+            }]);
+        }
+    } catch (salesError) {
+        console.info("Sales attribution unavailable:", salesError);
+    }
 }
 
 async function handleSubscriptionUpdated(sub: Stripe.Subscription, supabase: any) {
