@@ -112,7 +112,7 @@ export default function UpdatePasswordPage() {
             </form>
           ) : (
             <div className="text-center text-sm text-zinc-500">
-              <Link href="/forgot-password" className="underline">Request a new reset link</Link>
+              <Link href="/forgot-password" className="underline">{t.requestNewLink}</Link>
             </div>
           )}
         </div>
