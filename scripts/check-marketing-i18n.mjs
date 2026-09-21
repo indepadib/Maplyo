@@ -1,7 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
+import { createRequire } from "node:module";
 import ts from "typescript";
+
+const require = createRequire(import.meta.url);
 
 const file = path.resolve("src/lib/i18n/marketing.ts");
 const source = fs.readFileSync(file, "utf8");
