@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
         // Enforce guide limits server-side.
         const { data: profile } = await supabase
             .from("profiles")
-            .select("plan_variant, extra_guides")
+            .select("plan_variant, subscription_status, trial_ends_at, extra_guides")
             .eq("id", user.id)
             .single();
 
@@ -47,18 +47,26 @@ export async function POST(request: NextRequest) {
             .select("*", { count: 'exact', head: true })
             .eq("user_id", user.id);
 
-        const isPro = profile?.plan_variant === "pro";
-        const baseLimit = isPro ? 2 : 1;
-        const extra = profile?.extra_guides || 0;
+        const trialEndsAt = profile?.trial_ends_at ? new Date(profile.trial_ends_at).getTime() : 0;
+        const reverseTrialActive =
+            profile?.plan_variant !== "pro" &&
+            profile?.subscription_status !== "active" &&
+            trialEndsAt > Date.now();
+
+        const effectivePro = profile?.plan_variant === "pro" || reverseTrialActive;
+        const baseLimit = effectivePro ? 2 : 1;
+        const extra = Number(profile?.extra_guides || 0);
         const guideLimit = baseLimit + extra;
 
         if ((count || 0) >= guideLimit) {
             return NextResponse.json({
                 error: "Limit reached",
                 isLimitReached: true,
-                message: isPro
-                    ? "Vous avez atteint la limite de 2 guides inclus dans le plan Pro."
-                    : "Votre offre inclut 1 expérience. Passez à une offre supérieure pour en créer plus."
+                effectivePlan: effectivePro ? "pro" : "free",
+                trialActive: reverseTrialActive,
+                message: effectivePro
+                    ? "Your current Pro access includes 2 guides. Upgrade your portfolio capacity to create more."
+                    : "Your Free plan includes 1 published guide. Upgrade to Pro to create more."
             }, { status: 403 });
         }
 
