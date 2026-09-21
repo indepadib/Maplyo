@@ -8,10 +8,8 @@ import {
   Bot,
   Building2,
   Check,
-  ChevronDown,
   CircleDollarSign,
   Globe2,
-  Languages,
   Menu,
   MessageSquareText,
   Play,
@@ -23,8 +21,8 @@ import {
 import { Button } from "@/components/ui/Button";
 import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 import { useTranslation } from "@/components/providers/LanguageProvider";
-import type { Language } from "@/lib/i18n/dictionary";
 import { marketingCopy } from "@/lib/i18n/marketing";
+import { MarketingLanguageSwitcher, MARKETING_LANGUAGES } from "@/components/marketing/MarketingLanguageSwitcher";
 import { CurrencyCode, PRICING_BY_CURRENCY } from "@/lib/pricing/currencies";
 
 const PhoneMockup3D = dynamic(
@@ -34,60 +32,6 @@ const PhoneMockup3D = dynamic(
     loading: () => <div className="mx-auto h-[560px] w-[280px] animate-pulse rounded-[3rem] bg-white/5" />,
   }
 );
-
-const LANGUAGES: Array<{ code: Language; label: string; native: string }> = [
-  { code: "fr", label: "FR", native: "Français" },
-  { code: "en", label: "EN", native: "English" },
-  { code: "es", label: "ES", native: "Español" },
-  { code: "ar", label: "AR", native: "العربية" },
-  { code: "nl", label: "NL", native: "Nederlands" },
-  { code: "zh", label: "ZH", native: "中文" },
-  { code: "pt", label: "PT", native: "Português" },
-];
-
-function LanguageMenu({ compact = false }: { compact?: boolean }) {
-  const { lang, setLang } = useTranslation();
-  const [open, setOpen] = useState(false);
-  const current = LANGUAGES.find((item) => item.code === lang) || LANGUAGES[1];
-
-  return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen((value) => !value)}
-        className={`flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] text-zinc-300 hover:bg-white/[0.08] hover:text-white ${compact ? "px-3 py-2 text-xs" : "px-4 py-2.5 text-sm"}`}
-        aria-label="Change language"
-      >
-        <Languages className="h-4 w-4" />
-        <span className="font-bold">{current.label}</span>
-        {!compact && <span className="hidden lg:inline text-zinc-500">{current.native}</span>}
-        <ChevronDown className="h-3.5 w-3.5 text-zinc-600" />
-      </button>
-
-      {open && (
-        <>
-          <button aria-label="Close language menu" className="fixed inset-0 z-40 cursor-default" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 z-50 mt-2 w-48 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 p-2 shadow-2xl">
-            {LANGUAGES.map((item) => (
-              <button
-                key={item.code}
-                type="button"
-                onClick={() => {
-                  setLang(item.code);
-                  setOpen(false);
-                }}
-                className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm transition ${item.code === lang ? "bg-white/10 text-white" : "text-zinc-400 hover:bg-white/5 hover:text-white"}`}
-              >
-                <span>{item.native}</span>
-                <span className="text-[10px] font-bold text-zinc-600">{item.label}</span>
-              </button>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
 
 function OfferBadge({ text }: { text: string }) {
   return (
@@ -137,7 +81,7 @@ export default function LandingPage() {
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
-            <LanguageMenu compact />
+            <MarketingLanguageSwitcher compact />
             <Link href="/login" className="px-3 py-2 text-sm font-bold text-zinc-400 hover:text-white">{t.nav.login}</Link>
             <Link href="/signup?ref=landing&offer=reverse-trial">
               <Button className="rounded-xl border-0 bg-white text-slate-950 hover:bg-zinc-200">{t.nav.cta}</Button>
@@ -152,7 +96,7 @@ export default function LandingPage() {
         {mobileOpen && (
           <div className="border-t border-white/5 bg-slate-950 px-6 py-5 md:hidden">
             <div className="flex flex-col gap-4">
-              <LanguageMenu />
+              <MarketingLanguageSwitcher />
               <Link onClick={() => setMobileOpen(false)} href="#product" className="py-2 text-zinc-300">{t.nav.product}</Link>
               <Link onClick={() => setMobileOpen(false)} href="#solutions" className="py-2 text-zinc-300">{t.nav.solutions}</Link>
               <Link onClick={() => setMobileOpen(false)} href="#pricing" className="py-2 text-zinc-300">{t.nav.pricing}</Link>
@@ -207,7 +151,7 @@ export default function LandingPage() {
               <p className="mt-5 max-w-2xl text-sm leading-6 text-zinc-500">{t.hero.fallback}</p>
 
               <div className="mt-8 flex flex-wrap gap-2">
-                {LANGUAGES.map((item) => (
+                {MARKETING_LANGUAGES.map((item) => (
                   <span key={item.code} className="rounded-lg border border-white/10 bg-white/[0.025] px-2.5 py-1.5 text-[10px] font-bold text-zinc-500">
                     {item.label}
                   </span>
