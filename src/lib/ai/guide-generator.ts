@@ -108,13 +108,14 @@ ${scrapedInfo ? `\n=== IMPORTED LISTING METADATA ===\n${scrapedInfo}` : ''}
 1. LOCATION: The guide location is "${targetLocation}". Use ONLY this city for local recommendations (places, events, transport). NEVER use Paris or any other city.
 2. HERO IMAGE: Set "coverImageUrl" to "__USE_REAL_PHOTO__" — it will be replaced with the actual listing photo automatically.
 3. PROPERTY DETAILS: Use the real property title, description, and amenities above to fill in the blocks. Do NOT invent generic property facts when real data is provided.
-4. PLACES: List 3 real restaurants or cafes that genuinely exist in ${targetLocation}. Use your knowledge of the city.
-5. AMENITIES: Use the real amenities list above. If unavailable, infer from the description.
-6. RULES: Extract from the description if available; otherwise provide only clearly editable suggestions appropriate to this property type.
-7. Wi-Fi and access data: Use obvious editable placeholders. Never present invented access credentials as real.
-8. REVENUE SERVICES: If the source explicitly mentions services such as breakfast, spa, transfers, restaurant or experiences, add an upsells block using those real service names. Never invent a price; use an empty price when none is provided.
+4. VERIFIED-ONLY LOCAL DATA: Never invent restaurants, cafés, addresses, opening hours, phone numbers, transport providers, ratings or local recommendations. Add a places or transport block ONLY when the imported source explicitly contains that information.
+5. AMENITIES: Use amenities explicitly imported from the property source or clearly supported by its description. Do not invent amenities.
+6. RULES: Add rules ONLY when they are explicitly present in the imported source. Otherwise omit the rules block.
+7. Wi-Fi and access data: Use obvious editable placeholders such as "EDIT_ME". Never present invented access credentials as real.
+8. REVENUE SERVICES: Add an upsells block ONLY when the source explicitly mentions a service such as breakfast, spa, transfer, restaurant or experience. Never invent a price; leave price empty when unavailable.
+9. UNCERTAINTY: It is better to omit a block than to fill it with unverified facts.
 
-Required blocks (in order): hero, welcome, wifi, checkin, amenities, places, transport. Add rules and upsells only when appropriate.
+Required base blocks (in order): hero, welcome, wifi, checkin. Add amenities, places, transport, rules and upsells only when supported by imported information.
 
 Output STRICTLY valid JSON:
 {
@@ -140,7 +141,7 @@ Output STRICTLY valid JSON:
             model: "gpt-4o",
             messages: [
                 { role: "system", content: systemPrompt },
-                { role: "user", content: `Generate a complete, personalized welcome guide using the listing details and location provided in the context above. The experience MUST be for the exact location specified (${targetLocation || "the property's actual city"}) — do NOT invent a different city.` }
+                { role: "user", content: `Generate a complete, personalized welcome guide using only the verified property details provided above. The experience MUST be for the exact location specified (${targetLocation || "the property's actual city"}). Omit any factual block that cannot be supported by the imported source instead of inventing details.` }
             ],
             temperature: 0.7,
         });
