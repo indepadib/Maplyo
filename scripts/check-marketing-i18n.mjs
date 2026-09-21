@@ -90,6 +90,7 @@ function validateBundle(bundle, name) {
 
 validateBundle(loadTsExport("src/lib/i18n/marketing.ts", "MARKETING_COPY"), "marketing");
 validateBundle(loadTsExport("src/lib/i18n/auth.ts", "AUTH_COPY"), "auth");
+validateBundle(loadTsExport("src/lib/i18n/onboarding.ts", "ONBOARDING_COPY"), "onboarding");
 
 if (errors.length) {
   console.error("\nI18n validation failed:\n");
@@ -97,4 +98,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`I18n OK: marketing + auth complete across ${expectedLanguages.length} languages, no placeholders.`);
+console.log(`I18n OK: marketing + auth + onboarding complete across ${expectedLanguages.length} languages, no placeholders.`);
