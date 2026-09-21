@@ -16,6 +16,9 @@ import { UserSubscription } from "@/types/subscription";
 import { slugify } from "@/lib/utils/slugify";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import type { Language } from "@/lib/i18n/dictionary";
+import { MARKETING_LANGUAGES } from "@/components/marketing/MarketingLanguageSwitcher";
+import { onboardingCopy } from "@/lib/i18n/onboarding";
 import { OnboardingTour } from "@/components/dashboard/OnboardingTour";
 import { BookingsDashboard } from "@/components/dashboard/BookingsDashboard";
 import { bootstrapHospitalityWorkspace } from "@/lib/hospitality/bootstrap";
@@ -46,7 +49,8 @@ export default function DashboardPage() {
 
 function DashboardContent() {
     const { user, signOut } = useAuth();
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
+    const onboardingT = onboardingCopy(lang);
     const searchParams = useSearchParams();
     const router = useRouter();
 
@@ -62,16 +66,20 @@ function DashboardContent() {
     const [isAiModalOpen, setIsAiModalOpen] = useState(false);
     const [aiPrompt, setAiPrompt] = useState<{
         airbnbUrl: string;
-        language: "fr" | "en";
+        language: Language;
         sourceOwnerConfirmed: boolean;
     }>({
         airbnbUrl: "",
-        language: "fr",
+        language: lang,
         sourceOwnerConfirmed: false
     });
     const [isGenerating, setIsGenerating] = useState(false);
     const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
     const [isAddonSuccessOpen, setIsAddonSuccessOpen] = useState(false);
+
+    useEffect(() => {
+        setAiPrompt((current) => ({ ...current, language: lang }));
+    }, [lang]);
 
     const handleAiGenerate = async () => {
         setIsGenerating(true);
@@ -664,19 +672,22 @@ function DashboardContent() {
                                         onChange={e => setAiPrompt({ ...aiPrompt, sourceOwnerConfirmed: e.target.checked })}
                                         className="mt-1"
                                     />
-                                    <span>I own, manage, or am authorized to use this listing information in Maplyo.</span>
+                                    <span>{onboardingT.authorizationAirbnb}</span>
                                 </label>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">Langue du guide</label>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">{onboardingT.languageLabel}</label>
                                 <select
                                     className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 outline-none transition-all text-sm font-medium"
                                     value={aiPrompt.language}
                                     onChange={e => setAiPrompt({ ...aiPrompt, language: e.target.value as any })}
                                 >
-                                    <option value="fr" className="bg-white text-gray-900">Français (fr)</option>
-                                    <option value="en" className="bg-white text-gray-900">English (en)</option>
+                                    {MARKETING_LANGUAGES.map((item) => (
+                                        <option key={item.code} value={item.code} className="bg-white text-gray-900">
+                                            {item.native} ({item.label.toLowerCase()})
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                         </div>
@@ -686,7 +697,7 @@ function DashboardContent() {
                             disabled={!aiPrompt.airbnbUrl || !aiPrompt.sourceOwnerConfirmed}
                             className="w-full py-4 rounded-2xl bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-bold text-lg shadow-xl shadow-rose-600/25 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Generate my guest experience
+                            {isGenerating ? onboardingT.generating : onboardingT.generate}
                         </button>
                     </div>
                 ) : (
