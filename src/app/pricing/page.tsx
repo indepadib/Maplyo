@@ -2,11 +2,11 @@ import { Metadata } from "next";
 import PricingClient from "./PricingClient";
 
 export const metadata: Metadata = {
-    title: "Tarifs Maplyo | Livret d'Accueil Numérique Airbnb Gratuit",
-    description: "Découvrez nos offres pour créer votre livret d'accueil numérique ou guide voyageur interactif. Commencez gratuitement pour 1 logement.",
-    keywords: ["tarifs maplyo", "livret d'accueil numérique airbnb gratuit", "guide voyageur tarifs", "livret d'accueil gite tarif", "pricing maplyo"],
+  title: "Maplyo Pricing | Free Guest Guide + 30 Days Pro",
+  description: "Start with one published guest guide free forever and unlock Maplyo Pro for 30 days without a credit card. Plans for hosts, property managers, riads and hotels.",
+  keywords: ["Maplyo pricing", "free digital guest guide", "AI concierge pricing", "hotel guest experience software", "property management guest guide"],
 };
 
 export default function PricingPage() {
-    return <PricingClient />;
+  return <PricingClient />;
 }

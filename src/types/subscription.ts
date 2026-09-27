@@ -16,16 +16,17 @@ export interface SubscriptionPlan {
 export const PLANS: Record<PlanId, SubscriptionPlan> = {
     demo: {
         id: 'demo',
-        name: 'Démo',
+        name: 'Free',
         price: 0,
         currency: 'MAD',
         features: [
-            'Accès au Créateur',
-            'Pas de publication',
-            'Thèmes limités'
+            '1 Guide publié à vie',
+            'QR Code & lien permanent',
+            'Éditeur complet',
+            'Thèmes essentiels'
         ],
         limits: {
-            guides: 1, // Can create 1 but not publish (handled elsewhere)
+            guides: 1,
             ai: false,
             themes: false
         }
@@ -54,7 +55,7 @@ export const PLANS: Record<PlanId, SubscriptionPlan> = {
         price: 99,
         currency: 'MAD',
         features: [
-            '2 Guides Inclus (+10 DH/guide supp.)',
+            '2 Guides Inclus (+20 DH/guide supp.)',
             'Assistant IA Invités',
             'Tous les Thèmes Premium',
             'Support Prioritaire',

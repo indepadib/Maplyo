@@ -1,178 +1,26 @@
 import { Guide, BlockType } from "@/types/blocks";
+import type { Language } from "@/lib/i18n/dictionary";
 import { guideThemes } from "@/types/themes";
 import { createOpenAIClient, cleanAIJSON } from "./openai";
+import { importAirbnbListing } from "@/lib/importers/airbnb";
+import { importPropertyWebsite } from "@/lib/importers/website";
 
 export interface GuidePrompt {
     city?: string;
     airbnbUrl?: string;
+    propertyUrl?: string;
     type?: "airbnb" | "hotel" | "guest_house" | "other";
     targetAudience?: "families" | "couples" | "remote_workers" | "groups" | "everyone";
-    language: "fr" | "en";
+    language: Language;
     mood?: "relax" | "adventure" | "romantic" | "business";
     amenities?: string[];
+    sourceOwnerConfirmed?: boolean;
 }
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 
-async function fetchAirbnbListing(url: string): Promise<string> {
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 6000); // 6 seconds timeout
-
-        const response = await fetch(url, {
-            headers: {
-                'User-Agent': 'Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Accept-Language': 'fr-FR,fr;q=0.8'
-            },
-            signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-
-        if (response.ok) {
-            return await response.text();
-        }
-    } catch (e) {
-        console.error("Failed to fetch Airbnb page:", e);
-    }
-    return "";
-}
-
-interface AirbnbExtracted {
-    dataText: string;        // Raw text sent to LLM
-    listingName?: string;   // Listing title from JSON-LD name field
-    city?: string;          // City from addressLocality
-    description?: string;   // Full description
-    coverImageUrl?: string; // First real listing photo
-    latitude?: string;
-    longitude?: string;
-    amenities?: string[];   // Extracted amenities list
-}
-
-function extractAirbnbMetadata(html: string): AirbnbExtracted {
-    if (!html) return { dataText: "" };
-    let dataText = "";
-    let listingName: string | undefined;
-    let city: string | undefined;
-    let description: string | undefined;
-    let coverImageUrl: string | undefined;
-    let latitude: string | undefined;
-    let longitude: string | undefined;
-    let amenities: string[] = [];
-
-    // 1. Extract <title> tag — also try to infer city from it
-    const titleMatch = html.match(/<title>([^<]+)<\/title>/i);
-    if (titleMatch) {
-        dataText += `Title: ${titleMatch[1]}\n`;
-        const cityFromTitle = titleMatch[1].match(/[àin]+\s+([A-ZÀ-Ö][a-zA-ZÀ-ÿ\-\s]+?)(?:,|\s+-\s+Airbnb)/i);
-        if (cityFromTitle) city = cityFromTitle[1].trim();
-    }
-
-    // 2. Extract og:image meta (fallback photo source)
-    const ogImageMatch = html.match(/<meta\s+[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i);
-    if (ogImageMatch) coverImageUrl = ogImageMatch[1];
-
-    // 3. Extract meta description
-    const metaDescMatch = html.match(/<meta\s+[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i);
-    if (metaDescMatch) {
-        description = metaDescMatch[1];
-        dataText += `Meta description: ${description}\n`;
-    }
-
-    const metaPropertyRegex = /<meta\s+[^>]*property=["']og:(title|description)["'][^>]*content=["']([^"']+)["']/gi;
-    let match;
-    while ((match = metaPropertyRegex.exec(html)) !== null) {
-        dataText += `Meta og:${match[1]}: ${match[2]}\n`;
-    }
-
-    // 4. Extract JSON-LD scripts — parse all useful fields
-    const jsonLdRegex = /<script\s+[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
-    let ldMatch;
-    let count = 0;
-    while ((ldMatch = jsonLdRegex.exec(html)) !== null && count < 5) {
-        try {
-            const parsed = JSON.parse(ldMatch[1].trim());
-
-            // Recursive key finder for string values
-            const findStr = (obj: any, key: string): string | undefined => {
-                if (!obj || typeof obj !== 'object') return undefined;
-                if (Array.isArray(obj)) {
-                    for (const item of obj) { const v = findStr(item, key); if (v) return v; }
-                    return undefined;
-                }
-                if (key in obj && typeof obj[key] === 'string' && obj[key].trim()) return obj[key].trim();
-                for (const k of Object.keys(obj)) { const v = findStr(obj[k], key); if (v) return v; }
-                return undefined;
-            };
-
-            // Extract core fields
-            if (!listingName) listingName = findStr(parsed, 'name');
-            if (!city) city = findStr(parsed, 'addressLocality');
-            if (!description && parsed.description) description = parsed.description.slice(0, 600);
-            if (!latitude) latitude = findStr(parsed, 'latitude');
-            if (!longitude) longitude = findStr(parsed, 'longitude');
-
-            // Extract real photos from JSON-LD image field
-            if (!coverImageUrl && parsed.image) {
-                if (typeof parsed.image === 'string' && parsed.image.startsWith('http')) {
-                    coverImageUrl = parsed.image;
-                } else if (Array.isArray(parsed.image)) {
-                    const firstImg = parsed.image.find((img: any) =>
-                        typeof img === 'string' ? img.startsWith('http') :
-                        (img?.url?.startsWith('http') || img?.contentUrl?.startsWith('http'))
-                    );
-                    if (firstImg) {
-                        coverImageUrl = typeof firstImg === 'string' ? firstImg : (firstImg.url || firstImg.contentUrl);
-                    }
-                }
-            }
-
-            // Extract amenities from containsPlace or amenityFeature
-            const extractAmenities = (obj: any): string[] => {
-                const items: string[] = [];
-                if (!obj) return items;
-                if (Array.isArray(obj)) {
-                    for (const item of obj) items.push(...extractAmenities(item));
-                } else if (typeof obj === 'object') {
-                    if (obj.name && typeof obj.name === 'string') items.push(obj.name);
-                    if (obj.amenityFeature) items.push(...extractAmenities(obj.amenityFeature));
-                    if (obj.containsPlace) items.push(...extractAmenities(obj.containsPlace));
-                }
-                return items;
-            };
-            const foundAmenities = extractAmenities(parsed.amenityFeature || parsed.containsPlace);
-            if (foundAmenities.length > 0) amenities.push(...foundAmenities);
-
-            // Append compact summary to dataText (avoid bloat)
-            const summary: Record<string, any> = {};
-            if (parsed.name) summary.name = parsed.name;
-            if (parsed.description) summary.description = parsed.description.slice(0, 400);
-            if (parsed.address) summary.address = parsed.address;
-            if (parsed.latitude) summary.latitude = parsed.latitude;
-            if (parsed.longitude) summary.longitude = parsed.longitude;
-            if (amenities.length > 0) summary.amenities = amenities.slice(0, 15);
-            dataText += `JSON-LD Summary:\n${JSON.stringify(summary, null, 2)}\n`;
-
-            count++;
-        } catch (e) {
-            // ignore parse errors
-        }
-    }
-
-    return {
-        dataText: dataText.slice(0, 12000),
-        listingName,
-        city,
-        description,
-        coverImageUrl,
-        latitude,
-        longitude,
-        amenities: [...new Set(amenities)].slice(0, 15) // deduplicate
-    };
-}
-
 export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
-    const { city, airbnbUrl, type = "airbnb", targetAudience = "everyone", language, mood } = prompt;
+    const { city, airbnbUrl, propertyUrl, sourceOwnerConfirmed = false, type = "airbnb", targetAudience = "everyone", language, mood } = prompt;
 
     // Default values — will be overridden by scraping
     let targetLocation = city || "";
@@ -183,48 +31,58 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     let realAmenities: string[] = [];
 
     if (airbnbUrl) {
-        try {
-            // 1. Fetch the full Airbnb listing HTML
-            const html = await fetchAirbnbListing(airbnbUrl);
-            if (html) {
-                // 2. Extract all structured data from JSON-LD + meta tags
-                const extracted = extractAirbnbMetadata(html);
-                scrapedInfo = extracted.dataText;
+        const imported = await importAirbnbListing(airbnbUrl, sourceOwnerConfirmed);
+        scrapedInfo = imported.dataText;
 
-                // Use extracted structured values (most reliable — direct from JSON-LD)
-                if (extracted.listingName) listingName = extracted.listingName;
-                if (extracted.city) targetLocation = extracted.city;
-                if (extracted.coverImageUrl) realCoverImageUrl = extracted.coverImageUrl;
-                if (extracted.description) realDescription = extracted.description;
-                if (extracted.amenities?.length) realAmenities = extracted.amenities;
+        if (imported.listingName) listingName = imported.listingName;
+        if (imported.city) targetLocation = imported.city;
+        if (imported.coverImageUrl) realCoverImageUrl = imported.coverImageUrl;
+        if (imported.description) realDescription = imported.description;
+        if (imported.amenities?.length) realAmenities = imported.amenities;
 
-                console.log(`[guide-generator] Scraped: name="${listingName}" city="${targetLocation}" photo=${realCoverImageUrl ? 'YES' : 'NO'} amenities=${realAmenities.length}`);
-            }
+        if (imported.warning) {
+            console.warn(`[guide-generator] Airbnb import warning: ${imported.warning}`);
+        }
 
-            // 3. Fallback: parse URL slug if JSON-LD didn't give us a name/city
-            if (!listingName || !targetLocation) {
+        // Safe fallback: infer only from the URL path itself, never by bypassing platform controls.
+        if (!listingName || !targetLocation) {
+            try {
                 const urlObj = new URL(airbnbUrl);
                 const pathParts = urlObj.pathname.split('/');
                 const roomPart = pathParts.find(p => p && p !== 'rooms');
                 if (roomPart && !/^\d+$/.test(roomPart)) {
                     const nameWithoutId = roomPart.replace(/-\d+$/, '').replace(/-/g, ' ');
                     if (!listingName) listingName = nameWithoutId.charAt(0).toUpperCase() + nameWithoutId.slice(1);
-                    if (!targetLocation) {
-                        const lowerName = nameWithoutId.toLowerCase();
-                        const knownCities = ['paris', 'marrakech', 'london', 'barcelona', 'rome', 'new york', 'tokyo', 'casablanca', 'rabat', 'nice', 'lyon', 'marseille', 'mohammedia', 'agadir', 'tangier', 'fes', 'essaouira', 'meknes', 'tetouan', 'safi', 'el jadida'];
-                        const foundCity = knownCities.find(c => lowerName.includes(c));
-                        if (foundCity) targetLocation = foundCity.charAt(0).toUpperCase() + foundCity.slice(1);
-                    }
                 }
+            } catch {
+                // URL validation is handled by the importer.
             }
-        } catch (e) {
-            console.error("Scraping error:", e);
+        }
+    } else if (propertyUrl) {
+        const imported = await importPropertyWebsite(propertyUrl, sourceOwnerConfirmed);
+        scrapedInfo = imported.dataText;
+
+        if (imported.propertyName) listingName = imported.propertyName;
+        if (imported.city) targetLocation = imported.city;
+        if (imported.coverImageUrl) realCoverImageUrl = imported.coverImageUrl;
+        if (imported.description) realDescription = imported.description;
+        if (imported.amenities?.length) realAmenities = imported.amenities;
+
+        if (imported.warning) {
+            console.warn(`[guide-generator] Website import warning: ${imported.warning}`);
         }
     }
 
     // Final fallbacks
-    if (!listingName) listingName = city ? `Mon Airbnb - ${city}` : "Mon Airbnb";
-    if (!targetLocation) targetLocation = city || "Paris";
+    const propertyLabel = type === "hotel"
+        ? "Hotel"
+        : type === "guest_house"
+            ? "Guest House"
+            : type === "airbnb"
+                ? "Vacation Rental"
+                : "Property";
+    if (!listingName) listingName = city ? `${propertyLabel} - ${city}` : `My ${propertyLabel}`;
+    if (!targetLocation) targetLocation = city || "Destination";
 
     const openai = createOpenAIClient();
 
@@ -234,27 +92,30 @@ export async function generateGuide(prompt: GuidePrompt): Promise<Guide> {
     }
 
     const systemPrompt = `
-You are an expert travel guide creator. Create a complete, personalized JSON welcome guide for a short-term rental based on the real listing data below.
+You are an expert hospitality guest-experience designer. Create a complete, personalized JSON guest experience for the property based on the verified/imported data below.
 
-=== REAL LISTING DATA (extracted directly from Airbnb) ===
+=== REAL LISTING DATA (provided/imported from the host listing source) ===
 - Listing Title: ${listingName}
 - Exact City / Location: ${targetLocation}
+- Property type: ${type}
 - Language to use: ${language} (ALL output text must be in this language)
-- Airbnb URL: ${airbnbUrl || 'N/A'}
+- Source URL: ${airbnbUrl || propertyUrl || 'N/A'}
 ${realDescription ? `- Real Listing Description: ${realDescription}` : ''}
 ${realAmenities.length > 0 ? `- Real Amenities from listing: ${realAmenities.join(', ')}` : ''}
-${scrapedInfo ? `\n=== FULL SCRAPED METADATA ===\n${scrapedInfo}` : ''}
+${scrapedInfo ? `\n=== IMPORTED LISTING METADATA ===\n${scrapedInfo}` : ''}
 
 === CRITICAL INSTRUCTIONS ===
 1. LOCATION: The guide location is "${targetLocation}". Use ONLY this city for local recommendations (places, events, transport). NEVER use Paris or any other city.
 2. HERO IMAGE: Set "coverImageUrl" to "__USE_REAL_PHOTO__" — it will be replaced with the actual listing photo automatically.
-3. LISTING DETAILS: Use the real listing title, description, and amenities above to fill in the blocks. Do NOT invent generic data when real data is provided.
-4. PLACES: List 3 real restaurants or cafes that genuinely exist in ${targetLocation}. Use your knowledge of the city.
-5. AMENITIES: Use the real amenities list above. If unavailable, infer from the description.
-6. RULES: Extract from the description if available, otherwise generate plausible rules for this type of property.
-7. Wi-Fi and check-in codes: Generate plausible mock values (the host will update them manually).
+3. PROPERTY DETAILS: Use the real property title, description, and amenities above to fill in the blocks. Do NOT invent generic property facts when real data is provided.
+4. VERIFIED-ONLY LOCAL DATA: Never invent restaurants, cafés, addresses, opening hours, phone numbers, transport providers, ratings or local recommendations. Add a places or transport block ONLY when the imported source explicitly contains that information.
+5. AMENITIES: Use amenities explicitly imported from the property source or clearly supported by its description. Do not invent amenities.
+6. RULES: Add rules ONLY when they are explicitly present in the imported source. Otherwise omit the rules block.
+7. Wi-Fi and access data: Use obvious editable placeholders such as "EDIT_ME". Never present invented access credentials as real.
+8. REVENUE SERVICES: Add an upsells block ONLY when the source explicitly mentions a service such as breakfast, spa, transfer, restaurant or experience. Never invent a price; leave price empty when unavailable.
+9. UNCERTAINTY: It is better to omit a block than to fill it with unverified facts.
 
-Required blocks (in order): hero, wifi, checkin, rules, amenities, places, events, transport
+Required base blocks (in order): hero, welcome, wifi, checkin. Add amenities, places, transport, rules and upsells only when supported by imported information.
 
 Output STRICTLY valid JSON:
 {
@@ -264,11 +125,13 @@ Output STRICTLY valid JSON:
     { "type": "hero", "title": "string", "data": { "title": "string", "subtitle": "string", "coverImageUrl": "__USE_REAL_PHOTO__", "badges": ["string"] } },
     { "type": "wifi", "title": "string", "data": { "networkName": "string", "password": "string" } },
     { "type": "checkin", "title": "string", "data": { "time": "15:00", "instruction": "string" } },
+    { "type": "welcome", "title": "string", "data": { "title": "string", "content": "string" } },
     { "type": "rules", "title": "string", "data": { "items": [{ "text": "string" }] } },
     { "type": "amenities", "title": "string", "data": { "items": [{ "text": "string" }] } },
     { "type": "places", "title": "string", "data": { "items": [{ "name": "string", "description": "string", "address": "string" }] } },
     { "type": "events", "title": "string", "data": { "items": [{ "title": "string", "month": "JAN", "day": 1, "description": "string" }] } },
-    { "type": "transport", "title": "string", "data": { "options": [{ "type": "taxi|bus|train", "name": "string", "description": "string" }] } }
+    { "type": "transport", "title": "string", "data": { "options": [{ "type": "taxi|bus|train", "name": "string", "description": "string" }] } },
+    { "type": "upsells", "title": "string", "data": { "items": [{ "title": "string", "category": "breakfast|spa|transfer|food_beverage|experience|other", "description": "string", "priceAmount": "", "currency": "MAD", "pricingType": "quote", "cta": "Request this service" }] } }
   ]
 }
 `;
@@ -278,7 +141,7 @@ Output STRICTLY valid JSON:
             model: "gpt-4o",
             messages: [
                 { role: "system", content: systemPrompt },
-                { role: "user", content: `Generate a complete, personalized welcome guide using the listing details and location provided in the context above. The guide MUST be for the exact location specified (${targetLocation || "the listing's actual city"}) — do NOT invent a different city or use Paris as a default.` }
+                { role: "user", content: `Generate a complete, personalized welcome guide using only the verified property details provided above. The experience MUST be for the exact location specified (${targetLocation || "the property's actual city"}). Omit any factual block that cannot be supported by the imported source instead of inventing details.` }
             ],
             temperature: 0.7,
         });
@@ -286,7 +149,7 @@ Output STRICTLY valid JSON:
         const content = response.choices[0]?.message?.content || "{}";
         const json = cleanAIJSON(content);
         
-        const finalLocation = json.location || targetLocation || "Paris";
+        const finalLocation = json.location || targetLocation || "Destination";
 
         // Post-processing: Add IDs and visibility
         // Smart theme matching: try exact city name, then coastal/beach for Moroccan coastal cities
@@ -304,7 +167,7 @@ Output STRICTLY valid JSON:
             data: b.data || {}
         }));
 
-        // Resolve hero cover image: prioritize real Airbnb photo > theme bg > nothing
+        // Resolve hero cover image: prioritize imported listing photo > theme bg > nothing
         const resolvedCoverImage = realCoverImageUrl || matchedTheme.bgImage || null;
 
         // Ensure Hero block exists and has a real cover image
@@ -360,16 +223,39 @@ Output STRICTLY valid JSON:
     }
 }
 
-// Keep the old mock function as fallback
+const MOCK_COPY: Record<Language, {
+    guide: string;
+    welcome: string;
+    subtitle: string;
+    fallback: string;
+    places: string;
+    cafe: string;
+    cafeDesc: string;
+    restaurant: string;
+    restaurantDesc: string;
+    central: string;
+}> = {
+    fr: { guide: "Guide", welcome: "Bienvenue à", subtitle: "Votre expérience voyageur", fallback: "Mode de secours local", places: "À proximité", cafe: "Café local", cafeDesc: "Une adresse à personnaliser.", restaurant: "Restaurant local", restaurantDesc: "Ajoutez ici une recommandation vérifiée.", central: "Central" },
+    en: { guide: "Guide", welcome: "Welcome to", subtitle: "Your guest experience", fallback: "Local fallback mode", places: "Nearby", cafe: "Local café", cafeDesc: "A place to customize.", restaurant: "Local restaurant", restaurantDesc: "Add a verified recommendation here.", central: "Central" },
+    es: { guide: "Guía", welcome: "Bienvenido a", subtitle: "Tu experiencia huésped", fallback: "Modo local de respaldo", places: "Cerca", cafe: "Café local", cafeDesc: "Un lugar para personalizar.", restaurant: "Restaurante local", restaurantDesc: "Añade aquí una recomendación verificada.", central: "Céntrico" },
+    ar: { guide: "دليل", welcome: "مرحباً بك في", subtitle: "تجربة الضيف الخاصة بك", fallback: "وضع احتياطي محلي", places: "بالقرب منك", cafe: "مقهى محلي", cafeDesc: "مكان يمكنك تخصيصه.", restaurant: "مطعم محلي", restaurantDesc: "أضف توصية موثوقة هنا.", central: "مركزي" },
+    nl: { guide: "Gids", welcome: "Welkom in", subtitle: "Je gastervaring", fallback: "Lokale fallbackmodus", places: "In de buurt", cafe: "Lokaal café", cafeDesc: "Een plek om aan te passen.", restaurant: "Lokaal restaurant", restaurantDesc: "Voeg hier een geverifieerde aanbeveling toe.", central: "Centraal" },
+    zh: { guide: "指南", welcome: "欢迎来到", subtitle: "你的住客体验", fallback: "本地备用模式", places: "附近", cafe: "本地咖啡馆", cafeDesc: "可在这里自定义地点。", restaurant: "本地餐厅", restaurantDesc: "在这里添加经过确认的推荐。", central: "市中心" },
+    pt: { guide: "Guia", welcome: "Bem-vindo a", subtitle: "A sua experiência do hóspede", fallback: "Modo local de contingência", places: "Perto", cafe: "Café local", cafeDesc: "Um local para personalizar.", restaurant: "Restaurante local", restaurantDesc: "Adicione aqui uma recomendação verificada.", central: "Central" },
+};
+
+// Keep a localized mock function as fallback.
 async function generateMockGuide(prompt: GuidePrompt): Promise<Guide> {
     const { city, language } = prompt;
     const lang = language;
+    const copy = MOCK_COPY[lang] || MOCK_COPY.en;
     const theme = guideThemes[0];
+    const place = city || "Destination";
 
     return {
         id: uid(),
-        slug: `mock-${city}`,
-        title: `Guide ${city} (Fallback Mode)`,
+        slug: `mock-${String(place).toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+        title: `${copy.guide} ${place} (${copy.fallback})`,
         theme: { themeId: theme.id },
         blocks: [
             {
@@ -378,10 +264,10 @@ async function generateMockGuide(prompt: GuidePrompt): Promise<Guide> {
                 title: "Hero",
                 visibility: { mode: "always" },
                 data: {
-                    title: `Bienvenue à ${city}`,
-                    subtitle: "Ce guide est généré localement (Erreur IA)",
+                    title: `${copy.welcome} ${place}`,
+                    subtitle: copy.subtitle,
                     coverImageUrl: theme.bgImage,
-                    badges: ["4G", "Central"]
+                    badges: ["Wi-Fi", copy.central]
                 }
             },
             {
@@ -389,17 +275,17 @@ async function generateMockGuide(prompt: GuidePrompt): Promise<Guide> {
                 type: "wifi",
                 title: "Wi-Fi",
                 visibility: { mode: "always" },
-                data: { networkName: "MonWifi", password: "password123" }
+                data: { networkName: "Guest_WiFi", password: "EDIT_ME" }
             },
             {
                 id: uid(),
                 type: "places",
-                title: "Lieux",
+                title: copy.places,
                 visibility: { mode: "always" },
                 data: {
                     items: [
-                        { name: "Café de la Place", description: "Le meilleur café du coin.", address: "123 Rue Principale" },
-                        { name: "Bistro le Gourmand", description: "Cuisine locale authentique.", address: "45 Avenue de la Liberté" }
+                        { name: copy.cafe, description: copy.cafeDesc, address: "" },
+                        { name: copy.restaurant, description: copy.restaurantDesc, address: "" }
                     ]
                 }
             }

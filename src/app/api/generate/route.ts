@@ -7,49 +7,67 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const prompt: GuidePrompt = body.prompt;
 
-        if (!prompt || (!prompt.city && !prompt.airbnbUrl)) {
-            return NextResponse.json({ error: "City or Airbnb URL is required" }, { status: 400 });
+        if (!prompt || (!prompt.city && !prompt.airbnbUrl && !prompt.propertyUrl)) {
+            return NextResponse.json({ error: "City or property source is required" }, { status: 400 });
         }
 
-        // Validate User & Check Limits
+        if ((prompt.airbnbUrl || prompt.propertyUrl) && !prompt.sourceOwnerConfirmed) {
+            return NextResponse.json({
+                error: "Listing authorization confirmation required",
+                message: "Confirm that you own, manage, or are authorized to use the property information before importing it."
+            }, { status: 400 });
+        }
+
+        // Generation consumes paid AI resources: require a valid Maplyo session.
         const authHeader = request.headers.get("Authorization");
-        if (authHeader) {
-            const supabase = createClient(
-                process.env.NEXT_PUBLIC_SUPABASE_URL!,
-                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                { global: { headers: { Authorization: authHeader } } }
-            );
-            const { data: { user } } = await supabase.auth.getUser();
+        if (!authHeader) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
 
-            if (user) {
-                // Check Profile Plan
-                const { data: profile } = await supabase
-                    .from("profiles")
-                    .select("plan_variant, extra_guides")
-                    .eq("id", user.id)
-                    .single();
+        const supabase = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            { global: { headers: { Authorization: authHeader } } }
+        );
 
-                // Check Guide Count
-                const { count } = await supabase
-                    .from("guides")
-                    .select("*", { count: 'exact', head: true })
-                    .eq("user_id", user.id);
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        if (authError || !user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
 
-                const isPro = profile?.plan_variant === "pro";
-                const baseLimit = isPro ? 2 : 1;
-                const extra = profile?.extra_guides || 0;
-                const guideLimit = baseLimit + extra;
+        // Enforce guide limits server-side.
+        const { data: profile } = await supabase
+            .from("profiles")
+            .select("plan_variant, subscription_status, trial_ends_at, extra_guides")
+            .eq("id", user.id)
+            .single();
 
-                if ((count || 0) >= guideLimit) {
-                    return NextResponse.json({
-                        error: "Limit reached",
-                        isLimitReached: true,
-                        message: isPro
-                            ? "Vous avez atteint la limite de 2 guides inclus dans le plan Pro."
-                            : "Le plan Basic inclut 1 seul guide. Passez au plan Pro pour en créer plus."
-                    }, { status: 403 });
-                }
-            }
+        const { count } = await supabase
+            .from("guides")
+            .select("*", { count: 'exact', head: true })
+            .eq("user_id", user.id);
+
+        const trialEndsAt = profile?.trial_ends_at ? new Date(profile.trial_ends_at).getTime() : 0;
+        const reverseTrialActive =
+            profile?.plan_variant !== "pro" &&
+            profile?.subscription_status !== "active" &&
+            trialEndsAt > Date.now();
+
+        const effectivePro = profile?.plan_variant === "pro" || reverseTrialActive;
+        const baseLimit = effectivePro ? 2 : 1;
+        const extra = Number(profile?.extra_guides || 0);
+        const guideLimit = baseLimit + extra;
+
+        if ((count || 0) >= guideLimit) {
+            return NextResponse.json({
+                error: "Limit reached",
+                isLimitReached: true,
+                effectivePlan: effectivePro ? "pro" : "free",
+                trialActive: reverseTrialActive,
+                message: effectivePro
+                    ? "Your current Pro access includes 2 guides. Upgrade your portfolio capacity to create more."
+                    : "Your Free plan includes 1 published guide. Upgrade to Pro to create more."
+            }, { status: 403 });
         }
 
         const guide = await generateGuide(prompt);

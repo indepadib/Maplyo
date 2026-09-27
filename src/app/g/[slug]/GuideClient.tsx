@@ -24,6 +24,15 @@ export function GuideClient({ guide: initialGuide }: { guide: Guide }) {
   // Sync with local storage for Demo purposes (legacy)
   useEffect(() => {
     try {
+      if (initialGuide.id !== "not-found" && initialGuide.id !== "restricted" && initialGuide.id !== "demo") {
+        fetch("/api/analytics/track", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ guideId: initialGuide.id }),
+          keepalive: true,
+        }).catch(() => undefined);
+      }
+
       // 1. Check Unlock Status
       const isAlreadyUnlocked = window.localStorage.getItem(LS_UNLOCK(initialGuide.slug)) === "1";
       setUnlocked(isAlreadyUnlocked);

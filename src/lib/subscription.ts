@@ -23,12 +23,21 @@ export async function getUserSubscription(userId: string, supabaseClient?: Supab
 
     const { data } = await client
         .from('profiles')
-        .select('plan_variant, subscription_status, addons, extra_guides, themes_unlocked')
+        .select('plan_variant, subscription_status, addons, extra_guides, themes_unlocked, trial_started_at, trial_ends_at')
         .eq('id', userId)
         .single();
 
-    const planId = (data?.plan_variant as PlanId) || 'demo';
-    const status = (data?.subscription_status as any) || 'free';
+    const storedPlanId = (data?.plan_variant as PlanId) || 'demo';
+    const storedStatus = (data?.subscription_status as any) || 'free';
+    const trialEndsAt = data?.trial_ends_at ? new Date(data.trial_ends_at).getTime() : 0;
+    const reverseTrialActive =
+        storedPlanId === 'demo' &&
+        storedStatus !== 'active' &&
+        trialEndsAt > Date.now();
+
+    // During the reverse trial, expose Pro capabilities without requiring payment.
+    const planId: PlanId = reverseTrialActive ? 'pro' : storedPlanId;
+    const status = reverseTrialActive ? 'trialing' : storedStatus;
 
     // Construct addons object from DB columns
     const addons = {
@@ -40,7 +49,7 @@ export async function getUserSubscription(userId: string, supabaseClient?: Supab
         userId: userId,
         planId: planId,
         status: status,
-        currentPeriodEnd: Date.now() + 30 * 24 * 60 * 60 * 1000,
+        currentPeriodEnd: reverseTrialActive ? trialEndsAt : Date.now() + 30 * 24 * 60 * 60 * 1000,
         addons: addons
     };
 }

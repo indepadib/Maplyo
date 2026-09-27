@@ -1,174 +1,142 @@
 "use client";
 
 import { useState } from "react";
-import { Lock, ArrowRight, Mail, Map as MapIcon } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 import Link from "next/link";
+import { ArrowRight, Lock, Mail, Map as MapIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabase";
 import { useTranslation } from "@/components/providers/LanguageProvider";
+import { authCopy } from "@/lib/i18n/auth";
+import { MarketingLanguageSwitcher } from "@/components/marketing/MarketingLanguageSwitcher";
 
 export default function LoginPage() {
-    const { t } = useTranslation();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+  const { lang } = useTranslation();
+  const t = authCopy(lang).login;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-        try {
-            // HYGIENE: Clear any existing sub-path cookies before login
-            if (typeof document !== 'undefined') {
-                const cookiesToClear = ['sb-access-token', 'sb-refresh-token'];
-                const paths = ['/', '/dashboard', '/dashboard/settings', '/app'];
-                cookiesToClear.forEach(name => {
-                    paths.forEach(path => {
-                        document.cookie = `${name}=; Path=${path}; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
-                    });
-                });
-            }
+    try {
+      if (typeof document !== "undefined") {
+        const cookiesToClear = ["sb-access-token", "sb-refresh-token"];
+        const paths = ["/", "/dashboard", "/dashboard/settings", "/app"];
+        cookiesToClear.forEach((name) => {
+          paths.forEach((path) => {
+            document.cookie = `${name}=; Path=${path}; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+          });
+        });
+      }
 
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
 
-            if (error) {
-                setError(error.message);
-                setLoading(false);
-            } else {
-                const timer = setTimeout(() => {
-                    window.location.href = "/dashboard";
-                }, 800);
-                return () => clearTimeout(timer);
-            }
-        } catch (err: any) {
-            setError(t.auth.login.error);
-            setLoading(false);
-        }
-    };
+      const next = new URLSearchParams(window.location.search).get("next");
+      const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : "/dashboard";
+      window.location.href = safeNext;
+    } catch (err: any) {
+      setError(err?.message || "Authentication failed");
+      setLoading(false);
+    }
+  };
 
-    return (
-        <div className="min-h-screen bg-slate-950 font-sans selection:bg-rose-500/30 flex flex-col items-center justify-center p-4 relative overflow-hidden">
-            {/* Animated Background Elements */}
-            <div className="fixed inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-20%] left-[-10%] w-[80vw] h-[80vw] bg-rose-600/10 rounded-full blur-[150px] mix-blend-screen animate-pulse" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-purple-600/10 rounded-full blur-[150px] mix-blend-screen" />
-                <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03]" />
+  const next = typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search).get("next")
+    : null;
+  const signupHref = next ? `/signup?next=${encodeURIComponent(next)}` : "/signup";
+
+  return (
+    <main dir={lang === "ar" ? "rtl" : "ltr"} className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 p-4 text-white">
+      <div className="absolute right-5 top-5 z-20">
+        <MarketingLanguageSwitcher compact />
+      </div>
+
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute -left-[10%] -top-[20%] h-[80vw] w-[80vw] rounded-full bg-rose-600/10 blur-[150px]" />
+        <div className="absolute -bottom-[20%] -right-[10%] h-[60vw] w-[60vw] rounded-full bg-purple-600/10 blur-[150px]" />
+      </div>
+
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 w-full max-w-md">
+        <div className="mb-8 text-center">
+          <Link href="/" className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500 to-purple-600 shadow-xl shadow-rose-500/20 transition hover:scale-105">
+            <MapIcon className="h-8 w-8" />
+          </Link>
+          <h1 className="text-3xl font-bold tracking-tight">{t.title}</h1>
+          <p className="mt-2 text-zinc-400">{t.subtitle}</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-8 shadow-2xl backdrop-blur-xl">
+          <form onSubmit={handleLogin} className="relative z-10 space-y-5">
+            <div>
+              <label className="mb-2 block text-sm font-medium text-zinc-300">{t.email}</label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-3.5 h-5 w-5 text-zinc-500 rtl:left-auto rtl:right-4" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  required
+                  placeholder="you@company.com"
+                  className="h-12 w-full rounded-xl border border-white/10 bg-black/20 pl-11 pr-4 text-white outline-none focus:border-rose-400/50 focus:ring-2 focus:ring-rose-500/20 rtl:pl-4 rtl:pr-11"
+                />
+              </div>
             </div>
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="w-full max-w-md relative z-10"
-            >
-                {/* Logo & Header */}
-                <div className="text-center mb-8">
-                    <Link href="/" className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500 to-purple-600 shadow-xl shadow-rose-500/20 mb-6 group hover:scale-105 transition-transform duration-300">
-                        <MapIcon className="text-white w-8 h-8" />
-                    </Link>
-                    <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">{t.auth.login.title}</h1>
-                    <p className="text-zinc-400">{t.auth.login.subtitle}</p>
-                </div>
+            <div>
+              <div className="mb-2 flex items-center justify-between">
+                <label className="text-sm font-medium text-zinc-300">{t.password}</label>
+                <Link href="/forgot-password" className="text-xs font-medium text-rose-300 hover:text-rose-200">{t.forgot}</Link>
+              </div>
+              <div className="relative">
+                <Lock className="absolute left-4 top-3.5 h-5 w-5 text-zinc-500 rtl:left-auto rtl:right-4" />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  required
+                  placeholder="••••••••"
+                  className="h-12 w-full rounded-xl border border-white/10 bg-black/20 pl-11 pr-4 text-white outline-none focus:border-rose-400/50 focus:ring-2 focus:ring-rose-500/20 rtl:pl-4 rtl:pr-11"
+                />
+              </div>
+            </div>
 
-                {/* Card */}
-                <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+            {error && <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-200">{error}</div>}
 
-                    <form onSubmit={handleLogin} className="space-y-5 relative z-10">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.login.email}</label>
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <Mail className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
-                                </div>
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="your@email.com"
-                                    className="w-full h-12 pl-11 pr-4 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between ml-1">
-                                <label className="text-sm font-medium text-zinc-300">{t.auth.login.password}</label>
-                                <Link href="#" className="text-xs text-rose-400 hover:text-rose-300 transition-colors">
-                                    {t.auth.login.forgot}
-                                </Link>
-                            </div>
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <Lock className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
-                                </div>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="••••••••"
-                                    className="w-full h-12 pl-11 pr-4 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        {error && (
-                            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-200 text-sm flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                                {error}
-                            </div>
-                        )}
-
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full h-12 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-rose-600/20 flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed mt-4 transform active:scale-95"
-                        >
-                            {loading ? (
-                                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            ) : (
-                                <>
-                                    {t.auth.login.submit}
-                                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                </>
-                            )}
-                        </button>
-                    </form>
-                </div>
-
-                {/* Footer */}
-                <div className="mt-8 space-y-4 text-center">
-                    <p className="text-zinc-500 text-sm">
-                        {t.auth.login.noAccount}{" "}
-                        <Link href="/signup" className="text-white font-medium hover:text-rose-300 transition-colors">
-                            {t.auth.login.createFree}
-                        </Link>
-                    </p>
-
-                    <button
-                        onClick={async () => {
-                            if (confirm(t.auth.login.resetLink)) {
-                                await supabase.auth.signOut();
-                                localStorage.clear();
-                                sessionStorage.clear();
-                                document.cookie.split(";").forEach((c) => {
-                                    document.cookie = c
-                                        .replace(/^ +/, "")
-                                        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-                                });
-                                window.location.reload();
-                            }
-                        }}
-                        className="text-xs text-zinc-600 hover:text-zinc-400 underline underline-offset-4 transition-colors tracking-wide uppercase font-semibold"
-                    >
-                        {t.auth.login.resetLink}
-                    </button>
-                </div>
-            </motion.div>
+            <button type="submit" disabled={loading} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-600 to-purple-600 font-semibold shadow-lg shadow-rose-600/20 disabled:opacity-60">
+              {loading ? t.loading : <>{t.submit} <ArrowRight className="h-4 w-4" /></>}
+            </button>
+          </form>
         </div>
-    );
+
+        <div className="mt-7 text-center">
+          <p className="text-sm text-zinc-500">
+            {t.noAccount} <Link href={signupHref} className="font-semibold text-white hover:text-rose-300">{t.createFree}</Link>
+          </p>
+
+          <button
+            onClick={async () => {
+              if (!confirm(t.resetConfirm)) return;
+              await supabase.auth.signOut();
+              localStorage.clear();
+              sessionStorage.clear();
+              document.cookie.split(";").forEach((cookie) => {
+                document.cookie = cookie.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+              });
+              window.location.reload();
+            }}
+            className="mt-4 text-[10px] font-semibold uppercase tracking-wider text-zinc-700 underline underline-offset-4 hover:text-zinc-500"
+          >
+            {t.resetSession}
+          </button>
+        </div>
+      </motion.div>
+    </main>
+  );
 }

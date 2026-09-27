@@ -37,6 +37,37 @@ export async function POST(req: Request) {
             return NextResponse.json({ success: false });
         }
 
+        // Activation milestone: mark the first real guest session once per guide.
+        // This fails open while the product_events migration is rolling out.
+        try {
+            const { data: guide } = await supabase
+                .from("guides")
+                .select("user_id")
+                .eq("id", guideId)
+                .maybeSingle();
+
+            if (guide?.user_id) {
+                const existing = await supabase
+                    .from("product_events")
+                    .select("id")
+                    .eq("user_id", guide.user_id)
+                    .eq("guide_id", guideId)
+                    .eq("event_name", "first_guest_session")
+                    .limit(1);
+
+                if (!existing.error && (!existing.data || existing.data.length === 0)) {
+                    await supabase.from("product_events").insert([{
+                        user_id: guide.user_id,
+                        guide_id: guideId,
+                        event_name: "first_guest_session",
+                        metadata: { source: "public_guide_view" }
+                    }]);
+                }
+            }
+        } catch {
+            // Never block guide analytics or the guest experience.
+        }
+
         return NextResponse.json({ success: true });
 
     } catch (err: any) {

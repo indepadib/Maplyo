@@ -120,8 +120,25 @@ export type DocumentsBlockData = z.infer<typeof DocumentsBlockDataSchema>;
 
 export const UpsellsBlockDataSchema = z.object({
   items: z.array(z.object({
+    id: z.string().optional(),
+    serviceId: z.string().uuid().optional(),
     title: z.string(),
-    price: z.string().optional(),
+    category: z.enum([
+      "late_checkout",
+      "early_checkin",
+      "transfer",
+      "breakfast",
+      "food_beverage",
+      "spa",
+      "experience",
+      "housekeeping",
+      "other"
+    ]).optional(),
+    price: z.string().optional(), // Legacy display field kept for backward compatibility.
+    priceAmount: z.union([z.number(), z.string()]).optional(),
+    currency: z.enum(["MAD", "EUR", "USD", "GBP"]).optional(),
+    pricingType: z.enum(["fixed", "per_guest", "per_night", "quote"]).optional(),
+    fulfillmentType: z.enum(["property", "partner", "maplyo_marketplace"]).optional(),
     description: z.string().optional(),
     cta: z.string().optional(),
     url: z.string().optional(),

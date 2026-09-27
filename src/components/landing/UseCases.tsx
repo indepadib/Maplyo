@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Building2, Home, KeyRound } from "lucide-react";
+import { ArrowRight, Building2, Home, KeyRound } from "lucide-react";
+import Link from "next/link";
 
 const CASES = [
   {
@@ -13,7 +14,8 @@ const CASES = [
       "Vente additionnelle (upsells) automatisée",
       "Lien iCal pour accès serrures par réservation"
     ],
-    color: "from-blue-500 to-indigo-600"
+    color: "from-blue-500 to-indigo-600",
+    href: "/for-property-managers"
   },
   {
     icon: Home,
@@ -24,7 +26,8 @@ const CASES = [
       "Partage des meilleures adresses locales",
       "Un guide toujours à jour (zéro papier)"
     ],
-    color: "from-emerald-500 to-teal-600"
+    color: "from-emerald-500 to-teal-600",
+    href: "/for-hosts"
   },
   {
     icon: KeyRound,
@@ -35,7 +38,8 @@ const CASES = [
       "Réservation spa / restaurant en 1 clic",
       "Multilingue automatique pour les étrangers"
     ],
-    color: "from-rose-500 to-orange-600"
+    color: "from-rose-500 to-orange-600",
+    href: "/for-hotels"
   }
 ];
 
@@ -78,6 +82,7 @@ export function UseCases() {
                   </li>
                 ))}
               </ul>
+              <Link href={uc.href} className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-white hover:text-rose-300">Découvrir <ArrowRight className="h-4 w-4" /></Link>
             </motion.div>
           ))}
         </div>
