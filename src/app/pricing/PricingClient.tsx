@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Building2, Check, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,16 +9,24 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { MarketingLanguageSwitcher } from "@/components/marketing/MarketingLanguageSwitcher";
 import { marketingCopy } from "@/lib/i18n/marketing";
+import { billingCopy } from "@/lib/i18n/billing";
 import { CurrencyCode, PRICING_BY_CURRENCY } from "@/lib/pricing/currencies";
 import { trackProductEvent } from "@/lib/analytics/product-events";
+
+type BillingCycle = "monthly" | "annual";
 
 export default function PricingClient() {
   const { user, session } = useAuth();
   const { lang } = useTranslation();
   const t = marketingCopy(lang);
+  const billing = billingCopy(lang);
   const router = useRouter();
+  const autoCheckoutStarted = useRef(false);
+
   const [currency, setCurrency] = useState<CurrencyCode>("MAD");
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>("annual");
   const [loading, setLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) trackProductEvent("pricing_viewed");
@@ -27,32 +35,51 @@ export default function PricingClient() {
     const debugCurrency = params.get("debug_currency") as CurrencyCode | null;
     if (debugCurrency && PRICING_BY_CURRENCY[debugCurrency]) {
       setCurrency(debugCurrency);
-      return;
+    } else {
+      const value = `; ${document.cookie}`;
+      const parts = value.split("; maplyo-currency=");
+      if (parts.length === 2) {
+        const cookieCurrency = parts.pop()?.split(";").shift() as CurrencyCode;
+        if (cookieCurrency && PRICING_BY_CURRENCY[cookieCurrency]) setCurrency(cookieCurrency);
+      }
     }
 
-    const value = `; ${document.cookie}`;
-    const parts = value.split("; maplyo-currency=");
-    if (parts.length === 2) {
-      const cookieCurrency = parts.pop()?.split(";").shift() as CurrencyCode;
-      if (cookieCurrency && PRICING_BY_CURRENCY[cookieCurrency]) setCurrency(cookieCurrency);
-    }
+    if (params.get("billing") === "monthly") setBillingCycle("monthly");
+    if (params.get("billing") === "annual") setBillingCycle("annual");
   }, [user]);
 
   const pricing = PRICING_BY_CURRENCY[currency] || PRICING_BY_CURRENCY.MAD;
+  const annualPrice = pricing.pro * 10;
+  const annualMonthlyEquivalent = annualPrice / 12;
+
+  const formatAmount = (amount: number) =>
+    new Intl.NumberFormat(lang === "fr" ? "fr-FR" : lang === "ar" ? "ar-MA" : lang, {
+      maximumFractionDigits: amount % 1 ? 2 : 0,
+    }).format(amount);
 
   const startFree = () => {
     if (user) router.push("/dashboard");
     else router.push("/signup?ref=pricing-free&offer=reverse-trial");
   };
 
-  const buyPro = async () => {
+  async function buyPro() {
     if (!user) {
-      router.push("/signup?ref=pricing-pro&offer=reverse-trial");
+      const next = `/pricing?billing=${billingCycle}&autocheckout=pro`;
+      router.push(
+        `/signup?ref=pricing-pro-${billingCycle}&offer=reverse-trial&next=${encodeURIComponent(next)}`
+      );
       return;
     }
 
     setLoading(true);
-    trackProductEvent("checkout_started", { metadata: { planId: "pro", currency } });
+    setCheckoutError(null);
+
+    const params = new URLSearchParams(window.location.search);
+    const acquisitionRef = params.get("ref") || `pricing-pro-${billingCycle}`;
+
+    trackProductEvent("checkout_started", {
+      metadata: { planId: "pro", currency, billingCycle, ref: acquisitionRef },
+    });
 
     try {
       const res = await fetch("/api/stripe/checkout", {
@@ -61,18 +88,39 @@ export default function PricingClient() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session?.access_token}`,
         },
-        body: JSON.stringify({ plan: "pro", currency }),
+        body: JSON.stringify({
+          plan: "pro",
+          currency,
+          billingCycle,
+          ref: acquisitionRef,
+        }),
       });
+
       const data = await res.json();
-      if (data.url) window.location.href = data.url;
-      else throw new Error(data.error || "Checkout unavailable");
+      if (!res.ok || !data.url) throw new Error(data.error || billing.checkoutError);
+      window.location.href = data.url;
     } catch (error: any) {
       console.error(error);
-      alert(error?.message || "Checkout unavailable");
-    } finally {
+      setCheckoutError(error?.message || billing.checkoutError);
       setLoading(false);
     }
-  };
+  }
+
+  useEffect(() => {
+    if (!user || !session?.access_token || autoCheckoutStarted.current) return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("autocheckout") !== "pro") return;
+
+    autoCheckoutStarted.current = true;
+    const cycle = params.get("billing") === "monthly" ? "monthly" : "annual";
+    setBillingCycle(cycle);
+
+    const cleanUrl = `/pricing?billing=${cycle}&ref=signup-paid-intent`;
+    window.history.replaceState({}, "", cleanUrl);
+    void buyPro();
+    // Intentional one-shot continuation of a user-initiated paid CTA after signup.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, session?.access_token]);
 
   return (
     <main dir={lang === "ar" ? "rtl" : "ltr"} className="min-h-screen bg-slate-950 text-white">
@@ -88,9 +136,13 @@ export default function PricingClient() {
           <div className="flex items-center gap-3">
             <MarketingLanguageSwitcher compact />
             {user ? (
-              <Link href="/dashboard" className="rounded-xl border border-white/10 px-4 py-2 text-sm font-bold text-zinc-300 hover:bg-white/5">Dashboard</Link>
+              <Link href="/dashboard" className="rounded-xl border border-white/10 px-4 py-2 text-sm font-bold text-zinc-300 hover:bg-white/5">
+                Maplyo
+              </Link>
             ) : (
-              <Link href="/login" className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm font-bold text-zinc-300 hover:bg-white/5 sm:block">{t.nav.login}</Link>
+              <Link href="/login" className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm font-bold text-zinc-300 hover:bg-white/5 sm:block">
+                {t.nav.login}
+              </Link>
             )}
           </div>
         </div>
@@ -111,7 +163,31 @@ export default function PricingClient() {
             <div className="text-xs font-bold uppercase tracking-[0.22em] text-purple-300">{t.pricing.eyebrow}</div>
             <h1 className="mt-4 text-4xl font-black tracking-tight md:text-6xl">{t.pricing.title}</h1>
             <p className="mt-6 text-lg leading-8 text-zinc-400">{t.pricing.subtitle}</p>
+
+            <div className="mx-auto mt-8 inline-flex rounded-2xl border border-white/10 bg-white/[0.035] p-1.5">
+              <button
+                onClick={() => setBillingCycle("monthly")}
+                className={`rounded-xl px-5 py-2.5 text-sm font-bold transition ${billingCycle === "monthly" ? "bg-white text-slate-950" : "text-zinc-500 hover:text-white"}`}
+              >
+                {billing.monthly}
+              </button>
+              <button
+                onClick={() => setBillingCycle("annual")}
+                className={`flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition ${billingCycle === "annual" ? "bg-white text-slate-950" : "text-zinc-500 hover:text-white"}`}
+              >
+                {billing.annual}
+                <span className={`rounded-full px-2 py-1 text-[9px] font-black uppercase tracking-wider ${billingCycle === "annual" ? "bg-emerald-100 text-emerald-700" : "bg-emerald-400/10 text-emerald-300"}`}>
+                  {billing.annualBadge}
+                </span>
+              </button>
+            </div>
           </div>
+
+          {checkoutError && (
+            <div className="mx-auto mt-8 max-w-2xl rounded-2xl border border-red-400/20 bg-red-400/10 p-4 text-center text-sm text-red-200">
+              {checkoutError}
+            </div>
+          )}
 
           <div className="mt-14 grid gap-5 lg:grid-cols-3">
             <article className="rounded-3xl border border-emerald-400/20 bg-emerald-400/[0.035] p-7">
@@ -131,15 +207,33 @@ export default function PricingClient() {
               </button>
             </article>
 
-            <article className="relative rounded-3xl border border-purple-400/35 bg-gradient-to-b from-purple-500/10 via-white/[0.025] to-rose-500/5 p-7 shadow-2xl shadow-purple-950/20">
+            <article className="relative scale-[1.02] rounded-3xl border border-purple-400/40 bg-gradient-to-b from-purple-500/12 via-white/[0.03] to-rose-500/6 p-7 shadow-2xl shadow-purple-950/25">
               <div className="absolute right-6 top-6"><Sparkles className="h-5 w-5 text-purple-300" /></div>
-              <div className="inline-flex rounded-full bg-purple-400/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-purple-200">{t.pricing.pro.badge}</div>
-              <h2 className="mt-5 text-2xl font-bold">{t.pricing.pro.name}</h2>
-              <div className="mt-4 flex items-baseline gap-2">
-                <span className="text-5xl font-black">{pricing.pro} {pricing.symbol}</span>
-                <span className="text-sm text-zinc-500">{t.pricing.pro.priceSuffix}</span>
+              <div className="inline-flex rounded-full bg-purple-400/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-purple-200">
+                {billingCycle === "annual" ? billing.annualBadge : t.pricing.pro.badge}
               </div>
-              <p className="mt-4 min-h-14 text-sm leading-6 text-zinc-400">{t.pricing.pro.desc}</p>
+
+              <h2 className="mt-5 text-2xl font-bold">{t.pricing.pro.name}</h2>
+
+              {billingCycle === "annual" ? (
+                <>
+                  <div className="mt-4 flex items-baseline gap-2">
+                    <span className="text-5xl font-black">{formatAmount(annualPrice)} {pricing.symbol}</span>
+                    <span className="text-sm text-zinc-500">{billing.perYear}</span>
+                  </div>
+                  <div className="mt-2 text-sm font-bold text-emerald-300">
+                    ≈ {formatAmount(annualMonthlyEquivalent)} {pricing.symbol}{billing.perMonth}
+                  </div>
+                  <p className="mt-2 text-xs text-zinc-600">{billing.billedYearly} · {billing.annualSaving}</p>
+                </>
+              ) : (
+                <div className="mt-4 flex items-baseline gap-2">
+                  <span className="text-5xl font-black">{formatAmount(pricing.pro)} {pricing.symbol}</span>
+                  <span className="text-sm text-zinc-500">{billing.perMonth}</span>
+                </div>
+              )}
+
+              <p className="mt-5 min-h-14 text-sm leading-6 text-zinc-400">{t.pricing.pro.desc}</p>
               <ul className="mt-7 space-y-3">
                 {t.pricing.pro.features.map((feature) => (
                   <li key={feature} className="flex gap-3 text-sm text-zinc-200">
@@ -147,10 +241,15 @@ export default function PricingClient() {
                   </li>
                 ))}
               </ul>
-              <button onClick={buyPro} disabled={loading} className="mt-8 w-full rounded-xl bg-white px-4 py-3 font-bold text-slate-950 hover:bg-zinc-200 disabled:opacity-50">
-                {loading ? "…" : t.pricing.pro.cta}
+
+              <button
+                onClick={buyPro}
+                disabled={loading}
+                className="mt-8 w-full rounded-xl bg-white px-4 py-3 font-bold text-slate-950 hover:bg-zinc-200 disabled:opacity-50"
+              >
+                {loading ? "…" : billingCycle === "annual" ? billing.chooseAnnual : billing.chooseMonthly}
               </button>
-              <p className="mt-3 text-center text-[11px] text-zinc-600">{t.hero.offer}</p>
+              <p className="mt-3 text-center text-[11px] text-zinc-600">{billing.secureCheckout}</p>
             </article>
 
             <article className="rounded-3xl border border-white/10 bg-white/[0.025] p-7">
@@ -167,7 +266,7 @@ export default function PricingClient() {
                   </li>
                 ))}
               </ul>
-              <Link href="/contact-sales" className="mt-8 flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-bold hover:bg-white/10">
+              <Link href="/contact-sales?ref=pricing-business" className="mt-8 flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-bold hover:bg-white/10">
                 {t.pricing.business.cta} <ArrowRight className="h-4 w-4" />
               </Link>
             </article>
