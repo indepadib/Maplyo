@@ -6,6 +6,7 @@ import { ArrowLeft, Building2, CalendarDays, CheckCircle2, KeyRound, RefreshCw, 
 import { supabase } from "@/lib/supabase";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { connectionsHealthCopy } from "@/lib/i18n/connections-health";
+import { integrationsCopy } from "@/lib/i18n/integrations";
 
 type Row = {
   guideId: string;
@@ -34,6 +35,7 @@ type Payload = {
 export default function ConnectionsPage() {
   const { lang } = useTranslation();
   const t = connectionsHealthCopy(lang);
+  const integrationT = integrationsCopy(lang);
   const [payload, setPayload] = useState<Payload | null>(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "attention">("all");
@@ -69,6 +71,12 @@ export default function ConnectionsPage() {
       ? source.filter((row) => row.overall === "degraded" || row.overall === "error")
       : source;
   }, [payload, filter]);
+
+  const statusLabel = (state: string) =>
+    state === "healthy" ? integrationT.healthy :
+    state === "degraded" ? integrationT.degraded :
+    state === "error" ? integrationT.error :
+    integrationT.disconnected;
 
   const badge = (state: string) => {
     if (state === "healthy") return "border-emerald-400/20 bg-emerald-400/10 text-emerald-300";
@@ -144,15 +152,15 @@ export default function ConnectionsPage() {
                           <div className="mt-1 text-xs text-zinc-600">{[row.property?.city, row.guideTitle].filter(Boolean).join(" · ")}</div>
                           {row.issues.length > 0 && <div className="mt-2 text-[10px] leading-4 text-amber-300">{row.issues.join(" · ")}</div>}
                         </div>
-                        <div><span className={`rounded-full border px-2 py-1 text-[10px] font-bold ${badge(row.overall)}`}>{row.overall}</span></div>
+                        <div><span className={`rounded-full border px-2 py-1 text-[10px] font-bold ${badge(row.overall)}`}>{statusLabel(row.overall)}</span></div>
                         <div>
                           <div className="font-bold">{row.airbnb.connected ? `${row.airbnb.reservationCount} ${t.reservations}` : "—"}</div>
-                          {row.airbnb.connected && <div className="mt-1 text-[10px] text-zinc-600">{row.airbnb.health}</div>}
+                          {row.airbnb.connected && <div className="mt-1 text-[10px] text-zinc-600">{statusLabel(row.airbnb.health)}</div>}
                         </div>
                         <div className="text-xs text-zinc-500">{row.airbnb.lastSyncAt ? new Date(row.airbnb.lastSyncAt).toLocaleString() : t.never}</div>
                         <div>
                           <div className="font-bold">{row.tuya.assigned ? (row.tuya.deviceName || t.lock) : "—"}</div>
-                          {row.tuya.assigned && <div className="mt-1 text-[10px] text-zinc-600">{row.tuya.health} · {row.tuya.codeLength}</div>}
+                          {row.tuya.assigned && <div className="mt-1 text-[10px] text-zinc-600">{statusLabel(row.tuya.health)} · {row.tuya.codeLength}</div>}
                         </div>
                         <div>
                           <Link href={`/app/guides/${row.guideId}/builder?integrations=1`} className="rounded-lg border border-white/10 px-3 py-2 text-xs font-bold text-zinc-300 hover:bg-white/5">
