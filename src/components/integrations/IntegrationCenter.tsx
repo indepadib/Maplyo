@@ -52,7 +52,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
   const [busy, setBusy] = useState<string | null>("load");
   const [message, setMessage] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
 
-  const authHeaders = useCallback(async () => {
+  const authHeaders = useCallback(async (): Promise<Record<string, string>> => {
     const { data } = await supabase.auth.getSession();
     const token = data.session?.access_token;
     return token ? { Authorization: `Bearer ${token}` } : {};
