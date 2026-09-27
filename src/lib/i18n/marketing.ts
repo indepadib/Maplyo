@@ -18,6 +18,10 @@ export type MarketingCopy = {
     offer: string;
     fallback: string;
     importHint: string;
+    sourcePlaceholder: string;
+    sourceCta: string;
+    sourceNote: string;
+    sourceError: string;
   };
   outcomes: {
     title: string;
@@ -109,7 +113,11 @@ export const MARKETING_COPY: Record<Language, MarketingCopy> = {
       secondary: "Voir une vraie démo",
       offer: "1 guide publié gratuit à vie · 30 jours Pro offerts · Sans carte bancaire",
       fallback: "Après 30 jours, votre guide reste actif gratuitement. Vous ne perdez pas votre travail.",
-      importHint: "Airbnb · Site hôtel/riad · Saisie manuelle"
+      importHint: "Airbnb · Site hôtel/riad · Saisie manuelle",
+      sourcePlaceholder: "Collez votre lien Airbnb ou le site de votre établissement",
+      sourceCta: "Créer à partir de ce lien",
+      sourceNote: "Pas de configuration maintenant : on reprend ce lien juste après votre compte.",
+      sourceError: "Ajoutez un lien https:// valide vers votre Airbnb ou votre site."
     },
     outcomes: {
       title: "Maplyo doit produire un résultat, pas juste être joli.",
@@ -225,7 +233,11 @@ export const MARKETING_COPY: Record<Language, MarketingCopy> = {
       secondary: "See a real demo",
       offer: "1 published guide free forever · 30 days of Pro included · No credit card",
       fallback: "After 30 days, your guide stays live on Free. You keep your work.",
-      importHint: "Airbnb · Hotel/riad website · Manual setup"
+      importHint: "Airbnb · Hotel/riad website · Manual setup",
+      sourcePlaceholder: "Paste your Airbnb listing or property website",
+      sourceCta: "Build from this link",
+      sourceNote: "No setup now: we keep this link and resume right after account creation.",
+      sourceError: "Enter a valid https:// Airbnb listing or property website."
     },
     outcomes: {
       title: "Maplyo should create an outcome, not just look good.",
@@ -341,7 +353,11 @@ export const MARKETING_COPY: Record<Language, MarketingCopy> = {
       secondary: "Ver una demo real",
       offer: "1 guía publicada gratis para siempre · 30 días Pro incluidos · Sin tarjeta",
       fallback: "Después de 30 días, tu guía sigue activa en Free. Conservas todo tu trabajo.",
-      importHint: "Airbnb · Web de hotel/riad · Configuración manual"
+      importHint: "Airbnb · Web de hotel/riad · Configuración manual",
+      sourcePlaceholder: "Pega tu Airbnb o la web del alojamiento",
+      sourceCta: "Crear desde este enlace",
+      sourceNote: "Sin configuración ahora: retomamos este enlace justo después de crear tu cuenta.",
+      sourceError: "Introduce un enlace https:// válido de Airbnb o de tu alojamiento."
     },
     outcomes: {
       title: "Maplyo debe generar resultados, no solo verse bien.",
@@ -416,7 +432,11 @@ export const MARKETING_COPY: Record<Language, MarketingCopy> = {
       secondary: "مشاهدة تجربة حقيقية",
       offer: "دليل منشور مجاني دائماً · 30 يوماً Pro مجاناً · بدون بطاقة",
       fallback: "بعد 30 يوماً يبقى دليلك فعالاً على الخطة المجانية ولن تفقد عملك.",
-      importHint: "Airbnb · موقع الفندق/الرياض · إعداد يدوي"
+      importHint: "Airbnb · موقع الفندق/الرياض · إعداد يدوي",
+      sourcePlaceholder: "ألصق رابط Airbnb أو موقع المنشأة",
+      sourceCta: "إنشاء التجربة من هذا الرابط",
+      sourceNote: "لا إعدادات الآن: سنحتفظ بالرابط ونكمل مباشرة بعد إنشاء الحساب.",
+      sourceError: "أدخل رابط https:// صالحاً لـ Airbnb أو موقع المنشأة."
     },
     outcomes: {
       title: "Maplyo يجب أن يحقق نتيجة، لا أن يبدو جميلاً فقط.",
@@ -491,7 +511,11 @@ export const MARKETING_COPY: Record<Language, MarketingCopy> = {
       secondary: "Bekijk een echte demo",
       offer: "1 gepubliceerde gids altijd gratis · 30 dagen Pro inbegrepen · Geen creditcard",
       fallback: "Na 30 dagen blijft je gids actief op Free. Je werk blijft behouden.",
-      importHint: "Airbnb · Hotel/riad-website · Handmatig"
+      importHint: "Airbnb · Hotel/riad-website · Handmatig",
+      sourcePlaceholder: "Plak je Airbnb-link of accommodatiewebsite",
+      sourceCta: "Bouwen vanuit deze link",
+      sourceNote: "Geen setup nu: we bewaren de link en gaan verder na het aanmaken van je account.",
+      sourceError: "Voer een geldige https:// Airbnb- of accommodatielink in."
     },
     outcomes: {
       title: "Maplyo moet resultaat opleveren, niet alleen mooi zijn.",
@@ -566,7 +590,11 @@ export const MARKETING_COPY: Record<Language, MarketingCopy> = {
       secondary: "查看真实演示",
       offer: "1 个已发布指南永久免费 · 30 天 Pro 免费 · 无需信用卡",
       fallback: "30 天后指南仍会在 Free 方案中保持在线，你不会丢失内容。",
-      importHint: "Airbnb · 酒店/riad 网站 · 手动设置"
+      importHint: "Airbnb · 酒店/riad 网站 · 手动设置",
+      sourcePlaceholder: "粘贴 Airbnb 房源或酒店网站链接",
+      sourceCta: "从这个链接创建",
+      sourceNote: "现在无需设置：创建账户后会直接继续使用这个链接。",
+      sourceError: "请输入有效的 https:// Airbnb 或住宿网站链接。"
     },
     outcomes: {
       title: "Maplyo 应该带来结果，而不只是好看。",
@@ -641,7 +669,11 @@ export const MARKETING_COPY: Record<Language, MarketingCopy> = {
       secondary: "Ver uma demo real",
       offer: "1 guia publicado grátis para sempre · 30 dias Pro incluídos · Sem cartão",
       fallback: "Depois de 30 dias, o seu guia continua ativo no Free e o trabalho fica guardado.",
-      importHint: "Airbnb · Site hotel/riad · Configuração manual"
+      importHint: "Airbnb · Site hotel/riad · Configuração manual",
+      sourcePlaceholder: "Cole o Airbnb ou o site do alojamento",
+      sourceCta: "Criar a partir deste link",
+      sourceNote: "Sem configuração agora: guardamos o link e continuamos depois de criar a conta.",
+      sourceError: "Introduza um link https:// válido do Airbnb ou do alojamento."
     },
     outcomes: {
       title: "O Maplyo deve gerar resultado, não apenas ser bonito.",
