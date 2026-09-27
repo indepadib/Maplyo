@@ -88,6 +88,12 @@ export function EnhancedBuilder({
     const [showIntegrations, setShowIntegrations] = useState(false);
     const [showSubscribe, setShowSubscribe] = useState(false);
     const [previewDevice, setPreviewDevice] = useState<'mobile' | 'desktop'>('mobile');
+
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("integrations") === "1") setShowIntegrations(true);
+    }, []);
     
     // Initialize theme
     const selectedTheme = useMemo(() => {
