@@ -23,6 +23,7 @@ import { OnboardingTour } from "@/components/dashboard/OnboardingTour";
 import { BookingsDashboard } from "@/components/dashboard/BookingsDashboard";
 import { bootstrapHospitalityWorkspace } from "@/lib/hospitality/bootstrap";
 import { ReverseTrialBanner } from "@/components/billing/ReverseTrialBanner";
+import { ValueToPaidCard } from "@/components/billing/ValueToPaidCard";
 
 type GuideSummary = {
     id: string;
@@ -467,7 +468,8 @@ function DashboardContent() {
             </header>
 
             <main className="max-w-7xl mx-auto px-6 pt-32 pb-20">
-                <ReverseTrialBanner className="mb-8" />
+                <ReverseTrialBanner className="mb-4" />
+                <ValueToPaidCard guides={guides} subscription={subscription} />
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                     <div>
                         <div className="text-xs font-bold uppercase tracking-[0.2em] text-rose-400 mb-3">Guest Experience OS</div>
