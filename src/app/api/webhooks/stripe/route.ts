@@ -71,6 +71,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabas
     const userId = session.metadata?.userId;
     const checkoutType = session.metadata?.type;
     const planId = session.metadata?.planId;
+    const billingCycle = session.metadata?.billingCycle === "annual" ? "annual" : "monthly";
+    const acquisitionRef = session.metadata?.acquisitionRef || null;
 
     // Guest-service payments will be routed by order metadata when native
     // marketplace payments are enabled. Never treat them as SaaS upgrades.
@@ -123,9 +125,23 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabas
         return;
     }
 
+    const { data: currentProfile } = await supabase
+        .from("profiles")
+        .select("first_paid_at")
+        .eq("id", userId)
+        .maybeSingle();
+
+    const paidAt = new Date().toISOString();
     const updateData: Record<string, unknown> = {
         subscription_status: "active",
         plan_variant: planId,
+        billing_cycle: billingCycle,
+        stripe_subscription_id: typeof session.subscription === "string"
+            ? session.subscription
+            : session.subscription?.id || null,
+        trial_ends_at: paidAt,
+        first_paid_at: currentProfile?.first_paid_at || paidAt,
+        last_checkout_ref: acquisitionRef,
     };
 
     if (session.customer) updateData.stripe_customer_id = session.customer as string;
@@ -173,6 +189,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabas
                 metadata: {
                     user_id: userId,
                     plan_id: planId,
+                    billing_cycle: billingCycle,
+                    acquisition_ref: acquisitionRef,
                     checkout_session_id: session.id,
                     magic_demo_id: claimedDemo.id,
                 },
@@ -206,7 +224,16 @@ async function handleSubscriptionUpdated(sub: Stripe.Subscription, supabase: any
 
     let extraGuides = 0;
     let themesUnlocked = false;
-    let planVariant = null;
+    let planVariant: "basic" | "pro" | null =
+        sub.metadata?.planId === "pro" || sub.metadata?.planId === "basic"
+            ? sub.metadata.planId
+            : null;
+    const billingCycle =
+        sub.metadata?.billingCycle === "annual"
+            ? "annual"
+            : sub.metadata?.billingCycle === "monthly"
+                ? "monthly"
+                : null;
 
     if (sub.items && sub.items.data) {
         for (const item of sub.items.data) {
@@ -218,8 +245,8 @@ async function handleSubscriptionUpdated(sub: Stripe.Subscription, supabase: any
             console.log(`   Expect Themes: ${themesPriceId}`);
 
             // Detect Plan
-            if (priceId === proPriceId) planVariant = 'pro';
-            else if (priceId === basicPriceId) planVariant = 'basic';
+            if (!planVariant && priceId === proPriceId) planVariant = "pro";
+            else if (!planVariant && priceId === basicPriceId) planVariant = "basic";
 
             // Detect Add-ons
             if (addonPriceId && priceId === addonPriceId) {
@@ -235,9 +262,14 @@ async function handleSubscriptionUpdated(sub: Stripe.Subscription, supabase: any
 
     const updateData: any = {
         subscription_status: status,
+        stripe_subscription_id: sub.id,
         extra_guides: extraGuides,
         themes_unlocked: themesUnlocked
     };
+
+    if (billingCycle) {
+        updateData.billing_cycle = billingCycle;
+    }
 
     // Only update plan_variant if we found a recognized plan price
     if (planVariant) {
@@ -267,7 +299,11 @@ async function handleSubscriptionDeleted(sub: Stripe.Subscription, supabase: any
         .from("profiles")
         .update({
             subscription_status: "canceled",
-            plan_variant: "free" // Revert to free? or keep as is?
+            plan_variant: "demo",
+            billing_cycle: null,
+            stripe_subscription_id: null,
+            themes_unlocked: false,
+            trial_ends_at: new Date().toISOString()
         })
         .eq("id", profiles.id);
 
