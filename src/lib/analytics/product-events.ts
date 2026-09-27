@@ -7,6 +7,7 @@ export type ProductEventName =
   | "generation_started"
   | "generation_completed"
   | "property_created"
+  | "source_resumed"
   | "experience_published"
   | "revenue_service_created"
   | "pricing_viewed"
