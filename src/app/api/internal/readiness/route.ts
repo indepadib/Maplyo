@@ -75,6 +75,14 @@ export async function GET(req: Request) {
       blocking: true,
     },
     {
+      key: "integration_encryption",
+      label: "Integration secret encryption key",
+      group: "environment",
+      ok: configured(process.env.MAPLYO_INTEGRATION_ENCRYPTION_KEY),
+      detail: configured(process.env.MAPLYO_INTEGRATION_ENCRYPTION_KEY) ? "Configured server-side" : "Set MAPLYO_INTEGRATION_ENCRYPTION_KEY before connecting smart locks",
+      blocking: true,
+    },
+    {
       key: "admin_allowlist",
       label: "Internal admin allowlist",
       group: "environment",
@@ -172,6 +180,8 @@ export async function GET(req: Request) {
     tableCheck(admin, "magic_demo_views", "Growth · human Magic Demo views"),
     tableCheck(admin, "ai_chat_usage", "AI · concierge usage"),
     tableCheck(admin, "trial_lifecycle_deliveries", "Growth · reverse-trial lifecycle"),
+    tableCheck(admin, "integration_secrets", "Integrations · encrypted secret vault"),
+    tableCheck(admin, "access_codes", "Integrations · stay access codes"),
   ]);
 
   const checks = [...envChecks, ...dbChecks, ...paymentChecks, ...aiChecks];
