@@ -38,3 +38,40 @@ export async function requireOwnedGuide(admin: any, userId: string, guideId: str
 
   return Boolean(data?.id);
 }
+
+
+export async function getOwnedPropertyFromGuide(admin: any, userId: string, guideId: string) {
+  const { data: guide } = await admin
+    .from("guides")
+    .select("id, property_id")
+    .eq("id", guideId)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (!guide?.property_id) return null;
+
+  const { data: property } = await admin
+    .from("properties")
+    .select("id, organization_id, name, city, property_type")
+    .eq("id", guide.property_id)
+    .maybeSingle();
+
+  if (!property?.id) return null;
+
+  return {
+    guideId: guide.id as string,
+    propertyId: property.id as string,
+    organizationId: property.organization_id as string,
+    property,
+  };
+}
+
+export async function getPropertyConnection(admin: any, propertyId: string) {
+  const { data } = await admin
+    .from("property_connections")
+    .select("*")
+    .eq("property_id", propertyId)
+    .maybeSingle();
+
+  return data || null;
+}
