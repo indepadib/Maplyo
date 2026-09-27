@@ -95,12 +95,12 @@ export async function GET(req: Request) {
     },
     {
       key: "resend",
-      label: "Sales email notifications",
+      label: "Transactional & lifecycle email delivery",
       group: "environment",
       ok: configured(process.env.RESEND_API_KEY, ["placeholder", "mock"]),
       detail: configured(process.env.RESEND_API_KEY, ["placeholder", "mock"])
         ? "Resend configured"
-        : "Optional: inquiries are still stored in the Sales Engine without email notification",
+        : "Configure RESEND_API_KEY before enabling guest journeys and reverse-trial lifecycle delivery",
       blocking: false,
     },
     {
@@ -171,6 +171,7 @@ export async function GET(req: Request) {
     tableCheck(admin, "sales_inquiries", "Growth · inbound sales inquiries"),
     tableCheck(admin, "magic_demo_views", "Growth · human Magic Demo views"),
     tableCheck(admin, "ai_chat_usage", "AI · concierge usage"),
+    tableCheck(admin, "trial_lifecycle_deliveries", "Growth · reverse-trial lifecycle"),
   ]);
 
   const checks = [...envChecks, ...dbChecks, ...paymentChecks, ...aiChecks];
