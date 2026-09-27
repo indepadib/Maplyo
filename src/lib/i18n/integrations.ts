@@ -20,6 +20,7 @@ export type IntegrationsCopy = {
     lastSync: string;
     never: string;
     helper: string;
+    autoSync: string;
   };
   tuya: {
     title: string;
@@ -35,12 +36,17 @@ export type IntegrationsCopy = {
     saveDevice: string;
     account: string;
     helper: string;
+    accessWindow: string;
+    beforeCheckIn: string;
+    afterCheckOut: string;
+    minutes: string;
   };
   messages: {
     connected: string;
     synced: string;
     deviceSaved: string;
     failed: string;
+    codesGenerated: string;
   };
 };
 
