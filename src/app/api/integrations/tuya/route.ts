@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { TuyaConnector, type TuyaRegion } from "@/lib/integrations/tuya";
 import { encryptIntegrationSecret, decryptIntegrationSecret } from "@/lib/integrations/secrets";
-import { getIntegrationAdmin, requireIntegrationUser, requireOwnedGuide } from "@/lib/integrations/server";
+import { getIntegrationAdmin, requireIntegrationUser, getOwnedPropertyFromGuide } from "@/lib/integrations/server";
 
 const ConnectSchema = z.object({
   accessId: z.string().min(6).max(128),
@@ -214,8 +214,9 @@ export async function PUT(req: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid lock assignment" }, { status: 400 });
 
   const { guideId, deviceId, codeLength } = parsed.data;
-  if (!(await requireOwnedGuide(admin, access.user.id, guideId))) {
-    return NextResponse.json({ error: "Guide not found" }, { status: 404 });
+  const context = await getOwnedPropertyFromGuide(admin, access.user.id, guideId);
+  if (!context) {
+    return NextResponse.json({ error: "This guide is not attached to a property yet" }, { status: 400 });
   }
 
   const integration = await findIntegration(admin, access.user.id);
@@ -225,40 +226,22 @@ export async function PUT(req: Request) {
     const secret = await readSecret(admin, integration);
     const connector = new TuyaConnector(secret.accessId, secret.accessSecret, secret.region);
     const device = await connector.getDevice(deviceId);
+    const now = new Date().toISOString();
 
-    const { data: existing } = await admin
-      .from("guide_integrations")
-      .select("id, config")
-      .eq("guide_id", guideId)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    const config = {
-      ...(existing?.config || {}),
-      tuyaDeviceId: deviceId,
-      tuyaCodeLength: codeLength,
-      tuyaDeviceName: device?.name || null,
-      tuyaAssignedAt: new Date().toISOString(),
-    };
-
-    if (existing?.id) {
-      await admin.from("guide_integrations").update({
-        integration_id: integration.id,
-        external_id: deviceId,
-        config,
-      }).eq("id", existing.id);
-    } else {
-      await admin.from("guide_integrations").insert([{
-        guide_id: guideId,
-        integration_id: integration.id,
-        external_id: deviceId,
-        config,
-      }]);
-    }
+    await admin.from("property_connections").upsert({
+      property_id: context.propertyId,
+      tuya_integration_id: integration.id,
+      tuya_device_id: deviceId,
+      tuya_device_name: device?.name || null,
+      tuya_code_length: codeLength,
+      tuya_assigned_at: now,
+      updated_at: now,
+    });
 
     return NextResponse.json({
       success: true,
+      propertyId: context.propertyId,
+      propertyName: context.property?.name || null,
       device: safeDevice(device),
       codeLength,
     });
@@ -277,24 +260,16 @@ export async function DELETE(req: Request) {
   const integration = await findIntegration(admin, access.user.id);
   if (!integration) return NextResponse.json({ success: true });
 
-  const { data: guideRows } = await admin
-    .from("guide_integrations")
-    .select("id, config")
-    .eq("integration_id", integration.id);
-
-  for (const row of guideRows || []) {
-    const config = { ...(row.config || {}) };
-    delete config.tuyaDeviceId;
-    delete config.tuyaCodeLength;
-    delete config.tuyaDeviceName;
-    delete config.tuyaAssignedAt;
-
-    await admin.from("guide_integrations").update({
-      integration_id: null,
-      external_id: null,
-      config,
-    }).eq("id", row.id);
-  }
+  await admin
+    .from("property_connections")
+    .update({
+      tuya_integration_id: null,
+      tuya_device_id: null,
+      tuya_device_name: null,
+      tuya_assigned_at: null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("tuya_integration_id", integration.id);
 
   await admin.from("integrations").delete().eq("id", integration.id);
   return NextResponse.json({ success: true });
