@@ -96,6 +96,7 @@ validateBundle(loadTsExport("src/lib/i18n/activation.ts", "ACTIVATION_COPY"), "a
 validateBundle(loadTsExport("src/lib/i18n/trial-lifecycle.ts", "TRIAL_LIFECYCLE_COPY"), "trialLifecycle");
 validateBundle(loadTsExport("src/lib/i18n/integrations.ts", "INTEGRATIONS_COPY"), "integrations");
 validateBundle(loadTsExport("src/lib/i18n/billing.ts", "BILLING_COPY"), "billing");
+validateBundle(loadTsExport("src/lib/i18n/conversion-moment.ts", "CONVERSION_MOMENT_COPY"), "conversionMoment");
 
 if (errors.length) {
   console.error("\nI18n validation failed:\n");
@@ -103,4 +104,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`I18n OK: commercial, auth, onboarding, trial, lifecycle, activation, integrations and billing complete across ${expectedLanguages.length} languages, no placeholders.`);
+console.log(`I18n OK: commercial funnel surfaces complete across ${expectedLanguages.length} languages, no placeholders.`);
