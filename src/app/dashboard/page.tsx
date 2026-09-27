@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2, Bot, Building2, Eye, Activity, CircleDollarSign, MessageSquareText, CalendarDays, Clock3, UsersRound } from "lucide-react";
+import { Plus, Edit2, Trash2, ExternalLink, LayoutGrid, List, Map as MapIcon, LogOut, Sparkles, Settings, CheckCircle2, Bot, Building2, Eye, Activity, CircleDollarSign, MessageSquareText, CalendarDays, Clock3, UsersRound, Link2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { guideThemes } from "@/types/themes";
 import { Modal } from "@/components/ui/Modal";
@@ -19,6 +19,7 @@ import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import type { Language } from "@/lib/i18n/dictionary";
 import { MARKETING_LANGUAGES } from "@/components/marketing/MarketingLanguageSwitcher";
 import { onboardingCopy } from "@/lib/i18n/onboarding";
+import { connectionsHealthCopy } from "@/lib/i18n/connections-health";
 import { OnboardingTour } from "@/components/dashboard/OnboardingTour";
 import { BookingsDashboard } from "@/components/dashboard/BookingsDashboard";
 import { bootstrapHospitalityWorkspace } from "@/lib/hospitality/bootstrap";
@@ -52,6 +53,7 @@ function DashboardContent() {
     const { user, signOut } = useAuth();
     const { t, lang } = useTranslation();
     const onboardingT = onboardingCopy(lang);
+    const connectionsT = connectionsHealthCopy(lang);
     const searchParams = useSearchParams();
     const router = useRouter();
 
@@ -419,6 +421,13 @@ function DashboardContent() {
                             title="Portfolio Command Center"
                         >
                             <Building2 className="w-4 h-4" />
+                        </Link>
+                        <Link
+                            href="/dashboard/integrations"
+                            className="w-10 h-10 rounded-full bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-300 hover:bg-violet-500/20 hover:text-violet-200 transition-all hover:scale-105"
+                            title={connectionsT.title}
+                        >
+                            <Link2 className="w-4 h-4" />
                         </Link>
                         <Link
                             href="/dashboard/team"
