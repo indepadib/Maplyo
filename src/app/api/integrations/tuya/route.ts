@@ -257,6 +257,30 @@ export async function DELETE(req: Request) {
   const admin = getIntegrationAdmin();
   if (!admin) return NextResponse.json({ error: "Integration service unavailable" }, { status: 503 });
 
+  const guideId = new URL(req.url).searchParams.get("guideId");
+
+  if (guideId) {
+    const context = await getOwnedPropertyFromGuide(admin, access.user.id, guideId);
+    if (!context) return NextResponse.json({ success: true });
+
+    await admin
+      .from("property_connections")
+      .update({
+        tuya_integration_id: null,
+        tuya_device_id: null,
+        tuya_device_name: null,
+        tuya_assigned_at: null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("property_id", context.propertyId);
+
+    return NextResponse.json({
+      success: true,
+      propertyId: context.propertyId,
+      disconnectedAccount: false,
+    });
+  }
+
   const integration = await findIntegration(admin, access.user.id);
   if (!integration) return NextResponse.json({ success: true });
 
