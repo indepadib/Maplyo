@@ -97,6 +97,7 @@ validateBundle(loadTsExport("src/lib/i18n/trial-lifecycle.ts", "TRIAL_LIFECYCLE_
 validateBundle(loadTsExport("src/lib/i18n/integrations.ts", "INTEGRATIONS_COPY"), "integrations");
 validateBundle(loadTsExport("src/lib/i18n/billing.ts", "BILLING_COPY"), "billing");
 validateBundle(loadTsExport("src/lib/i18n/conversion-moment.ts", "CONVERSION_MOMENT_COPY"), "conversionMoment");
+validateBundle(loadTsExport("src/lib/i18n/connections-health.ts", "CONNECTIONS_HEALTH_COPY"), "connectionsHealth");
 
 if (errors.length) {
   console.error("\nI18n validation failed:\n");
