@@ -11,6 +11,7 @@ import {
   CircleDollarSign,
   Globe2,
   Languages,
+  Link2,
   Menu,
   MessageSquareText,
   Play,
@@ -22,6 +23,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { MaplyoLogo } from "@/components/ui/MaplyoLogo";
 import { useTranslation } from "@/components/providers/LanguageProvider";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { marketingCopy } from "@/lib/i18n/marketing";
 import { MarketingLanguageSwitcher, MARKETING_LANGUAGES } from "@/components/marketing/MarketingLanguageSwitcher";
 import { CurrencyCode, PRICING_BY_CURRENCY } from "@/lib/pricing/currencies";
@@ -45,8 +47,11 @@ function OfferBadge({ text }: { text: string }) {
 
 export default function LandingPage() {
   const { lang } = useTranslation();
+  const { user } = useAuth();
   const t = marketingCopy(lang);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [sourceUrl, setSourceUrl] = useState("");
+  const [sourceError, setSourceError] = useState<string | null>(null);
   const [currency, setCurrency] = useState<CurrencyCode>("MAD");
 
   useEffect(() => {
@@ -62,6 +67,40 @@ export default function LandingPage() {
   const pricing = PRICING_BY_CURRENCY[currency] || PRICING_BY_CURRENCY.MAD;
   const proPrice = `${pricing.pro} ${pricing.symbol}`;
   const rtl = lang === "ar";
+
+  const startFromSource = (event: React.FormEvent) => {
+    event.preventDefault();
+    setSourceError(null);
+
+    let normalized = sourceUrl.trim();
+    if (!normalized) {
+      setSourceError(t.hero.sourceError);
+      return;
+    }
+
+    if (!/^https?:\/\//i.test(normalized)) normalized = "https://" + normalized;
+
+    try {
+      const parsed = new URL(normalized);
+      if (parsed.protocol !== "https:" || !parsed.hostname.includes(".")) {
+        throw new Error("invalid");
+      }
+    } catch {
+      setSourceError(t.hero.sourceError);
+      return;
+    }
+
+    sessionStorage.setItem("maplyo_pending_source", JSON.stringify({
+      url: normalized,
+      capturedAt: Date.now(),
+      ref: "hero-source",
+    }));
+
+    const next = "/onboarding?resume=source";
+    window.location.href = user
+      ? next
+      : `/signup?ref=hero-source&offer=reverse-trial&next=${encodeURIComponent(next)}`;
+  };
 
   return (
     <div dir={rtl ? "rtl" : "ltr"} className="min-h-screen overflow-x-hidden bg-slate-950 text-white selection:bg-rose-500/30">
@@ -136,16 +175,41 @@ export default function LandingPage() {
                 ))}
               </div>
 
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Link href="/signup?ref=hero&offer=reverse-trial">
-                  <Button className="h-14 w-full rounded-xl border-0 bg-white px-7 text-base font-bold text-slate-950 hover:bg-zinc-200 sm:w-auto">
-                    {t.hero.primary} <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+              <form onSubmit={startFromSource} className="mt-9 max-w-3xl">
+                <div className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/[0.055] p-2 shadow-2xl shadow-black/20 sm:flex-row">
+                  <div className="relative flex-1">
+                    <Link2 className="absolute left-4 top-4 h-5 w-5 text-zinc-600 rtl:left-auto rtl:right-4" />
+                    <input
+                      value={sourceUrl}
+                      onChange={(e) => {
+                        setSourceUrl(e.target.value);
+                        if (sourceError) setSourceError(null);
+                      }}
+                      placeholder={t.hero.sourcePlaceholder}
+                      inputMode="url"
+                      autoComplete="url"
+                      className="h-13 w-full rounded-xl border border-transparent bg-slate-950/70 py-3.5 pl-12 pr-4 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-rose-400/40 rtl:pl-4 rtl:pr-12"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-black text-slate-950 transition hover:bg-zinc-200"
+                  >
+                    {t.hero.sourceCta} <ArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
+                <p className={`mt-2 text-xs ${sourceError ? "text-red-300" : "text-zinc-600"}`}>
+                  {sourceError || t.hero.sourceNote}
+                </p>
+              </form>
+
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <Link href="/signup?ref=hero-manual&offer=reverse-trial" className="text-sm font-bold text-zinc-300 hover:text-white">
+                  {t.hero.primary} <ArrowRight className="ml-1 inline h-3.5 w-3.5" />
                 </Link>
-                <Link href="/demo" target="_blank">
-                  <Button variant="secondary" className="h-14 w-full rounded-xl border-white/10 bg-white/5 px-7 text-base font-bold text-white hover:bg-white/10 sm:w-auto">
-                    <Play className="mr-2 h-4 w-4 fill-white" /> {t.hero.secondary}
-                  </Button>
+                <span className="text-zinc-700">·</span>
+                <Link href="/demo" target="_blank" className="inline-flex items-center gap-2 text-sm font-bold text-zinc-500 hover:text-white">
+                  <Play className="h-3.5 w-3.5 fill-current" /> {t.hero.secondary}
                 </Link>
               </div>
 
