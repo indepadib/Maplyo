@@ -19,15 +19,14 @@ export async function GET(req: Request) {
 
   if (guideError) return NextResponse.json({ error: guideError.message }, { status: 500 });
 
-  const guideIds = (guides || []).map((guide: any) => guide.id);
   const propertyIds = [...new Set((guides || []).map((guide: any) => guide.property_id).filter(Boolean))];
 
-  const [guideIntegrationsResult, propertiesResult, tuyaResult] = await Promise.all([
-    guideIds.length
+  const [propertyConnectionsResult, propertiesResult, tuyaResult] = await Promise.all([
+    propertyIds.length
       ? admin
-          .from("guide_integrations")
-          .select("guide_id, integration_id, config")
-          .in("guide_id", guideIds)
+          .from("property_connections")
+          .select("*")
+          .in("property_id", propertyIds)
       : Promise.resolve({ data: [], error: null }),
     propertyIds.length
       ? admin
@@ -42,36 +41,35 @@ export async function GET(req: Request) {
       .eq("type", "tuya"),
   ]);
 
-  const guideIntegrations = guideIntegrationsResult.data || [];
+  const propertyConnections = propertyConnectionsResult.data || [];
   const properties = propertiesResult.data || [];
   const tuyaIntegrations = tuyaResult.data || [];
   const now = Date.now();
 
   const rows = (guides || []).map((guide: any) => {
-    const link = guideIntegrations.find((row: any) => row.guide_id === guide.id);
-    const config = link?.config || {};
+    const connection = propertyConnections.find((row: any) => row.property_id === guide.property_id) || null;
     const property = properties.find((row: any) => row.id === guide.property_id) || null;
-    const tuyaIntegration = tuyaIntegrations.find((row: any) => row.id === link?.integration_id) || null;
+    const tuyaIntegration = tuyaIntegrations.find((row: any) => row.id === connection?.tuya_integration_id) || null;
 
-    const airbnbConnected = Boolean(config.icalUrl);
-    const airbnbLastSyncAt = config.airbnbLastSyncAt || null;
+    const airbnbConnected = Boolean(connection?.airbnb_ical_url);
+    const airbnbLastSyncAt = connection?.airbnb_last_sync_at || null;
     const airbnbAgeMs = airbnbLastSyncAt ? now - new Date(airbnbLastSyncAt).getTime() : null;
     const airbnbStale = Boolean(airbnbConnected && airbnbAgeMs !== null && airbnbAgeMs > 6 * 60 * 60 * 1000);
     const airbnbHealth = !airbnbConnected
       ? "disconnected"
-      : config.airbnbSyncStatus === "error"
+      : connection?.airbnb_status === "error"
         ? "error"
         : airbnbStale
           ? "degraded"
           : "healthy";
 
-    const tuyaAssigned = Boolean(config.tuyaDeviceId);
+    const tuyaAssigned = Boolean(connection?.tuya_device_id);
     const tuyaHealth = !tuyaAssigned
       ? "disconnected"
       : tuyaIntegration?.health_status || "degraded";
 
     const issues: string[] = [];
-    if (airbnbHealth === "error") issues.push(config.airbnbLastError || "Airbnb calendar sync error");
+    if (airbnbHealth === "error") issues.push(connection?.airbnb_last_error || "Airbnb calendar sync error");
     if (airbnbHealth === "degraded") issues.push("Airbnb calendar has not synced in more than 6 hours");
     if (tuyaAssigned && tuyaHealth === "error") issues.push(tuyaIntegration?.last_error || "Tuya connection error");
     if (tuyaAssigned && !tuyaIntegration) issues.push("Tuya lock assigned but account connection is unavailable");
@@ -97,13 +95,13 @@ export async function GET(req: Request) {
         connected: airbnbConnected,
         health: airbnbHealth,
         lastSyncAt: airbnbLastSyncAt,
-        reservationCount: Number(config.airbnbReservationCount || 0),
+        reservationCount: Number(connection?.airbnb_reservation_count || 0),
       },
       tuya: {
         assigned: tuyaAssigned,
         health: tuyaHealth,
-        deviceName: config.tuyaDeviceName || null,
-        codeLength: Number(config.tuyaCodeLength || 6),
+        deviceName: connection?.tuya_device_name || null,
+        codeLength: Number(connection?.tuya_code_length || 6),
         lastTestedAt: tuyaIntegration?.last_tested_at || null,
         lastSyncAt: tuyaIntegration?.last_sync_at || null,
       },
