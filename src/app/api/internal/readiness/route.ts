@@ -142,19 +142,19 @@ export async function GET(req: Request) {
     },
     {
       key: "stripe_basic",
-      label: "Basic plan price",
+      label: "Legacy Basic Stripe Price ID",
       group: "payments",
       ok: configured(process.env.STRIPE_BASIC_PRICE_ID, ["placeholder"]),
-      detail: configured(process.env.STRIPE_BASIC_PRICE_ID, ["placeholder"]) ? "Configured" : "Missing",
-      blocking: true,
+      detail: configured(process.env.STRIPE_BASIC_PRICE_ID, ["placeholder"]) ? "Configured as webhook fallback" : "Optional: dynamic Checkout pricing uses subscription metadata",
+      blocking: false,
     },
     {
       key: "stripe_pro",
-      label: "Pro plan price",
+      label: "Legacy Pro Stripe Price ID",
       group: "payments",
       ok: configured(process.env.STRIPE_PRO_PRICE_ID, ["placeholder"]),
-      detail: configured(process.env.STRIPE_PRO_PRICE_ID, ["placeholder"]) ? "Configured" : "Missing",
-      blocking: true,
+      detail: configured(process.env.STRIPE_PRO_PRICE_ID, ["placeholder"]) ? "Configured as webhook fallback" : "Optional: dynamic Checkout pricing uses subscription metadata",
+      blocking: false,
     },
   ];
 
