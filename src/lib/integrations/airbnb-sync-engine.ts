@@ -3,17 +3,6 @@ import { parseAirbnbCalendar } from "@/lib/integrations/ical";
 import { TuyaConnector, type TuyaRegion } from "@/lib/integrations/tuya";
 import { decryptIntegrationSecret } from "@/lib/integrations/secrets";
 
-async function getGuideIntegration(admin: any, guideId: string) {
-  const { data } = await admin
-    .from("guide_integrations")
-    .select("id, integration_id, config")
-    .eq("guide_id", guideId)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  return data || null;
-}
-
 async function getTuyaConnector(admin: any, userId: string, integrationId?: string | null) {
   let query = admin
     .from("integrations")
@@ -127,39 +116,41 @@ export async function runAirbnbGuideSync(options: {
 }) {
   const { admin, userId, guideId } = options;
   const startedAt = Date.now();
-  const guideIntegration = await getGuideIntegration(admin, guideId);
-  const config = guideIntegration?.config || {};
-  const icalUrl = config.icalUrl;
 
-  if (!icalUrl) throw new Error("Airbnb iCal is not connected");
+  const { data: guide } = await admin
+    .from("guides")
+    .select("property_id")
+    .eq("id", guideId)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (!guide?.property_id) throw new Error("Guide is not attached to a property");
+
+  const { data: property } = await admin
+    .from("properties")
+    .select("id, organization_id")
+    .eq("id", guide.property_id)
+    .maybeSingle();
+
+  if (!property?.id || !property?.organization_id) throw new Error("Property not found");
+
+  const { data: connection } = await admin
+    .from("property_connections")
+    .select("*")
+    .eq("property_id", property.id)
+    .maybeSingle();
+
+  const icalUrl = connection?.airbnb_ical_url;
+  if (!icalUrl) throw new Error("Airbnb iCal is not connected for this property");
 
   try {
     const bookings = await parseAirbnbCalendar(icalUrl);
     const currentUids = new Set(bookings.map((booking) => booking.uid));
 
-    const { data: guide } = await admin
-      .from("guides")
-      .select("property_id")
-      .eq("id", guideId)
-      .eq("user_id", userId)
-      .maybeSingle();
-
-    if (!guide) throw new Error("Guide not found");
-
-    let propertyContext: { id: string; organization_id: string } | null = null;
-    if (guide.property_id) {
-      const { data: property } = await admin
-        .from("properties")
-        .select("id, organization_id")
-        .eq("id", guide.property_id)
-        .maybeSingle();
-      if (property?.id && property?.organization_id) propertyContext = property;
-    }
-
-    const deviceId = config.tuyaDeviceId ? String(config.tuyaDeviceId) : null;
-    const codeLength = Number(config.tuyaCodeLength) === 7 ? 7 : 6;
-    const startOffsetMinutes = Number.isFinite(Number(config.tuyaStartOffsetMinutes)) ? Number(config.tuyaStartOffsetMinutes) : -60;
-    const endOffsetMinutes = Number.isFinite(Number(config.tuyaEndOffsetMinutes)) ? Number(config.tuyaEndOffsetMinutes) : 60;
+    const deviceId = connection?.tuya_device_id ? String(connection.tuya_device_id) : null;
+    const codeLength = Number(connection?.tuya_code_length) === 7 ? 7 : 6;
+    const startOffsetMinutes = -60;
+    const endOffsetMinutes = 60;
 
     let tuyaConnector: TuyaConnector | null = null;
     let tuyaIntegration: any = null;
@@ -167,7 +158,7 @@ export async function runAirbnbGuideSync(options: {
 
     if (deviceId) {
       try {
-        const tuya = await getTuyaConnector(admin, userId, guideIntegration?.integration_id);
+        const tuya = await getTuyaConnector(admin, userId, connection?.tuya_integration_id);
         tuyaConnector = tuya.connector;
         tuyaIntegration = tuya.integration;
         if (tuyaConnector) await tuyaConnector.testConnection();
@@ -183,11 +174,11 @@ export async function runAirbnbGuideSync(options: {
     let codeFailures = 0;
 
     for (const booking of bookings) {
-      if (propertyContext) {
+      {
         try {
           await syncStay(admin, {
-            organizationId: propertyContext.organization_id,
-            propertyId: propertyContext.id,
+            organizationId: property.organization_id,
+            propertyId: property.id,
             guideId,
             booking,
           });
@@ -280,11 +271,11 @@ export async function runAirbnbGuideSync(options: {
     }
 
     let cancelledStays = 0;
-    if (propertyContext) {
+    {
       const { data: futureStays } = await admin
         .from("stays")
         .select("id, external_reservation_id")
-        .eq("property_id", propertyContext.id)
+        .eq("property_id", property.id)
         .eq("source", "airbnb_ical")
         .eq("status", "confirmed")
         .gte("check_out_at", new Date().toISOString());
@@ -300,17 +291,14 @@ export async function runAirbnbGuideSync(options: {
     }
 
     const syncedAt = new Date().toISOString();
-    if (guideIntegration?.id) {
-      await admin.from("guide_integrations").update({
-        config: {
-          ...config,
-          airbnbLastSyncAt: syncedAt,
-          airbnbSyncStatus: "healthy",
-          airbnbLastError: null,
-          airbnbReservationCount: bookings.length,
-        },
-      }).eq("id", guideIntegration.id);
-    }
+    await admin.from("property_connections").upsert({
+      property_id: property.id,
+      airbnb_status: "healthy",
+      airbnb_last_sync_at: syncedAt,
+      airbnb_last_error: null,
+      airbnb_reservation_count: bookings.length,
+      updated_at: syncedAt,
+    });
 
     if (tuyaIntegration?.id) {
       await admin.from("integrations").update({
@@ -336,16 +324,13 @@ export async function runAirbnbGuideSync(options: {
     };
   } catch (error: any) {
     const message = String(error?.message || "Airbnb sync failed").slice(0, 500);
-    if (guideIntegration?.id) {
-      await admin.from("guide_integrations").update({
-        config: {
-          ...config,
-          airbnbSyncStatus: "error",
-          airbnbLastError: message,
-          airbnbLastSyncAt: new Date().toISOString(),
-        },
-      }).eq("id", guideIntegration.id);
-    }
+    await admin.from("property_connections").upsert({
+      property_id: property.id,
+      airbnb_status: "error",
+      airbnb_last_error: message,
+      airbnb_last_sync_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    });
     throw new Error(message);
   }
 }
