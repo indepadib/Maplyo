@@ -46,7 +46,19 @@ export async function GET(req: Request) {
   const tuyaIntegrations = tuyaResult.data || [];
   const now = Date.now();
 
-  const rows = (guides || []).map((guide: any) => {
+  // One operational row per property. Prefer a published guide as the deep-link target.
+  const primaryGuides = Array.from(
+    (guides || []).reduce((map: Map<string, any>, guide: any) => {
+      if (!guide.property_id) return map;
+      const current = map.get(guide.property_id);
+      if (!current || (!current.is_published && guide.is_published)) {
+        map.set(guide.property_id, guide);
+      }
+      return map;
+    }, new Map<string, any>()).values()
+  );
+
+  const rows = primaryGuides.map((guide: any) => {
     const connection = propertyConnections.find((row: any) => row.property_id === guide.property_id) || null;
     const property = properties.find((row: any) => row.id === guide.property_id) || null;
     const tuyaIntegration = tuyaIntegrations.find((row: any) => row.id === connection?.tuya_integration_id) || null;
