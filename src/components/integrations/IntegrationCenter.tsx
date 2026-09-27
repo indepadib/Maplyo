@@ -249,11 +249,15 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
     setBusy("tuya-disconnect");
     try {
       const headers = await authHeaders();
-      const res = await fetch("/api/integrations/tuya", { method: "DELETE", headers });
+      const res = await fetch("/api/integrations/tuya?guideId=" + encodeURIComponent(guideId), { method: "DELETE", headers });
       if (!res.ok) throw new Error(t.messages.failed);
-      setTuya({ connected: false, health: "disconnected", devices: [] });
       setDeviceId("");
-      setAirbnb((current) => ({ ...current, tuyaDeviceId: null, tuyaDeviceName: null }));
+      setAirbnb((current) => ({
+        ...current,
+        tuyaDeviceId: null,
+        tuyaDeviceName: null,
+        tuyaCodeLength: 6,
+      }));
     } catch (error: any) {
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
     } finally {
