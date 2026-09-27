@@ -38,6 +38,43 @@ export default function OnboardingPage() {
   }, [user]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    try {
+      const raw = sessionStorage.getItem("maplyo_pending_source");
+      if (!raw) return;
+
+      const pending = JSON.parse(raw);
+      const capturedAt = Number(pending?.capturedAt || 0);
+      const url = String(pending?.url || "").trim();
+
+      if (!url || !capturedAt || Date.now() - capturedAt > 24 * 60 * 60 * 1000) {
+        sessionStorage.removeItem("maplyo_pending_source");
+        return;
+      }
+
+      const hostname = new URL(url).hostname.toLowerCase();
+      if (hostname.includes("airbnb.")) {
+        setPropertyType("airbnb");
+        setAirbnbUrl(url);
+      } else {
+        setPropertyType("hotel");
+        setPropertyUrl(url);
+      }
+
+      setOwnerConfirmed(false);
+      trackProductEvent("source_resumed", {
+        metadata: {
+          source: hostname.includes("airbnb.") ? "airbnb" : "website",
+          ref: pending?.ref || "unknown",
+        },
+      });
+    } catch {
+      sessionStorage.removeItem("maplyo_pending_source");
+    }
+  }, []);
+
+  useEffect(() => {
     if (!isGenerating) {
       setProgressIndex(0);
       return;
@@ -136,6 +173,9 @@ export default function OnboardingPage() {
         },
       });
 
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem("maplyo_pending_source");
+      }
       window.location.href = `/app/guides/${saved.id}/builder`;
     } catch (e: any) {
       setError(e?.message || t.errors.generic);
