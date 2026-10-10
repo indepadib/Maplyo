@@ -98,10 +98,11 @@ async function saveAirbnbState(admin: any, context: any, values: {
 }
 
 async function handlePOST(req: Request) {
-  const access = await requireIntegrationUser(req.headers.get("authorization"));
+  const authHeader = req.headers.get("authorization");
+  const access = await requireIntegrationUser(authHeader);
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
-  const admin = getIntegrationAdmin();
+  const admin = getIntegrationAdmin(authHeader);
   if (!admin) return NextResponse.json({ error: "Integration service unavailable" }, { status: 503 });
 
   const parsed = ConnectSchema.safeParse(await req.json().catch(() => null));
@@ -153,10 +154,11 @@ async function handlePOST(req: Request) {
 }
 
 async function handleGET(req: Request) {
-  const access = await requireIntegrationUser(req.headers.get("authorization"));
+  const authHeader = req.headers.get("authorization");
+  const access = await requireIntegrationUser(authHeader);
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
-  const admin = getIntegrationAdmin();
+  const admin = getIntegrationAdmin(authHeader);
   if (!admin) return NextResponse.json({ error: "Integration service unavailable" }, { status: 503 });
 
   const guideId = new URL(req.url).searchParams.get("guideId");
@@ -187,10 +189,11 @@ async function handleGET(req: Request) {
 }
 
 async function handleDELETE(req: Request) {
-  const access = await requireIntegrationUser(req.headers.get("authorization"));
+  const authHeader = req.headers.get("authorization");
+  const access = await requireIntegrationUser(authHeader);
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
-  const admin = getIntegrationAdmin();
+  const admin = getIntegrationAdmin(authHeader);
   if (!admin) return NextResponse.json({ error: "Integration service unavailable" }, { status: 503 });
 
   const guideId = new URL(req.url).searchParams.get("guideId");
