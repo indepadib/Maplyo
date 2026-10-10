@@ -8,7 +8,8 @@
     "build": "next build",
     "check:i18n": "node scripts/check-marketing-i18n.mjs",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check:integrations": "node scripts/check-integration-persistence.cjs && node scripts/check-ical-runtime.mjs"
   },
   "dependencies": {
     "@react-email/components": "^1.0.3",
