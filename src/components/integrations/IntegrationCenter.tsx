@@ -130,14 +130,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
       const body = await res.json();
       if (!res.ok) throw new Error(body.error || t.messages.failed);
 
-      setAirbnb((current) => ({
-        ...current,
-        connected: true,
-        health: "healthy",
-        calendar: body.calendar,
-        reservationCount: body.reservationCount,
-        lastSyncAt: airbnb.lastSyncAt || null,
-      }));
+      await load();
       setMessage({ kind: "ok", text: t.messages.connected });
     } catch (error: any) {
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
@@ -219,10 +212,14 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
       const body = await res.json();
       if (!res.ok) throw new Error(body.error || t.messages.failed);
 
-      setTuya({ ...body, devices: body.devices || [] });
       setAccessId("");
       setAccessSecret("");
-      setMessage({ kind: "ok", text: t.messages.connected });
+      await load();
+      const devices = Array.isArray(body.devices) ? body.devices : [];
+      setMessage({
+        kind: devices.length ? "ok" : "error",
+        text: devices.length ? t.messages.connected : t.tuya.noDevices,
+      });
     } catch (error: any) {
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
     } finally {
@@ -245,12 +242,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
       const body = await res.json();
       if (!res.ok) throw new Error(body.error || t.messages.failed);
 
-      setAirbnb((current) => ({
-        ...current,
-        tuyaDeviceId: body.device?.id || deviceId,
-        tuyaDeviceName: body.device?.name || null,
-        tuyaCodeLength: codeLength,
-      }));
+      await load();
       setMessage({ kind: "ok", text: t.messages.deviceSaved });
     } catch (error: any) {
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
@@ -267,12 +259,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
       if (!res.ok) throw new Error(t.messages.failed);
       setDeviceId("");
       setCodeLength(6);
-      setAirbnb((current) => ({
-        ...current,
-        tuyaDeviceId: null,
-        tuyaDeviceName: null,
-        tuyaCodeLength: 6,
-      }));
+      await load();
     } catch (error: any) {
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
     } finally {
@@ -326,6 +313,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
               className="h-11 w-full rounded-xl border border-gray-200 px-4 text-sm outline-none focus:border-rose-400"
             />
             <p className="text-[11px] leading-5 text-gray-400">{t.airbnb.helper}</p>
+            <p className="rounded-lg bg-rose-50 px-3 py-2 text-[11px] leading-5 text-rose-700">{t.airbnb.autoSync}</p>
             <button
               onClick={connectAirbnb}
               disabled={!icalUrl.trim() || Boolean(busy)}
@@ -402,6 +390,11 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
             </div>
 
             <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">{t.tuya.device}</label>
+            {tuya.devices.length === 0 && (
+              <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs leading-5 text-amber-800">
+                {t.tuya.noDevices}
+              </div>
+            )}
             {airbnb.tuyaDeviceId && (
               <div className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-800">
                 <span className="font-bold">{t.connected}: </span>
