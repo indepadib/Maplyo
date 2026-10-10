@@ -1,3 +1,4 @@
+import { withIntegrationErrors } from "@/lib/integrations/route-errors";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -25,7 +26,7 @@ function maskCalendarUrl(raw: string) {
   }
 }
 
-export async function POST(req: Request) {
+async function handlePOST(req: Request) {
   const access = await requireIntegrationUser(req.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
@@ -57,7 +58,7 @@ export async function POST(req: Request) {
       airbnb_last_error: null,
       airbnb_reservation_count: bookings.length,
       updated_at: now,
-    });
+    }).throwOnError();
 
     return NextResponse.json({
       connected: true,
@@ -76,22 +77,13 @@ export async function POST(req: Request) {
     });
   } catch (error: any) {
     const message = String(error?.message || "Airbnb calendar validation failed").slice(0, 500);
-    const now = new Date().toISOString();
-
-    await admin.from("property_connections").upsert({
-      property_id: context.propertyId,
-      airbnb_ical_url: icalUrl,
-      airbnb_status: "error",
-      airbnb_last_validated_at: now,
-      airbnb_last_error: message,
-      updated_at: now,
-    });
+    // Keep the previously saved calendar if validation or persistence fails.
 
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }
 
-export async function GET(req: Request) {
+async function handleGET(req: Request) {
   const access = await requireIntegrationUser(req.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
@@ -130,7 +122,7 @@ export async function GET(req: Request) {
   });
 }
 
-export async function DELETE(req: Request) {
+async function handleDELETE(req: Request) {
   const access = await requireIntegrationUser(req.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
@@ -152,7 +144,11 @@ export async function DELETE(req: Request) {
     airbnb_last_error: null,
     airbnb_reservation_count: 0,
     updated_at: new Date().toISOString(),
-  });
+  }).throwOnError();
 
   return NextResponse.json({ success: true });
 }
+
+export const POST = withIntegrationErrors(handlePOST);
+export const GET = withIntegrationErrors(handleGET);
+export const DELETE = withIntegrationErrors(handleDELETE);

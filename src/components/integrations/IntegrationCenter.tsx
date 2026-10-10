@@ -18,6 +18,7 @@ type AirbnbStatus = {
   tuyaDeviceId?: string | null;
   tuyaDeviceName?: string | null;
   tuyaCodeLength?: number;
+  propertyName?: string | null;
 };
 
 type TuyaDevice = {
@@ -50,6 +51,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
   const [deviceId, setDeviceId] = useState("");
   const [codeLength, setCodeLength] = useState<6|7>(6);
   const [busy, setBusy] = useState<string | null>("load");
+  const [loadFailed, setLoadFailed] = useState(false);
   const [message, setMessage] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
 
   const authHeaders = useCallback(async (): Promise<Record<string, string>> => {
@@ -61,6 +63,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
   const load = useCallback(async () => {
     setBusy("load");
     setMessage(null);
+    setLoadFailed(false);
 
     try {
       const headers = await authHeaders();
@@ -69,13 +72,17 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
         fetch("/api/integrations/tuya", { headers }),
       ]);
 
-      const airbnbBody = await airbnbRes.json();
-      const tuyaBody = await tuyaRes.json();
+      const airbnbBody = await airbnbRes.json().catch(() => ({}));
+      const tuyaBody = await tuyaRes.json().catch(() => ({}));
+
+      if (!airbnbRes.ok || !tuyaRes.ok) {
+        throw new Error(airbnbBody.error || tuyaBody.error || t.messages.failed);
+      }
 
       if (airbnbRes.ok) {
         setAirbnb(airbnbBody);
-        if (airbnbBody.tuyaDeviceId) setDeviceId(String(airbnbBody.tuyaDeviceId));
-        if (Number(airbnbBody.tuyaCodeLength) === 7) setCodeLength(7);
+        setDeviceId(String(airbnbBody.tuyaDeviceId || ""));
+        setCodeLength(Number(airbnbBody.tuyaCodeLength) === 7 ? 7 : 6);
       }
 
       if (tuyaRes.ok) {
@@ -85,6 +92,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
         }
       }
     } catch (error: any) {
+      setLoadFailed(true);
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
     } finally {
       setBusy(null);
@@ -122,13 +130,14 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
       const body = await res.json();
       if (!res.ok) throw new Error(body.error || t.messages.failed);
 
-      setAirbnb({
+      setAirbnb((current) => ({
+        ...current,
         connected: true,
         health: "healthy",
         calendar: body.calendar,
         reservationCount: body.reservationCount,
         lastSyncAt: airbnb.lastSyncAt || null,
-      });
+      }));
       setMessage({ kind: "ok", text: t.messages.connected });
     } catch (error: any) {
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
@@ -159,7 +168,12 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
         reservationCount: body.reservations,
         error: null,
       }));
-      setMessage({ kind: "ok", text: `${t.messages.synced} ${body.reservations ?? 0} ${t.airbnb.reservations}.` });
+      if (body.tuya?.configured && !body.tuya.healthy) {
+        setTuya((current) => ({ ...current, health: "degraded", error: body.tuya.error || t.messages.failed }));
+        setMessage({ kind: "error", text: `${t.messages.synced} ${body.tuya.error || t.messages.failed}` });
+      } else {
+        setMessage({ kind: "ok", text: `${t.messages.synced} ${body.reservations ?? 0} ${t.airbnb.reservations}.` });
+      }
     } catch (error: any) {
       setAirbnb((current) => ({ ...current, health: "error", error: error?.message || t.messages.failed }));
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
@@ -177,7 +191,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
         headers,
       });
       if (!res.ok) throw new Error(t.messages.failed);
-      setAirbnb({ connected: false, health: "disconnected" });
+      setAirbnb((current) => ({ ...current, connected: false, health: "disconnected", calendar: null, lastSyncAt: null, reservationCount: 0, error: null }));
       setIcalUrl("");
     } catch (error: any) {
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
@@ -252,6 +266,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
       const res = await fetch("/api/integrations/tuya?guideId=" + encodeURIComponent(guideId), { method: "DELETE", headers });
       if (!res.ok) throw new Error(t.messages.failed);
       setDeviceId("");
+      setCodeLength(6);
       setAirbnb((current) => ({
         ...current,
         tuyaDeviceId: null,
@@ -275,6 +290,10 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
       <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-4">
         <h3 className="font-bold text-slate-900">{t.title}</h3>
         <p className="mt-1 text-xs leading-5 text-indigo-700">{t.subtitle}</p>
+        {airbnb.propertyName && <p className="mt-2 text-sm font-bold text-slate-900">{airbnb.propertyName}</p>}
+        <button onClick={() => load()} disabled={Boolean(busy)} aria-label={t.loading} className="mt-3 rounded-lg border border-indigo-200 p-2 text-indigo-700 disabled:opacity-40">
+          <RefreshCw className={`h-4 w-4 ${busy === "load" ? "animate-spin" : ""}`} />
+        </button>
       </div>
 
       {message && (
@@ -283,7 +302,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
         </div>
       )}
 
-      <section className="rounded-2xl border border-gray-200 bg-white p-5">
+      <fieldset disabled={loadFailed || Boolean(busy)} className="rounded-2xl border border-gray-200 bg-white p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-50 text-rose-600"><CalendarDays className="h-5 w-5" /></div>
@@ -345,9 +364,9 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
             </div>
           </div>
         )}
-      </section>
+      </fieldset>
 
-      <section className="rounded-2xl border border-gray-200 bg-white p-5">
+      <fieldset disabled={loadFailed || Boolean(busy)} className="rounded-2xl border border-gray-200 bg-white p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600"><KeyRound className="h-5 w-5" /></div>
@@ -383,8 +402,17 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
             </div>
 
             <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">{t.tuya.device}</label>
+            {airbnb.tuyaDeviceId && (
+              <div className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-800">
+                <span className="font-bold">{t.connected}: </span>
+                {airbnb.tuyaDeviceName || airbnb.tuyaDeviceId} · {airbnb.tuyaCodeLength || 6}
+              </div>
+            )}
             <select value={deviceId} onChange={(e) => setDeviceId(e.target.value)} className="mt-2 h-11 w-full rounded-xl border border-gray-200 px-4 text-sm">
               <option value="">{t.tuya.chooseDevice}</option>
+              {airbnb.tuyaDeviceId && !tuya.devices.some((device) => device.id === airbnb.tuyaDeviceId) && (
+                <option value={airbnb.tuyaDeviceId}>{airbnb.tuyaDeviceName || airbnb.tuyaDeviceId}</option>
+              )}
               {tuya.devices.map((device) => (
                 <option key={device.id} value={device.id}>
                   {device.name} {device.online === false ? "· offline" : ""}
@@ -419,7 +447,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
                 {busy === "tuya-device" ? <Loader2 className="h-4 w-4 animate-spin" /> : <KeyRound className="h-4 w-4" />}
                 {t.tuya.saveDevice}
               </button>
-              <button onClick={disconnectTuya} disabled={Boolean(busy)} className="rounded-xl border border-gray-200 px-3 text-gray-400 hover:text-red-600">
+              <button onClick={disconnectTuya} disabled={Boolean(busy) || !airbnb.tuyaDeviceId} aria-label={t.tuya.disconnect} title={t.tuya.disconnect} className="rounded-xl border border-gray-200 px-3 text-gray-400 hover:text-red-600">
                 <Unplug className="h-4 w-4" />
               </button>
             </div>
@@ -431,7 +459,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
             <CircleAlert className="mt-0.5 h-4 w-4 shrink-0" /> {tuya.error}
           </div>
         )}
-      </section>
+      </fieldset>
 
       {busy === "load" && (
         <div className="flex items-center justify-center gap-2 py-3 text-xs text-gray-400">

@@ -15,7 +15,7 @@ async function getTuyaConnector(admin: any, userId: string, integrationId?: stri
   const { data: integration } = await query
     .order("updated_at", { ascending: false })
     .limit(1)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   if (!integration?.id) return { connector: null, integration: null };
 
@@ -23,7 +23,7 @@ async function getTuyaConnector(admin: any, userId: string, integrationId?: stri
     .from("integration_secrets")
     .select("ciphertext, iv, auth_tag")
     .eq("integration_id", integration.id)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   if (!secret) return { connector: null, integration };
 
@@ -55,7 +55,7 @@ async function syncStay(admin: any, args: {
       .eq("organization_id", args.organizationId)
       .contains("metadata", { source_booking_uid: booking.uid })
       .limit(1)
-      .maybeSingle();
+      .maybeSingle().throwOnError();
 
     if (existingGuest?.id) {
       guestId = existingGuest.id;
@@ -69,7 +69,7 @@ async function syncStay(admin: any, args: {
           metadata: { source: "airbnb_ical", source_booking_uid: booking.uid },
         }])
         .select("id")
-        .single();
+        .single().throwOnError();
       guestId = createdGuest?.id || null;
     }
   }
@@ -81,7 +81,7 @@ async function syncStay(admin: any, args: {
     .eq("source", "airbnb_ical")
     .eq("external_reservation_id", booking.uid)
     .limit(1)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   const payload = {
     organization_id: args.organizationId,
@@ -101,12 +101,13 @@ async function syncStay(admin: any, args: {
   };
 
   if (existingStay?.id) {
-    await admin.from("stays").update(payload).eq("id", existingStay.id);
+    await admin.from("stays").update(payload).eq("id", existingStay.id).throwOnError();
     return existingStay.id;
   }
 
-  const { data: created } = await admin.from("stays").insert([payload]).select("id").single();
-  return created?.id || null;
+  const { data: created } = await admin.from("stays").insert([payload]).select("id").single().throwOnError();
+  if (!created?.id) throw new Error("Could not save stay");
+  return created.id;
 }
 
 export async function runAirbnbGuideSync(options: {
@@ -122,7 +123,7 @@ export async function runAirbnbGuideSync(options: {
     .select("property_id")
     .eq("id", guideId)
     .eq("user_id", userId)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   if (!guide?.property_id) throw new Error("Guide is not attached to a property");
 
@@ -130,7 +131,7 @@ export async function runAirbnbGuideSync(options: {
     .from("properties")
     .select("id, organization_id")
     .eq("id", guide.property_id)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   if (!property?.id || !property?.organization_id) throw new Error("Property not found");
 
@@ -138,7 +139,7 @@ export async function runAirbnbGuideSync(options: {
     .from("property_connections")
     .select("*")
     .eq("property_id", property.id)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   const icalUrl = connection?.airbnb_ical_url;
   if (!icalUrl) throw new Error("Airbnb iCal is not connected for this property");
@@ -174,19 +175,13 @@ export async function runAirbnbGuideSync(options: {
     let codeFailures = 0;
 
     for (const booking of bookings) {
-      {
-        try {
-          await syncStay(admin, {
-            organizationId: property.organization_id,
-            propertyId: property.id,
-            guideId,
-            booking,
-          });
-          staysSynced += 1;
-        } catch (error) {
-          console.info("[Airbnb sync] stay sync skipped:", error);
-        }
-      }
+      await syncStay(admin, {
+        organizationId: property.organization_id,
+        propertyId: property.id,
+        guideId,
+        booking,
+      });
+      staysSynced += 1;
 
       const { data: existingCode } = await admin
         .from("access_codes")
@@ -195,7 +190,7 @@ export async function runAirbnbGuideSync(options: {
         .eq("external_uid", booking.uid)
         .order("created_at", { ascending: false })
         .limit(1)
-        .maybeSingle();
+        .maybeSingle().throwOnError();
 
       let code = existingCode?.code || null;
       let providerPasswordId = existingCode?.provider_password_id || null;
@@ -239,9 +234,9 @@ export async function runAirbnbGuideSync(options: {
       };
 
       if (existingCode?.id) {
-        await admin.from("access_codes").update(codePayload).eq("id", existingCode.id);
+        await admin.from("access_codes").update(codePayload).eq("id", existingCode.id).throwOnError();
       } else {
-        await admin.from("access_codes").insert([codePayload]);
+        await admin.from("access_codes").insert([codePayload]).throwOnError();
       }
       accessCodesSynced += 1;
     }
@@ -253,20 +248,28 @@ export async function runAirbnbGuideSync(options: {
       .eq("guide_id", guideId)
       .eq("source", "airbnb")
       .eq("status", "active")
-      .gte("valid_until", new Date().toISOString());
+      .gte("valid_until", new Date().toISOString()).throwOnError();
 
     for (const stale of futureCodes || []) {
       if (!stale.external_uid || currentUids.has(stale.external_uid)) continue;
+
+      if (stale.provider_password_id && (!deviceId || !tuyaConnector)) {
+        codeFailures += 1;
+        tuyaError = "Tuya connection required to revoke a cancelled reservation lock code";
+        continue;
+      }
 
       if (deviceId && tuyaConnector && stale.provider_password_id) {
         try {
           await tuyaConnector.deleteTemporaryPassword(deviceId, stale.provider_password_id);
         } catch (error) {
-          console.info("[Airbnb sync] could not delete stale Tuya password:", error);
+          codeFailures += 1;
+          tuyaError = "Could not revoke a cancelled reservation lock code";
+          continue; // Keep the row active so the next sync retries revocation.
         }
       }
 
-      await admin.from("access_codes").update({ status: "cancelled" }).eq("id", stale.id);
+      await admin.from("access_codes").update({ status: "cancelled" }).eq("id", stale.id).throwOnError();
       cancelledCodes += 1;
     }
 
@@ -278,14 +281,14 @@ export async function runAirbnbGuideSync(options: {
         .eq("property_id", property.id)
         .eq("source", "airbnb_ical")
         .eq("status", "confirmed")
-        .gte("check_out_at", new Date().toISOString());
+        .gte("check_out_at", new Date().toISOString()).throwOnError();
 
       for (const stale of futureStays || []) {
         if (!stale.external_reservation_id || currentUids.has(stale.external_reservation_id)) continue;
         await admin.from("stays").update({
           status: "cancelled",
           updated_at: new Date().toISOString(),
-        }).eq("id", stale.id);
+        }).eq("id", stale.id).throwOnError();
         cancelledStays += 1;
       }
     }
@@ -298,7 +301,7 @@ export async function runAirbnbGuideSync(options: {
       airbnb_last_error: null,
       airbnb_reservation_count: bookings.length,
       updated_at: syncedAt,
-    });
+    }).throwOnError();
 
     if (tuyaIntegration?.id) {
       await admin.from("integrations").update({
@@ -306,7 +309,7 @@ export async function runAirbnbGuideSync(options: {
         last_sync_at: syncedAt,
         last_error: tuyaError,
         updated_at: syncedAt,
-      }).eq("id", tuyaIntegration.id);
+      }).eq("id", tuyaIntegration.id).throwOnError();
     }
 
     return {
@@ -330,7 +333,7 @@ export async function runAirbnbGuideSync(options: {
       airbnb_last_error: message,
       airbnb_last_sync_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-    });
+    }).throwOnError();
     throw new Error(message);
   }
 }

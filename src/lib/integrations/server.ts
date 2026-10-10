@@ -34,7 +34,7 @@ export async function requireOwnedGuide(admin: any, userId: string, guideId: str
     .select("id")
     .eq("id", guideId)
     .eq("user_id", userId)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   return Boolean(data?.id);
 }
@@ -46,7 +46,7 @@ export async function getOwnedPropertyFromGuide(admin: any, userId: string, guid
     .select("id, title, property_id")
     .eq("id", guideId)
     .eq("user_id", userId)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   if (guideError || !guide?.id) return null;
 
@@ -55,7 +55,7 @@ export async function getOwnedPropertyFromGuide(admin: any, userId: string, guid
       .from("properties")
       .select("id, organization_id, name, city, property_type")
       .eq("id", guide.property_id)
-      .maybeSingle();
+      .maybeSingle().throwOnError();
 
     if (property?.id) {
       return {
@@ -75,7 +75,7 @@ export async function getOwnedPropertyFromGuide(admin: any, userId: string, guid
     .eq("user_id", userId)
     .order("created_at", { ascending: true })
     .limit(1)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   let organizationId = membership?.organization_id as string | undefined;
 
@@ -87,7 +87,7 @@ export async function getOwnedPropertyFromGuide(admin: any, userId: string, guid
         created_by: userId,
       }])
       .select("id")
-      .single();
+      .single().throwOnError();
 
     if (organizationError || !organization?.id) return null;
     organizationId = organization.id;
@@ -98,7 +98,7 @@ export async function getOwnedPropertyFromGuide(admin: any, userId: string, guid
         organization_id: organizationId,
         user_id: userId,
         role: "owner",
-      }]);
+      }]).throwOnError();
 
     if (membershipError) return null;
   }
@@ -109,7 +109,7 @@ export async function getOwnedPropertyFromGuide(admin: any, userId: string, guid
     .eq("organization_id", organizationId)
     .contains("metadata", { legacy_guide_id: guideId })
     .limit(1)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   let property = existingLegacyProperty || null;
 
@@ -125,7 +125,7 @@ export async function getOwnedPropertyFromGuide(admin: any, userId: string, guid
         metadata: { legacy_guide_id: guideId },
       }])
       .select("id, organization_id, name, city, property_type")
-      .single();
+      .single().throwOnError();
 
     if (propertyError || !createdProperty?.id) return null;
     property = createdProperty;
@@ -138,7 +138,7 @@ export async function getOwnedPropertyFromGuide(admin: any, userId: string, guid
     .eq("user_id", userId)
     .is("property_id", null)
     .select("id, property_id")
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   if (!linkedGuide?.property_id) {
     const { data: refreshedGuide } = await admin
@@ -146,14 +146,16 @@ export async function getOwnedPropertyFromGuide(admin: any, userId: string, guid
       .select("property_id")
       .eq("id", guideId)
       .eq("user_id", userId)
-      .maybeSingle();
+      .maybeSingle().throwOnError();
+
+    if (!refreshedGuide?.property_id) throw new Error("Could not attach guide to property");
 
     if (refreshedGuide?.property_id && refreshedGuide.property_id !== property.id) {
       const { data: existingProperty } = await admin
         .from("properties")
         .select("id, organization_id, name, city, property_type")
         .eq("id", refreshedGuide.property_id)
-        .maybeSingle();
+        .maybeSingle().throwOnError();
 
       if (existingProperty?.id) {
         return {
@@ -179,7 +181,7 @@ export async function getPropertyConnection(admin: any, propertyId: string) {
     .from("property_connections")
     .select("*")
     .eq("property_id", propertyId)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   return data || null;
 }

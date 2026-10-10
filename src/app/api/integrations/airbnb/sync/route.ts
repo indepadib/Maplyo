@@ -1,3 +1,4 @@
+import { withIntegrationErrors } from "@/lib/integrations/route-errors";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -6,7 +7,7 @@ import { NextResponse } from "next/server";
 import { getIntegrationAdmin, requireIntegrationUser, requireOwnedGuide } from "@/lib/integrations/server";
 import { runAirbnbGuideSync } from "@/lib/integrations/airbnb-sync-engine";
 
-export async function POST(request: Request) {
+async function handlePOST(request: Request) {
   const access = await requireIntegrationUser(request.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
@@ -34,3 +35,5 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export const POST = withIntegrationErrors(handlePOST);

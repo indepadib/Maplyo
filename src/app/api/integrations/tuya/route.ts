@@ -1,3 +1,4 @@
+import { withIntegrationErrors } from "@/lib/integrations/route-errors";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -39,7 +40,7 @@ async function findIntegration(admin: any, userId: string) {
     .eq("type", "tuya")
     .order("updated_at", { ascending: false })
     .limit(1)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
   return data || null;
 }
 
@@ -48,7 +49,7 @@ async function readSecret(admin: any, integration: any) {
     .from("integration_secrets")
     .select("ciphertext, iv, auth_tag")
     .eq("integration_id", integration.id)
-    .maybeSingle();
+    .maybeSingle().throwOnError();
 
   if (secret) return decryptIntegrationSecret<{ accessId: string; accessSecret: string; region: TuyaRegion }>(secret);
 
@@ -66,13 +67,13 @@ async function readSecret(admin: any, integration: any) {
       auth_tag: encrypted.authTag,
       key_version: encrypted.keyVersion,
       updated_at: new Date().toISOString(),
-    });
+    }).throwOnError();
 
     await admin.from("integrations").update({
       credentials: {},
       settings: { ...(integration.settings || {}), region, account_hint: String(legacy.accessId).slice(-4) },
       updated_at: new Date().toISOString(),
-    }).eq("id", integration.id);
+    }).eq("id", integration.id).throwOnError();
 
     return payload;
   }
@@ -80,7 +81,7 @@ async function readSecret(admin: any, integration: any) {
   throw new Error("Tuya credentials are not configured");
 }
 
-export async function POST(req: Request) {
+async function handlePOST(req: Request) {
   const access = await requireIntegrationUser(req.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
@@ -93,6 +94,7 @@ export async function POST(req: Request) {
   const { accessId, accessSecret, region } = parsed.data;
 
   try {
+    const encrypted = encryptIntegrationSecret({ accessId, accessSecret, region });
     const connector = new TuyaConnector(accessId, accessSecret, region);
     await connector.testConnection();
     const devices = await connector.listDevices();
@@ -101,7 +103,7 @@ export async function POST(req: Request) {
     const now = new Date().toISOString();
 
     if (!integration) {
-      const { data, error } = await admin
+      const { data } = await admin
         .from("integrations")
         .insert([{
           user_id: access.user.id,
@@ -114,23 +116,12 @@ export async function POST(req: Request) {
           last_error: null,
         }])
         .select("id, settings, status, health_status, last_tested_at, last_sync_at, last_error, credentials")
-        .single();
+        .single().throwOnError();
 
-      if (error || !data) throw new Error(error?.message || "Could not save Tuya connection");
+      if (!data) throw new Error("Could not save Tuya connection");
       integration = data;
-    } else {
-      await admin.from("integrations").update({
-        credentials: {},
-        settings: { ...(integration.settings || {}), region, account_hint: accessId.slice(-4) },
-        status: "active",
-        health_status: "healthy",
-        last_tested_at: now,
-        last_error: null,
-        updated_at: now,
-      }).eq("id", integration.id);
     }
 
-    const encrypted = encryptIntegrationSecret({ accessId, accessSecret, region });
     await admin.from("integration_secrets").upsert({
       integration_id: integration.id,
       ciphertext: encrypted.ciphertext,
@@ -138,7 +129,17 @@ export async function POST(req: Request) {
       auth_tag: encrypted.authTag,
       key_version: encrypted.keyVersion,
       updated_at: now,
-    });
+    }).throwOnError();
+
+    await admin.from("integrations").update({
+      credentials: {},
+      settings: { ...(integration.settings || {}), region, account_hint: accessId.slice(-4) },
+      status: "active",
+      health_status: "healthy",
+      last_tested_at: now,
+      last_error: null,
+      updated_at: now,
+    }).eq("id", integration.id).throwOnError();
 
     return NextResponse.json({
       connected: true,
@@ -153,7 +154,7 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+async function handleGET(req: Request) {
   const access = await requireIntegrationUser(req.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
@@ -175,7 +176,7 @@ export async function GET(req: Request) {
       last_tested_at: now,
       last_error: null,
       updated_at: now,
-    }).eq("id", integration.id);
+    }).eq("id", integration.id).throwOnError();
 
     return NextResponse.json({
       connected: true,
@@ -192,7 +193,7 @@ export async function GET(req: Request) {
       last_error: message,
       last_tested_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-    }).eq("id", integration.id);
+    }).eq("id", integration.id).throwOnError();
 
     return NextResponse.json({
       connected: true,
@@ -203,7 +204,7 @@ export async function GET(req: Request) {
   }
 }
 
-export async function PUT(req: Request) {
+async function handlePUT(req: Request) {
   const access = await requireIntegrationUser(req.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
@@ -236,7 +237,7 @@ export async function PUT(req: Request) {
       tuya_code_length: codeLength,
       tuya_assigned_at: now,
       updated_at: now,
-    });
+    }).throwOnError();
 
     return NextResponse.json({
       success: true,
@@ -250,7 +251,7 @@ export async function PUT(req: Request) {
   }
 }
 
-export async function DELETE(req: Request) {
+async function handleDELETE(req: Request) {
   const access = await requireIntegrationUser(req.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
@@ -272,7 +273,7 @@ export async function DELETE(req: Request) {
         tuya_assigned_at: null,
         updated_at: new Date().toISOString(),
       })
-      .eq("property_id", context.propertyId);
+      .eq("property_id", context.propertyId).throwOnError();
 
     return NextResponse.json({
       success: true,
@@ -293,8 +294,13 @@ export async function DELETE(req: Request) {
       tuya_assigned_at: null,
       updated_at: new Date().toISOString(),
     })
-    .eq("tuya_integration_id", integration.id);
+    .eq("tuya_integration_id", integration.id).throwOnError();
 
-  await admin.from("integrations").delete().eq("id", integration.id);
+  await admin.from("integrations").delete().eq("id", integration.id).throwOnError();
   return NextResponse.json({ success: true });
 }
+
+export const POST = withIntegrationErrors(handlePOST);
+export const GET = withIntegrationErrors(handleGET);
+export const PUT = withIntegrationErrors(handlePUT);
+export const DELETE = withIntegrationErrors(handleDELETE);
