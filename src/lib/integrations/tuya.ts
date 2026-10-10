@@ -144,19 +144,40 @@ export class TuyaConnector {
     return { ok: true };
   }
 
-  async listDevices(page = 1, pageSize = 100): Promise<TuyaDevice[]> {
+  async listDevices(): Promise<TuyaDevice[]> {
     await this.getAccessToken();
-    const result = await this.request("GET", `/v1.0/devices?page_no=${page}&page_size=${pageSize}`);
 
-    if (Array.isArray(result)) return result;
-    if (Array.isArray(result?.list)) return result.list;
-    if (Array.isArray(result?.devices)) return result.devices;
-    return [];
+    const devices: TuyaDevice[] = [];
+    let lastId = "";
+
+    // Current Tuya Cloud Thing API: max 20 devices per page.
+    for (let page = 0; page < 50; page += 1) {
+      const query = new URLSearchParams({ page_size: "20" });
+      if (lastId) query.set("last_id", lastId);
+
+      const result = await this.request("GET", `/v2.0/cloud/thing/device?${query.toString()}`);
+      const batch = Array.isArray(result)
+        ? result
+        : Array.isArray(result?.list)
+          ? result.list
+          : Array.isArray(result?.devices)
+            ? result.devices
+            : [];
+
+      devices.push(...batch);
+      if (batch.length < 20) break;
+
+      const nextId = String(batch[batch.length - 1]?.id || "");
+      if (!nextId || nextId === lastId) break;
+      lastId = nextId;
+    }
+
+    return devices;
   }
 
   async getDevice(deviceId: string): Promise<TuyaDevice> {
     await this.getAccessToken();
-    return await this.request("GET", `/v1.0/devices/${encodeURIComponent(deviceId)}`);
+    return await this.request("GET", `/v2.0/cloud/thing/${encodeURIComponent(deviceId)}`);
   }
 
   private async getPasswordTicket(deviceId: string) {
