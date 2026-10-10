@@ -74,7 +74,7 @@ export const blockRegistry: Record<BlockType, BlockDefinition> = {
   places: { type: "places", label: "places", category: "catTravel", schema: PlacesBlockDataSchema, defaultData: { items: [{ name: "Boulangerie Délicieuse", description: "Les meilleurs croissants." }] }, Traveler: PlacesTraveler, Editor: PlacesEditor },
   events: { type: "events", label: "events", category: "catTravel", schema: EventsBlockDataSchema, defaultData: { items: [{ title: "Fête de la ville", month: "JUI", day: 14 }] }, Traveler: EventsTraveler, Editor: EventsEditor },
   documents: { type: "documents", label: "documents", category: "catBusiness", schema: DocumentsBlockDataSchema, defaultData: { items: [{ title: "Manuel de la maison", url: "#" }] }, Traveler: DocumentsTraveler, Editor: DocumentsEditor },
-  upsells: { type: "upsells", label: "upsells", category: "catBusiness", schema: UpsellsBlockDataSchema, defaultData: { items: [{ title: "Départ tardif", price: "30€", description: "Profitez de votre dernière matinée." }] }, Traveler: UpsellsTraveler, Editor: UpsellsEditor },
+  upsells: { type: "upsells", label: "upsells", category: "catBusiness", schema: UpsellsBlockDataSchema, defaultData: { items: [{ id: "svc_late_checkout", title: "Départ tardif", category: "late_checkout", priceAmount: 300, currency: "MAD", price: "300 MAD", pricingType: "fixed", fulfillmentType: "property", description: "Profitez plus longtemps de votre dernière journée.", cta: "Book this service" }] }, Traveler: UpsellsTraveler, Editor: UpsellsEditor },
   embed: { type: "embed", label: "embed", category: "catBusiness", schema: EmbedBlockDataSchema, defaultData: { url: "" }, Traveler: EmbedTraveler, Editor: EmbedEditor },
 };
 

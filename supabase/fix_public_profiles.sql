@@ -1,5 +1,7 @@
--- Migration to allow public read access to profiles (needed for public guide page to check plan)
--- We only need to check the plan, but RLS policies apply to the row.
+-- SECURITY HARDENING
+-- Historical versions of Maplyo temporarily allowed public profile reads so a public
+-- guide could inspect the owner's plan. That is no longer required.
+--
+-- Public guide visibility is enforced directly on guides.is_published.
 
--- OPTION 1: Allow public select on profiles
-create policy "Public can view profiles" on profiles for select using (true);
+drop policy if exists "Public can view profiles" on public.profiles;

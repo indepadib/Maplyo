@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import type { VisibilityRule } from "@/types/blocks";
 import { Lock, Unlock } from "lucide-react";
@@ -14,31 +13,12 @@ export function AccessCodesTraveler({
   ctx: { unlocked: boolean; guideId?: string };
   visibility?: VisibilityRule;
 }) {
-  const guideId = ctx.guideId;
   const { t } = useTranslation();
   const [localUnlock, setLocalUnlock] = useState(false);
   const [code, setCode] = useState("");
   const [error, setError] = useState(false);
-  const [dynamicCode, setDynamicCode] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!guideId || isLocked) return;
-    const fetchDynamicCode = async () => {
-      const now = new Date().toISOString();
-      const { data: booking } = await supabase
-        .from('access_codes')
-        .select('code')
-        .eq('guide_id', guideId)
-        .lte('valid_from', now)
-        .gte('valid_until', now)
-        .single();
-      
-      if (booking?.code) {
-        setDynamicCode(booking.code);
-      }
-    };
-    fetchDynamicCode();
-  }, [guideId, ctx.unlocked, localUnlock]);
+  const dynamicCode = data?.personalStayCode ? String(data.personalStayCode) : null;
 
   // Effective unlock: either Global (ctx.unlocked) OR Local (localUnlock)
   const mode = visibility?.mode ?? "always";

@@ -1,4 +1,4 @@
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 
 import type { CookieOptions } from "@supabase/ssr";
 import { NextResponse } from "next/server";
@@ -8,11 +8,19 @@ export async function GET(request: Request) {
     const { cookies } = await import("next/headers");
     const requestUrl = new URL(request.url);
     const code = requestUrl.searchParams.get("code");
+    const requestedNext = requestUrl.searchParams.get("next");
+    const safeNext = requestedNext && requestedNext.startsWith("/") && !requestedNext.startsWith("//")
+        ? requestedNext
+        : "/onboarding";
 
     if (code) {
         const cookieStore = await cookies();
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://leiaiothqandpyebrauv.supabase.co";
-        const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlaWFpb3RocWFuZHB5ZWJyYXV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1MTM2NjEsImV4cCI6MjA4MjA4OTY2MX0.IuJ2uwwl6-ZvgnPy41rJfgY_YHbvUW7fmpzR7Sz7yKU";
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+        if (!supabaseUrl || !supabaseKey) {
+            return NextResponse.redirect(new URL("/login?error=auth_config", request.url));
+        }
 
         const supabase = createServerClient(
             supabaseUrl,
@@ -20,21 +28,23 @@ export async function GET(request: Request) {
             {
                 cookies: {
                     get(name: string) {
-                        return cookieStore.get(name)?.value
+                        return cookieStore.get(name)?.value;
                     },
                     set(name: string, value: string, options: CookieOptions) {
-                        cookieStore.set({ name, value, ...options })
+                        cookieStore.set({ name, value, ...options });
                     },
                     remove(name: string, options: CookieOptions) {
-                        cookieStore.set({ name, value: '', ...options })
+                        cookieStore.set({ name, value: "", ...options });
                     },
                 },
             }
         );
 
-        await supabase.auth.exchangeCodeForSession(code);
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (error) {
+            return NextResponse.redirect(new URL("/login?error=auth_callback", request.url));
+        }
     }
 
-    // URL to redirect to after sign in process completes
-    return NextResponse.redirect(new URL("/onboarding", request.url));
+    return NextResponse.redirect(new URL(safeNext, request.url));
 }

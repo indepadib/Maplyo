@@ -79,64 +79,44 @@ export default async function PublicGuidePage({
         guideData = allGuides?.find(g => slugify(g.title || '') === slugLower) || null;
     }
 
-    // 3. Fetch Profile separately (Avoid join errors)
-    let profile = null;
-    if (guideData?.user_id) {
-        const { data: pData } = await supabase
-            .from('profiles')
-            .select('plan_variant, subscription_status')
-            .eq('id', guideData.user_id)
-            .single();
-        profile = pData;
-    }
-
     // Check if current visitor is the owner
     const { data: { user: currentUser } } = await supabase.auth.getUser();
     const isOwner = currentUser && currentUser.id === guideData?.user_id;
 
-    const plan = profile?.plan_variant || 'pro'; 
-    const status = profile?.subscription_status || 'active';
-
-    const isSubscriptionValid = plan !== 'demo' && (status === 'active' || status === 'trialing' || status === 'free');
-    const guideIsPublished = guideData?.is_published !== false; 
-    const isPublicAllowed = guideIsPublished || isSubscriptionValid || slug === 'demo';
+    // Public access is intentionally independent from subscription/profile data.
+    // Owners can preview private experiences; everyone else only sees explicitly published ones.
+    const guideIsPublished = guideData?.is_published === true;
+    const isPublicAllowed = guideIsPublished || slug === 'demo';
 
     let guide: Guide;
 
     if (guideData && (isOwner || isPublicAllowed)) {
-        if (!isOwner && !isPublicAllowed) {
-            guide = {
-                id: "restricted",
-                slug,
-                title: "Guide Privé",
-                theme: { themeId: "minimal-white" },
-                blocks: [
-                    {
-                        id: "restricted",
-                        type: "welcome",
-                        visibility: { mode: "always" },
-                        data: {
-                            title: "Guide Privé",
-                            content: "Ce guide est en mode démonstration et n'est pas accessible au public. Veuillez contacter l'hôte."
-                        }
+        guide = {
+            id: guideData.id,
+            slug: guideData.slug,
+            title: guideData.title,
+            theme: { themeId: guideData.theme_id || "minimal-white" },
+            blocks: guideData.content?.blocks || [],
+            updatedAt: guideData.updated_at
+        };
+    } else if (guideData) {
+        guide = {
+            id: "restricted",
+            slug,
+            title: "Private Experience",
+            theme: { themeId: "minimal-white" },
+            blocks: [
+                {
+                    id: "restricted",
+                    type: "welcome",
+                    visibility: { mode: "always" },
+                    data: {
+                        title: "Private Experience",
+                        content: "This guest experience is not published."
                     }
-                ]
-            };
-        } else {
-            guide = {
-                id: guideData.id,
-                slug: guideData.slug,
-                title: guideData.title,
-                theme: { themeId: guideData.theme_id || "minimal-white" },
-                blocks: guideData.content?.blocks || [],
-                updatedAt: guideData.updated_at
-            };
-
-            // Track view asynchronously if not owner
-            if (!isOwner) {
-                supabase.from("guide_views").insert({ guide_id: guide.id }).then();
-            }
-        }
+                }
+            ]
+        };
     } else {
         guide = {
             id: "not-found",

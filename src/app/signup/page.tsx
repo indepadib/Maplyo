@@ -2,21 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
-import { Lock, ArrowRight, Mail, User, Phone, Building, Map as MapIcon } from "lucide-react";
+import { ArrowRight, Check, Lock, Mail, Map as MapIcon, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabase";
 import { useTranslation } from "@/components/providers/LanguageProvider";
+import { marketingCopy } from "@/lib/i18n/marketing";
+import { MarketingLanguageSwitcher } from "@/components/marketing/MarketingLanguageSwitcher";
 
 export default function SignupPage() {
-  const { t } = useTranslation();
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    businessName: "",
-    password: ""
-  });
+  const { lang } = useTranslation();
+  const t = marketingCopy(lang);
+  const s = t.signup;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -26,230 +24,156 @@ export default function SignupPage() {
     setLoading(true);
     setError(null);
 
+    const params = new URLSearchParams(window.location.search);
+    const next = params.get("next");
+    const ref = params.get("ref");
+    const offer = params.get("offer");
+    const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : "/onboarding";
+    const callbackUrl = new URL("/auth/callback", window.location.origin);
+    callbackUrl.searchParams.set("next", safeNext);
+
     const { error, data } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
+      email,
+      password,
       options: {
-        emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : 'https://maplyo.com'}/auth/callback`,
+        emailRedirectTo: callbackUrl.toString(),
         data: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          full_name: `${formData.firstName} ${formData.lastName}`.trim(),
-          phone: formData.phone,
-          business_name: formData.businessName
-        }
-      }
+          acquisition_ref: ref || null,
+          acquisition_offer: offer || null,
+          preferred_language: lang,
+        },
+      },
     });
 
     if (error) {
       setError(error.message);
       setLoading(false);
-    } else {
-      if (data.session) {
-        window.location.href = "/onboarding";
-      } else {
-        // TRIGGER WELCOME EMAIL (Fire & Forget)
-        fetch('/api/email/welcome', {
-          method: 'POST',
-          body: JSON.stringify({ email: formData.email, name: formData.firstName })
-        });
-        setSuccess(true);
-      }
+      return;
     }
+
+    if (data.session) {
+      window.location.href = safeNext;
+      return;
+    }
+
+    setSuccess(true);
+    setLoading(false);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const nextParam = typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search).get("next")
+    : null;
+  const loginHref = nextParam
+    ? `/login?next=${encodeURIComponent(nextParam)}`
+    : "/login";
 
   return (
-    <div className="min-h-screen bg-slate-950 font-sans selection:bg-rose-500/30 flex flex-col items-center justify-center p-4 py-10 relative overflow-hidden">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-20%] right-[-10%] w-[80vw] h-[80vw] bg-rose-600/10 rounded-full blur-[150px] mix-blend-screen animate-pulse delay-700" />
-        <div className="absolute bottom-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-purple-600/10 rounded-full blur-[150px] mix-blend-screen" />
-        <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03]" />
+    <main dir={lang === "ar" ? "rtl" : "ltr"} className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 p-5 text-white">
+      <div className="absolute right-5 top-5 z-20">
+        <MarketingLanguageSwitcher compact />
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="w-full max-w-lg relative z-10"
-      >
-        {/* Logo & Header */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500 to-purple-600 shadow-xl shadow-rose-500/20 mb-6 group hover:scale-105 transition-transform duration-300">
-            <MapIcon className="text-white w-8 h-8" />
-          </Link>
-          <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">{t.auth.signup.title}</h1>
-          <p className="text-zinc-400">{t.auth.signup.subtitle}</p>
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -right-40 -top-40 h-[620px] w-[620px] rounded-full bg-rose-600/15 blur-[130px]" />
+        <div className="absolute -bottom-40 -left-40 h-[560px] w-[560px] rounded-full bg-purple-600/15 blur-[130px]" />
+      </div>
+
+      <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 w-full max-w-md">
+        <Link href="/" className="mx-auto mb-7 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500 to-purple-600 shadow-xl shadow-rose-600/20">
+          <MapIcon className="h-7 w-7" />
+        </Link>
+
+        <div className="text-center">
+          <h1 className="text-4xl font-bold tracking-tight">{s.title}</h1>
+          <p className="mt-3 text-zinc-400">{s.subtitle}</p>
         </div>
 
-        {/* Card */}
-        <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+        <div className="mt-6 flex justify-center">
+          <span className="rounded-full border border-emerald-400/15 bg-emerald-400/10 px-4 py-2 text-center text-[11px] font-bold text-emerald-200">
+            {t.hero.offer}
+          </span>
+        </div>
 
+        <div className="mt-7 rounded-3xl border border-white/10 bg-white/[0.04] p-7 shadow-2xl backdrop-blur-xl">
           {success ? (
-            <div className="text-center py-12 relative z-10">
-              <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/50">
-                  <ArrowRight className="w-6 h-6 text-white rotate-[-45deg]" />
-                </div>
+            <div className="py-8 text-center">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-300">
+                <Mail className="h-6 w-6" />
               </div>
-              <h2 className="text-2xl font-bold text-white mb-4">{t.auth.signup.successTitle}</h2>
-              <p className="text-zinc-400 mb-8 max-w-sm mx-auto">
-                {t.auth.signup.successMsg} <strong>{formData.email}</strong>. {t.auth.signup.successDesc}
+              <h2 className="mt-5 text-2xl font-bold">{s.checkInbox}</h2>
+              <p className="mt-3 text-sm leading-6 text-zinc-400">
+                {s.checkInboxBody} <strong className="text-white">{email}</strong>
               </p>
-              <Link
-                href="/login"
-                className="inline-flex px-8 py-3 bg-white text-black font-bold rounded-xl hover:bg-zinc-200 transition-colors"
-              >
-                {t.auth.signup.backToLogin}
+              <Link href={loginHref} className="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-950">
+                {s.continueLogin} <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           ) : (
-            <form onSubmit={handleSignup} className="space-y-4 relative z-10">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.signup.firstName}</label>
-                  <div className="relative group">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <User className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
-                    </div>
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      placeholder="Jean"
-                      className="w-full h-12 pl-11 pr-4 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.signup.lastName}</label>
-                  <div className="relative group">
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      placeholder="Dupont"
-                      className="w-full h-12 px-4 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.signup.businessEmail}</label>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
-                  </div>
+            <form onSubmit={handleSignup} className="space-y-5">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-zinc-300">{s.email}</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-3.5 h-5 w-5 text-zinc-500 rtl:left-auto rtl:right-4" />
                   <input
                     type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="jean@hotel-luxe.com"
-                    className="w-full h-12 pl-11 pr-4 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@company.com"
+                    autoComplete="email"
                     required
+                    className="h-12 w-full rounded-xl border border-white/10 bg-black/20 pl-11 pr-4 text-white outline-none transition focus:border-rose-400/50 focus:ring-2 focus:ring-rose-500/20 rtl:pl-4 rtl:pr-11"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.signup.businessName}</label>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Building className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
-                  </div>
-                  <input
-                    type="text"
-                    name="businessName"
-                    value={formData.businessName}
-                    onChange={handleChange}
-                    placeholder="Hôtel California"
-                    className="w-full h-12 pl-11 pr-4 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.signup.phone}</label>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Phone className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
-                  </div>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="+212 6 12 34 56 78"
-                    className="w-full h-12 pl-11 pr-4 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-300 ml-1">{t.auth.signup.passwordLabel}</label>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-zinc-500 group-focus-within:text-rose-400 transition-colors" />
-                  </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-zinc-300">{s.password}</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-3.5 h-5 w-5 text-zinc-500 rtl:left-auto rtl:right-4" />
                   <input
                     type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder={t.auth.signup.passwordHint}
-                    className="w-full h-12 pl-11 pr-4 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     minLength={6}
+                    placeholder={s.passwordPlaceholder}
+                    autoComplete="new-password"
                     required
+                    className="h-12 w-full rounded-xl border border-white/10 bg-black/20 pl-11 pr-4 text-white outline-none transition focus:border-rose-400/50 focus:ring-2 focus:ring-rose-500/20 rtl:pl-4 rtl:pr-11"
                   />
                 </div>
               </div>
 
-              {error && (
-                <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-200 text-sm flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                  {error}
-                </div>
-              )}
+              {error && <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-200">{error}</div>}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full h-12 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-rose-600/20 flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed mt-4 transform active:scale-95"
-              >
-                {loading ? (
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : (
-                  <>
-                    {t.auth.signup.submit}
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </>
-                )}
+              <button disabled={loading} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-600 to-purple-600 font-bold shadow-lg shadow-rose-600/20 disabled:opacity-60">
+                {loading ? s.loading : <>{s.button} <ArrowRight className="h-4 w-4" /></>}
               </button>
+
+              <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+                <div className="flex items-start gap-3 text-xs leading-5 text-zinc-500">
+                  <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-purple-300" />
+                  <div>
+                    <div className="font-bold text-zinc-300">{t.hero.offer}</div>
+                    <div className="mt-1">{t.hero.fallback}</div>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-center text-xs leading-5 text-zinc-500">
+                {s.termsPrefix} <Link href="/legal/terms" className="text-zinc-300 underline">{s.terms}</Link> · <Link href="/legal/privacy" className="text-zinc-300 underline">{s.privacy}</Link>.
+              </p>
             </form>
           )}
         </div>
 
-        {/* Footer */}
-        <p className="text-center mt-8 text-zinc-500 text-sm">
-          {t.auth.signup.hasAccount}{" "}
-          <Link href="/login" className="text-white font-medium hover:text-rose-300 transition-colors">
-            {t.auth.signup.signIn}
-          </Link>
+        <p className="mt-6 text-center text-sm text-zinc-500">
+          {s.existing} <Link href={loginHref} className="font-semibold text-white">{s.signIn}</Link>
         </p>
-        <div className="mt-8 text-center opacity-20 text-xs font-mono uppercase tracking-widest text-white">
-          Maplyo &copy; 2025
+
+        <div className="mt-5 flex items-center justify-center gap-2 text-center text-[11px] text-zinc-600">
+          <Check className="h-3.5 w-3.5 shrink-0 text-emerald-500" /> {t.hero.fallback}
         </div>
       </motion.div>
-    </div>
+    </main>
   );
 }

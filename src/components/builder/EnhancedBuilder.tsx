@@ -8,13 +8,17 @@ import { StyledGuideRenderer as GuideRenderer } from "@/components/guide/StyledG
 import { Modal } from "@/components/ui/Modal";
 import { guideThemes as themes, type GuideTheme as Theme } from "@/types/themes";
 import { MinimalIcons } from "@/components/icons/MinimalIcons";
-import { Settings, ChevronRight, Trash2, ExternalLink, ChevronLeft, Plus, Lock, Check as CheckIcon, Palette, QrCode, Monitor, Smartphone, Link2, Key, Calendar, Sparkles, Save } from "lucide-react";
+import { Settings, ChevronRight, Trash2, ExternalLink, ChevronLeft, Plus, Lock, Check as CheckIcon, Palette, QrCode, Monitor, Smartphone, Link2, Sparkles, Save } from "lucide-react";
 import { canUseFeature } from "@/lib/subscription";
 import { UserSubscription } from "@/types/subscription";
 import { Guide, BlockType } from "@/types/blocks"; // Value import for Guide and BlockType
 import { slugify } from "@/lib/utils/slugify";
 import { useTranslation } from "@/components/providers/LanguageProvider";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { trackProductEvent } from "@/lib/analytics/product-events";
+import { BuilderLaunchChecklist } from "@/components/builder/BuilderLaunchChecklist";
+import { IntegrationCenter } from "@/components/integrations/IntegrationCenter";
+import { integrationsCopy } from "@/lib/i18n/integrations";
 
 function uid() { return Math.random().toString(36).slice(2, 10); }
 const STORAGE_KEY = "eguidehq_demo_guide_v1";
@@ -59,7 +63,8 @@ export function EnhancedBuilder({
     const planId = subscription?.planId || 'demo';
     // @ts-ignore
     const unlockedThemes = subscription ? canUseFeature(subscription, 'themes') : false;
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
+    const integrationsT = integrationsCopy(lang);
 
     // --- STATE ---
     const [guide, setGuide] = useState<Guide>(() => {
@@ -83,10 +88,13 @@ export function EnhancedBuilder({
     const [showIntegrations, setShowIntegrations] = useState(false);
     const [showSubscribe, setShowSubscribe] = useState(false);
     const [previewDevice, setPreviewDevice] = useState<'mobile' | 'desktop'>('mobile');
-    
-    // Integrations State
-    const [guideIntegrations, setGuideIntegrations] = useState({ icalUrl: "", tuyaDeviceId: "" });
 
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("integrations") === "1") setShowIntegrations(true);
+    }, []);
+    
     // Initialize theme
     const selectedTheme = useMemo(() => {
         const savedId = guide.theme?.themeId;
@@ -118,58 +126,52 @@ export function EnhancedBuilder({
                 })
                 .eq("id", next.id);
 
-            if (error) console.error("Error saving guide:", error);
-            
-            // Save Integrations
-            if (next.id !== 'demo') {
+            if (error) {
+                console.error("Error saving guide:", error);
+            } else if (next.id !== "demo") {
                 try {
-                    const { error: intError } = await supabase
-                        .from("guide_integrations")
-                        .upsert({
-                            guide_id: next.id,
-                            config: guideIntegrations,
-                        }, { onConflict: 'guide_id' });
-                    
-                    if (intError) {
-                        console.error("Error saving guide integrations (upsert):", intError);
-                        // Fallback: safe check
-                        const { data: existing } = await supabase.from("guide_integrations").select("id").eq("guide_id", next.id).maybeSingle();
-                        if (existing) {
-                            await supabase.from("guide_integrations").update({ config: guideIntegrations }).eq("guide_id", next.id);
-                        } else {
-                            await supabase.from("guide_integrations").insert({ guide_id: next.id, config: guideIntegrations });
-                        }
+                    const { data: sessionData } = await supabase.auth.getSession();
+                    const token = sessionData.session?.access_token;
+
+                    if (token) {
+                        const revenueServices = next.blocks
+                            .filter((block) => block.type === "upsells")
+                            .flatMap((block) => {
+                                const items = Array.isArray((block.data as any)?.items) ? (block.data as any).items : [];
+                                return items.map((item: any, index: number) => ({
+                                    key: item.id || item.serviceId || `legacy_${String(item.title || "service").toLowerCase().replace(/[^a-z0-9]+/g, "_")}_${index}`,
+                                    title: item.title || "Service",
+                                    description: item.description || "",
+                                    category: item.category || "other",
+                                    priceAmount: item.priceAmount ?? "",
+                                    currency: item.currency || "MAD",
+                                    pricingType: item.pricingType || "fixed",
+                                    fulfillmentType: item.fulfillmentType || "property",
+                                    providerName: item.providerName || "",
+                                    imageUrl: item.imageUrl || "",
+                                    externalUrl: item.url || "",
+                                }));
+                            });
+
+                        await fetch("/api/services/sync", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`,
+                            },
+                            body: JSON.stringify({
+                                guideId: next.id,
+                                services: revenueServices,
+                            }),
+                        }).catch(() => undefined);
                     }
-                } catch (e) {
-                    console.error("Critical error in integrations persist:", e);
+                } catch (syncError) {
+                    console.info("Revenue service sync unavailable:", syncError);
                 }
             }
+            
         }
     }
-
-    // Load Guide Integrations
-    useEffect(() => {
-        if (isDemoMode || isGuest || guide.id === 'demo') return;
-        const loadInt = async () => {
-            try {
-                const { data } = await supabase
-                    .from("guide_integrations")
-                    .select("config")
-                    .eq("guide_id", guide.id)
-                    .maybeSingle();
-                
-                if (data?.config) {
-                    setGuideIntegrations({
-                        icalUrl: (data.config as any).icalUrl || "",
-                        tuyaDeviceId: (data.config as any).tuyaDeviceId || ""
-                    });
-                }
-            } catch (err) {
-                console.error("Failed to load integrations:", err);
-            }
-        };
-        loadInt();
-    }, [guide.id]);
 
     function addBlock(type: BlockType) {
         const def = blockRegistry[type];
@@ -301,9 +303,12 @@ export function EnhancedBuilder({
                         <button
                             onClick={async () => {
                                 // 1. CHECK PLAN
-                                // Pro/Basic accounts can publish if active
-                                const canPublish = subscription?.planId !== 'demo' && 
-                                                 (subscription?.status === 'active' || subscription?.status === 'trialing' || subscription?.status === 'free');
+                                // Free accounts can publish their one included guide.
+                                // Reverse-trial accounts expose Pro capabilities with status=trialing.
+                                const canPublish = Boolean(
+                                    subscription &&
+                                    ['active', 'trialing', 'free'].includes(subscription.status)
+                                );
                                 if (!canPublish) {
                                     setShowSubscribe(true);
                                     return;
@@ -313,6 +318,7 @@ export function EnhancedBuilder({
                                 const { error } = await supabase.from("guides").update({ is_published: true }).eq("id", guide.id);
                                 if (!error) {
                                     setGuide({ ...guide, isPublished: true });
+                                    trackProductEvent("experience_published", { guideId: guide.id });
                                     alert(t.builder.publishSuccess);
                                 } else {
                                     console.error("Publish error:", error);
@@ -326,6 +332,13 @@ export function EnhancedBuilder({
                     ))}
                 </div>
             </header>
+
+            {!isGuest && !isDemoMode && (
+                <BuilderLaunchChecklist
+                    guide={guide}
+                    onAddService={() => addBlock("upsells")}
+                />
+            )}
 
             <div className="flex-1 flex overflow-hidden">
                 {/* 1. LEFT COLUMN: LIBRARY */}
@@ -512,7 +525,7 @@ export function EnhancedBuilder({
 
                                     <div className={`w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar ${previewDevice === 'mobile' ? 'pt-8 bg-black' : ''}`}>
                                         <div className={`w-full min-h-full bg-white relative ${previewDevice === 'mobile' ? 'rounded-[2.5rem] overflow-hidden' : ''}`}>
-                                            <StyledGuideRenderer guide={guide} unlocked={true} forceDesktop={previewDevice === 'desktop'} forceMobile={previewDevice === 'mobile'} />
+                                            <GuideRenderer guide={guide} unlocked={true} forceDesktop={previewDevice === 'desktop'} forceMobile={previewDevice === 'mobile'} />
                                         </div>
                                     </div>
                                 </div>
@@ -658,59 +671,10 @@ export function EnhancedBuilder({
             <Modal
                 isOpen={showIntegrations}
                 onClose={() => setShowIntegrations(false)}
-                title="Configuration de l'appartement"
+                title={integrationsT.title}
                 icon={<Link2 className="w-6 h-6 text-rose-500" />}
             >
-                <div className="space-y-6 p-2">
-                    <div className="p-4 rounded-2xl bg-indigo-50 border border-indigo-100">
-                        <p className="text-xs text-indigo-700 leading-relaxed font-medium">
-                            Liez ce guide spécifique à un calendrier Airbnb et une serrure connectée pour automatiser l'expérience de vos voyageurs.
-                        </p>
-                    </div>
-
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
-                                <Calendar size={14} className="text-rose-500" />
-                                URL iCal Airbnb (pour ce guide)
-                            </label>
-                            <input
-                                type="text"
-                                className="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm focus:border-indigo-500 outline-none transition-all"
-                                placeholder="https://www.airbnb.com/calendar/export/..."
-                                value={guideIntegrations.icalUrl}
-                                onChange={e => setGuideIntegrations({ ...guideIntegrations, icalUrl: e.target.value })}
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
-                                <Key size={14} className="text-indigo-500" />
-                                ID de l'appareil Tuya (Serrure)
-                            </label>
-                            <input
-                                type="text"
-                                className="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm focus:border-indigo-500 outline-none transition-all"
-                                placeholder="ex: bf781234567890..."
-                                value={guideIntegrations.tuyaDeviceId}
-                                onChange={e => setGuideIntegrations({ ...guideIntegrations, tuyaDeviceId: e.target.value })}
-                            />
-                            <p className="text-[10px] text-gray-400">Trouvez cet ID dans l'application Tuya Smart ou sur le portail IoT.</p>
-                        </div>
-                    </div>
-
-                    <div className="pt-4 flex gap-3">
-                        <Button 
-                            className="w-full bg-slate-900 text-white hover:bg-black font-bold h-12 rounded-xl shadow-lg"
-                            onClick={() => {
-                                persist(guide);
-                                setShowIntegrations(false);
-                            }}
-                        >
-                            Enregistrer la configuration
-                        </Button>
-                    </div>
-                </div>
+                <IntegrationCenter guideId={guide.id} />
             </Modal>
 
             {/* Modal Subscribe */}

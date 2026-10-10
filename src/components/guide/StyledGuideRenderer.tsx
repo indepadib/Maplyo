@@ -11,6 +11,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { QRCodeSVG } from "qrcode.react";
 import { Wifi, Key, X, ExternalLink, Search, Globe, ChevronRight, CheckCircle2, MapPin, Sun, Moon, Coffee, Utensils, Music, Camera } from "lucide-react";
 import { GuideChatbot } from "./GuideChatbot";
+import { GuestRequestWidget } from "./GuestRequestWidget";
 import { TipModal } from "./TipModal";
 import { DailyDashboard } from "./DailyDashboard";
 import { useTranslation } from "@/components/providers/LanguageProvider";
@@ -820,7 +821,8 @@ export function StyledGuideRenderer({ guide, unlocked, forceMobile = false, forc
                 )}
             </BottomSheet >
 
-            {/* AI CHATBOT INTEGRATION */}
+            {/* AI CHATBOT + GUEST OPERATIONS */}
+            <GuestRequestWidget guideId={guide.id} />
             < GuideChatbot guide={guide} primaryColor={currentTheme.primary} forceMobile={forceMobile} lang={lang} />
         </div >
     );

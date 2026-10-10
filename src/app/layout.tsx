@@ -4,21 +4,17 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   metadataBase: new URL('https://maplyo.com'),
   title: {
-    default: "Maplyo — Le Guide Numérique pour Hôtes Airbnb & Gîtes",
+    default: "Maplyo — AI Guest Experience & Revenue Platform",
     template: "%s | Maplyo"
   },
-  description: "Créez des livrets d'accueil numériques irrésistibles. Partagez codes Wi-Fi, digicodes et bonnes adresses par QR Code. Gratuit pour démarrer.",
-  keywords: ["livret d'accueil numérique", "livret d'accueil numérique airbnb", "guide numérique gîte", "livret d'accueil hôte", "airbnb guide", "guide voyageur", "qr code wifi", "gestion locative", "conciergerie", "location saisonnière"],
+  description: "Maplyo centralise l’expérience voyageur, le concierge IA, les services additionnels, les demandes et les parcours de séjour pour locations, conciergeries, riads et hôtels.",
+  keywords: ["guest experience platform", "digital guest guide", "AI concierge", "hotel guest experience", "property manager guest experience", "livret accueil numérique", "conciergerie", "riad", "hôtel", "upselling hôtelier"],
   alternates: {
     canonical: '/',
-    languages: {
-      'fr-FR': '/fr',
-      'en-US': '/en',
-    },
   },
   openGraph: {
-    title: "Maplyo — Sublimez l'accueil de vos voyageurs",
-    description: "Le livret d'accueil nouvelle génération. QR Code Wi-Fi instantané, guide local interactif, et upsells pour augmenter vos revenus.",
+    title: "Maplyo — Guest Experience & Revenue OS",
+    description: "Moins de questions répétitives, plus de services vendus et une meilleure expérience voyageur — sans application à télécharger.",
     url: 'https://maplyo.com',
     siteName: 'Maplyo',
     locale: 'fr_FR',
@@ -34,8 +30,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Maplyo — Votre Livret d'Accueil 2.0",
-    description: "Fini les PDF moches. Passez au guide web interactif que vos voyageurs vont adorer.",
+    title: "Maplyo — Guest Experience & Revenue OS",
+    description: "Créez une expérience voyageur multilingue avec concierge IA, services, requests et automatisations de séjour.",
     creator: '@maplyo_app',
   },
   robots: {
@@ -54,8 +50,8 @@ export const metadata: Metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false, // App-like feel
+  maximumScale: 5,
+  userScalable: true,
   themeColor: "#020617",
 };
 
@@ -102,9 +98,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 "@type": "AggregateOffer",
                 priceCurrency: "USD",
                 lowPrice: 0,
-                highPrice: 20
+                highPrice: 9.9
               },
-              description: "Plateforme de création de livrets d'accueil numériques pour hôtes Airbnb et gestionnaires immobiliers."
+              description: "Guest Experience & Revenue platform for vacation rentals, property managers, riads and hotels."
             })
           }}
         />
