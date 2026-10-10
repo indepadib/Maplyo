@@ -76,10 +76,16 @@ export async function GET(req: Request) {
     },
     {
       key: "integration_encryption",
-      label: "Integration secret encryption key",
+      label: "Integration secret encryption",
       group: "environment",
-      ok: configured(process.env.MAPLYO_INTEGRATION_ENCRYPTION_KEY),
-      detail: configured(process.env.MAPLYO_INTEGRATION_ENCRYPTION_KEY) ? "Configured server-side" : "Set MAPLYO_INTEGRATION_ENCRYPTION_KEY before connecting smart locks",
+      ok: Boolean(
+        configured(process.env.MAPLYO_INTEGRATION_ENCRYPTION_KEY) ||
+        configured(process.env.STRIPE_WEBHOOK_SECRET, ["placeholder"]) ||
+        configured(process.env.SUPABASE_SERVICE_ROLE_KEY, ["placeholder"])
+      ),
+      detail: configured(process.env.MAPLYO_INTEGRATION_ENCRYPTION_KEY)
+        ? "Dedicated encryption key configured"
+        : "Using a domain-separated key derived from an existing server-only secret",
       blocking: true,
     },
     {
@@ -180,7 +186,9 @@ export async function GET(req: Request) {
     tableCheck(admin, "magic_demo_views", "Growth · human Magic Demo views"),
     tableCheck(admin, "ai_chat_usage", "AI · concierge usage"),
     tableCheck(admin, "trial_lifecycle_deliveries", "Growth · reverse-trial lifecycle"),
-    tableCheck(admin, "integration_secrets", "Integrations · encrypted secret vault"),
+    tableCheck(admin, "integration_secrets", "Integrations · encrypted secret vault", false),
+    tableCheck(admin, "property_connections", "Integrations · property-level mappings", false),
+    tableCheck(admin, "guide_integrations", "Integrations · legacy compatibility storage"),
     tableCheck(admin, "access_codes", "Integrations · stay access codes"),
   ]);
 
