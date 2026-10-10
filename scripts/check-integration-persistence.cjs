@@ -162,6 +162,41 @@ const request = (body, query = "") =>
   });
 
 async function run() {
+  // Runtime configuration regression: integration APIs must still get a
+  // Supabase client when an older Netlify site has no service-role key.
+  const previousUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const previousAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const previousService = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co";
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "anon-test-key";
+  delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  const createdClients = [];
+  const actualServer = moduleFrom("src/lib/integrations/server.ts", {
+    "@supabase/supabase-js": {
+      createClient: (url, key, options) => {
+        const client = { url, key, options };
+        createdClients.push(client);
+        return client;
+      },
+    },
+  });
+
+  const rlsClient = actualServer.getIntegrationAdmin("Bearer user-token");
+  assert.ok(rlsClient, "authenticated RLS fallback client must be created");
+  assert.equal(createdClients[0].key, "anon-test-key");
+  assert.equal(
+    createdClients[0].options.global.headers.Authorization,
+    "Bearer user-token"
+  );
+
+  if (previousUrl === undefined) delete process.env.NEXT_PUBLIC_SUPABASE_URL;
+  else process.env.NEXT_PUBLIC_SUPABASE_URL = previousUrl;
+  if (previousAnon === undefined) delete process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  else process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = previousAnon;
+  if (previousService === undefined) delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+  else process.env.SUPABASE_SERVICE_ROLE_KEY = previousService;
+
   let active;
   let storageMode = "property";
   let invalidCalendar = false;
