@@ -8,10 +8,11 @@ import { getIntegrationAdmin, requireIntegrationUser, requireOwnedGuide } from "
 import { runAirbnbGuideSync } from "@/lib/integrations/airbnb-sync-engine";
 
 async function handlePOST(request: Request) {
-  const access = await requireIntegrationUser(request.headers.get("authorization"));
+  const authHeader = request.headers.get("authorization");
+  const access = await requireIntegrationUser(authHeader);
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
-  const admin = getIntegrationAdmin();
+  const admin = getIntegrationAdmin(authHeader);
   if (!admin) return NextResponse.json({ error: "Integration service unavailable" }, { status: 503 });
 
   const body = await request.json().catch(() => null);
