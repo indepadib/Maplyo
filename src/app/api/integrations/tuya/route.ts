@@ -271,6 +271,9 @@ async function handlePOST(req: Request) {
   const { accessId, accessSecret, region } = parsed.data;
 
   try {
+    // Fail before any database write if no stable encryption key can be derived.
+    encryptIntegrationSecret({ accessId, accessSecret, region });
+
     const connector = new TuyaConnector(accessId, accessSecret, region);
     await connector.testConnection();
     const devices = await connector.listDevices();
