@@ -20,7 +20,9 @@ export function isSchemaCompatibilityError(error: any) {
   const code = String(error?.code || "");
   const message = String(error?.message || error || "");
   return (
-    ["42P01", "42703", "PGRST204", "PGRST205"].includes(code) ||
+    ["42P01", "42703", "42501", "PGRST204", "PGRST205"].includes(code) ||
+    /permission denied/i.test(message) ||
+    /row-level security/i.test(message) ||
     /relation .* does not exist/i.test(message) ||
     /column .* does not exist/i.test(message) ||
     /could not find the table/i.test(message) ||
@@ -46,14 +48,30 @@ export async function requireIntegrationUser(authHeader: string | null) {
   return { ok: true as const, user };
 }
 
-export function getIntegrationAdmin() {
+export function getIntegrationAdmin(authHeader?: string | null) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !serviceRole) return null;
+  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  return createClient(url, serviceRole, {
-    auth: { persistSession: false },
-  });
+  if (!url) return null;
+
+  if (serviceRole) {
+    return createClient(url, serviceRole, {
+      auth: { persistSession: false },
+    });
+  }
+
+  // Runtime fallback for older Netlify environments that were never given
+  // the service-role key. The user's JWT keeps RLS enforced while allowing
+  // the integration flow to keep working on the legacy tables.
+  if (anon && authHeader) {
+    return createClient(url, anon, {
+      global: { headers: { Authorization: authHeader } },
+      auth: { persistSession: false },
+    });
+  }
+
+  return null;
 }
 
 export async function requireOwnedGuide(admin: any, userId: string, guideId: string) {
