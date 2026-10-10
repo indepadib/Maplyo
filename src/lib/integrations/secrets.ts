@@ -8,11 +8,20 @@ type EncryptedSecret = {
 };
 
 function getKey() {
-  const source = process.env.MAPLYO_INTEGRATION_ENCRYPTION_KEY;
+  const source =
+    process.env.MAPLYO_INTEGRATION_ENCRYPTION_KEY ||
+    process.env.STRIPE_WEBHOOK_SECRET ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
+
   if (!source || source.trim().length < 24) {
-    throw new Error("MAPLYO_INTEGRATION_ENCRYPTION_KEY is not configured");
+    throw new Error("No stable server secret is available for integration encryption");
   }
-  return crypto.createHash("sha256").update(source, "utf8").digest();
+
+  // Domain separation prevents reuse of the raw application secret as the AES key.
+  return crypto
+    .createHash("sha256")
+    .update("maplyo:integration-secrets:v1:" + source, "utf8")
+    .digest();
 }
 
 export function encryptIntegrationSecret(value: unknown): EncryptedSecret {
