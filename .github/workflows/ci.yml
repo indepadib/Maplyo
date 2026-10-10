@@ -48,8 +48,8 @@ jobs:
       - name: Validate marketing translations
         run: npm run check:i18n
 
-      - name: Verify integration persistence and error handling
-        run: node scripts/check-integration-persistence.cjs
+      - name: Verify integration persistence, iCal runtime and error handling
+        run: npm run check:integrations
 
       - name: Build
         run: npm run build
