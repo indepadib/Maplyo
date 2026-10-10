@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
+    // node-ical pulls recurrence/Temporal code that must stay in the Node runtime.
+    // Keeping it external prevents webpack/Turbopack from re-bundling JSBI/Temporal internals.
+    serverExternalPackages: ['node-ical'],
     images: {
         remotePatterns: [
             {
