@@ -463,7 +463,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
                         {airbnb.tuyaDeviceName || airbnb.tuyaDeviceId}
                       </div>
                       <div className="mt-1 text-[11px] text-emerald-700">
-                        {airbnb.tuyaCodeLength || 6} digits
+                        {t.tuya.codeLength}: {airbnb.tuyaCodeLength || 6}
                       </div>
                     </div>
                     <span className={`rounded-full border px-2 py-1 text-[10px] font-bold ${healthClass(tuya.health)}`}>
