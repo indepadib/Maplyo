@@ -50,6 +50,8 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
   const [region, setRegion] = useState<"eu"|"us"|"cn"|"in">("eu");
   const [deviceId, setDeviceId] = useState("");
   const [codeLength, setCodeLength] = useState<6|7>(6);
+  const [editingAirbnb, setEditingAirbnb] = useState(false);
+  const [editingLock, setEditingLock] = useState(false);
   const [busy, setBusy] = useState<string | null>("load");
   const [loadFailed, setLoadFailed] = useState(false);
   const [message, setMessage] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
@@ -131,6 +133,8 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
       if (!res.ok) throw new Error(body.error || t.messages.failed);
 
       await load();
+      setIcalUrl("");
+      setEditingAirbnb(false);
       setMessage({ kind: "ok", text: t.messages.connected });
     } catch (error: any) {
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
@@ -186,6 +190,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
       if (!res.ok) throw new Error(t.messages.failed);
       setAirbnb((current) => ({ ...current, connected: false, health: "disconnected", calendar: null, lastSyncAt: null, reservationCount: 0, error: null }));
       setIcalUrl("");
+      setEditingAirbnb(false);
     } catch (error: any) {
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
     } finally {
@@ -243,6 +248,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
       if (!res.ok) throw new Error(body.error || t.messages.failed);
 
       await load();
+      setEditingLock(false);
       setMessage({ kind: "ok", text: t.messages.deviceSaved });
     } catch (error: any) {
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
@@ -259,6 +265,7 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
       if (!res.ok) throw new Error(t.messages.failed);
       setDeviceId("");
       setCodeLength(6);
+      setEditingLock(false);
       await load();
     } catch (error: any) {
       setMessage({ kind: "error", text: error?.message || t.messages.failed });
@@ -303,9 +310,32 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
           </span>
         </div>
 
-        {!airbnb.connected ? (
+        {!airbnb.connected || editingAirbnb ? (
           <div className="mt-5 space-y-3">
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">{t.airbnb.url}</label>
+            {airbnb.connected && (
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+                <div className="flex items-center gap-2 text-xs font-bold text-emerald-800">
+                  <CheckCircle2 className="h-4 w-4" />
+                  {t.airbnb.savedFor} {airbnb.propertyName || "Maplyo"}
+                </div>
+                {airbnb.calendar && <div className="mt-1 truncate text-[11px] text-emerald-700">{airbnb.calendar}</div>}
+              </div>
+            )}
+            <div className="flex items-center justify-between gap-3">
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">{t.airbnb.url}</label>
+              {airbnb.connected && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingAirbnb(false);
+                    setIcalUrl("");
+                  }}
+                  className="text-xs font-bold text-gray-400 hover:text-gray-700"
+                >
+                  ×
+                </button>
+              )}
+            </div>
             <input
               value={icalUrl}
               onChange={(e) => setIcalUrl(e.target.value)}
@@ -325,7 +355,22 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
           </div>
         ) : (
           <div className="mt-5">
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 text-xs font-bold text-emerald-800">
+                    <CheckCircle2 className="h-4 w-4 shrink-0" />
+                    {t.airbnb.savedFor} {airbnb.propertyName || "Maplyo"}
+                  </div>
+                  {airbnb.calendar && <div className="mt-2 truncate text-[11px] text-emerald-700">{airbnb.calendar}</div>}
+                </div>
+                <span className={`shrink-0 rounded-full border px-2 py-1 text-[10px] font-bold ${healthClass(airbnb.health)}`}>
+                  {healthLabel(airbnb.health)}
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <div className="rounded-xl bg-gray-50 p-3">
                 <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">{t.airbnb.reservations}</div>
                 <div className="mt-1 text-xl font-bold text-gray-900">{airbnb.reservationCount || 0}</div>
@@ -335,19 +380,32 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
                 <div className="mt-1 text-xs font-bold text-gray-700">{airbnb.lastSyncAt ? new Date(airbnb.lastSyncAt).toLocaleString() : t.airbnb.never}</div>
               </div>
             </div>
-            {airbnb.calendar && <div className="mt-3 truncate text-[11px] text-gray-400">{airbnb.calendar}</div>}
+
             {airbnb.error && <div className="mt-3 text-xs text-red-600">{airbnb.error}</div>}
-            <div className="mt-4 flex gap-2">
+
+            <div className="mt-4 grid gap-2 sm:grid-cols-3">
               <button
                 onClick={syncAirbnb}
                 disabled={Boolean(busy)}
-                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-xs font-bold text-white disabled:opacity-40"
+                className="flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-xs font-bold text-white disabled:opacity-40"
               >
                 {busy === "airbnb-sync" ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
                 {t.airbnb.sync}
               </button>
-              <button onClick={disconnectAirbnb} disabled={Boolean(busy)} className="rounded-xl border border-gray-200 px-3 text-gray-400 hover:text-red-600">
-                <Unplug className="h-4 w-4" />
+              <button
+                type="button"
+                onClick={() => setEditingAirbnb(true)}
+                className="rounded-xl border border-gray-200 px-4 py-3 text-xs font-bold text-gray-700 hover:bg-gray-50"
+              >
+                {t.airbnb.change}
+              </button>
+              <button
+                type="button"
+                onClick={disconnectAirbnb}
+                disabled={Boolean(busy)}
+                className="rounded-xl border border-red-100 px-4 py-3 text-xs font-bold text-red-600 hover:bg-red-50 disabled:opacity-40"
+              >
+                {t.airbnb.remove}
               </button>
             </div>
           </div>
@@ -385,65 +443,123 @@ export function IntegrationCenter({ guideId }: { guideId: string }) {
           </div>
         ) : (
           <div className="mt-5">
-            <div className="mb-4 rounded-xl bg-gray-50 p-3 text-xs text-gray-500">
-              {t.tuya.account}: ••••{tuya.accountHint || "—"} · {String(tuya.region || region).toUpperCase()}
+            <div className="rounded-xl border border-indigo-100 bg-indigo-50 p-3">
+              <div className="text-[10px] font-black uppercase tracking-wider text-indigo-500">{t.tuya.globalAccount}</div>
+              <div className="mt-1 text-sm font-bold text-indigo-900">
+                ••••{tuya.accountHint || "—"} · {String(tuya.region || region).toUpperCase()}
+              </div>
             </div>
 
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">{t.tuya.device}</label>
-            {tuya.devices.length === 0 && (
-              <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs leading-5 text-amber-800">
-                {t.tuya.noDevices}
-              </div>
-            )}
-            {airbnb.tuyaDeviceId && (
-              <div className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-800">
-                <span className="font-bold">{t.connected}: </span>
-                {airbnb.tuyaDeviceName || airbnb.tuyaDeviceId} · {airbnb.tuyaCodeLength || 6}
-              </div>
-            )}
-            <select value={deviceId} onChange={(e) => setDeviceId(e.target.value)} className="mt-2 h-11 w-full rounded-xl border border-gray-200 px-4 text-sm">
-              <option value="">{t.tuya.chooseDevice}</option>
-              {airbnb.tuyaDeviceId && !tuya.devices.some((device) => device.id === airbnb.tuyaDeviceId) && (
-                <option value={airbnb.tuyaDeviceId}>{airbnb.tuyaDeviceName || airbnb.tuyaDeviceId}</option>
-              )}
-              {tuya.devices.map((device) => (
-                <option key={device.id} value={device.id}>
-                  {device.name} {device.online === false ? "· offline" : ""}
-                </option>
-              ))}
-            </select>
+            {airbnb.tuyaDeviceId && !editingLock ? (
+              <div className="mt-4">
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="flex items-center gap-2 text-xs font-bold text-emerald-800">
+                        <KeyRound className="h-4 w-4" />
+                        {t.tuya.assignedFor} {airbnb.propertyName || "Maplyo"}
+                      </div>
+                      <div className="mt-2 text-sm font-black text-emerald-950">
+                        {airbnb.tuyaDeviceName || airbnb.tuyaDeviceId}
+                      </div>
+                      <div className="mt-1 text-[11px] text-emerald-700">
+                        {airbnb.tuyaCodeLength || 6} digits
+                      </div>
+                    </div>
+                    <span className={`rounded-full border px-2 py-1 text-[10px] font-bold ${healthClass(tuya.health)}`}>
+                      {healthLabel(tuya.health)}
+                    </span>
+                  </div>
+                </div>
 
-            {selectedDevice && (
-              <div className="mt-2 text-[11px] text-gray-400">
-                {[selectedDevice.productName, selectedDevice.category, selectedDevice.online === false ? "offline" : selectedDevice.online === true ? "online" : null].filter(Boolean).join(" · ")}
-              </div>
-            )}
-
-            <div className="mt-4">
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">{t.tuya.codeLength}</label>
-              <div className="mt-2 grid grid-cols-2 gap-2">
-                {[6,7].map((length) => (
+                <div className="mt-3 grid gap-2 sm:grid-cols-2">
                   <button
-                    key={length}
-                    onClick={() => setCodeLength(length as 6|7)}
-                    className={`rounded-xl border px-4 py-2 text-sm font-bold ${codeLength === length ? "border-indigo-400 bg-indigo-50 text-indigo-700" : "border-gray-200 text-gray-500"}`}
+                    type="button"
+                    onClick={() => setEditingLock(true)}
+                    className="rounded-xl border border-gray-200 px-4 py-3 text-xs font-bold text-gray-700 hover:bg-gray-50"
                   >
-                    {length}
+                    {t.tuya.changeLock}
                   </button>
-                ))}
+                  <button
+                    type="button"
+                    onClick={disconnectTuya}
+                    disabled={Boolean(busy)}
+                    className="rounded-xl border border-red-100 px-4 py-3 text-xs font-bold text-red-600 hover:bg-red-50 disabled:opacity-40"
+                  >
+                    {t.tuya.unassignLock}
+                  </button>
+                </div>
               </div>
-              <p className="mt-2 text-[11px] leading-5 text-gray-400">{t.tuya.helper}</p>
-            </div>
+            ) : (
+              <div className="mt-4">
+                <div className="flex items-center justify-between gap-3">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">{t.tuya.device}</label>
+                  {airbnb.tuyaDeviceId && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingLock(false);
+                        setDeviceId(String(airbnb.tuyaDeviceId || ""));
+                        setCodeLength(Number(airbnb.tuyaCodeLength) === 7 ? 7 : 6);
+                      }}
+                      className="text-xs font-bold text-gray-400 hover:text-gray-700"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
 
-            <div className="mt-4 flex gap-2">
-              <button onClick={assignDevice} disabled={!deviceId || Boolean(busy)} className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-xs font-bold text-white disabled:opacity-40">
-                {busy === "tuya-device" ? <Loader2 className="h-4 w-4 animate-spin" /> : <KeyRound className="h-4 w-4" />}
-                {t.tuya.saveDevice}
-              </button>
-              <button onClick={disconnectTuya} disabled={Boolean(busy) || !airbnb.tuyaDeviceId} aria-label={t.tuya.disconnect} title={t.tuya.disconnect} className="rounded-xl border border-gray-200 px-3 text-gray-400 hover:text-red-600">
-                <Unplug className="h-4 w-4" />
-              </button>
-            </div>
+                {tuya.devices.length === 0 && (
+                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs leading-5 text-amber-800">
+                    {t.tuya.noDevices}
+                  </div>
+                )}
+
+                <select value={deviceId} onChange={(e) => setDeviceId(e.target.value)} className="mt-2 h-11 w-full rounded-xl border border-gray-200 px-4 text-sm">
+                  <option value="">{t.tuya.chooseDevice}</option>
+                  {airbnb.tuyaDeviceId && !tuya.devices.some((device) => device.id === airbnb.tuyaDeviceId) && (
+                    <option value={airbnb.tuyaDeviceId}>{airbnb.tuyaDeviceName || airbnb.tuyaDeviceId}</option>
+                  )}
+                  {tuya.devices.map((device) => (
+                    <option key={device.id} value={device.id}>
+                      {device.name} {device.online === false ? "· offline" : ""}
+                    </option>
+                  ))}
+                </select>
+
+                {selectedDevice && (
+                  <div className="mt-2 text-[11px] text-gray-400">
+                    {[selectedDevice.productName, selectedDevice.category, selectedDevice.online === false ? "offline" : selectedDevice.online === true ? "online" : null].filter(Boolean).join(" · ")}
+                  </div>
+                )}
+
+                <div className="mt-4">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">{t.tuya.codeLength}</label>
+                  <div className="mt-2 grid grid-cols-2 gap-2">
+                    {[6,7].map((length) => (
+                      <button
+                        key={length}
+                        type="button"
+                        onClick={() => setCodeLength(length as 6|7)}
+                        className={`rounded-xl border px-4 py-2 text-sm font-bold ${codeLength === length ? "border-indigo-400 bg-indigo-50 text-indigo-700" : "border-gray-200 text-gray-500"}`}
+                      >
+                        {length}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="mt-2 text-[11px] leading-5 text-gray-400">{t.tuya.helper}</p>
+                </div>
+
+                <button
+                  onClick={assignDevice}
+                  disabled={!deviceId || Boolean(busy)}
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-xs font-bold text-white disabled:opacity-40"
+                >
+                  {busy === "tuya-device" ? <Loader2 className="h-4 w-4 animate-spin" /> : <KeyRound className="h-4 w-4" />}
+                  {t.tuya.saveDevice}
+                </button>
+              </div>
+            )}
           </div>
         )}
 
