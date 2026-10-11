@@ -5,11 +5,10 @@ import { NextResponse } from "next/server";
 import { getIntegrationAdmin, requireIntegrationUser } from "@/lib/integrations/server";
 
 export async function GET(req: Request) {
-  const authHeader = req.headers.get("authorization");
-  const access = await requireIntegrationUser(authHeader);
+  const access = await requireIntegrationUser(req.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
-  const admin = getIntegrationAdmin(authHeader);
+  const admin = getIntegrationAdmin();
   if (!admin) return NextResponse.json({ error: "Integration service unavailable" }, { status: 503 });
 
   const { data: guides, error: guideError } = await admin
