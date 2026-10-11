@@ -259,11 +259,10 @@ async function saveDeviceAssignment(admin: any, context: any, integrationId: str
 }
 
 async function handlePOST(req: Request) {
-  const authHeader = req.headers.get("authorization");
-  const access = await requireIntegrationUser(authHeader);
+  const access = await requireIntegrationUser(req.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
-  const admin = getIntegrationAdmin(authHeader);
+  const admin = getIntegrationAdmin();
   if (!admin) return NextResponse.json({ error: "Integration service unavailable" }, { status: 503 });
 
   const parsed = ConnectSchema.safeParse(await req.json().catch(() => null));
@@ -311,11 +310,10 @@ async function handlePOST(req: Request) {
 }
 
 async function handleGET(req: Request) {
-  const authHeader = req.headers.get("authorization");
-  const access = await requireIntegrationUser(authHeader);
+  const access = await requireIntegrationUser(req.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
-  const admin = getIntegrationAdmin(authHeader);
+  const admin = getIntegrationAdmin();
   if (!admin) return NextResponse.json({ error: "Integration service unavailable" }, { status: 503 });
 
   const integration = await findIntegration(admin, access.user.id);
@@ -360,11 +358,10 @@ async function handleGET(req: Request) {
 }
 
 async function handlePUT(req: Request) {
-  const authHeader = req.headers.get("authorization");
-  const access = await requireIntegrationUser(authHeader);
+  const access = await requireIntegrationUser(req.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
-  const admin = getIntegrationAdmin(authHeader);
+  const admin = getIntegrationAdmin();
   if (!admin) return NextResponse.json({ error: "Integration service unavailable" }, { status: 503 });
 
   const parsed = AssignSchema.safeParse(await req.json().catch(() => null));
@@ -398,11 +395,10 @@ async function handlePUT(req: Request) {
 }
 
 async function handleDELETE(req: Request) {
-  const authHeader = req.headers.get("authorization");
-  const access = await requireIntegrationUser(authHeader);
+  const access = await requireIntegrationUser(req.headers.get("authorization"));
   if (!access.ok) return NextResponse.json({ error: access.error }, { status: access.status });
 
-  const admin = getIntegrationAdmin(authHeader);
+  const admin = getIntegrationAdmin();
   if (!admin) return NextResponse.json({ error: "Integration service unavailable" }, { status: 503 });
 
   const guideId = new URL(req.url).searchParams.get("guideId");
